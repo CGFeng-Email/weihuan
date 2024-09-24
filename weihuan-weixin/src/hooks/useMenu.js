@@ -5,9 +5,9 @@ function useMenuButton() {
 	const bottom = getMenuButton.bottom + 'px';
 	const left = (getMenuButton.left - 20) + 'px';
 	const width = getMenuButton.width + 'px';
-	const height = getMenuButton.height + 'px';
+	const height = (getMenuButton.height + 6) + 'px';
 	// 占位符高度
-	const topView = getMenuButton.height + getMenuButton.top + 'px';
+	const topView = (getMenuButton.height + 6) + getMenuButton.top + 'px';
 
 	return {
 		top,

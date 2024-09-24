@@ -2,14 +2,14 @@
 	"pages": [{
 			"path": "pages/index/index",
 			"style": {
-				"navigationBarTitleText": "炜洹商城",
-				"navigationStyle": "custom"
+				"navigationBarTitleText": "炜洹商城"
 			}
 		},
 		{
 			"path": "pages/shopping/index",
 			"style": {
-				"navigationBarTitleText": "在线商城"
+				"navigationBarTitleText": "在线商城",
+				"navigationStyle": "custom"
 			}
 		},
 		{
