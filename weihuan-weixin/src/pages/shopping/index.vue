@@ -25,96 +25,101 @@
 		<uni-transition mode-class="fade" :show="loading">
 			<!-- 轮播图 -->
 			<swiper class="swiper_banner" autoplay :interval="5000" :duration="1000" circular>
-				<swiper-item class="swiper-item">
-					<image class="cover" src="/static/img/banner1.png" mode="widthFix"></image>
-				</swiper-item>
-				<swiper-item class="swiper-item">
-					<image class="cover" src="/static/img/banner2.png" mode="widthFix"></image>
-				</swiper-item>
-				<swiper-item class="swiper-item">
-					<image class="cover" src="/static/img/banner3.png" mode="widthFix"></image>
-				</swiper-item>
+				<block v-for="item in swiper_list" :key="item.src">
+					<swiper-item class="swiper-item">
+						<image class="cover" :src="item.src" mode="widthFix"></image>
+					</swiper-item>
+				</block>
 			</swiper>
 		</uni-transition>
 		<!-- 分类导航 -->
 		<div class="classify_navigation_wrap">
-			<view class="classify_navigation">
-				<view class="item company">
-					<uni-data-select
-						class="company_item"
-						:clear="false"
-						placeholder="所属公司"
-						v-model="company_index"
-						:localdata="company_list"
-						@change="company_change"
-					></uni-data-select>
-				</view>
-				<view class="item spec">
-					<view class="text">销量</view>
-					<view class="icon">
-						<i class="iconfont icon-shang"></i>
-						<i class="iconfont icon-xiala active"></i>
+			<uni-transition ref="transition_ref" mode-class="slide-bottom" :show="loading">
+				<view class="classify_navigation">
+					<view class="item company">
+						<uni-data-select
+							class="company_item"
+							:clear="false"
+							placeholder="所属公司"
+							v-model="company_index"
+							:localdata="company_list"
+							@change="company_change"
+						></uni-data-select>
+					</view>
+					<view class="item spec">
+						<view class="text">销量</view>
+						<view class="icon">
+							<i class="iconfont icon-shang"></i>
+							<i class="iconfont icon-xiala active"></i>
+						</view>
+					</view>
+					<view class="item spec">
+						<view class="text">价格</view>
+						<view class="icon">
+							<i class="iconfont icon-shang"></i>
+							<i class="iconfont icon-xiala active"></i>
+						</view>
+					</view>
+					<view class="item classify_btn" @click="jump_category">
+						<view class="text">分类</view>
+						<view class="icon">
+							<i class="iconfont icon-shaixuan"></i>
+						</view>
 					</view>
 				</view>
-				<view class="item spec">
-					<view class="text">价格</view>
-					<view class="icon">
-						<i class="iconfont icon-shang"></i>
-						<i class="iconfont icon-xiala active"></i>
-					</view>
-				</view>
-				<view class="item classify_btn">
-					<view class="text">分类</view>
-					<view class="icon">
-						<i class="iconfont icon-shaixuan"></i>
-					</view>
-				</view>
-			</view>
+			</uni-transition>
 		</div>
 	</view>
 
 	<!-- 列表 -->
 	<view class="list">
 		<block v-for="item in shopping_list" :key="item.src">
-			<view class="item" v-if="item.type == 'type1'">
-				<view class="cover_box">
-					<image class="cover type1" :src="item.src" mode="aspectFill"></image>
-				</view>
+			<view class="item" v-if="item.type == 'type1'" @click="jump_place_order">
+				<uni-transition mode-class="slide-bottom" :show="item ? true : false">
+					<view class="item_wrap"></view>
+					<view class="cover_box">
+						<image class="cover type1" :src="item.src" mode="aspectFill"></image>
+					</view>
+				</uni-transition>
 			</view>
-			<view class="item item3" v-else-if="item.type == 'type3'">
-				<view class="cover_box">
-					<image class="cover type3" :src="item.src" mode="aspectFill"></image>
-				</view>
+			<view class="item item3" v-else-if="item.type == 'type3'" @click="jump_place_order">
+				<uni-transition mode-class="slide-bottom" :show="item ? true : false">
+					<view class="cover_box">
+						<image class="cover type3" :src="item.src" mode="aspectFill"></image>
+					</view>
+				</uni-transition>
 			</view>
-			<view class="item" v-else>
-				<view class="cover_box">
-					<image class="cover" :src="item.src" mode="aspectFill"></image>
-				</view>
-				<view class="content">
-					<view class="title">
-						<text class="boom" v-if="item.boom">畅销</text>
-						<text class="text over2" :class="{ boom_text: item.boom }">{{ item.title }} {{ item.title }}</text>
+			<view class="item" v-else @click="jump_place_order">
+				<uni-transition mode-class="slide-bottom" :show="item ? true : false">
+					<view class="cover_box">
+						<image class="cover" :src="item.src" mode="aspectFill"></image>
 					</view>
-					<view class="total_price">
-						<view class="price_box">
-							<text class="symbol">￥</text>
-							<text class="price">{{ priceToFixed(item.price) }}</text>
+					<view class="content">
+						<view class="title">
+							<text class="boom" v-if="item.boom">畅销</text>
+							<text class="text over2" :class="{ boom_text: item.boom }">{{ item.title }} {{ item.title }}</text>
 						</view>
-						<view class="primary_price">
-							<text class="primary_symbol">原价:</text>
-							<text class="price">￥{{ item.primary_price }}</text>
+						<view class="total_price">
+							<view class="price_box">
+								<text class="symbol">￥</text>
+								<text class="price">{{ priceToFixed(item.price) }}</text>
+							</view>
+							<view class="primary_price">
+								<text class="primary_symbol">原价:</text>
+								<text class="price">￥{{ item.primary_price }}</text>
+							</view>
+						</view>
+						<view class="bottom_cart">
+							<view class="left">
+								<view class="tips">{{ item.tips }}</view>
+								<view class="tips_location">配送至{{ item.location }}</view>
+							</view>
+							<view class="cart">
+								<i class="iconfont icon-gouwuche-tianchong"></i>
+							</view>
 						</view>
 					</view>
-					<view class="bottom_cart">
-						<view class="left">
-							<view class="tips">{{ item.tips }}</view>
-							<view class="tips_location">配送至{{ item.location }}</view>
-						</view>
-						<view class="cart">
-							<i class="iconfont icon-gouwuche-tianchong"></i>
-						</view>
-					</view>
-				</view>
+				</uni-transition>
 			</view>
 		</block>
 	</view>
@@ -122,12 +127,27 @@
 
 <script setup>
 //onPageScroll:滚动事件
-import { onPageScroll } from '@dcloudio/uni-app';
-import { ref, computed, onMounted } from 'vue';
+import { onPageScroll, onLoad, onShow } from '@dcloudio/uni-app';
+import { ref, computed, onMounted, getCurrentInstance } from 'vue';
+const { proxy } = getCurrentInstance();
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 // 页面加载
 const loading = ref(false);
+
+// 轮播图
+const swiper_list = ref([
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner1.png'
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner2.png'
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner3.png'
+	}
+]);
+
 // 所属公司company
 const company_list = ref([
 	{ value: 0, text: '炜洹饮食策划管理有限公司' },
@@ -145,11 +165,11 @@ const company_change = (e) => {
 // 列表
 const shopping_list = ref([
 	{
-		src: '/static/img/list1.png',
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list1.png',
 		type: 'type1'
 	},
 	{
-		src: '/static/img/list2.png',
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
 		type: 'type2',
 		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
 		boom: true,
@@ -159,7 +179,7 @@ const shopping_list = ref([
 		location: '广州'
 	},
 	{
-		src: '/static/img/list3.png',
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
 		type: 'type2',
 		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
 		boom: false,
@@ -169,7 +189,7 @@ const shopping_list = ref([
 		location: '广州'
 	},
 	{
-		src: '/static/img/list4.png',
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
 		type: 'type2',
 		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
 		boom: false,
@@ -179,7 +199,7 @@ const shopping_list = ref([
 		location: '广州'
 	},
 	{
-		src: '/static/img/list5.png',
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
 		type: 'type2',
 		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
 		boom: false,
@@ -189,7 +209,7 @@ const shopping_list = ref([
 		location: '广州'
 	},
 	{
-		src: '/static/img/list6.png',
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
 		type: 'type2',
 		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
 		boom: false,
@@ -200,7 +220,7 @@ const shopping_list = ref([
 	},
 	{
 		type: 'type3',
-		src: '/static/img/list7.png'
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list7.png'
 	}
 ]);
 
@@ -234,9 +254,31 @@ onPageScroll((e) => {
 	}
 });
 
+// 跳转分类
+const jump_category = () => {
+	uni.navigateTo({
+		url: '/pages/shopping/category'
+	});
+};
+
+// 跳转商品下单页
+const jump_place_order = () => {
+	uni.navigateTo({
+		url: '/pages/shopping/place_an_order'
+	});
+};
+
+onShow((e) => {
+	console.log('onshwo', e);
+});
+
 // 页面挂载完毕
 onMounted(() => {
 	loading.value = true;
+	proxy.$refs.transition_ref.init({
+		duration: 500,
+		timingFunction: 'ease'
+	});
 });
 </script>
 
@@ -324,6 +366,7 @@ onMounted(() => {
 
 .swiper_wrap {
 	position: relative;
+	z-index: 3;
 }
 
 .swiper_banner {
@@ -342,7 +385,6 @@ onMounted(() => {
 	right: 0;
 	padding: 0 14rpx;
 	margin: auto;
-	background: linear-gradient(to bottom, transparent, #f1f1f1);
 	.classify_navigation {
 		padding: 24rpx 30rpx;
 		background: rgba(255, 255, 255, 0.8);
@@ -389,6 +431,7 @@ onMounted(() => {
 			.company_item {
 				::v-deep .uni-select {
 					border: none;
+					z-index: 3;
 				}
 				::v-deep .uni-select__input-box {
 					width: 160rpx;
@@ -399,6 +442,7 @@ onMounted(() => {
 				}
 				::v-deep .uni-select__selector {
 					width: 450rpx;
+					z-index: 3;
 				}
 			}
 		}

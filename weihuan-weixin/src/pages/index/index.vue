@@ -25,15 +25,11 @@
 		<uni-transition mode-class="fade" :show="loading">
 			<!-- 轮播图 -->
 			<swiper class="swiper_banner" autoplay :interval="5000" :duration="1000" circular>
-				<swiper-item class="swiper-item">
-					<image class="cover" src="/static/img/banner1.png" mode="widthFix"></image>
-				</swiper-item>
-				<swiper-item class="swiper-item">
-					<image class="cover" src="/static/img/banner2.png" mode="widthFix"></image>
-				</swiper-item>
-				<swiper-item class="swiper-item">
-					<image class="cover" src="/static/img/banner3.png" mode="widthFix"></image>
-				</swiper-item>
+				<block v-for="item in swiper_list" :key="item.src">
+					<swiper-item class="swiper-item">
+						<image class="cover" :src="item.src" mode="widthFix"></image>
+					</swiper-item>
+				</block>
 			</swiper>
 		</uni-transition>
 
@@ -74,40 +70,39 @@
 	</div>
 
 	<!-- 分发方式 -->
-	<uni-transition mode-class="slide-bottom" :show="loading">
-		<view class="distribute">
-			<view class="wrap">
-				<view class="type">
-					<view class="box">
-						<view class="title">自提点</view>
-						<view class="lead">在线点单，到自提点取货</view>
-						<view class="cover_box">
-							<image class="cover" src="/src/static/img/store.png" mode="widthFix"></image>
-						</view>
-					</view>
-					<view class="box">
-						<view class="title">物流配送</view>
-						<view class="lead">在线点单，货物送到家</view>
-						<view class="cover_box">
-							<image class="cover" src="/src/static/img/truck.png" mode="widthFix"></image>
-						</view>
+	<view class="distribute">
+		<view class="wrap">
+			<view class="type">
+				<view class="box">
+					<view class="title">自提点</view>
+					<view class="lead">在线点单，到自提点取货</view>
+					<view class="cover_box">
+						<image class="cover" src="/src/static/img/store.png" mode="widthFix"></image>
 					</view>
 				</view>
-				<view class="advertising">
-					<uni-notice-bar
-						scrollable
-						showIcon
-						single
-						speed="80"
-						background-color="#F1F1F1"
-						color="#FD6F23"
-						textColor="#000"
-						text="精选猕猴桃，德国进口，新品上架，限时抢购"
-					></uni-notice-bar>
+				<view class="box">
+					<view class="title">物流配送</view>
+					<view class="lead">在线点单，货物送到家</view>
+					<view class="cover_box">
+						<image class="cover" src="/src/static/img/truck.png" mode="widthFix"></image>
+					</view>
 				</view>
 			</view>
+			<view class="advertising">
+				<uni-notice-bar
+					scrollable
+					showIcon
+					single
+					speed="80"
+					background-color="#F1F1F1"
+					color="#FD6F23"
+					textColor="#000"
+					text="精选猕猴桃，德国进口，新品上架，限时抢购"
+				></uni-notice-bar>
+			</view>
 		</view>
-	</uni-transition>
+	</view>
+
 	<!-- 优惠卷 -->
 	<uni-transition mode-class="slide-bottom" :show="loading">
 		<view class="coupon">
@@ -127,30 +122,14 @@
 	<uni-transition mode-class="fade" :show="loading">
 		<view class="classify">
 			<view class="wrap">
-				<view class="item">
-					<view class="cover_box">
-						<image class="cover" src="/static/img/classify1.png" mode="widthFix" lazy-load></image>
+				<block v-for="item in classify_list" :key="item.src">
+					<view class="item">
+						<view class="cover_box">
+							<image class="cover" :src="item.src" mode="widthFix" lazy-load></image>
+						</view>
+						<view class="title">{{ item.title }}</view>
 					</view>
-					<view class="title">海鲜优选</view>
-				</view>
-				<view class="item">
-					<view class="cover_box">
-						<image class="cover" src="/static/img/classify2.png" mode="widthFix" lazy-load></image>
-					</view>
-					<view class="title">进口肉类</view>
-				</view>
-				<view class="item">
-					<view class="cover_box">
-						<image class="cover" src="/static/img/classify3.png" mode="widthFix" lazy-load></image>
-					</view>
-					<view class="title">西式甜品</view>
-				</view>
-				<view class="item">
-					<view class="cover_box">
-						<image class="cover" src="/static/img/classify4.png" mode="widthFix" lazy-load></image>
-					</view>
-					<view class="title">精品果茶</view>
-				</view>
+				</block>
 			</view>
 		</view>
 	</uni-transition>
@@ -158,15 +137,11 @@
 	<uni-transition mode-class="fade" :show="loading">
 		<view class="recommend">
 			<swiper class="recommend_swiper" autoplay :interval="500000" :duration="1000" circular>
-				<swiper-item class="item">
-					<image class="cover" src="/src/static/img/recommend1.png" mode="aspectFit"></image>
-				</swiper-item>
-				<swiper-item class="item">
-					<image class="cover" src="/src/static/img/recommend2.png" mode="aspectFit"></image>
-				</swiper-item>
-				<swiper-item class="item">
-					<image class="cover" src="/src/static/img/recommend1.png" mode="aspectFit"></image>
-				</swiper-item>
+				<block v-for="item in recommend_list" :key="item.src">
+					<swiper-item class="item">
+						<image class="cover" :src="item.src" mode="aspectFit"></image>
+					</swiper-item>
+				</block>
 			</swiper>
 		</view>
 	</uni-transition>
@@ -184,6 +159,49 @@ const loading = ref(false);
 const user_title = ref('炜洹游客用户');
 const user_lead = ref('为给您提供更好的服务请授权登录');
 const user_mobile = ref('13428198898');
+
+// 轮播图
+const swiper_list = ref([
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner1.png'
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner2.png'
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner3.png'
+	}
+]);
+
+// 分类列表
+const classify_list = ref([
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify1.png',
+		title: '海鲜优选'
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify2.png',
+		title: '进口肉类'
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify3.png',
+		title: '西式甜品'
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify4.png',
+		title: '精品果茶'
+	}
+]);
+
+// 推荐列表
+const recommend_list = ref([
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/recommend1.png'
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/recommend2.png'
+	}
+]);
 
 // 手机号码加密
 const userMobileComputed = computed(() => {

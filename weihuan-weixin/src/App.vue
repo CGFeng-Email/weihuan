@@ -14,7 +14,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 @import url('/src/static/font/iconfont.css');
 view {
 	padding: 0;
@@ -24,6 +24,7 @@ view {
 
 image {
 	height: auto;
+	vertical-align: bottom;
 }
 
 .over1 {
@@ -57,11 +58,12 @@ image {
 	width: 100%;
 	z-index: 10;
 	background: transparent;
+	transition: 0.3s ease;
 }
 
 .page_title {
 	text-align: center;
-	font-size: 32rpx;
+	font-size: 28rpx;
 	font-weight: 500;
 	color: #000;
 	position: fixed;
@@ -69,5 +71,42 @@ image {
 	width: 100%;
 	z-index: 10;
 	background: transparent;
+	transition: 0.3s ease;
+}
+
+.btn_bg {
+	background: linear-gradient(257.93deg, #fdb681 0%, #ff8992 100%);
+}
+
+.box_shadow {
+	box-shadow: 0 0 6rpx rgba(0, 0, 0, 0.1);
+}
+
+.box_border_radius {
+	border-radius: 12rpx;
+}
+
+.fixed_bottom_btn {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	padding: 30rpx 30rpx 50rpx;
+	background: #fff;
+	z-index: 20;
+	.btn {
+		overflow: hidden;
+		height: 100rpx;
+		line-height: 100rpx;
+		border-radius: 45rpx;
+	}
+
+	button {
+		height: 100%;
+		line-height: 100rpx;
+		background: none;
+		font-size: 30rpx;
+		color: #fff;
+	}
 }
 </style>

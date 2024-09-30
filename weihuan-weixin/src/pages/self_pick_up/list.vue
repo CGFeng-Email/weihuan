@@ -1,39 +1,37 @@
-<!-- 自提点 -->
+<!-- 自提点列表 -->
 <template>
 	<!-- 顶部到胶囊的高度 -->
 	<view class="top" :style="{ height: useMenuButton().top }"></view>
 	<!-- 标题 -->
-	<uni-transition mode-class="fade" :show="true">
-		<view class="page_title" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
-			<view class="navigation_wrap">
-				<view class="navigation box_border_radius box_shadow">
-					<view class="navigation_btn btn_bg active">自提点</view>
-					<view class="navigation_btn" @click="jump_list">列表</view>
-				</view>
+	<view class="page_title" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
+		<view class="navigation_wrap">
+			<view class="navigation box_border_radius box_shadow">
+				<view class="navigation_btn" @click="returnPage">自提点</view>
+				<view class="navigation_btn btn_bg active">列表</view>
 			</view>
 		</view>
-	</uni-transition>
+	</view>
 
-	<map
-		id="mapId"
-		ref="mapRef"
-		class="map"
-		:latitude="latitude"
-		:longitude="longitude"
-		:scale="scale"
-		:markers="markersList"
-		:show-location="true"
-		:show-compass="true"
-		:enable-rotate="true"
-		:enable-traffic="true"
-		:enable-poi="true"
-		:enable-building="true"
-		@markertap="markertap"
-	></map>
+	<!-- 地址，搜索 -->
+	<view class="location_search" :style="{ top: useMenuButton().topView }">
+		<view class="address" @click="jump_selectAddress">
+			<text class="iconfont icon-dizhi"></text>
+			<text class="text">广州.荔湾</text>
+		</view>
+		<view class="search">
+			<text class="iconfont icon-sousuo"></text>
+			<text class="text">请输入关键字</text>
+		</view>
+	</view>
 
-	<swiper class="store box_border_radius box_shadow" circular :current="current" @change="swiperChange">
-		<block v-for="item in markersList" :key="item.id">
-			<swiper-item class="item">
+	<view :style="{ height: useMenuButton().top }"></view>
+	<view :style="{ height: useMenuButton().height }"></view>
+	<view style="height: 36px"></view>
+
+	<!-- 列表 -->
+	<view class="list">
+		<block v-for="(item, index) in markersList" :key="index">
+			<view class="item box_border_radius box_shadow" @click="jump_details">
 				<view class="store_info">
 					<image class="cover" :src="item.image" mode="aspectFill"></image>
 					<view class="content">
@@ -65,25 +63,29 @@
 					<view class="location over2">
 						{{ item.title }}
 					</view>
-					<view class="location_btn btn_bg" @click="openLocation(item)">
+					<view class="location_btn btn_bg" @click.stop="openLocation(item)">
 						<text class="iconfont icon-dizhi"></text>
 						<text class="text">导航</text>
 					</view>
 				</view>
-			</swiper-item>
+			</view>
 		</block>
-	</swiper>
+	</view>
 </template>
 
 <script setup>
-import { ref, onMounted, getCurrentInstance } from 'vue';
-const { proxy } = getCurrentInstance();
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
-let mapContent = ref(null);
-const latitude = ref(null);
-const longitude = ref(null);
-const scale = ref(16);
+import { ref, onMounted } from 'vue';
+// 页面加载
+const loading = ref(false);
+
+// 跳转选择收货地址
+const jump_selectAddress = () => {
+	uni.navigateTo({
+		url: '/pages/select_address/index'
+	});
+};
 
 // 标记点
 const markersList = ref([
@@ -209,76 +211,12 @@ const markersList = ref([
 	}
 ]);
 
-const get_location = () => {
-	uni.getLocation({
-		type: 'gcj02',
-		success: function (res) {
-			console.log('res', res);
-			latitude.value = res.latitude;
-			longitude.value = res.longitude;
-
-			if (res.latitude && res.longitude) {
-				mapContent.value = uni.createMapContext('mapId', proxy);
-			}
-
-			console.log('mapContent', mapContent.value);
-		},
-		fail: (err) => {
-			console.log('err', err);
-		}
-	});
+// 返回上一页
+const returnPage = () => {
+	uni.navigateBack();
 };
 
-// 轮播切换
-const current = ref(0);
-
-// 点击标记点
-const markertap = (e) => {
-	console.log('id', e.detail.markerId);
-
-	const index = markersList.value.findIndex((item) => item.id == e.detail.markerId);
-	console.log('index', index);
-	current.value = index;
-	moverTo(index);
-};
-
-// 轮播切换
-const swiperChange = (e) => {
-	current.value = e.detail.current;
-	moverTo(current.value);
-};
-
-// 地图切换中心点，更新导航APP信息
-const moverTo = (index) => {
-	// 将地图中心移动到当前定位点
-	mapContent.value.moveToLocation({
-		longitude: markersList.value[index].longitude,
-		latitude: markersList.value[index].latitude,
-		success: (moveToRes) => {
-			console.log('moveToRes', moveToRes);
-		},
-		fail: (moveToErr) => {
-			console.log('moveToErr', moveToErr);
-		}
-	});
-};
-
-// 拉起第三方app-选择导航地图
-const openMapApp = (item) => {
-	mapContent.openMapApp({
-		longitude: item.longitude,
-		latitude: item.latitude,
-		destination: item.title
-	});
-};
-
-const jump_list = () => {
-	uni.navigateTo({
-		url: '/pages/self_pick_up/list'
-	});
-};
-
-// 打开地图
+// 使用应用内置地图查看位置
 const openLocation = (item) => {
 	uni.openLocation({
 		latitude: item.latitude,
@@ -286,12 +224,25 @@ const openLocation = (item) => {
 		address: item.title,
 		name: item.callout.content
 	});
-}
+};
+
+// 跳转详情
+const jump_details = () => {
+	uni.navigateTo({
+		url: '/pages/self_pick_up/details'
+	});
+};
 
 onMounted(() => {
-	get_location();
+	loading.value = true;
 });
 </script>
+
+<style>
+page {
+	background: #fbfbfb;
+}
+</style>
 
 <style lang="scss" scoped>
 .top {
@@ -325,24 +276,64 @@ onMounted(() => {
 	}
 }
 
-.map {
-	width: 750rpx;
-	height: 100vh;
+.location_search {
+	background: #fff;
+	position: fixed;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 30rpx 12rpx;
+	z-index: 2;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+
+	.address {
+		font-size: 26rpx;
+		color: #ff8992;
+		font-weight: 500;
+		display: flex;
+		align-items: center;
+		flex: none;
+		.text {
+			padding: 0 12rpx;
+			color: #000;
+		}
+	}
+
+	.search {
+		flex: 1;
+		height: 60rpx;
+		border-radius: 45rpx;
+		display: flex;
+		align-items: center;
+		background: #f9f9f9;
+		padding: 0 30rpx;
+		margin-left: 15rpx;
+
+		.iconfont {
+			font-size: 26rpx;
+			font-weight: 500;
+			color: #ff8992;
+			flex: none;
+		}
+
+		.text {
+			flex: 1;
+			font-size: 24rpx;
+			font-weight: 500;
+			color: #b5b5b5;
+			padding-left: 15rpx;
+		}
+	}
 }
 
-.store {
-	position: fixed;
-	bottom: 20rpx;
-	left: 50%;
-	transform: translateX(-50%);
-	width: 690rpx;
-	height: 390rpx;
-	background: #fff;
-	padding: 30rpx;
-	box-sizing: border-box;
-
+.list {
+	padding: 20rpx 20rpx 40rpx;
 	.item {
-		height: 100%;
+		padding: 20rpx;
+		margin-bottom: 20rpx;
+		background: #fff;
 		.store_info {
 			display: flex;
 			justify-content: space-between;
