@@ -1,3 +1,4 @@
+<!-- 定位地址，选择城市定位 -->
 <template>
 	<view class="location">
 		<view class="address">{{ address }}</view>

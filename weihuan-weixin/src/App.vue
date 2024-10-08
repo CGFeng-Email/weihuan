@@ -72,10 +72,26 @@ image {
 	z-index: 10;
 	background: transparent;
 	transition: 0.3s ease;
+	
+	.return_icon {
+		position: absolute;
+		left: 30rpx;
+		top: 50%;
+		transform: translateY(-50%);
+		padding-right: 30rpx;
+	}
 }
 
 .btn_bg {
 	background: linear-gradient(257.93deg, #fdb681 0%, #ff8992 100%);
+}
+
+.disabled_bg {
+	background: #c1c1c1;
+	color: #000 !important;
+	&::after {
+		display: none;
+	}
 }
 
 .box_shadow {

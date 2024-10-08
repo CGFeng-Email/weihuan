@@ -63,12 +63,14 @@
 			<uni-icons :type="computedCheckAll ? 'checkbox-filled' : 'circle'" size="24" :color="computedCheckAll ? '#FF8992' : '#bcbcbc'"></uni-icons>
 			<text class="text">全选</text>
 		</view>
-		<view class="pay_btn btn_bg" @click="jump_place_order">去支付</view>
+		<view>
+			<button class="pay_btn btn_bg" :class="{ disabled_bg: isPayment }" :disabled="isPayment" @click="jump_place_order">去支付</button>
+		</view>
 	</view>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 
 // 购物车列表
 const cartList = ref([
@@ -197,6 +199,23 @@ const total_price = computed(() => {
 
 	return price_number;
 });
+
+// 是否能支付
+const isPayment = ref(true);
+watch(
+	() => cartList.value.map((item) => item.check),
+	(newVal, oldVal) => {
+		const isIndex = newVal.findIndex((item) => item == true);
+		if (isIndex >= 0) {
+			isPayment.value = false;
+		} else {
+			isPayment.value = true;
+		}
+	},
+	{
+		immediate: true
+	}
+);
 
 // 跳转商品详情
 const jump_order_details = () => {

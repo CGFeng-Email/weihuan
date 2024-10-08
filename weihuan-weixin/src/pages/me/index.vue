@@ -41,11 +41,11 @@
 			<view class="num">3</view>
 			<view class="name">待自提订单</view>
 		</view>
-		<view class="item">
+		<view class="item" @click="open_coupon">
 			<view class="num">5</view>
 			<view class="name">优惠卷</view>
 		</view>
-		<view class="item">
+		<view class="item" @click="open_collect">
 			<view class="num">28</view>
 			<view class="name">我的收藏</view>
 		</view>
@@ -165,6 +165,20 @@ const functionList = ref([
 const jump_personal_data = () => {
 	uni.navigateTo({
 		url: '/pages/me/personal_data'
+	})
+}
+
+// 跳转我的收藏
+const open_collect = () =>{
+	uni.navigateTo({
+		url: '/pages/shopping/collect'
+	})
+}
+
+// 跳转优惠卷
+const open_coupon = () => {
+	uni.navigateTo({
+		url: '/pages/coupon/index'
 	})
 }
 
