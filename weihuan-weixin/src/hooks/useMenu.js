@@ -8,14 +8,19 @@ function useMenuButton() {
 	const height = (getMenuButton.height + 6) + 'px';
 	// 占位符高度
 	const topView = (getMenuButton.height + 6) + getMenuButton.top + 'px';
-
+	// 订单页 导航栏的top高度
+	const navigateTop =  (getMenuButton.height + 6) + getMenuButton.top + 40 + 'px';
+	// 订单页 顶部占位
+	const orderView = (getMenuButton.height + 6) + getMenuButton.top + 40 + 42 + 'px';
 	return {
 		top,
 		bottom,
 		left,
 		width,
 		height,
-		topView
+		topView,
+		navigateTop,
+		orderView
 	}
 }
 

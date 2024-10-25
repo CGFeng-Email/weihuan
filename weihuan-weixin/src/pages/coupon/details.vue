@@ -5,7 +5,7 @@
 	<!-- 标题 -->
 	<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
 		<view class="return_icon" @click="return_page">
-			<uni-icons type="left" size="20" color="#fff"></uni-icons>
+			<uni-icons type="left" size="23" color="#fff"></uni-icons>
 		</view>
 		{{ scrollTop != 'white_default' ? '我的' : '' }}
 	</view>
@@ -71,12 +71,14 @@ const coupon_data = ref({
 	type: 1
 });
 
+// 使用优惠券
 const open_shoppingList = () =>{
 	uni.switchTab({
 		url: '/pages/shopping/index'
 	})
 }
 
+// 返回
 const return_page = () => {
 	uni.navigateBack()
 }

@@ -18,7 +18,7 @@
 			<text class="iconfont icon-dizhi"></text>
 			<text class="text">广州.荔湾</text>
 		</view>
-		<view class="search">
+		<view class="search" @click="open_shopping_search">
 			<text class="iconfont icon-sousuo"></text>
 			<text class="text">请输入关键字</text>
 		</view>
@@ -232,6 +232,13 @@ const jump_details = () => {
 		url: '/pages/self_pick_up/details'
 	});
 };
+
+// 跳转搜索商品页
+function open_shopping_search() {
+	uni.navigateTo({
+		url: '/pages/shopping/shopping_search'
+	})
+}
 
 onMounted(() => {
 	loading.value = true;

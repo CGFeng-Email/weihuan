@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "9351294",
+      "name": "承运商我的订单",
+      "font_class": "chengyunshangwodedingdan",
+      "unicode": "e780",
+      "unicode_decimal": 59264
+    },
+    {
+      "icon_id": "11641875",
+      "name": "扫码",
+      "font_class": "saoma",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
+      "icon_id": "504568",
+      "name": "复制",
+      "font_class": "fuzhi",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
       "icon_id": "5027",
       "name": "手机",
       "font_class": "shouji",

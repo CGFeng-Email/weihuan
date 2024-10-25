@@ -99,6 +99,151 @@
 			"style": {
 				"navigationStyle": "custom"
 			}
+		},
+		{
+			"path": "pages/coupon/center",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "领劵中心"
+			}
+		},
+		{
+			"path": "pages/address/index",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "地址管理"
+			}
+		},
+		{
+			"path": "pages/address/add_address",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "新增地址"
+			}
+		},
+		{
+			"path": "pages/address/edit_address",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "编辑收货地址"
+			}
+		},
+		{
+			"path": "pages/notice/index",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "系统公告"
+			}
+		},
+		{
+
+			"path": "pages/notice/details",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/feedback/index",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "意见反馈"
+			}
+		},
+		{
+			"path": "pages/feedback/add",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "立即反馈"
+			}
+		},
+		{
+			"path": "pages/feedback/details",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "意见反馈"
+			}
+		},
+		{
+			"path": "pages/member_center/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/index",
+			"style": {
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/order/details",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationBarBackgroundColor": "#fff"
+			}
+		},
+		{
+			"path": "pages/order/distribution",
+			"style": {
+				"navigationBarTitleText": "物流信息",
+				"navigationBarBackgroundColor": "#fff"
+			}
+		},
+		{
+			"path": "pages/order/after_sale",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "申请售后"
+			}
+		},
+		{
+			"path": "pages/order/retreat",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "退换商品"
+			}
+		},
+		{
+			"path": "pages/order/cancel",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "订单核销"
+			}
+		},
+		{
+			"path": "pages/order/me_cancel",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "我的核销"
+			}
+		},
+		{
+			"path": "pages/shopping/shopping_search",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "搜索商品"
+			}
+		},
+		{
+			"path": "pages/condition/agreement",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "用户协议"
+			}
+		},
+		{
+			"path": "pages/condition/privacy",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "隐私政策"
+			}
+		},
+		{
+			"path": "pages/login/register",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "手机号登录/注册"
+			}
 		}
 	],
 	"globalStyle": {

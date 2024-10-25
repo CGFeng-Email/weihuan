@@ -8,7 +8,7 @@
 				<view class="ide">RMB</view>
 				<view class="price">{{ item.price }}</view>
 				<view class="lead">{{ item.tips }}</view>
-				<view class="btn" v-if="item.type == 1">立即使用</view>
+				<view class="btn" @click.stop="use_coupon" v-if="item.type == 1">立即使用</view>
 				<view class="btn" :class="{ type2_btn: item.type == 2 }" v-else-if="item.type == 2">已使用</view>
 				<view class="btn" :class="{ type3_btn: item.type == 3 }" v-else>已过期</view>
 			</view>
@@ -78,11 +78,20 @@ const list = ref([
 	}
 ]);
 
+// 跳转优惠券详情
 const open_details = () => {
 	uni.navigateTo({
 		url: '/pages/coupon/details'
+	});
+};
+
+// 使用优惠券
+function use_coupon() {
+	uni.switchTab({
+		url: '/pages/shopping/index'
 	})
 }
+
 </script>
 
 <style>
@@ -145,13 +154,13 @@ page {
 			.type2_btn {
 				background: #000;
 				color: #fff;
-				opacity: .3;
+				opacity: 0.3;
 			}
 
 			.type3_btn {
 				background: #000;
 				color: #fff;
-				opacity: .2;
+				opacity: 0.2;
 			}
 		}
 

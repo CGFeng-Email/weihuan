@@ -72,10 +72,10 @@ image {
 	z-index: 10;
 	background: transparent;
 	transition: 0.3s ease;
-	
+
 	.return_icon {
 		position: absolute;
-		left: 30rpx;
+		left: 5px;
 		top: 50%;
 		transform: translateY(-50%);
 		padding-right: 30rpx;
@@ -112,17 +112,92 @@ image {
 	z-index: 20;
 	.btn {
 		overflow: hidden;
-		height: 100rpx;
-		line-height: 100rpx;
-		border-radius: 45rpx;
+		height: 80rpx;
+		line-height: 80rpx;
+		border-radius: 50rpx;
 	}
 
 	button {
 		height: 100%;
-		line-height: 100rpx;
+		line-height: 80rpx;
 		background: none;
 		font-size: 30rpx;
 		color: #fff;
+		&::after {
+			display: none;
+		}
 	}
+}
+.multi {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	.btn {
+		width: 48%;
+	}
+
+	.del {
+		background: #dfdfdf;
+	}
+}
+
+.head_title {
+	font-size: 28rpx;
+	line-height: 38rpx;
+	color: #111;
+	font-weight: bold;
+	margin-bottom: 20rpx;
+}
+
+.line_title {
+	position: relative;
+	padding-left: 26rpx;
+	font-size: 30rpx;
+	font-weight: bold;
+	color: #373737;
+	padding-bottom: 20rpx;
+	&::after {
+		content: '';
+		position: absolute;
+		top: 2rpx;
+		left: 0;
+		width: 12rpx;
+		height: 32rpx;
+		border-radius: 6px;
+		background: linear-gradient(92.65deg, #ff8992 0%, #fdba80 100%);
+	}
+}
+
+.card_box {
+	padding: 30rpx;
+	background: #fff;
+	margin-bottom: 30rpx;
+	overflow: hidden;
+	.title {
+		font-size: 30rpx;
+		font-weight: 600;
+		padding-bottom: 30rpx;
+	}
+
+	.li {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 20rpx;
+		.name {
+			font-size: 28rpx;
+			color: #707070;
+			font-weight: 500;
+		}
+
+		.val {
+			font-size: 26rpx;
+			color: #000;
+			font-weight: 500;
+		}
+	}
+}
+
+.animate {
+	transition: .4s ease;
 }
 </style>

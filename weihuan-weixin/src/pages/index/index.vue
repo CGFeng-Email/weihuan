@@ -1,4 +1,8 @@
 <template>
+	<!-- 打开弹窗时，禁止滑动页面，必须要在第一个节点 -->
+	<page-meta :page-style="'overflow:' + (login_show ? 'hidden' : 'visible')"></page-meta>
+	<!-- 登录弹窗 -->
+	<login-popup :show="login_show" @maskClick="maskClick"></login-popup>
 	<!-- 顶部到胶囊的高度 -->
 	<view class="top" :class="scrollTop" :style="{ height: useMenuButton().top }"></view>
 	<!-- 标题 -->
@@ -14,7 +18,7 @@
 				<text class="iconfont icon-dizhi"></text>
 				<text class="text">广州.荔湾</text>
 			</view>
-			<view class="search">
+			<view class="search" @click="open_shopping_search">
 				<text class="iconfont icon-sousuo"></text>
 				<text class="text">进口美国3A牛肉</text>
 			</view>
@@ -44,7 +48,7 @@
 							{{ user_lead }}
 						</view>
 					</view>
-					<view class="login_btn">登录/注册</view>
+					<view class="login_btn" @click="show_login">登录/注册</view>
 				</view>
 			</view>
 			<view class="user" v-else>
@@ -73,14 +77,14 @@
 	<view class="distribute">
 		<view class="wrap">
 			<view class="type">
-				<view class="box">
+				<view class="box" @click="open_shopping">
 					<view class="title">自提点</view>
 					<view class="lead">在线点单，到自提点取货</view>
 					<view class="cover_box">
 						<image class="cover" src="/src/static/img/store.png" mode="widthFix"></image>
 					</view>
 				</view>
-				<view class="box">
+				<view class="box" @click="open_shopping">
 					<view class="title">物流配送</view>
 					<view class="lead">在线点单，货物送到家</view>
 					<view class="cover_box">
@@ -98,6 +102,7 @@
 					color="#FD6F23"
 					textColor="#000"
 					text="精选猕猴桃，德国进口，新品上架，限时抢购"
+					@click="open_notice_details"
 				></uni-notice-bar>
 			</view>
 		</view>
@@ -107,23 +112,24 @@
 	<uni-transition mode-class="slide-bottom" :show="loading">
 		<view class="coupon">
 			<swiper class="swiper_coupon" skip-hidden-item-layout autoplay :interval="5000" :duration="1000" :display-multiple-items="4" circular previous-margin="15px">
-				<swiper-item class="item" v-for="(item, index) in 10" :key="index">
+				<swiper-item class="item" v-for="(item, index) in 10" :key="index" @click="open_coupon_details">
 					<view class="box">
 						<view class="ide">RMB</view>
 						<view class="price">150</view>
 						<view class="lead">满600可用</view>
-						<view class="btn">立即领取</view>
+						<view class="btn" @click.stop="get_coupon">立即领取</view>
 					</view>
 				</swiper-item>
 			</swiper>
 		</view>
 	</uni-transition>
+
 	<!-- 分类 -->
 	<uni-transition mode-class="fade" :show="loading">
 		<view class="classify">
 			<view class="wrap">
 				<block v-for="item in classify_list" :key="item.src">
-					<view class="item">
+					<view class="item" @click="open_shopping">
 						<view class="cover_box">
 							<image class="cover" :src="item.src" mode="widthFix" lazy-load></image>
 						</view>
@@ -133,18 +139,20 @@
 			</view>
 		</view>
 	</uni-transition>
+
 	<!-- 推荐 -->
 	<uni-transition mode-class="fade" :show="loading">
 		<view class="recommend">
-			<swiper class="recommend_swiper" autoplay :interval="500000" :duration="1000" circular>
+			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
 				<block v-for="item in recommend_list" :key="item.src">
-					<swiper-item class="item">
+					<swiper-item class="item" @click="open_shopping_details">
 						<image class="cover" :src="item.src" mode="aspectFit"></image>
 					</swiper-item>
 				</block>
 			</swiper>
 		</view>
 	</uni-transition>
+
 </template>
 
 <script setup>
@@ -159,6 +167,18 @@ const loading = ref(false);
 const user_title = ref('炜洹游客用户');
 const user_lead = ref('为给您提供更好的服务请授权登录');
 const user_mobile = ref('13428198898');
+// 登录弹窗
+const login_show = ref(false);
+
+// 打开登录弹窗
+function show_login() {
+	login_show.value = true;
+}
+
+// 点击登录弹窗遮罩，关闭弹窗
+function maskClick() {
+	login_show.value = false;
+}
 
 // 轮播图
 const swiper_list = ref([
@@ -214,6 +234,51 @@ const jump_selectAddress = () => {
 		url: '/pages/select_address/index'
 	});
 };
+
+// 跳转优惠券详情
+function open_coupon_details() {
+	uni.navigateTo({
+		url: '/pages/coupon/details'
+	});
+}
+
+// 领取优惠券
+function get_coupon() {
+	uni.showToast({
+		title: '领取成功',
+		icon: 'none',
+		duration: 2000,
+		mask: true
+	});
+}
+
+// 商品分类，商品列表
+function open_shopping() {
+	uni.switchTab({
+		url: '/pages/shopping/index'
+	});
+}
+
+// 跳转公告详情
+function open_notice_details() {
+	uni.navigateTo({
+		url: '/pages/notice/details'
+	});
+}
+
+// 推荐商品， 跳转商品详情
+function open_shopping_details() {
+	uni.navigateTo({
+		url: '/pages/shopping/place_an_order'
+	});
+}
+
+// 跳转搜索商品页
+function open_shopping_search() {
+	uni.navigateTo({
+		url: '/pages/shopping/shopping_search'
+	});
+}
 
 // 顶部区域滚动
 const scrollTop = ref('white_default');

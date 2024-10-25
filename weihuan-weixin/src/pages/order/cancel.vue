@@ -1,0 +1,69 @@
+<!-- 订单核销 -->
+<template>
+	<view class="main">
+		<image class="cover" src="/src/static/img/cancel.jpg" mode="widthFix"></image>
+		<view class="title">扫描券码 一键核销</view>
+		<view class="lead">降低核销门槛 低成本留存优质客户</view>
+		<view class="sweep">
+			<button class="btn_bg" @click="sweep_click">立即核销</button>
+		</view>
+	</view>
+
+	<sweep-navigate @sweep_switch="sweep_switch" :sweep_index="sweep_index"></sweep-navigate>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import sweepNavigate from '../component/sweep_navigate.vue';
+
+const sweep_index = ref(0);
+
+// 立即核销
+function sweep_click() {
+	uni.scanCode({
+		autoDecodeCharset: true,
+		barCodeInput: true,
+		success: function (res) {
+			console.log('res', res);
+			if(res.errMsg == 'scanCode:ok') {
+				uni.navigateTo({
+					url: '/pages/order/details'
+				})
+			}
+		}
+	});
+}
+</script>
+
+<style lang="scss" scoped>
+.main {
+	padding: 170rpx 30rpx 30rpx;
+	text-align: center;
+
+	.cover {
+		width: 500rpx;
+		margin-bottom: 20rpx;
+	}
+
+	.title {
+		font-size: 48rpx;
+		font-weight: 500;
+		padding: 20rpx 0;
+	}
+
+	.lead {
+		font-size: 32rpx;
+		line-height: 42rpx;
+		color: #8e8e8e;
+	}
+
+	.sweep {
+		padding-top: 100rpx;
+		button {
+			width: 400rpx;
+			border-radius: 45rpx;
+			color: #fff;
+		}
+	}
+}
+</style>

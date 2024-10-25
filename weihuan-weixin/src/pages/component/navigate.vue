@@ -1,6 +1,6 @@
 <!-- 导航栏组件 -->
 <template>
-	<view class="navigate">
+	<view class="navigate" :style="{ top: top }">
 		<view class="list">
 			<block v-for="(item, index) in list" :key="item.title">
 				<view class="item" :class="{ active: itemIndex == index }" @click="itemClick(index, item.title)">
@@ -10,7 +10,9 @@
 		</view>
 	</view>
 	<!-- 占位 -->
-	<view style="height: 82rpx"></view>
+	<block v-if="top == 0">
+		<view style="height: 82rpx"></view>
+	</block>
 </template>
 
 <script>
@@ -22,6 +24,10 @@ export default {
 		},
 		itemIndex: {
 			type: Number,
+			default: 0
+		},
+		top: {
+			type: String,
 			default: 0
 		}
 	},
@@ -48,6 +54,7 @@ export default {
 		display: flex;
 		align-items: center;
 		background: #fff;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 		.item {
 			flex: 1;
 			text-align: center;
@@ -85,5 +92,4 @@ export default {
 		}
 	}
 }
-
 </style>
