@@ -6,24 +6,21 @@
 	<!-- 顶部到胶囊的高度 -->
 	<view class="top" :class="scrollTop" :style="{ height: useMenuButton().top }"></view>
 	<!-- 标题 -->
-	<uni-transition mode-class="fade" :show="loading">
-		<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
-			{{ scrollTop != 'white_default' ? '炜洹商城' : '' }}
-		</view>
-	</uni-transition>
+	<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
+		{{ scrollTop != 'white_default' ? '炜洹商城' : '' }}
+	</view>
+
 	<!-- 地址，搜索 -->
-	<uni-transition mode-class="fade" :show="loading">
-		<view :class="['location', scrollTop, scrollTop != 'white_default' ? 'scroll_loacation' : '']" :style="{ top: useMenuButton().topView }">
-			<view class="address" @click="jump_selectAddress">
-				<text class="iconfont icon-dizhi"></text>
-				<text class="text">广州.荔湾</text>
-			</view>
-			<view class="search" @click="open_shopping_search">
-				<text class="iconfont icon-sousuo"></text>
-				<text class="text">进口美国3A牛肉</text>
-			</view>
+	<view :class="['location', scrollTop, scrollTop != 'white_default' ? 'scroll_loacation' : '']" :style="{ top: useMenuButton().topView }">
+		<view class="address" @click="jump_selectAddress">
+			<text class="iconfont icon-dizhi"></text>
+			<text class="text">广州.荔湾</text>
 		</view>
-	</uni-transition>
+		<view class="search" @click="open_shopping_search">
+			<text class="iconfont icon-sousuo"></text>
+			<text class="text">进口美国3A牛肉</text>
+		</view>
+	</view>
 
 	<div class="swiper_wrap">
 		<uni-transition mode-class="fade" :show="loading">
@@ -77,14 +74,14 @@
 	<view class="distribute">
 		<view class="wrap">
 			<view class="type">
-				<view class="box" @click="open_shopping">
+				<view class="box" @click="open_pickup">
 					<view class="title">自提点</view>
 					<view class="lead">在线点单，到自提点取货</view>
 					<view class="cover_box">
 						<image class="cover" src="/src/static/img/store.png" mode="widthFix"></image>
 					</view>
 				</view>
-				<view class="box" @click="open_shopping">
+				<view class="box" @click="open_classify">
 					<view class="title">物流配送</view>
 					<view class="lead">在线点单，货物送到家</view>
 					<view class="cover_box">
@@ -112,11 +109,11 @@
 	<uni-transition mode-class="slide-bottom" :show="loading">
 		<view class="coupon">
 			<swiper class="swiper_coupon" skip-hidden-item-layout autoplay :interval="5000" :duration="1000" :display-multiple-items="4" circular previous-margin="15px">
-				<swiper-item class="item" v-for="(item, index) in 10" :key="index" @click="open_coupon_details">
+				<swiper-item class="item" v-for="(item, index) in coupon_list" :key="index" @click="open_coupon_details">
 					<view class="box">
-						<view class="ide">RMB</view>
-						<view class="price">150</view>
-						<view class="lead">满600可用</view>
+						<view class="ide">{{ item.title }}</view>
+						<view class="price">{{ item.price }}</view>
+						<view class="lead">{{ item.lead }}</view>
 						<view class="btn" @click.stop="get_coupon">立即领取</view>
 					</view>
 				</swiper-item>
@@ -152,7 +149,6 @@
 			</swiper>
 		</view>
 	</uni-transition>
-
 </template>
 
 <script setup>
@@ -223,6 +219,46 @@ const recommend_list = ref([
 	}
 ]);
 
+// 优惠卷
+const coupon_list = ref([
+	{
+		title: '双11通用券',
+		price: 150,
+		lead: '满600可用',
+		type: 1
+	},
+	{
+		title: '满减券',
+		price: 120,
+		lead: '满400可用',
+		type: 1
+	},
+	{
+		title: '双11通用券',
+		price: 150,
+		lead: '满600可用',
+		type: 1
+	},
+	{
+		title: '满减券',
+		price: 120,
+		lead: '满400可用',
+		type: 1
+	},
+	{
+		title: '双11通用券',
+		price: 150,
+		lead: '满600可用',
+		type: 1
+	},
+	{
+		title: '满减券',
+		price: 120,
+		lead: '满400可用',
+		type: 1
+	}
+]);
+
 // 手机号码加密
 const userMobileComputed = computed(() => {
 	return user_mobile.value.substr(0, 3) + '****' + user_mobile.value.substring(7);
@@ -252,10 +288,17 @@ function get_coupon() {
 	});
 }
 
-// 商品分类，商品列表
-function open_shopping() {
+// 自提点
+function open_pickup(){
 	uni.switchTab({
-		url: '/pages/shopping/index'
+		url: '/pages/self_pick_up/index'
+	})
+}
+
+// 商品分类
+function open_classify() {
+	uni.switchTab({
+		url: '/pages/classify/index'
 	});
 }
 

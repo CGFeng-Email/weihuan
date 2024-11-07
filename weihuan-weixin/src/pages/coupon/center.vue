@@ -3,9 +3,9 @@
 	<view class="list">
 		<view class="item" v-for="item in list" :key="item.id">
 			<view class="box" :class="{ type2: item.type == 3 }" @click="open_details">
-				<view class="ide">RMB</view>
+				<view class="ide">{{item.tips}}</view>
 				<view class="price">{{ item.price }}</view>
-				<view class="lead">{{ item.tips }}</view>
+				<view class="lead">{{ item.title }}</view>
 				<view class="btn" @click.stop="get_coupon">立即领取</view>
 			</view>
 		</view>
@@ -17,42 +17,47 @@ import { ref } from 'vue';
 const list = ref([
 	{
 		id: 1,
+		tips: '双11通用券',
 		price: 150,
-		tips: '满600可用',
+		title: '满600可用',
 		type: 1
 	},
 	{
 		id: 2,
+		tips: '满减券',
 		price: 150,
-		tips: '满600可用',
+		title: '满400可用',
 		type: 1
 	},
 	{
 		id: 3,
+		tips: '双11通用券',
 		price: 150,
-		tips: '满600可用',
+		title: '满500可用',
 		type: 1
 	},
 	{
 		id: 4,
 		price: 150,
-		tips: '满600可用',
+		tips: '双11通用券',
+		title: '满600可用',
 		type: 1
 	},
 	{
 		id: 5,
 		price: 150,
-		tips: '满600可用',
+		tips: '双11通用券',
+		title: '满300可用',
 		type: 1
 	},
 	{
 		id: 6,
 		price: 150,
-		tips: '满600可用',
+		tips: '满减券',
+		title: '满1200可用',
 		type: 1
 	}
 ]);
-
 // 优惠券详情
 const open_details = () => {
 	uni.navigateTo({

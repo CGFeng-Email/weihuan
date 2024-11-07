@@ -5,7 +5,7 @@
 	<view class="list">
 		<view class="item" v-for="item in list" :key="item.id">
 			<view class="box" :class="{ type2: item.type == 3 }" @click="open_details">
-				<view class="ide">RMB</view>
+				<view class="ide">{{ item.title }}</view>
 				<view class="price">{{ item.price }}</view>
 				<view class="lead">{{ item.tips }}</view>
 				<view class="btn" @click.stop="use_coupon" v-if="item.type == 1">立即使用</view>
@@ -42,18 +42,21 @@ const navigateItem = (e) => {
 const list = ref([
 	{
 		id: 1,
+		title: '双11通用券',
 		price: 150,
 		tips: '满600可用',
 		type: 1
 	},
 	{
 		id: 2,
+		title: '满减券',
 		price: 150,
 		tips: '满600可用',
 		type: 1
 	},
 	{
 		id: 3,
+		title: '双11通用券',
 		price: 150,
 		tips: '满600可用',
 		type: 2
@@ -61,18 +64,21 @@ const list = ref([
 	{
 		id: 4,
 		price: 150,
+		title: '双11通用券',
 		tips: '满600可用',
 		type: 2
 	},
 	{
 		id: 5,
 		price: 150,
+		title: '双11通用券',
 		tips: '满600可用',
 		type: 3
 	},
 	{
 		id: 6,
 		price: 150,
+		title: '满减券',
 		tips: '满600可用',
 		type: 3
 	}
@@ -89,9 +95,8 @@ const open_details = () => {
 function use_coupon() {
 	uni.switchTab({
 		url: '/pages/shopping/index'
-	})
+	});
 }
-
 </script>
 
 <style>

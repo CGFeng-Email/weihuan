@@ -25,8 +25,20 @@
 					</view>
 					<view class="content">
 						<view class="title">
-							<text class="boom" v-if="item.boom">畅销</text>
-							<text class="text over2" :class="{ boom_text: item.boom }">{{ item.title }} {{ item.title }}</text>
+							{{ item.title }}
+						</view>
+						<view class="specification">
+							<view class="hot spec">畅销</view>
+							<view class="isPick spec">不可自提</view>
+						</view>
+						<view class="bottom_cart">
+							<view class="left">
+								<view class="tips">{{ item.tips }}</view>
+								<view class="tips_location">配送至{{ item.location }}</view>
+							</view>
+							<view class="cart">
+								<i class="iconfont icon-gouwuche-tianchong"></i>
+							</view>
 						</view>
 						<view class="total_price">
 							<view class="price_box">
@@ -36,15 +48,6 @@
 							<view class="primary_price">
 								<text class="primary_symbol">原价:</text>
 								<text class="price">￥{{ item.primary_price }}</text>
-							</view>
-						</view>
-						<view class="bottom_cart">
-							<view class="left">
-								<view class="tips">{{ item.tips }}</view>
-								<view class="tips_location">配送至{{ item.location }}</view>
-							</view>
-							<view class="cart">
-								<i class="iconfont icon-gouwuche-tianchong"></i>
 							</view>
 						</view>
 					</view>
@@ -111,30 +114,34 @@ export default {
 		.content {
 			padding: 18rpx;
 			.title {
-				position: relative;
-				.boom {
-					position: absolute;
-					left: 0;
-					top: 0;
-					display: inline-block;
-					width: 72rpx;
-					height: 38rpx;
-					line-height: 38rpx;
-					text-align: center;
+				font-size: 26rpx;
+				color: #000;
+				font-weight: 600;
+				line-height: 38rpx;
+			}
+
+			.specification {
+				display: flex;
+				align-items: center;
+				padding-top: 10rpx;
+				.spec {
+					height: 34rpx;
+					line-height: 34rpx;
+					border-radius: 4rpx;
+					margin-right: 10rpx;
+					padding: 0 20rpx;
 					font-size: 24rpx;
-					color: #fff;
 					font-weight: 500;
-					border-radius: 5rpx;
+					color: #fff;
+					overflow: hidden;
+				}
+
+				.hot {
 					background: linear-gradient(83.83deg, #f24d2a 0%, #f59e33 100%);
 				}
-				.text {
-					font-size: 26rpx;
-					color: #000;
-					font-weight: 600;
-					line-height: 38rpx;
-				}
-				.boom_text {
-					text-indent: 3em;
+
+				.isPick {
+					background: linear-gradient(83.83deg, #2ac2f2 0%, #0b6ff2 100%);
 				}
 			}
 

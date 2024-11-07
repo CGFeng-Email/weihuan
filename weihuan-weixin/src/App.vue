@@ -200,4 +200,34 @@ image {
 .animate {
 	transition: .4s ease;
 }
+
+.recomment_title {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 30rpx 0;
+	.line {
+		width: 150rpx;
+		height: 1px;
+		background: #c1c1c1;
+	}
+	
+	.title {
+		font-size: 30rpx;
+		font-weight: bold;
+		margin: 0 20rpx;
+		padding: 0 10rpx;
+		position: relative;
+		&::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			bottom: -2rpx;
+			width: 100%;
+			height: 20rpx;
+			background: #f8c5cc;
+			z-index: -1;
+		}
+	}
+}
 </style>

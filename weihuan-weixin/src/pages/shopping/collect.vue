@@ -10,10 +10,6 @@ import List from './list.vue';
 // 列表
 const shopping_list = ref([
 	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list1.png',
-		type: 'type1'
-	},
-	{
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
 		type: 'type2',
 		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
@@ -21,7 +17,9 @@ const shopping_list = ref([
 		price: 130,
 		primary_price: 210,
 		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州'
+		location: '广州',
+		isPick: true,
+		hot: true
 	},
 	{
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
@@ -31,7 +29,9 @@ const shopping_list = ref([
 		price: 120,
 		primary_price: 210,
 		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州'
+		location: '广州',
+		isPick: true,
+		hot: true
 	},
 	{
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
@@ -41,7 +41,9 @@ const shopping_list = ref([
 		price: 110,
 		primary_price: 210,
 		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州'
+		location: '广州',
+		isPick: true,
+		hot: true
 	},
 	{
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
@@ -51,7 +53,9 @@ const shopping_list = ref([
 		price: 100,
 		primary_price: 210,
 		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州'
+		location: '广州',
+		isPick: true,
+		hot: true
 	},
 	{
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
@@ -61,11 +65,21 @@ const shopping_list = ref([
 		price: 180,
 		primary_price: 210,
 		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州'
+		location: '广州',
+		isPick: true,
+		hot: true
 	},
 	{
-		type: 'type3',
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list7.png'
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: true,
+		price: 130,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
 	}
 ]);
 

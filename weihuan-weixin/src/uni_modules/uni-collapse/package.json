@@ -1,13 +1,13 @@
 {
-  "id": "uni-load-more",
-  "displayName": "uni-load-more 加载更多",
-  "version": "1.3.6",
-  "description": "LoadMore 组件，常用在列表里面，做滚动加载使用。",
+  "id": "uni-collapse",
+  "displayName": "uni-collapse 折叠面板",
+  "version": "1.4.4",
+  "description": "Collapse 组件，可以折叠 / 展开的内容区域。",
   "keywords": [
     "uni-ui",
-    "uniui",
-    "加载更多",
-    "load-more"
+    "折叠",
+    "折叠面板",
+    "手风琴"
 ],
   "repository": "https://github.com/dcloudio/uni-ui",
   "engines": {
@@ -37,13 +37,15 @@
     "type": "component-vue"
   },
   "uni_modules": {
-    "dependencies": ["uni-scss"],
+    "dependencies": [
+			"uni-scss",
+      "uni-icons"
+    ],
     "encrypt": [],
     "platforms": {
       "cloud": {
         "tcb": "y",
-        "aliyun": "y",
-        "alipay": "n"
+        "aliyun": "y"
       },
       "client": {
         "App": {

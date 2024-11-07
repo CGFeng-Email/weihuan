@@ -1,8 +1,8 @@
 <template>
-	<view class="search_box">
+	<view class="search_box" :style="{background: bgColor}">
 		<view class="wrap">
 			<uni-icons class="icon" type="search" size="18" color="#FE938E"></uni-icons>
-			<input class="input" type="text" v-model="keyword" :placeholder="placeholder" focus confirm-type="search" @input="search_input" @confirm="search_confirm" />
+			<input class="input" type="text" v-model="keyword" :disabled="disabled" :placeholder="placeholder" focus confirm-type="search" @input="search_input" @confirm="search_confirm" />
 		</view>
 	</view>
 
@@ -23,6 +23,14 @@ export default {
 		placeholder: {
 			type: String,
 			default: '请输入关键字'
+		},
+		bgColor: {
+			type: String,
+			default: '#fff'
+		},
+		disabled: {
+			type: Boolean,
+			default: false
 		}
 	},
 	data() {
@@ -37,7 +45,7 @@ export default {
 		},
 		// 键盘回车时触发
 		search_confirm() {
-			this.$emit('search_confirm', this.keyword)
+			this.$emit('search_confirm', this.keyword);
 		}
 	}
 };

@@ -7,13 +7,6 @@
 			}
 		},
 		{
-			"path": "pages/shopping/index",
-			"style": {
-				"navigationBarTitleText": "在线商城",
-				"navigationStyle": "custom"
-			}
-		},
-		{
 			"path": "pages/self_pick_up/index",
 			"style": {
 				"navigationBarTitleText": "自提点",
@@ -143,27 +136,6 @@
 			}
 		},
 		{
-			"path": "pages/feedback/index",
-			"style": {
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTitleText": "意见反馈"
-			}
-		},
-		{
-			"path": "pages/feedback/add",
-			"style": {
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTitleText": "立即反馈"
-			}
-		},
-		{
-			"path": "pages/feedback/details",
-			"style": {
-				"navigationBarBackgroundColor": "#fff",
-				"navigationBarTitleText": "意见反馈"
-			}
-		},
-		{
 			"path": "pages/member_center/index",
 			"style": {
 				"navigationStyle": "custom"
@@ -244,6 +216,21 @@
 				"navigationBarBackgroundColor": "#fff",
 				"navigationBarTitleText": "手机号登录/注册"
 			}
+		},
+		{
+			"path": "pages/trouble_shooting/index",
+			"style": {
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "常见问题解答"
+			}
+		},
+		{
+			"path": "pages/classify/index",
+			"style": {
+				"navigationBarBackgroundColor": "#fff0ef",
+				"navigationBarTitleText": "在线商城",
+				"navigationBarTextStyle": "black"
+			}
 		}
 	],
 	"globalStyle": {
@@ -262,7 +249,7 @@
 			"iconPath": "static/img/tabbar/home.png",
 			"selectedIconPath": "static/img/tabbar/home_hover.png"
 		}, {
-			"pagePath": "pages/shopping/index",
+			"pagePath": "pages/classify/index",
 			"text": "在线商城",
 			"iconPath": "static/img/tabbar/shopping.png",
 			"selectedIconPath": "static/img/tabbar/shopping_hover.png"

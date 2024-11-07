@@ -138,23 +138,23 @@ const order_list = ref([
 		url: '/pages/order/index'
 	},
 	{
+		title: '待发货',
+		order_type: 'dirstribution',
+		image: '/static/img/order2.png',
+		index: 2,
+		url: '/pages/order/index'
+	},
+	{
 		title: '待收货',
 		order_type: 'dirstribution',
 		image: '/static/img/order3.png',
-		index: 2,
+		index: 3,
 		url: '/pages/order/index'
 	},
 	{
 		title: '已完成',
 		order_type: 'dirstribution',
 		image: '/static/img/order4.png',
-		index: 3,
-		url: '/pages/order/index'
-	},
-	{
-		title: '已取消',
-		order_type: 'dirstribution',
-		image: '/static/img/order5.png',
 		index: 4,
 		url: '/pages/order/index'
 	}
@@ -207,8 +207,8 @@ const functionList = ref([
 	},
 	{
 		id: 4,
-		title: '意见反馈',
-		url: '/pages/feedback/index'
+		title: '常见问题解答',
+		url: '/pages/trouble_shooting/index'
 	},
 	{
 		id: 5,
@@ -250,7 +250,7 @@ const open_function = (item) => {
 		case '领劵中心':
 			open_function_link(item.url);
 			break;
-		case '意见反馈':
+		case '常见问题解答':
 			open_function_link(item.url);
 			break;
 		case '系统公告':

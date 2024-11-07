@@ -23,16 +23,6 @@
 	</uni-popup>
 </template>
 
-<script>
-export default {
-	methods: {
-		maskClick() {
-			this.$emit('maskClick');
-		}
-	}
-};
-</script>
-
 <script setup>
 import { ref, watch, defineEmits } from 'vue';
 const emit = defineEmits(['on-save-ok']);
@@ -86,6 +76,11 @@ function wx_login() {
 			}, 700);
 		}
 	});
+}
+
+// 关闭弹窗
+function maskClick() {
+	emit('maskClick');
 }
 
 // 协议

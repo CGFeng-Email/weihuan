@@ -10,7 +10,7 @@
 			<view class="left_icon" @click="left_return">
 				<uni-icons type="left" size="18" :color="scrollTop == 'white_default' ? '#fff' : '#000'"></uni-icons>
 			</view>
-			{{ scrollTop != 'white_default' ? '在线商城' : '' }}
+			{{ scrollTop != 'white_default' ? '产品详情' : '' }}
 		</view>
 	</uni-transition>
 
@@ -105,7 +105,10 @@
 		<view class="btn btn_bg">
 			<view class="text">搭配建议</view>
 		</view>
-		<swiper class="match_swiper" autoplay :interval="5000" next-margin="15px" circular :duration="1000" :display-multiple-items="2">
+			
+		<List :list="shopping_list" @itemClick="jump_order_details"></List>
+		
+		<!-- <swiper class="match_swiper" autoplay :interval="5000" next-margin="15px" circular :duration="1000" :display-multiple-items="2">
 			<swiper-item class="swiper-item">
 				<view class="item">
 					<view class="cover_box">
@@ -151,7 +154,7 @@
 					</view>
 				</view>
 			</swiper-item>
-		</swiper>
+		</swiper> -->
 	</view>
 	<!-- 底部栏-购物车 -->
 	<view class="bottom_cart_navigation">
@@ -232,6 +235,8 @@
 </template>
 
 <script setup>
+// 列表组件
+import List from '@/pages/shopping/list.vue';
 import { ref, onMounted, computed } from 'vue';
 //onPageScroll:滚动事件
 import { onPageScroll } from '@dcloudio/uni-app';
@@ -250,6 +255,82 @@ const swiper_list = ref([
 	},
 	{
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/product_banner1.png'
+	}
+]);
+
+// 搭配建议商品列表
+const shopping_list = ref([
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: true,
+		price: 130,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: false,
+		price: 120,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: false,
+		price: 110,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: false,
+		price: 100,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: false,
+		price: 180,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: true,
+		price: 130,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
 	}
 ]);
 
@@ -321,6 +402,13 @@ const left_return = () => {
 const submit_order = () => {
 	uni.navigateTo({
 		url: '/pages/shopping/confirm_an_order'
+	});
+};
+
+// 跳转商品详情
+const jump_order_details = () => {
+	uni.navigateTo({
+		url: '/pages/shopping/place_an_order'
 	});
 };
 
@@ -549,8 +637,8 @@ onMounted(() => {
 }
 
 .match {
-	background: #f8f8f8;
-	padding: 80rpx 15rpx;
+	// background: #f8f8f8;
+	padding: 40rpx 15rpx 0;
 	.btn {
 		width: 280rpx;
 		height: 80rpx;
@@ -563,6 +651,7 @@ onMounted(() => {
 		color: #fff;
 		font-weight: 500;
 		position: relative;
+		margin-bottom: 20rpx;
 		&::before {
 			content: '';
 			position: absolute;

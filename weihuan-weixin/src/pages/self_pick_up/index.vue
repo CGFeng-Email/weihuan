@@ -34,7 +34,7 @@
 	<swiper class="store box_border_radius box_shadow" circular :current="current" @change="swiperChange">
 		<block v-for="item in markersList" :key="item.id">
 			<swiper-item class="item">
-				<view class="store_info">
+				<view class="store_info" @click="open_classify">
 					<image class="cover" :src="item.image" mode="aspectFill"></image>
 					<view class="content">
 						<view class="store_top">
@@ -277,6 +277,12 @@ const jump_list = () => {
 		url: '/pages/self_pick_up/list'
 	});
 };
+
+function open_classify() {
+	uni.switchTab({
+		url: '/pages/classify/index'
+	});
+}
 
 // 打开地图
 const openLocation = (item) => {

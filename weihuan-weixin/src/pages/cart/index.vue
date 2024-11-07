@@ -1,4 +1,5 @@
 <template>
+	<page-meta :page-style="'overflow:' + (isScroll ? 'hidden' : 'visible')"></page-meta>
 	<view class="main">
 		<view class="list box_border_radius box_shadow">
 			<block v-for="(item, index) in cartList" :key="item.id">
@@ -46,15 +47,23 @@
 					</uni-swipe-action>
 				</view>
 			</block>
-			<view class="item">
+			<!-- <view class="item">
 				<view class="total_price">
 					小计：
 					<text class="icon">￥</text>
 					<text class="price">{{ priceToFixed(total_price) }}</text>
 				</view>
-			</view>
+			</view> -->
 		</view>
 	</view>
+
+	<view class="recomment_title">
+		<text class="line"></text>
+		<text class="title">猜你喜欢</text>
+		<text class="line"></text>
+	</view>
+
+	<List :list="shopping_list" @itemClick="jump_order_details"></List>
 
 	<view style="height: 160rpx"></view>
 
@@ -63,14 +72,77 @@
 			<uni-icons :type="computedCheckAll ? 'checkbox-filled' : 'circle'" size="24" :color="computedCheckAll ? '#FF8992' : '#bcbcbc'"></uni-icons>
 			<text class="text">全选</text>
 		</view>
-		<view>
+		<view class="right_cart">
+			<view class="describe">
+				<view class="total_price">
+					<text class="name">合计:</text>
+					<text class="icon">￥</text>
+					<text class="price">{{ priceToFixed(total_price) }}</text>
+				</view>
+				<view class="details" @click="open_popup">
+					<text class="text">共减: ￥20.00</text>
+					<text class="price_details">优惠明细</text>
+					<uni-icons :type="isScroll ? 'up' : 'down'" size="12" color="#FF0000"></uni-icons>
+				</view>
+			</view>
 			<button class="pay_btn btn_bg" :class="{ disabled_bg: isPayment }" :disabled="isPayment" @click="jump_place_order">去支付</button>
 		</view>
 	</view>
+
+	<uni-popup ref="cart_popup" type="bottom" @maskClick="hide_popup">
+		<view class="cart_popup_content">
+			<view class="close" @click="hide_popup">
+				<uni-icons type="closeempty" size="20" color="#000"></uni-icons>
+			</view>
+			<view class="cart_popup_head">
+				<view class="title">金额明细</view>
+				<view class="lead">实际金额以提交订单页金额为准</view>
+			</view>
+			<view class="list">
+				<view class="lis">
+					<view class="name">商品总价</view>
+					<view class="total_price">￥{{ priceToFixed(total_price) }}</view>
+				</view>
+				<view class="lis">
+					<view class="name">配送费</view>
+					<view class="total_price">￥{{ priceToFixed(total_price) }}</view>
+				</view>
+				<view class="lis">
+					<view class="name">共减</view>
+					<view class="total_price">￥{{ priceToFixed(total_price) }}</view>
+				</view>
+				<view class="lis">
+					<view class="name">合计</view>
+					<view class="total_price">￥{{ priceToFixed(total_price) }}</view>
+				</view>
+			</view>
+		</view>
+	</uni-popup>
 </template>
 
 <script setup>
+// 列表组件
+import List from '@/pages/shopping/list.vue';
 import { ref, computed, watch } from 'vue';
+
+// 防止弹窗打开后，页面继续滚动
+const isScroll = ref(false);
+// 明细弹窗
+const cart_popup = ref(null);
+// 打开明细弹窗
+function open_popup() {
+	if (isScroll.value) {
+		hide_popup();
+	} else {
+		isScroll.value = true;
+		cart_popup.value.open();
+	}
+}
+// 关闭明细弹窗
+function hide_popup() {
+	isScroll.value = false;
+	cart_popup.value.close();
+}
 
 // 购物车列表
 const cartList = ref([
@@ -127,6 +199,82 @@ const cartList = ref([
 		sku: '原味*3+雪域牛乳*3',
 		quantity: 1,
 		price: 50
+	}
+]);
+
+// 推荐商品列表
+const shopping_list = ref([
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: true,
+		price: 130,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: false,
+		price: 120,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: false,
+		price: 110,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: false,
+		price: 100,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: false,
+		price: 180,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
+	},
+	{
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+		type: 'type2',
+		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+		boom: true,
+		price: 130,
+		primary_price: 210,
+		tips: '全程冻品冷链运输，保质保鲜',
+		location: '广州',
+		isPick: true,
+		hot: true
 	}
 ]);
 
@@ -349,22 +497,22 @@ page {
 				justify-content: center;
 			}
 		}
+	}
+}
 
-		.total_price {
-			padding: 30rpx;
-			font-size: 28rpx;
-			font-weight: 500;
-			display: flex;
-			align-items: center;
-			.icon {
-				color: #ff0000;
-			}
-			.price {
-				color: #ff0000;
-				font-size: 38rpx;
-				font-weight: bold;
-			}
-		}
+.total_price {
+	padding: 30rpx;
+	font-size: 28rpx;
+	font-weight: 500;
+	display: flex;
+	align-items: center;
+	.icon {
+		color: #ff0000;
+	}
+	.price {
+		color: #ff0000;
+		font-size: 38rpx;
+		font-weight: bold;
 	}
 }
 
@@ -380,7 +528,7 @@ page {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	z-index: 10;
+	z-index: 110;
 
 	.check_all {
 		flex: 1;
@@ -390,6 +538,32 @@ page {
 			font-size: 26rpx;
 			color: #000;
 			padding-left: 8rpx;
+		}
+	}
+
+	.right_cart {
+		display: flex;
+		align-items: center;
+
+		.describe {
+			padding: 0 20rpx;
+			.total_price {
+				padding: 0;
+				justify-content: flex-end;
+				.name {
+					text-align: right;
+					font-size: 30rpx;
+					font-weight: bold;
+					padding-right: 4rpx;
+				}
+			}
+			.details {
+				font-size: 24rpx;
+				.price_details {
+					padding-left: 10rpx;
+					color: #ff0000;
+				}
+			}
 		}
 	}
 
@@ -403,6 +577,56 @@ page {
 		font-weight: 500;
 		border-radius: 45rpx;
 		flex: none;
+	}
+}
+
+.cart_popup_content {
+	background: #fff;
+	border-radius: 20rpx 20rpx 0 0;
+	padding: 40rpx 30rpx;
+	position: relative;
+	.close {
+		position: absolute;
+		top: 40rpx;
+		right: 30rpx;
+	}
+
+	.cart_popup_head {
+		text-align: center;
+		padding-bottom: 10rpx;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		.title {
+			font-size: 34rpx;
+			font-weight: bold;
+		}
+
+		.lead {
+			font-size: 24rpx;
+			line-height: 34rpx;
+			color: #acacac;
+			font-weight: 500;
+			padding: 10rpx 0;
+		}
+	}
+
+	.list {
+		padding-top: 40rpx;
+		.lis {
+			display: flex;
+			justify-content: space-between;
+			padding: 10rpx 0;
+			.name {
+				font-size: 30rpx;
+				font-weight: bold;
+			}
+
+			.total_price {
+				color: #ff0000;
+				font-weight: bold;
+				padding: 0;
+				font-size: 26rpx;
+			}
+		}
 	}
 }
 </style>

@@ -56,7 +56,7 @@ export default {
 		background: #fff;
 		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 		.item {
-			flex: 1;
+			flex: auto;
 			text-align: center;
 			.title {
 				display: inline-block;
