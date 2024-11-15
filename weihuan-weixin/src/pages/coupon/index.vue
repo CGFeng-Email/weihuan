@@ -8,7 +8,7 @@
 				<view class="ide">{{ item.title }}</view>
 				<view class="price">{{ item.price }}</view>
 				<view class="lead">{{ item.tips }}</view>
-				<view class="btn" @click.stop="use_coupon" v-if="item.type == 1">立即使用</view>
+				<view class="btn" @click.stop="use_coupon(item.price)" v-if="item.type == 1">立即使用</view>
 				<view class="btn" :class="{ type2_btn: item.type == 2 }" v-else-if="item.type == 2">已使用</view>
 				<view class="btn" :class="{ type3_btn: item.type == 3 }" v-else>已过期</view>
 			</view>
@@ -92,10 +92,9 @@ const open_details = () => {
 };
 
 // 使用优惠券
-function use_coupon() {
-	uni.switchTab({
-		url: '/pages/shopping/index'
-	});
+function use_coupon(price) {
+	uni.$emit('update_coupon', { price });
+	uni.navigateBack();
 }
 </script>
 

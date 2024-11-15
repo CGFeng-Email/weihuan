@@ -6,8 +6,8 @@
 	<view class="page_title" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
 		<view class="navigation_wrap">
 			<view class="navigation box_border_radius box_shadow">
-				<view class="navigation_btn" @click="returnPage">自提点</view>
-				<view class="navigation_btn btn_bg active">列表</view>
+				<view class="navigation_btn" @click="returnPage">门店自提</view>
+				<view class="navigation_btn btn_bg active">门店列表</view>
 			</view>
 		</view>
 	</view>

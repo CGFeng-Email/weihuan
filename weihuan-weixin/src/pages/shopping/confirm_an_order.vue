@@ -1,5 +1,6 @@
 <!-- 确认订单 -->
 <template>
+	<page-meta :page-style="'overflow:' + (isScroll ? 'hidden' : 'visible')"></page-meta>
 	<view class="main">
 		<!-- 自提，自提店家信息 -->
 		<view class="store box_shadow box_border_radius">
@@ -99,7 +100,7 @@
 				<view class="name">购买服务</view>
 				<view class="right lead">摔坏包赔 / 7天无理由退货 / 商品冷链运输</view>
 			</view>
-			<view class="li">
+			<!-- <view class="li">
 				<view class="name">是否需要发票</view>
 				<view class="right lead">
 					<view class="invoice">
@@ -129,10 +130,14 @@
 						></uni-easyinput>
 					</view>
 				</view>
-			</view>
+			</view> -->
 			<view class="li">
 				<view class="name">优惠卷</view>
-				<view class="right lead coupon">-¥{{ priceToFixed(50) }}</view>
+				<view class="right lead coupon" @click="open_coupon">
+					<text v-if="coupon_number">-¥{{ priceToFixed(coupon_number) }}</text>
+					<text class="text" v-else>选择优惠卷</text>
+					<uni-icons class="icon" type="right" size="13" color="#a2a2a2"></uni-icons>
+				</view>
 			</view>
 			<view class="li">
 				<view class="name">订单备注</view>
@@ -160,6 +165,47 @@
 			</view>
 		</view>
 	</view>
+
+	<!-- 优惠卷弹窗 -->
+	<uni-popup ref="coupon_popup" type="bottom" :safe-area="false" @maskClick="close_popup">
+		<view class="coupon_content">
+			<uni-icons class="close" type="closeempty" size="20"></uni-icons>
+			<view class="coupon_head">
+				<view class="title" :class="{ active: coupon_is_index == 0 }" @click="switch_coupon(0)">可用优惠卷(3)</view>
+				<view class="title" :class="{ active: coupon_is_index == 1 }" @click="switch_coupon(1)">不可用优惠卷(7)</view>
+			</view>
+			<scroll-view class="scroll_view" scroll-y enable-back-to-top scroll-anchoring enhanced enable-passive>
+				<view class="list">
+					<block v-for="(item, index) in 8" :key="index">
+						<view class="item" @click="coupon_item(index, 5)">
+							<view class="left_box">
+								<text class="ide">￥</text>
+								<text class="number">5</text>
+							</view>
+							<view class="right_box">
+								<view class="content">
+									<view class="title">双12购物节购物优惠券</view>
+									<view class="date">2024/08/22 至 2024/12/30</view>
+									<view class="lead">使用条件: 适应所有商品</view>
+									<view class="lead">使用说明: 超过有效日期会自动失效</view>
+								</view>
+								<view class="icon">
+									<uni-icons
+										:type="coupon_index == index ? 'checkbox-filled' : 'circle'"
+										size="22"
+										:color="coupon_index == index ? '#FF8992' : '#aaa'"
+									></uni-icons>
+								</view>
+							</view>
+						</view>
+					</block>
+				</view>
+			</scroll-view>
+			<view class="bottom_btn">
+				<button class="btn_bg" @click="coupon_submit">确认</button>
+			</view>
+		</view>
+	</uni-popup>
 
 	<view style="height: 170rpx"></view>
 
@@ -222,6 +268,46 @@ const textarta = ref('');
 const emailInput = (e) => {
 	console.log('e', e);
 };
+
+// 弹窗优惠卷
+const isScroll = ref(false);
+const coupon_is_index = ref(0);
+const coupon_index = ref(null);
+const coupon_number = ref(null);
+const coupon_popup = ref(null);
+function switch_coupon(i) {
+	uni.showLoading({
+		title: '加载中',
+		mask: true,
+		success: () => {
+			setTimeout(function () {
+				coupon_index.value = null;
+				coupon_is_index.value = i;
+				uni.hideLoading();
+			}, 1000);
+		}
+	});
+}
+function coupon_item(i, price) {
+	if (coupon_index.value == i) {
+		coupon_index.value = null;
+		coupon_number.value = null;
+		return;
+	}
+	coupon_index.value = i;
+	coupon_number.value = price;
+}
+function coupon_submit() {
+	close_popup();
+}
+function open_coupon() {
+	isScroll.value = true;
+	coupon_popup.value.open();
+}
+function close_popup() {
+	isScroll.value = false;
+	coupon_popup.value.close();
+}
 </script>
 
 <style>
@@ -461,6 +547,16 @@ page {
 			color: #ff0000;
 			font-weight: 600;
 			font-size: 30rpx;
+
+			.text {
+				color: #a2a2a2;
+				font-size: 24rpx;
+				font-weight: 500;
+			}
+
+			.icon {
+				margin-left: 6rpx;
+			}
 		}
 
 		.invoice {
@@ -542,6 +638,113 @@ page {
 
 	.li:last-child {
 		border-bottom: 0;
+	}
+}
+
+.coupon_content {
+	background: #fff;
+	border-radius: 24rpx 24rpx 0 0;
+	position: relative;
+	padding-bottom: 20px;
+	.close {
+		position: absolute;
+		top: 30rpx;
+		right: 30rpx;
+	}
+	.coupon_head {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+		.title {
+			padding: 30rpx 30rpx;
+			font-size: 30rpx;
+			font-weight: 500;
+			color: #aaaaaa;
+		}
+		.active {
+			color: #000;
+			font-weight: bold;
+		}
+	}
+	.scroll_view {
+		height: 640rpx;
+		padding: 20rpx 0;
+		box-sizing: border-box;
+		background: #f5f5f7;
+		.list {
+			padding: 0 20rpx;
+		}
+		.item {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 20rpx;
+			border-radius: 12rpx;
+			box-shadow: 0 0 1px rgba(0, 0, 0, 0.1);
+			background: #fff;
+			overflow: hidden;
+			.left_box {
+				width: 150rpx;
+				flex: none;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+
+				.ide {
+					font-size: 30rpx;
+					font-weight: bold;
+					color: #ff0000;
+				}
+				.number {
+					font-size: 50rpx;
+					font-weight: bold;
+					color: #ff0000;
+				}
+			}
+			.right_box {
+				flex: 1;
+				padding: 10rpx 20rpx;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+				.content {
+					flex: 1;
+					.title {
+						font-size: 30rpx;
+						font-weight: bold;
+						color: #000;
+						line-height: 40rpx;
+					}
+					.date {
+						font-size: 24rpx;
+						line-height: 36rpx;
+						color: #aaaaaa;
+						padding: 5rpx 0;
+					}
+					.lead {
+						font-size: 24rpx;
+						line-height: 36rpx;
+						color: #aaaaaa;
+						padding: 5rpx 0;
+					}
+				}
+
+				.icon {
+					flex: none;
+				}
+			}
+		}
+	}
+
+	.bottom_btn {
+		padding: 20rpx;
+		button {
+			color: #fff;
+			border-radius: 45rpx;
+			height: 80rpx;
+			line-height: 80rpx;
+			font-size: 32rpx;
+		}
 	}
 }
 </style>

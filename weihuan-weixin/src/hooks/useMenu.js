@@ -9,9 +9,11 @@ function useMenuButton() {
 	// 占位符高度
 	const topView = (getMenuButton.height + 6) + getMenuButton.top + 'px';
 	// 订单页 导航栏的top高度
-	const navigateTop =  (getMenuButton.height + 6) + getMenuButton.top + 40 + 'px';
+	const navigateTop = (getMenuButton.height + 6) + getMenuButton.top + 40 + 5 + 'px';
 	// 订单页 顶部占位
-	const orderView = (getMenuButton.height + 6) + getMenuButton.top + 40 + 42 + 'px';
+	const orderView = (getMenuButton.height + 6) + getMenuButton.top + 40 + 47 + 'px';
+	
+	const orderHeight = (getMenuButton.height + 6) + getMenuButton.top + 40 + 47;
 	return {
 		top,
 		bottom,
@@ -20,7 +22,8 @@ function useMenuButton() {
 		height,
 		topView,
 		navigateTop,
-		orderView
+		orderView,
+		orderHeight
 	}
 }
 

@@ -120,40 +120,40 @@ const userMobileComputed = computed(() => {
 const order_list = ref([
 	{
 		title: '全部订单',
-		order_type: 'dirstribution',
+		head_title_index: 0,
 		index: 0,
 		url: '/pages/order/index'
 	},
 	{
 		title: '自提订单',
-		order_type: 'pick_store',
+		head_title_index: 1,
 		index: 0,
 		url: '/pages/order/index'
 	},
 	{
 		title: '待付款',
-		order_type: 'dirstribution',
+		head_title_index: 0,
 		image: '/static/img/order1.png',
 		index: 1,
 		url: '/pages/order/index'
 	},
 	{
 		title: '待发货',
-		order_type: 'dirstribution',
+		head_title_index: 0,
 		image: '/static/img/order2.png',
 		index: 2,
 		url: '/pages/order/index'
 	},
 	{
 		title: '待收货',
-		order_type: 'dirstribution',
+		head_title_index: 0,
 		image: '/static/img/order3.png',
 		index: 3,
 		url: '/pages/order/index'
 	},
 	{
 		title: '已完成',
-		order_type: 'dirstribution',
+		head_title_index: 0,
 		image: '/static/img/order4.png',
 		index: 4,
 		url: '/pages/order/index'
@@ -163,7 +163,7 @@ const order_list = ref([
 // 订单列表 click
 const open_order = (item) => {
 	uni.navigateTo({
-		url: `${item.url}?index=${item.index}&order_type=${item.order_type}`
+		url: `${item.url}?index=${item.index}&head_title_index=${item.head_title_index}`
 	});
 };
 
@@ -202,13 +202,13 @@ const functionList = ref([
 	},
 	{
 		id: 3,
-		title: '领劵中心',
+		title: '领券中心',
 		url: '/pages/coupon/center'
 	},
 	{
 		id: 4,
-		title: '常见问题解答',
-		url: '/pages/trouble_shooting/index'
+		title: '开票申请',
+		url: '/pages/invoice/index'
 	},
 	{
 		id: 5,
@@ -247,10 +247,10 @@ const open_function = (item) => {
 		case '订单核销':
 			open_function_link(item.url);
 			break;
-		case '领劵中心':
+		case '领券中心':
 			open_function_link(item.url);
 			break;
-		case '常见问题解答':
+		case '开票申请':
 			open_function_link(item.url);
 			break;
 		case '系统公告':

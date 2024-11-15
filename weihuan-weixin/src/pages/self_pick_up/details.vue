@@ -8,7 +8,7 @@
 			<uni-icons type="left" size="20" :color="scrollTop != 'white_default' ? '#000' : '#fff'"></uni-icons>
 		</view>
 		<text class="title">
-			{{ scrollTop != 'white_default' ? '自提点详情' : '' }}
+			{{ scrollTop != 'white_default' ? '门店详情' : '' }}
 		</text>
 	</view>
 

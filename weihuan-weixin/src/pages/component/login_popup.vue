@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { ref, watch, defineEmits } from 'vue';
+import { ref, watch, defineEmits, defineProps } from 'vue';
 const emit = defineEmits(['on-save-ok']);
 
 // 参数

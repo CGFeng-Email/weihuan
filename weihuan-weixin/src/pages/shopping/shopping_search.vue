@@ -1,6 +1,15 @@
 <!-- 商品搜索 -->
 <template>
 	<searchVue placeholder="请输入商品关键字" :page="page" @search_input="search_input" @search_confirm="search_confirm" />
+	<view class="hot" v-if="keyword == '' && shopping_list.length == 0">
+		<view class="title">热门搜索</view>
+		<view class="list">
+			<view class="li" v-for="(item,index) in hot_list" :key="item.id" @click="open_shopping">
+				<text class="iconfont icon-remen" v-if="index < 3"></text>
+				<text class="text">{{ item.title }}</text>
+			</view>
+		</view>
+	</view>
 	<searchListVue :list="shopping_list"></searchListVue>
 </template>
 
@@ -11,6 +20,45 @@ import { ref } from 'vue';
 
 const keyword = ref('');
 const page = ref(0);
+
+const hot_list = ref([
+	{
+		id: 1,
+		title: '猪肉'
+	},
+	{
+		id: 2,
+		title: '鸡蛋'
+	},
+	{
+		id: 3,
+		title: '葱'
+	},
+	{
+		id: 4,
+		title: '虾'
+	},
+	{
+		id: 5,
+		title: '牛奶'
+	},
+	{
+		id: 6,
+		title: '玉米'
+	},
+	{
+		id: 7,
+		title: '辣椒'
+	},
+	{
+		id: 8,
+		title: '饮料'
+	},
+	{
+		id: 9,
+		title: '牛肉'
+	}
+]);
 
 // 列表
 const shopping_list = ref([]);
@@ -97,6 +145,14 @@ function statrSearch() {
 
 		uni.hideLoading();
 	}, 1000);
+
+}
+
+// 跳转商品列表
+function open_shopping() {
+	uni.switchTab({
+		url: '/pages/classify/index'
+	})
 }
 </script>
 
@@ -107,6 +163,34 @@ page {
 </style>
 
 <style lang="scss" scoped>
-.main {
+.hot {
+	padding: 0 20rpx;
+
+	.title {
+		font-weight: bold;
+		padding: 30rpx 0;
+	}
+	.list {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.li {
+		border-radius: 6rpx;
+		border: 1px solid rgba(0, 0, 0, 0.1);
+		padding: 10rpx 20rpx;
+		font-size: 24rpx;
+		color: #000;
+		font-weight: 500;
+		margin: 0 20rpx 20rpx 0;
+		
+		.iconfont {
+			font-size: 26rpx;
+			color: #ff0000;
+		}
+		
+		.text {
+			padding-left: 8rpx;
+		}
+	}
 }
 </style>

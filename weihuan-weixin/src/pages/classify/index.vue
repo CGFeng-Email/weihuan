@@ -1,12 +1,15 @@
 <template>
+	<!-- 搜索 -->
 	<view @click="open_search">
 		<Search bgColor="#fff0ef" :disabled="true"></Search>
 	</view>
+	<!-- 菜单栏 -->
 	<view class="menu_wrap">
-		<Menu :list="categoryList" :menu_id="menu_id" :current="menu_index" bgColor="#fff0ef" @menuClick="menuClick"></Menu>
+		<MenuChild ref="MenuChildRef" :list="categoryList" :menu_id="menu_id" :current="menu_index" bgColor="#fff0ef" @menuClick="menuClick"></MenuChild>
 	</view>
+	<!-- 顶部区域占位 -->
 	<view style="height: 170rpx"></view>
-
+	<!-- 主体 -->
 	<swiper class="swiper" :current="swiperIndex" @change="swiperChange">
 		<block v-for="(item, index) in categoryList" :key="item.id">
 			<swiper-item>
@@ -24,7 +27,17 @@
 						<!-- 分类导航 -->
 						<view class="classify_navigation">
 							<view class="item company">
-								<uni-data-select v-model="company_index" :localdata="company_list" @change="company_change" :clear="false"></uni-data-select>
+								<picker class="picker" mode="selector" :range="company_list" :value="company_index" range-key="value" @change="company_change">
+									<input
+										type="text"
+										class="input"
+										v-model="company_list[company_index].value"
+										disabled
+										placeholder-class="input_placeholder"
+										focus
+										placeholder="请选择开票类型"
+									/>
+								</picker>
 							</view>
 							<view class="item spec">
 								<view class="text">销量</view>
@@ -57,18 +70,51 @@
 </template>
 
 <script setup>
-import Search from '../component/search.vue';
-import Menu from './menu.vue';
-import Item from './item.vue';
 import { ref } from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
+import Search from '../component/search.vue';
+import MenuChild from './menu.vue';
+import Item from './item.vue';
 
 const swiperIndex = ref(0);
 const menu_id = ref('');
 const menu_index = ref(0);
 
+// 主体切换
+const MenuChildRef = ref();
 function swiperChange(e) {
-	menu_index.value = e.detail.current
+	menu_index.value = e.detail.current;
+	menu_id.value = categoryList.value[e.detail.current].id;
+	// 调用子组件方法
+	MenuChildRef.value.menuItemClick(menu_index.value, menu_id.value);
 }
+
+onLoad(() => {
+	uni.$on('classify_params', (e) => {
+		console.log('once - e', e);
+		if (e.id) {
+			uni.showLoading({
+				title: '加载中',
+				mask: true
+			});
+			// classifyId.value = e.id;
+			categoryList.value.forEach((item, index) => {
+				if (item.id == e.id) {
+					console.log('==', item.id);
+					menu_index.value = index;
+					menu_id.value = e.id;
+					// 调用子组件方法
+					MenuChildRef.value.menuItemClick(menu_index.value, menu_id.value);
+					setTimeout(() => {
+						uni.hideLoading();
+						return;
+					}, 200);
+				}
+			});
+		}
+	});
+});
+
 function menuClick(e) {
 	menu_id.value = e.id;
 	menu_index.value = e.index;
@@ -78,8 +124,8 @@ function menuClick(e) {
 const categoryList = ref([
 	{
 		id: 23819289,
-		title: '海鲜',
-		image: '/static/img/menu/menu1.png',
+		title: '海鲜鱼类',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify1.png',
 		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster1.png',
 		children: [
 			{
@@ -136,8 +182,8 @@ const categoryList = ref([
 	},
 	{
 		id: 34242664,
-		title: '国产肉类',
-		image: '/static/img/menu/menu2.png',
+		title: '进口肉类',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify2.png',
 		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster2.png',
 		children: [
 			{
@@ -194,8 +240,8 @@ const categoryList = ref([
 	},
 	{
 		id: 132131244,
-		title: '宴席食材',
-		image: '/static/img/menu/menu3.png',
+		title: '西式甜品',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify3.png',
 		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster3.png',
 		children: [
 			{
@@ -252,8 +298,8 @@ const categoryList = ref([
 	},
 	{
 		id: 378647269,
-		title: '肉制品',
-		image: '/static/img/menu/menu4.png',
+		title: '精品果茶',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify4.png',
 		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster1.png',
 		children: [
 			{
@@ -310,8 +356,8 @@ const categoryList = ref([
 	},
 	{
 		id: 3264978326,
-		title: '特色小吃',
-		image: '/static/img/menu/menu5.png',
+		title: '新鲜海鲜',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify5.png',
 		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster2.png',
 		children: [
 			{
@@ -368,8 +414,240 @@ const categoryList = ref([
 	},
 	{
 		id: 3671263877,
-		title: '中式点心',
-		image: '/static/img/menu/menu6.png',
+		title: '国产肉类',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify6.png',
+		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster3.png',
+		children: [
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: true,
+				price: 130,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 120,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 110,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 100,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 180,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			}
+		]
+	},
+	{
+		id: 3434634327,
+		title: '宴席食材',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify7.png',
+		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster3.png',
+		children: [
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: true,
+				price: 130,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 120,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 110,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 100,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 180,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			}
+		]
+	},
+	{
+		id: 6453571263877,
+		title: '特色小吃',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify8.png',
+		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster3.png',
+		children: [
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: true,
+				price: 130,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 120,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 110,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 100,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 180,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			}
+		]
+	},
+	{
+		id: 43126827368732,
+		title: '薯片零食',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify9.png',
+		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster3.png',
+		children: [
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: true,
+				price: 130,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 120,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 110,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 100,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			},
+			{
+				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
+				type: 'type2',
+				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
+				boom: false,
+				price: 180,
+				primary_price: 210,
+				tips: '全程冻品冷链运输，保质保鲜',
+				location: '广州'
+			}
+		]
+	},
+	{
+		id: 342424564652,
+		title: '特惠饮料',
+		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify10.png',
 		poster: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/category_poster3.png',
 		children: [
 			{
@@ -442,16 +720,18 @@ const left_menu_item = (e, id) => {
 
 // 所属公司company
 const company_list = ref([
-	{ value: 0, text: '网上超市' },
-	{ value: 1, text: '团购集采' },
-	{ value: 2, text: '服务项目' },
-	{ value: 3, text: '礼品卡/代金券' }
+	{ id: 0, value: '网上超市' },
+	{ id: 1, value: '团购集采' },
+	{ id: 2, value: '服务项目' },
+	{ id: 3, value: '礼品卡/代金券' }
 ]);
 // 所属公司下标
 const company_index = ref(0);
 // 所属公司change
 const company_change = (e) => {
-	company_index.value = e;
+	console.log(e);
+	// company_index.value = e;
+	company_index.value = Number(e.detail.value);
 };
 
 // 下单详情
@@ -555,6 +835,11 @@ function open_search() {
 		align-items: center;
 		justify-content: center;
 
+		.input {
+			font-size: 28rpx;
+			font-weight: bold;
+		}
+
 		.text {
 			font-size: 26rpx;
 			padding-right: 6rpx;
@@ -574,11 +859,11 @@ function open_search() {
 
 	.spec {
 		.icon-shang {
-			transform: scale(0.7) translateY(8rpx);
+			transform: scale(0.7) translateY(12rpx);
 		}
 
 		.icon-xiala {
-			transform: scale(0.7) translateY(-8rpx);
+			transform: scale(0.7) translateY(-12rpx);
 		}
 	}
 

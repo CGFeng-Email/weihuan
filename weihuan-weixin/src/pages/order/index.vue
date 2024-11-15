@@ -7,11 +7,13 @@
 	<!-- 标题 -->
 	<view class="page_title" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
 		<view class="return_icon" @click="return_page">
-			<uni-icons type="left" size="23" :color="scrollTop == 'white_default' ? '#fff' : '#000'"></uni-icons>
+			<uni-icons class="icon" type="left" size="24" color="#000"></uni-icons>
 		</view>
 		<view class="navigation_wrap">
-			<view class="navigation_btn" :class="{ active: order_type == 'dirstribution' }" @click="navigation_switch('dirstribution')">物流订单</view>
-			<view class="navigation_btn" :class="{ active: order_type == 'pick_store' }" @click="navigation_switch('pick_store')">自提订单</view>
+			<view class="navigation box_border_radius box_shadow">
+				<view class="navigation_btn" :class="{ active: head_title_index == 0 }" @click="switchPage(0)">配送蓝订单</view>
+				<view class="navigation_btn" :class="{ active: head_title_index == 1 }" @click="switchPage(1)">门店自提订单</view>
+			</view>
 		</view>
 	</view>
 	<!-- 搜索 -->
@@ -24,13 +26,25 @@
 	<!-- 导航栏 -->
 	<navigate class="top_navigate" :list="navList" :itemIndex="itemIndex" @itemClick="itemClick" :top="useMenuButton().navigateTop" />
 	<!-- 占位 -->
-	<view class="" :style="{ height: useMenuButton().orderView }"></view>
-	<!-- 列表 -->
-	<view class="list">
-		<block v-for="(item, index) in shopping_list" :key="item.id">
-			<OrderItem :item="item" :order_type="order_type" @stateClick="stateClick" @open_details="open_details"></OrderItem>
+	<view :style="{ height: useMenuButton().orderHeight + 'px' }"></view>
+
+	<swiper :style="{ height: getSystem().screenHeight - 173 + 'px' }" class="swiper" :current="itemIndex" @change="swiperChange">
+		<block v-for="(item, index) in navList" :key="item.title">
+			<swiper-item>
+				<!-- 列表 -->
+				<view class="list">
+					<scroll-view class="scroll_view" scroll-y scroll-with-animation enable-back-to-top :scroll-anchoring="true" @scrolltolower="scrolltolower">
+						<view class="scroll_item">
+							<block v-for="(item, index) in shopping_list" :key="item.id">
+								<OrderItem :item="item" :head_title_index="head_title_index" @stateClick="stateClick" @open_details="open_details"></OrderItem>
+							</block>
+						</view>
+					</scroll-view>
+				</view>
+			</swiper-item>
 		</block>
-	</view>
+	</swiper>
+
 	<!-- 核销码弹窗 -->
 	<uni-popup ref="checkCodeRef" @change="checkCodeChange">
 		<view class="check_code_wrap box_border_radius box_shadow">
@@ -43,6 +57,7 @@
 <script setup>
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
+import getSystem from '../../hooks/getSystem.js';
 import navigate from '/src/pages/component/navigate.vue';
 import OrderItem from './item.vue';
 import { ref } from 'vue';
@@ -50,10 +65,19 @@ import { onLoad } from '@dcloudio/uni-app';
 
 onLoad((params) => {
 	console.log('params', params);
-	order_type.value = params.order_type;
-	itemIndex.value = params.index;
+	if (params.head_title_index && params.index) {
+		head_title_index.value = params.head_title_index;
+		itemIndex.value = params.index;
+	}
 });
 
+// 标题页面
+const head_title_index = ref(0);
+function switchPage(i) {
+	head_title_index.value = i;
+}
+
+// 导航栏列表
 const navList = ref([
 	{
 		title: '全部'
@@ -74,9 +98,8 @@ const navList = ref([
 		title: '退换/售后'
 	}
 ]);
-
+// 导航栏
 const itemIndex = ref(0);
-
 // 导航栏切换
 function itemClick(e) {
 	if (itemIndex.value != e.i) {
@@ -84,11 +107,16 @@ function itemClick(e) {
 	}
 }
 
-// dirstribution: 物流
-// pick_store: 自提
-const order_type = ref('dirstribution');
-function navigation_switch(e) {
-	order_type.value = e;
+function swiperChange(e) {
+	uni.showLoading({
+		title: '加载中',
+		mask: true
+	});
+
+	setTimeout(function () {
+		itemIndex.value = e.detail.current;
+		uni.hideLoading();
+	}, 400);
 }
 
 // 列表
@@ -225,6 +253,11 @@ const shopping_list = ref([
 	}
 ]);
 
+// 滚动到底部时触发
+function scrolltolower(e) {
+	console.log(e);
+}
+
 // 核销码弹窗
 const checkCodeRef = ref(null);
 // 打开核销码弹窗
@@ -282,23 +315,12 @@ page {
 
 .page_title {
 	background: #fff;
-}
-
-.navigation_wrap {
 	display: flex;
 	align-items: center;
-	padding-left: 80rpx;
-
-	.navigation_btn {
-		font-size: 26rpx;
-		color: #aaaaaa;
-		font-weight: 600;
-		padding-right: 30rpx;
-	}
-
-	.active {
-		font-size: 32rpx;
-		color: #000;
+	.navigation_wrap {
+		margin-left: 30px;
+		.navigation {
+		}
 	}
 }
 
@@ -306,7 +328,7 @@ page {
 	position: fixed;
 	left: 0;
 	width: 100%;
-	padding: 20rpx 20rpx 0;
+	padding: 20rpx 20rpx 10rpx;
 	z-index: 1;
 	background: #fff;
 
@@ -331,7 +353,7 @@ page {
 }
 
 .list {
-	padding: 20rpx;
+	height: 100%;
 }
 
 .check_code_wrap {
@@ -347,6 +369,18 @@ page {
 	.cover {
 		width: 580rpx;
 		height: 580rpx;
+	}
+}
+
+.swiper {
+	background: #fff;
+	.scroll_view {
+		height: 100%;
+		padding: 28rpx 0;
+		.scroll_item {
+			padding: 0 20rpx;
+			margin: 1px 0;
+		}
 	}
 }
 </style>

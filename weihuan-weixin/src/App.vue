@@ -8,6 +8,17 @@ export default {
 			const res = uni.getMenuButtonBoundingClientRect();
 			uni.setStorageSync('menuButton', res);
 		}
+
+		// 获取设备信息
+		const getSystem = uni.getStorageSync('system');
+		console.log('getSystem', getSystem);
+		if (!getSystem) {
+			uni.getSystemInfo({
+				success: function (res) {
+					uni.setStorageSync('system', res);
+				}
+			});
+		}
 	},
 	onShow: function () {},
 	onHide: function () {}
@@ -16,7 +27,8 @@ export default {
 
 <style lang="scss">
 @import url('/src/static/font/iconfont.css');
-view {
+view,
+scroll-view {
 	padding: 0;
 	margin: 0;
 	box-sizing: border-box;
@@ -51,6 +63,33 @@ image {
 	text-overflow: ellipsis;
 }
 
+.navigation_wrap {
+	display: inline-block;
+
+	.navigation {
+		display: flex;
+		text-align: center;
+		border-radius: 34rpx;
+		overflow: hidden;
+		margin-left: 20rpx;
+
+		.navigation_btn {
+			min-width: 134rpx;
+			height: 56rpx;
+			line-height: 56rpx;
+			font-size: 24rpx;
+			font-weight: 500;
+			padding: 0 30rpx;
+			color: #000;
+		}
+
+		.active {
+			background: linear-gradient(257.93deg, #fdb681 0%, #ff8992 100%);
+			color: #fff;
+		}
+	}
+}
+
 .top {
 	position: fixed;
 	top: 0;
@@ -72,13 +111,15 @@ image {
 	z-index: 10;
 	background: transparent;
 	transition: 0.3s ease;
-
+	
 	.return_icon {
 		position: absolute;
-		left: 5px;
 		top: 50%;
 		transform: translateY(-50%);
-		padding-right: 30rpx;
+		left: 0;
+		padding-left: 20rpx;
+		height: 56rpx;
+		line-height: 56rpx;
 	}
 }
 
@@ -179,6 +220,13 @@ image {
 		padding-bottom: 30rpx;
 	}
 
+	.lead {
+		font-size: 30rpx;
+		line-height: 40rpx;
+		color: #000;
+		font-weight: 500;
+	}
+
 	.li {
 		display: flex;
 		justify-content: space-between;
@@ -198,7 +246,7 @@ image {
 }
 
 .animate {
-	transition: .4s ease;
+	transition: 0.4s ease;
 }
 
 .recomment_title {
@@ -211,7 +259,7 @@ image {
 		height: 1px;
 		background: #c1c1c1;
 	}
-	
+
 	.title {
 		font-size: 30rpx;
 		font-weight: bold;

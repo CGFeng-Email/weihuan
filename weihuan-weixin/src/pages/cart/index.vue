@@ -1,5 +1,17 @@
 <template>
 	<page-meta :page-style="'overflow:' + (isScroll ? 'hidden' : 'visible')"></page-meta>
+	<!-- 顶部到胶囊的高度 -->
+	<view class="top" :class="scrollTop" :style="{ height: useMenuButton().top }"></view>
+	<!-- 标题 -->
+	<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
+		<view class="navigation_wrap">
+			<view class="navigation box_border_radius box_shadow">
+				<view class="navigation_btn" :class="{ active: head_title_index == 0 }" @click="switchPage(0)">配送蓝</view>
+				<view class="navigation_btn" :class="{ active: head_title_index == 1 }" @click="switchPage(1)">自提蓝</view>
+			</view>
+		</view>
+	</view>
+	<view :style="{ height: useMenuButton().topView }"></view>
 	<view class="main">
 		<view class="list box_border_radius box_shadow">
 			<block v-for="(item, index) in cartList" :key="item.id">
@@ -19,6 +31,10 @@
 									<view class="content">
 										<view class="shopping_top">
 											<view class="title over2">{{ item.title }}</view>
+											<view class="specification">
+												<view class="hot spec">畅销</view>
+												<view class="isPick spec">不可自提</view>
+											</view>
 											<view class="spec">{{ item.sku }}</view>
 										</view>
 										<view class="shopping_bottom">
@@ -47,13 +63,6 @@
 					</uni-swipe-action>
 				</view>
 			</block>
-			<!-- <view class="item">
-				<view class="total_price">
-					小计：
-					<text class="icon">￥</text>
-					<text class="price">{{ priceToFixed(total_price) }}</text>
-				</view>
-			</view> -->
 		</view>
 	</view>
 
@@ -124,11 +133,28 @@
 // 列表组件
 import List from '@/pages/shopping/list.vue';
 import { ref, computed, watch } from 'vue';
-
+// 胶囊信息
+import useMenuButton from '../../hooks/useMenu.js';
 // 防止弹窗打开后，页面继续滚动
 const isScroll = ref(false);
 // 明细弹窗
 const cart_popup = ref(null);
+// 自提产品:0，物流产品:1
+const head_title_index = ref(0);
+// 页面切换
+function switchPage(i) {
+	if (head_title_index.value == i) return;
+	uni.showLoading({
+		title: '加载中',
+		mask: true,
+		success: () => {
+			setTimeout(() => {
+				head_title_index.value = i;
+				uni.hideLoading();
+			}, 300);
+		}
+	});
+}
 // 打开明细弹窗
 function open_popup() {
 	if (isScroll.value) {
@@ -387,8 +413,17 @@ page {
 </style>
 
 <style lang="scss" scoped>
+.top {
+	background: #fff;
+}
+
+.page_title {
+	background: #fff;
+	display: flex;
+}
+
 .main {
-	padding: 30rpx;
+	padding: 10rpx 30rpx;
 	.list {
 		overflow: hidden;
 		.item {
@@ -430,6 +465,31 @@ page {
 								font-size: 24rpx;
 								color: #acacac;
 								padding-top: 10rpx;
+							}
+						}
+
+						.specification {
+							display: flex;
+							align-items: center;
+							padding-top: 10rpx;
+							.spec {
+								height: 34rpx;
+								line-height: 34rpx;
+								border-radius: 4rpx;
+								margin-right: 10rpx;
+								padding: 0 20rpx;
+								font-size: 24rpx;
+								font-weight: 500;
+								color: #fff;
+								overflow: hidden;
+							}
+
+							.hot {
+								background: linear-gradient(83.83deg, #f24d2a 0%, #f59e33 100%);
+							}
+
+							.isPick {
+								background: linear-gradient(83.83deg, #2ac2f2 0%, #0b6ff2 100%);
 							}
 						}
 

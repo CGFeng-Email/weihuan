@@ -11,7 +11,7 @@
 		:enable-passive="true"
 	>
 		<view class="wrap">
-			<view class="item" :class="current == index ? 'active' : ''" v-for="(item, index) in list" :key="item.id" :id="'item' + item.id" @click="itemClick(index, item.id)">
+			<view class="item" :class="current == index ? 'active' : ''" v-for="(item, index) in list" :key="item.id" :id="'item' + item.id" @click="menuItemClick(index, item.id)">
 				<view class="cover_box">
 					<image class="cover" :src="item.image" mode="aspectFit"></image>
 				</view>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, getCurrentInstance, ref, onMounted } from 'vue';
+import { defineProps, defineEmits, getCurrentInstance, ref, onMounted, defineExpose } from 'vue';
 const emit = defineEmits(['on-save-ok']);
 const that = getCurrentInstance();
 const props = defineProps({
@@ -48,7 +48,7 @@ const props = defineProps({
 const scrollLeft = ref(0);
 const listItem = ref([]);
 
-function itemClick(index, id) {
+function menuItemClick(index, id) {
 	listItem.value.forEach((item) => {
 		if (item.id == 'item' + id) {
 			scrollLeft.value = item.left - 150;
@@ -57,6 +57,11 @@ function itemClick(index, id) {
 
 	emit('menuClick', { index, id });
 }
+
+// 解决父组件调用不了子组件的问题
+defineExpose({
+	menuItemClick
+})
 
 onMounted(() => {
 	const query = uni.createSelectorQuery().in(that);

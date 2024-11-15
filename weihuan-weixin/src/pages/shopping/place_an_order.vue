@@ -74,7 +74,7 @@
 		</view>
 		<view class="title">提拉米苏罐子蛋糕盒子慕斯罐小蛋糕下午茶零食抹茶巧克力</view>
 		<view class="specification">
-			<view class="sku" @click="open_specification">
+			<view class="sku" @click="open_specification('add')">
 				<text class="text">【6罐】原味*3+雪域牛乳*3</text>
 				<uni-icons type="down" size="14" color="#000"></uni-icons>
 			</view>
@@ -105,64 +105,16 @@
 		<view class="btn btn_bg">
 			<view class="text">搭配建议</view>
 		</view>
-			
+
 		<List :list="shopping_list" @itemClick="jump_order_details"></List>
-		
-		<!-- <swiper class="match_swiper" autoplay :interval="5000" next-margin="15px" circular :duration="1000" :display-multiple-items="2">
-			<swiper-item class="swiper-item">
-				<view class="item">
-					<view class="cover_box">
-						<image class="cover" src="https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/match_li1.png" mode="aspectFill"></image>
-					</view>
-					<view class="content">
-						<view class="title over1">提拉米苏罐子蛋糕</view>
-						<view class="price_box">
-							<text class="symbol">￥</text>
-							<text class="price">{{ priceToFixed(130) }}</text>
-							<text class="primary_price">￥{{ priceToFixed(210) }}</text>
-						</view>
-					</view>
-				</view>
-			</swiper-item>
-			<swiper-item class="swiper-item">
-				<view class="item">
-					<view class="cover_box">
-						<image class="cover" src="https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/match_li2.png" mode="aspectFill"></image>
-					</view>
-					<view class="content">
-						<view class="title over1">提拉米苏罐子蛋糕</view>
-						<view class="price_box">
-							<text class="symbol">￥</text>
-							<text class="price">{{ priceToFixed(130) }}</text>
-							<text class="primary_price">￥{{ priceToFixed(210) }}</text>
-						</view>
-					</view>
-				</view>
-			</swiper-item>
-			<swiper-item class="swiper-item">
-				<view class="item">
-					<view class="cover_box">
-						<image class="cover" src="https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/match_li3.png" mode="aspectFill"></image>
-					</view>
-					<view class="content">
-						<view class="title over1">提拉米苏罐子蛋糕</view>
-						<view class="price_box">
-							<text class="symbol">￥</text>
-							<text class="price">{{ priceToFixed(130) }}</text>
-							<text class="primary_price">￥{{ priceToFixed(210) }}</text>
-						</view>
-					</view>
-				</view>
-			</swiper-item>
-		</swiper> -->
 	</view>
 	<!-- 底部栏-购物车 -->
 	<view class="bottom_cart_navigation">
 		<view class="btn">
-			<button @click="open_specification">加入购物车</button>
+			<button @click="open_specification('add')">加入购物车</button>
 		</view>
 		<view class="btn">
-			<button @click="open_specification">立即购买</button>
+			<button @click="open_specification('immed')">立即购买</button>
 		</view>
 	</view>
 	<!-- 底部购物车 - 占位 -->
@@ -199,19 +151,25 @@
 			<view class="line"></view>
 			<view class="name">规格属性</view>
 			<view class="specification_select">
-				<uni-section>
-					<uni-data-select v-model="specificationIndex" :localdata="specificationList" @change="specificationChange" placeholder="请选择规格属性"></uni-data-select>
-				</uni-section>
+				<view
+					class="specification_li"
+					:class="{ active: index == specificationIndex }"
+					v-for="(item, index) in specificationList"
+					:key="item.value"
+					@click="specificationChange(index)"
+				>
+					{{ item.text }}
+				</view>
 			</view>
 			<view class="name">配送方式</view>
 			<view class="delivery">
 				<view class="delivery_select" :class="{ active: deliveryIndex == 0 }" @click="deliveryChange(0)">
 					<text class="circle"></text>
-					<text class="text">自提点自提</text>
+					<text class="text">配送蓝</text>
 				</view>
 				<view class="delivery_select" :class="{ active: deliveryIndex == 1 }" @click="deliveryChange(1)">
 					<text class="circle"></text>
-					<text class="text">物流配送</text>
+					<text class="text">自提蓝</text>
 				</view>
 			</view>
 			<view class="quantity">
@@ -350,7 +308,9 @@ const priceToFixed = computed(() => {
 // 打开规格弹窗
 const openId = ref(null);
 const pageMeta = ref(false);
-const open_specification = () => {
+const confirmType = ref('add');
+const open_specification = (e) => {
+	confirmType.value = e;
 	openId.value.open();
 };
 
@@ -365,16 +325,34 @@ const popup_close = () => {
 };
 
 // 规格列表
-const specificationIndex = ref(-1);
+const specificationIndex = ref(0);
 const specificationList = ref([
-	{ value: 0, text: '【6罐】原味*3+雪域牛乳*3' },
-	{ value: 1, text: '【8罐】原味*4+雪域牛乳*4' },
-	{ value: 2, text: '【10罐】原味*5+雪域牛乳*5' }
+	{
+		value: 0,
+		text: '【6罐】原味+雪域牛乳'
+	},
+	{
+		value: 1,
+		text: '【6罐】原味*3+雪域牛乳*3'
+	},
+	{
+		value: 2,
+		text: '【6罐】原味+雪域牛乳'
+	},
+	{
+		value: 3,
+		text: '【6罐】原味*3+雪域牛乳*3'
+	},
+	{
+		value: 4,
+		text: '【10罐】原味*5+雪域牛乳*5'
+	}
 ]);
 
 // 规格属性
-const specificationChange = (e) => {
-	console.log(e);
+const specificationChange = (i) => {
+	console.log(i);
+	specificationIndex.value = i;
 };
 
 // 配送方式
@@ -400,9 +378,22 @@ const left_return = () => {
 
 // 提交订单
 const submit_order = () => {
-	uni.navigateTo({
-		url: '/pages/shopping/confirm_an_order'
-	});
+	if (confirmType.value == 'immed') {
+		uni.navigateTo({
+			url: '/pages/shopping/confirm_an_order'
+		});
+	} else {
+		uni.showToast({
+			title: '加入购物车成功',
+			icon: 'none',
+			mask: true,
+			duration: 2000,
+			success: () => {
+				popup_close()
+			}
+		});
+		
+	}
 };
 
 // 跳转商品详情
@@ -821,16 +812,23 @@ onMounted(() => {
 
 	.specification_select {
 		margin-bottom: 30rpx;
-		background: #f8f8f8;
-		border-radius: 8rpx;
-		::v-deep .uni-select__input-text {
-			font-size: 12px;
+		display: flex;
+		flex-wrap: wrap;
+		.specification_li {
+			margin: 0 20rpx 20rpx 0;
+			border-radius: 4px;
+			background: #f8f8f8;
+			padding: 16rpx 20rpx;
+			font-size: 24rpx;
+			line-height: 34rpx;
+			color: #000;
+			font-weight: 500;
+			border: 1px solid transparent;
+			transition: 0.3s ease;
 		}
-		::v-deep .uni-select {
-			border: none;
-			.uni-select__selector-item {
-				font-size: 12px;
-			}
+		.active {
+			border-color: #ff0000;
+			color: #ff0000;
 		}
 	}
 

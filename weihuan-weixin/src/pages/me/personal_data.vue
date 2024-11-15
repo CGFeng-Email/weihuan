@@ -27,7 +27,9 @@
 					<text class="title">真实姓名</text>
 				</view>
 				<view class="right">
-					<view class="value">谷志华</view>
+					<view class="value">
+						<input class="uni-input input" placeholder="请输入您的姓名" maxlength="12" v-model="userName" />
+					</view>
 				</view>
 			</view>
 			<view class="item">
@@ -35,29 +37,30 @@
 					<text class="title">手机号</text>
 				</view>
 				<view class="right">
-					<view class="value">13626548975</view>
+					<view class="value">
+						<input type="tel" class="uni-input input" placeholder="请输入您的电话号码" maxlength="11" v-model="mobile" />
+					</view>
 				</view>
 			</view>
 			<view class="item location_item">
 				<view class="name">
-					<text class="title">联系地址</text>
+					<text class="title">电子邮箱</text>
 				</view>
 				<view class="right">
-					<view class="value">广东省广州市天河区中山大道中18号</view>
+					<view class="value">
+						<input type="text" class="uni-input input" placeholder="请输入您的邮箱" maxlength="11" v-model="email" />
+					</view>
 				</view>
 			</view>
 		</view>
 	</view>
 
-	<view class="fixed_bottom_btn">
-		<view class="btn_bg btn">
-			<button>确认修改</button>
-		</view>
-	</view>
+	<bottomVue title="确认修改" @bottom_click="bottom_click"></bottomVue>
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import bottomVue from '../component/bottom.vue';
 const portrait = ref('/static/img/head_portrait.png');
 const nickName = ref('炜洹游客用户');
 // 头像
@@ -70,6 +73,29 @@ const nickNameBlur = (e) => {
 	console.log(e);
 	nickName.value = e.detail.value;
 };
+// 姓名
+const userName = ref(null);
+// 电话
+const mobile = ref(null);
+// 邮箱
+const email = ref(null);
+// 确认修改
+function bottom_click() {
+	uni.showLoading({
+		title: '修改中',
+		mask: true,
+		success: () => {
+			setTimeout(function () {
+				uni.hideLoading();
+				uni.showToast({
+					title: '修改成功',
+					icon: 'none',
+					mask: true
+				});
+			}, 1000);
+		}
+	});
+}
 </script>
 
 <style>
@@ -137,6 +163,10 @@ page {
 					line-height: 38rpx;
 					color: #090909;
 					font-weight: 500;
+
+					.input {
+						text-align: right;
+					}
 				}
 			}
 		}

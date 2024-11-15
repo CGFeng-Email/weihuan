@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1788579",
+      "name": "热门",
+      "font_class": "remen",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "13769334",
+      "name": "列表页-热门选项",
+      "font_class": "liebiaoye-remenxuanxiang",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
+      "icon_id": "18371186",
+      "name": "注意",
+      "font_class": "zhuyi",
+      "unicode": "e67e",
+      "unicode_decimal": 59006
+    },
+    {
+      "icon_id": "2902701",
+      "name": "注",
+      "font_class": "zhu",
+      "unicode": "e673",
+      "unicode_decimal": 58995
+    },
+    {
+      "icon_id": "1618065",
+      "name": "注释",
+      "font_class": "zhushi",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
+      "icon_id": "17697983",
+      "name": "申请发票",
+      "font_class": "shenqingfapiaochakanfapiao",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
       "icon_id": "9351294",
       "name": "承运商我的订单",
       "font_class": "chengyunshangwodedingdan",

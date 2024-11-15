@@ -23,59 +23,69 @@
 	</view>
 
 	<div class="swiper_wrap">
-		<uni-transition mode-class="fade" :show="loading">
-			<!-- 轮播图 -->
-			<swiper class="swiper_banner" autoplay :interval="5000" :duration="1000" circular>
-				<block v-for="item in swiper_list" :key="item.src">
-					<swiper-item class="swiper-item">
-						<image class="cover" :src="item.src" mode="widthFix"></image>
-					</swiper-item>
-				</block>
-			</swiper>
-		</uni-transition>
+		<!-- 轮播图 -->
+		<swiper class="swiper_banner" autoplay :interval="5000" :duration="1000" circular>
+			<block v-for="item in swiper_list" :key="item.src">
+				<swiper-item class="swiper-item">
+					<image class="cover" :src="item.src" mode="widthFix"></image>
+				</swiper-item>
+			</block>
+		</swiper>
 
 		<!-- 用户信息 -->
-		<uni-transition mode-class="fade" :show="loading">
-			<view class="user" v-if="true">
-				<view class="wrap">
-					<image class="head_portrait" src="/src/static/img/head_portrait.png" mode="widthFix"></image>
-					<view class="content">
-						<view class="name">{{ user_title }}</view>
-						<view class="lead">
-							{{ user_lead }}
-						</view>
+		<view class="user" v-if="true">
+			<view class="wrap">
+				<image class="head_portrait" src="/src/static/img/head_portrait.png" mode="widthFix"></image>
+				<view class="content">
+					<view class="name">{{ user_title }}</view>
+					<view class="lead">
+						{{ user_lead }}
 					</view>
-					<view class="login_btn" @click="show_login">登录/注册</view>
 				</view>
+				<view class="login_btn" @click="show_login">登录/注册</view>
 			</view>
-			<view class="user" v-else>
-				<view class="wrap">
-					<view class="head_portrait">
-						<image class="cover" src="/static/img/head_portrait.png" mode="widthFix"></image>
-						<image class="vip" src="/static/img/head_vip.png" mode="widthFix"></image>
-					</view>
-					<view class="content">
-						<view class="name">
-							{{ user_title }}
-							<image class="vip" src="/static/img/vip.png" mode="widthFix" lazy-load></image>
-						</view>
-						<view class="lead">
-							<image class="phone" src="/src/static/img/phone.png" mode="widthFix" lazy-load></image>
-							{{ userMobileComputed }}
-						</view>
-					</view>
-					<image class="star_cover" src="/src/static/img/user_star.png" mode="widthFix"></image>
+		</view>
+		<view class="user" v-else>
+			<view class="wrap">
+				<view class="head_portrait">
+					<image class="cover" src="/static/img/head_portrait.png" mode="widthFix"></image>
+					<image class="vip" src="/static/img/head_vip.png" mode="widthFix"></image>
 				</view>
+				<view class="content">
+					<view class="name">
+						{{ user_title }}
+						<image class="vip" src="/static/img/vip.png" mode="widthFix" lazy-load></image>
+					</view>
+					<view class="lead">
+						<image class="phone" src="/src/static/img/phone.png" mode="widthFix" lazy-load></image>
+						{{ userMobileComputed }}
+					</view>
+				</view>
+				<image class="star_cover" src="/src/static/img/user_star.png" mode="widthFix"></image>
 			</view>
-		</uni-transition>
+		</view>
 	</div>
+
+	<!-- 分类 -->
+	<view class="classify">
+		<view class="wrap">
+			<block v-for="(item, index) in classify_list" :key="item.src">
+				<view class="item" @click="open_classify_item(item)" v-if="index < 8">
+					<view class="cover_box">
+						<image class="cover" :src="item.src" mode="widthFix" lazy-load></image>
+					</view>
+					<view class="title">{{ item.title }}</view>
+				</view>
+			</block>
+		</view>
+	</view>
 
 	<!-- 分发方式 -->
 	<view class="distribute">
 		<view class="wrap">
 			<view class="type">
 				<view class="box" @click="open_pickup">
-					<view class="title">自提点</view>
+					<view class="title">门店自提</view>
 					<view class="lead">在线点单，到自提点取货</view>
 					<view class="cover_box">
 						<image class="cover" src="/src/static/img/store.png" mode="widthFix"></image>
@@ -106,55 +116,35 @@
 	</view>
 
 	<!-- 优惠卷 -->
-	<uni-transition mode-class="slide-bottom" :show="loading">
-		<view class="coupon">
-			<swiper class="swiper_coupon" skip-hidden-item-layout autoplay :interval="5000" :duration="1000" :display-multiple-items="4" circular previous-margin="15px">
-				<swiper-item class="item" v-for="(item, index) in coupon_list" :key="index" @click="open_coupon_details">
-					<view class="box">
-						<view class="ide">{{ item.title }}</view>
-						<view class="price">{{ item.price }}</view>
-						<view class="lead">{{ item.lead }}</view>
-						<view class="btn" @click.stop="get_coupon">立即领取</view>
-					</view>
-				</swiper-item>
-			</swiper>
-		</view>
-	</uni-transition>
-
-	<!-- 分类 -->
-	<uni-transition mode-class="fade" :show="loading">
-		<view class="classify">
-			<view class="wrap">
-				<block v-for="item in classify_list" :key="item.src">
-					<view class="item" @click="open_shopping">
-						<view class="cover_box">
-							<image class="cover" :src="item.src" mode="widthFix" lazy-load></image>
-						</view>
-						<view class="title">{{ item.title }}</view>
-					</view>
-				</block>
-			</view>
-		</view>
-	</uni-transition>
+	<view class="coupon">
+		<swiper class="swiper_coupon" skip-hidden-item-layout autoplay :interval="5000" :duration="1000" :display-multiple-items="4" circular previous-margin="15px">
+			<swiper-item class="item" v-for="(item, index) in coupon_list" :key="index" @click="open_coupon_details">
+				<view class="box">
+					<view class="ide">{{ item.title }}</view>
+					<view class="price">{{ item.price }}</view>
+					<view class="lead">{{ item.lead }}</view>
+					<view class="btn" @click.stop="get_coupon">立即领取</view>
+				</view>
+			</swiper-item>
+		</swiper>
+	</view>
 
 	<!-- 推荐 -->
-	<uni-transition mode-class="fade" :show="loading">
-		<view class="recommend">
-			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
-				<block v-for="item in recommend_list" :key="item.src">
-					<swiper-item class="item" @click="open_shopping_details">
-						<image class="cover" :src="item.src" mode="aspectFit"></image>
-					</swiper-item>
-				</block>
-			</swiper>
-		</view>
-	</uni-transition>
+	<view class="recommend">
+		<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
+			<block v-for="item in recommend_list" :key="item.src">
+				<swiper-item class="item" @click="open_shopping_details">
+					<image class="cover" :src="item.src" mode="aspectFit"></image>
+				</swiper-item>
+			</block>
+		</swiper>
+	</view>
 </template>
 
 <script setup>
 //onPageScroll:滚动事件
 import { onPageScroll } from '@dcloudio/uni-app';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 console.log('useMenuButton', useMenuButton());
@@ -192,20 +182,54 @@ const swiper_list = ref([
 // 分类列表
 const classify_list = ref([
 	{
+		id: 23819289,
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify1.png',
-		title: '海鲜优选'
+		title: '海鲜鱼类'
 	},
 	{
+		id: 34242664,
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify2.png',
 		title: '进口肉类'
 	},
 	{
+		id: 132131244,
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify3.png',
 		title: '西式甜品'
 	},
 	{
+		id: 378647269,
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify4.png',
 		title: '精品果茶'
+	},
+	{
+		id: 3264978326,
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify5.png',
+		title: '新鲜海鲜'
+	},
+	{
+		id: 3671263877,
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify6.png',
+		title: '国产肉类'
+	},
+	{
+		id: 3434634327,
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify7.png',
+		title: '宴席食材'
+	},
+	{
+		id: 6453571263877,
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify8.png',
+		title: '特色小吃'
+	},
+	{
+		id: 43126827368732,
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify9.png',
+		title: '薯片零食'
+	},
+	{
+		id: 342424564652,
+		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify10.png',
+		title: '特惠饮料'
 	}
 ]);
 
@@ -289,16 +313,20 @@ function get_coupon() {
 }
 
 // 自提点
-function open_pickup(){
+function open_pickup() {
 	uni.switchTab({
 		url: '/pages/self_pick_up/index'
-	})
+	});
 }
 
-// 商品分类
-function open_classify() {
+// 跳转商品分类
+function open_classify_item(e) {
+	console.log(e);
 	uni.switchTab({
-		url: '/pages/classify/index'
+		url: '/pages/classify/index',
+		success: () => {
+			uni.$emit('classify_params', { id: e.id });
+		}
 	});
 }
 
@@ -309,7 +337,7 @@ function open_notice_details() {
 	});
 }
 
-// 推荐商品， 跳转商品详情
+// 跳转推荐
 function open_shopping_details() {
 	uni.navigateTo({
 		url: '/pages/shopping/place_an_order'
@@ -380,11 +408,6 @@ const getLocation = () => {
 };
 
 getLocation();
-
-// 页面挂载完毕
-onMounted(() => {
-	loading.value = true;
-});
 </script>
 
 <style lang="scss" scoped>
@@ -486,7 +509,7 @@ onMounted(() => {
 	bottom: 0;
 	left: 0;
 	right: 0;
-	padding: 0 30rpx;
+	padding: 15rpx 30rpx;
 	margin: auto;
 	background: linear-gradient(to bottom, transparent, #f1f1f1);
 
@@ -555,7 +578,7 @@ onMounted(() => {
 }
 
 .distribute {
-	padding: 30rpx;
+	padding: 15rpx 30rpx;
 	background: #f1f1f1;
 
 	.wrap {
@@ -608,6 +631,7 @@ onMounted(() => {
 }
 
 .coupon {
+	padding: 15rpx 0;
 	background: #f1f1f1;
 	padding-bottom: 30rpx;
 	.swiper_coupon {
@@ -650,15 +674,18 @@ onMounted(() => {
 
 .classify {
 	background: #f1f1f1;
-	padding: 0 30rpx 30rpx;
+	padding: 15rpx 30rpx;
 	.wrap {
 		background: #fff;
 		border-radius: 20rpx;
 		display: flex;
-		padding: 50rpx 0;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		padding: 30rpx 12rpx;
 		.item {
-			width: 25%;
+			width: 167.5rpx;
 			text-align: center;
+			padding: 15rpx 0;
 			.cover_box {
 				padding-bottom: 14rpx;
 				.cover {

@@ -53,10 +53,10 @@
 			<button class="common_btn" @click.stop="stateClick('物流信息')">物流信息</button>
 			<button class="common_btn" @click.stop="stateClick('申请售后')">申请售后</button>
 
-			<block v-if="order_type == 'dirstribution'">
+			<block v-if="head_title_index == 0">
 				<button class="common_btn btn_bg" @click.stop="stateClick('立即支付')">立即支付</button>
 			</block>
-			<block v-else-if="order_type == 'pick_store'">
+			<block v-else-if="head_title_index == 1">
 				<button class="common_btn btn_bg" @click.stop="stateClick('核销码')">核销码</button>
 			</block>
 		</view>
@@ -76,11 +76,11 @@ export default {
 			type: Boolean,
 			default: true
 		},
-		// 物流: dirstribution
-		// 自提：pick_store
-		order_type: {
-			type: String,
-			default: 'dirstribution'
+		// 物流: 0
+		// 自提：1
+		head_title_index: {
+			type: Number,
+			default: 0
 		},
 		// 待核销、已核销
 		cancel: {
@@ -213,7 +213,7 @@ export default {
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		
+
 		.right_state {
 			display: flex;
 			align-items: center;

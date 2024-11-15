@@ -3,16 +3,14 @@
 	<!-- 顶部到胶囊的高度 -->
 	<view class="top" :style="{ height: useMenuButton().top }"></view>
 	<!-- 标题 -->
-	<uni-transition mode-class="fade" :show="true">
-		<view class="page_title" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
-			<view class="navigation_wrap">
-				<view class="navigation box_border_radius box_shadow">
-					<view class="navigation_btn btn_bg active">自提点</view>
-					<view class="navigation_btn" @click="jump_list">列表</view>
-				</view>
+	<view class="page_title" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
+		<view class="navigation_wrap">
+			<view class="navigation box_border_radius box_shadow">
+				<view class="navigation_btn active">门店自提</view>
+				<view class="navigation_btn" @click="jump_list">门店列表</view>
 			</view>
 		</view>
-	</uni-transition>
+	</view>
 
 	<map
 		id="mapId"
@@ -34,7 +32,7 @@
 	<swiper class="store box_border_radius box_shadow" circular :current="current" @change="swiperChange">
 		<block v-for="item in markersList" :key="item.id">
 			<swiper-item class="item">
-				<view class="store_info" @click="open_classify">
+				<view class="store_info" @click="open_details">
 					<image class="cover" :src="item.image" mode="aspectFill"></image>
 					<view class="content">
 						<view class="store_top">
@@ -84,17 +82,21 @@ let mapContent = ref(null);
 const latitude = ref(null);
 const longitude = ref(null);
 const scale = ref(16);
+const defaultImg = ref('/static/img/map_store.png');
+const iconActive = ref('/static/img/map.png');
+const iconActiveWidth = ref(46);
+const iconActiveHeight = ref(72);
 
 // 标记点
 const markersList = ref([
 	{
 		id: 3,
-		width: 28,
-		height: 41,
+		width: iconActiveWidth.value,
+		height: iconActiveHeight.value,
 		latitude: 23.12463,
 		longitude: 113.36199,
 		title: '广东省广州市天河区黄埔大道中258号',
-		iconPath: '/static/img/map.png',
+		iconPath: iconActive.value,
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
 		store: '陈先生',
 		mobile: 13636986542,
@@ -104,21 +106,21 @@ const markersList = ref([
 			content: '黄埔大道中258号店',
 			display: 'ALWAYS',
 			textAlign: 'center',
-			padding: '6',
+			padding: 7,
 			bgColor: '#fff',
 			borderRadius: 8,
-			fontSize: 14,
+			fontSize: 16,
 			color: '#000'
 		}
 	},
 	{
 		id: 4,
 		width: 28,
-		height: 41,
+		height: 42,
 		latitude: 23.122686,
 		longitude: 113.36604,
 		title: '广东省广州市天河区黄埔大道中199号',
-		iconPath: '/static/img/map.png',
+		iconPath: '/static/img/map_store.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
 		store: '陈先生',
 		mobile: 13636986542,
@@ -128,21 +130,21 @@ const markersList = ref([
 			content: '黄埔大道中199店',
 			display: 'ALWAYS',
 			textAlign: 'center',
-			padding: '6',
+			padding: 7,
 			bgColor: '#fff',
 			borderRadius: 8,
-			fontSize: 14,
+			fontSize: 16,
 			color: '#000'
 		}
 	},
 	{
 		id: 5,
 		width: 28,
-		height: 41,
+		height: 42,
 		latitude: 23.12103843540073,
 		longitude: 113.36126043914797,
 		title: '广东省广州市天河区员村西街7号大院',
-		iconPath: '/static/img/map.png',
+		iconPath: '/static/img/map_store.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
 		store: '陈先生',
 		mobile: 13636986542,
@@ -152,21 +154,21 @@ const markersList = ref([
 			content: '员村西街7号大院',
 			display: 'ALWAYS',
 			textAlign: 'center',
-			padding: '6',
+			padding: 7,
 			bgColor: '#fff',
 			borderRadius: 8,
-			fontSize: 14,
+			fontSize: 16,
 			color: '#000'
 		}
 	},
 	{
 		id: 6,
 		width: 28,
-		height: 41,
+		height: 42,
 		latitude: 23.120406941577873,
 		longitude: 113.35739805816652,
 		title: '广东省广州市天河区员村南街',
-		iconPath: '/static/img/map.png',
+		iconPath: '/static/img/map_store.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
 		store: '陈先生',
 		mobile: 13636986542,
@@ -176,21 +178,21 @@ const markersList = ref([
 			content: '员村南街',
 			display: 'ALWAYS',
 			textAlign: 'center',
-			padding: '6',
+			padding: 7,
 			bgColor: '#fff',
 			borderRadius: 8,
-			fontSize: 14,
+			fontSize: 16,
 			color: '#000'
 		}
 	},
 	{
 		id: 7,
 		width: 28,
-		height: 41,
+		height: 42,
 		latitude: 23.128132,
 		longitude: 113.365929,
 		title: '广东省广州市天河区黄埔大道员村段',
-		iconPath: '/static/img/map.png',
+		iconPath: '/static/img/map_store.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
 		store: '陈先生',
 		mobile: 13636986542,
@@ -200,10 +202,10 @@ const markersList = ref([
 			content: '黄埔大道员村店',
 			display: 'ALWAYS',
 			textAlign: 'center',
-			padding: '6',
+			padding: 7,
 			bgColor: '#fff',
 			borderRadius: 8,
-			fontSize: 14,
+			fontSize: 16,
 			color: '#000'
 		}
 	}
@@ -216,7 +218,6 @@ const get_location = () => {
 			console.log('res', res);
 			latitude.value = res.latitude;
 			longitude.value = res.longitude;
-
 			if (res.latitude && res.longitude) {
 				mapContent.value = uni.createMapContext('mapId', proxy);
 			}
@@ -234,10 +235,7 @@ const current = ref(0);
 
 // 点击标记点
 const markertap = (e) => {
-	console.log('id', e.detail.markerId);
-
 	const index = markersList.value.findIndex((item) => item.id == e.detail.markerId);
-	console.log('index', index);
 	current.value = index;
 	moverTo(index);
 };
@@ -255,7 +253,15 @@ const moverTo = (index) => {
 		longitude: markersList.value[index].longitude,
 		latitude: markersList.value[index].latitude,
 		success: (moveToRes) => {
-			console.log('moveToRes', moveToRes);
+			markersList.value.forEach((item) => {
+				item.iconPath = defaultImg.value;
+				item.width = 28;
+				item.height = 42;
+			});
+
+			markersList.value[index].iconPath = iconActive.value;
+			markersList.value[index].width = iconActiveWidth.value;
+			markersList.value[index].height = iconActiveHeight.value;
 		},
 		fail: (moveToErr) => {
 			console.log('moveToErr', moveToErr);
@@ -278,10 +284,10 @@ const jump_list = () => {
 	});
 };
 
-function open_classify() {
-	uni.switchTab({
-		url: '/pages/classify/index'
-	});
+function open_details() {
+	uni.navigateTo({
+		url: '/pages/self_pick_up/details'
+	})
 }
 
 // 打开地图
@@ -292,7 +298,7 @@ const openLocation = (item) => {
 		address: item.title,
 		name: item.callout.content
 	});
-}
+};
 
 onMounted(() => {
 	get_location();
@@ -307,28 +313,6 @@ onMounted(() => {
 .page_title {
 	background: #fff;
 	text-align: left;
-	padding-left: 20rpx;
-	.navigation_wrap {
-		display: inline-block;
-	}
-	.navigation {
-		display: flex;
-		text-align: center;
-		border-radius: 34rpx;
-		overflow: hidden;
-		.navigation_btn {
-			min-width: 134rpx;
-			height: 56rpx;
-			line-height: 56rpx;
-			font-size: 24rpx;
-			font-weight: 500;
-			padding: 0 30rpx;
-		}
-	}
-
-	.active {
-		color: #fff;
-	}
 }
 
 .map {
