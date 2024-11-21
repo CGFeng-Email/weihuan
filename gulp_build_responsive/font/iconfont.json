@@ -1,0 +1,51 @@
+{
+  "id": "4753351",
+  "name": "炜洹PC",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "630083",
+      "name": "下拉",
+      "font_class": "xiala",
+      "unicode": "e65c",
+      "unicode_decimal": 58972
+    },
+    {
+      "icon_id": "996913",
+      "name": "右右",
+      "font_class": "left-1",
+      "unicode": "e603",
+      "unicode_decimal": 58883
+    },
+    {
+      "icon_id": "1028020",
+      "name": "右右",
+      "font_class": "down-1-copy",
+      "unicode": "e604",
+      "unicode_decimal": 58884
+    },
+    {
+      "icon_id": "1029274",
+      "name": "右右",
+      "font_class": "right-1-copy",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "37356626",
+      "name": "关闭",
+      "font_class": "guanbi",
+      "unicode": "e60e",
+      "unicode_decimal": 58894
+    },
+    {
+      "icon_id": "7594157",
+      "name": "24gf-playCircle",
+      "font_class": "24gf-playCircle",
+      "unicode": "ea82",
+      "unicode_decimal": 60034
+    }
+  ]
+}

@@ -52,7 +52,7 @@
 	<!-- 底部栏-购物车 -->
 	<view class="fixed_bottom_btn">
 		<view class="btn btn_bg">
-			<button @click="returnPage">返回</button>
+			<button @click="open_classify">去下单</button>
 		</view>
 	</view>
 </template>
@@ -63,6 +63,34 @@ import { ref } from 'vue';
 import { onPageScroll } from '@dcloudio/uni-app';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
+
+// 自提点信息
+const pick_up_store = ref({
+	id: 6,
+	width: 28,
+	height: 41,
+	latitude: 23.120406941577873,
+	longitude: 113.35739805816652,
+	store_title: '天河员村生鲜自提点',
+	title: '广东省广州市天河区员村南街',
+	iconPath: '/static/img/map.png',
+	image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
+	store: '陈先生',
+	mobile: 13636986542,
+	date: '09:00 - 23:00',
+	distance: '200m',
+	callout: {
+		content: '员村南街',
+		display: 'ALWAYS',
+		textAlign: 'center',
+		padding: '6',
+		bgColor: '#fff',
+		borderRadius: 8,
+		fontSize: 14,
+		color: '#000'
+	}
+});
+
 // 顶部区域滚动
 const scrollTop = ref('white_default');
 onPageScroll((e) => {
@@ -77,9 +105,14 @@ onPageScroll((e) => {
 		scrollTop.value = 'white_100';
 	}
 });
-// 返回
-const returnPage = () => {
-	uni.navigateBack();
+
+// 跳转分类页面
+const open_classify = () => {
+	uni.setStorageSync('pick_up_store', pick_up_store.value);
+
+	uni.switchTab({
+		url: '/pages/classify/index'
+	});
 };
 
 // 使用应用内置地图查看位置
@@ -91,6 +124,11 @@ const openLocation = () => {
 		name: '天河鲜肉生鲜自提点'
 	});
 };
+
+// 返回上一页
+function returnPage() {
+	uni.navigateBack();
+}
 </script>
 
 <style lang="scss" scoped>

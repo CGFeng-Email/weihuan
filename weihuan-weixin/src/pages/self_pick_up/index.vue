@@ -11,11 +11,14 @@
 			</view>
 		</view>
 	</view>
+	<!-- 顶部导航栏占位符 -->
+	<view :style="{ height: (useMenuButton().topHeight) + 'px' }"></view>
 
 	<map
+		:style="{ height: getSystem().screenHeight - useMenuButton().topHeight + 'px' }"
+		class="map"
 		id="mapId"
 		ref="mapRef"
-		class="map"
 		:latitude="latitude"
 		:longitude="longitude"
 		:scale="scale"
@@ -78,6 +81,8 @@ import { ref, onMounted, getCurrentInstance } from 'vue';
 const { proxy } = getCurrentInstance();
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
+// 系统信息
+import getSystem from '../../hooks/getSystem.js';
 let mapContent = ref(null);
 const latitude = ref(null);
 const longitude = ref(null);
@@ -287,7 +292,7 @@ const jump_list = () => {
 function open_details() {
 	uni.navigateTo({
 		url: '/pages/self_pick_up/details'
-	})
+	});
 }
 
 // 打开地图
@@ -317,7 +322,7 @@ onMounted(() => {
 
 .map {
 	width: 750rpx;
-	height: 100vh;
+	box-sizing: border-box;
 }
 
 .store {

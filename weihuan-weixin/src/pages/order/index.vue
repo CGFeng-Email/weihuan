@@ -11,8 +11,8 @@
 		</view>
 		<view class="navigation_wrap">
 			<view class="navigation box_border_radius box_shadow">
-				<view class="navigation_btn" :class="{ active: head_title_index == 0 }" @click="switchPage(0)">配送蓝订单</view>
-				<view class="navigation_btn" :class="{ active: head_title_index == 1 }" @click="switchPage(1)">门店自提订单</view>
+				<view class="navigation_btn" :class="{ active: head_title_index == 0 }" @click="switchPage(0)">物流订单</view>
+				<view class="navigation_btn" :class="{ active: head_title_index == 1 }" @click="switchPage(1)">自提订单</view>
 			</view>
 		</view>
 	</view>

@@ -31,7 +31,7 @@
 	<!-- 列表 -->
 	<view class="list">
 		<block v-for="(item, index) in markersList" :key="index">
-			<view class="item box_border_radius box_shadow" @click="jump_details">
+			<view class="item box_border_radius box_shadow" @click="itemClick(item)">
 				<view class="store_info">
 					<image class="cover" :src="item.image" mode="aspectFill"></image>
 					<view class="content">
@@ -74,9 +74,18 @@
 </template>
 
 <script setup>
+import { onLoad } from '@dcloudio/uni-app';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 import { ref, onMounted } from 'vue';
+// 是否点击item返回
+const isSelect = ref(false);
+
+onLoad((load) => {
+	console.log('load', load);
+	isSelect.value = load.select;
+});
+
 // 页面加载
 const loading = ref(false);
 
@@ -95,6 +104,7 @@ const markersList = ref([
 		height: 41,
 		latitude: 23.12463,
 		longitude: 113.36199,
+		store_title: '黄埔生鲜自提点',
 		title: '广东省广州市天河区黄埔大道中258号',
 		iconPath: '/static/img/map.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
@@ -119,6 +129,7 @@ const markersList = ref([
 		height: 41,
 		latitude: 23.122686,
 		longitude: 113.36604,
+		store_title: '黄埔生鲜自提点',
 		title: '广东省广州市天河区黄埔大道中199号',
 		iconPath: '/static/img/map.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
@@ -143,6 +154,7 @@ const markersList = ref([
 		height: 41,
 		latitude: 23.12103843540073,
 		longitude: 113.36126043914797,
+		store_title: '天河员村生鲜自提点',
 		title: '广东省广州市天河区员村西街7号大院',
 		iconPath: '/static/img/map.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
@@ -167,6 +179,7 @@ const markersList = ref([
 		height: 41,
 		latitude: 23.120406941577873,
 		longitude: 113.35739805816652,
+		store_title: '天河员村生鲜自提点',
 		title: '广东省广州市天河区员村南街',
 		iconPath: '/static/img/map.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
@@ -191,6 +204,7 @@ const markersList = ref([
 		height: 41,
 		latitude: 23.128132,
 		longitude: 113.365929,
+		store_title: '黄埔生鲜自提点',
 		title: '广东省广州市天河区黄埔大道员村段',
 		iconPath: '/static/img/map.png',
 		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
@@ -227,17 +241,22 @@ const openLocation = (item) => {
 };
 
 // 跳转详情
-const jump_details = () => {
-	uni.navigateTo({
-		url: '/pages/self_pick_up/details'
-	});
+const itemClick = (item) => {
+	if (isSelect.value) {
+		uni.$emit('select_store', item);
+		uni.navigateBack();
+	} else {
+		uni.navigateTo({
+			url: '/pages/self_pick_up/details'
+		});
+	}
 };
 
 // 跳转搜索商品页
 function open_shopping_search() {
 	uni.navigateTo({
 		url: '/pages/shopping/shopping_search'
-	})
+	});
 }
 
 onMounted(() => {
@@ -259,14 +278,12 @@ page {
 .page_title {
 	background: #fff;
 	text-align: left;
-	padding-left: 20rpx;
 	.navigation_wrap {
 		display: inline-block;
 	}
 	.navigation {
 		display: flex;
 		text-align: center;
-		border-radius: 34rpx;
 		overflow: hidden;
 		.navigation_btn {
 			min-width: 134rpx;

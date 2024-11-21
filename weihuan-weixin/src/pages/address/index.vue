@@ -2,10 +2,15 @@
 <template>
 	<view class="list">
 		<block v-for="(item, index) in list" :key="item.id">
-			<view class="item box_border_radius box_shadow">
+			<view class="item box_border_radius box_shadow" :class="{ active: active_index == index }" @click="itemClick(item, index)">
 				<view class="content">
 					<view class="c_top">
-						<view class="title">{{ item.name }}</view>
+						<view class="title">
+							<uni-icons class="check" type="checkbox-filled" size="24" color="#FE978D" v-if="active_index == index"></uni-icons>
+							<text class="text">
+								{{ item.name }}
+							</text>
+						</view>
 						<view class="mobile">{{ userMobileComputed(item.mobile) }}</view>
 					</view>
 					<view class="address">{{ item.address.join('') }}{{ item.content }}</view>
@@ -26,7 +31,27 @@
 </template>
 
 <script setup>
+import { onLoad } from '@dcloudio/uni-app';
 import { ref, computed } from 'vue';
+// 是否点击item返回
+const isSelect = ref(false);
+// 默认地址
+const active_index = ref(null);
+
+onLoad((load) => {
+	console.log('load', load);
+	isSelect.value = load.select;
+});
+
+function itemClick(item, index) {
+	if (isSelect.value) {
+		isSelect.value = false;
+		uni.$emit('location', item);
+		uni.navigateBack();
+	} else {
+	}
+}
+
 const list = ref([
 	{
 		id: 1,
@@ -57,6 +82,7 @@ const list = ref([
 		content: '员村南街'
 	}
 ]);
+
 // 手机号码加密
 const userMobileComputed = computed(() => {
 	return (e) => {
@@ -76,8 +102,8 @@ const open_edit_address = (item) => {
 const open_add_address = () => {
 	uni.navigateTo({
 		url: '/pages/address/add_address'
-	})
-}
+	});
+};
 </script>
 
 <style>
@@ -95,6 +121,8 @@ page {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+		transition: 0.3s ease;
+		border: 1px solid transparent;
 		.content {
 			flex: 1;
 			.c_top {
@@ -104,11 +132,23 @@ page {
 			.title {
 				font-size: 32rpx;
 				font-weight: bold;
+				display: flex;
+				align-items: center;
+				transition: 0.3s ease;
+
+				.check {
+					margin-right: 10rpx;
+				}
+
+				.text {
+					transition: 0.3s ease;
+				}
 			}
 			.mobile {
 				font-size: 26rpx;
 				color: #606060;
 				padding-left: 10rpx;
+				transition: 0.3s ease;
 			}
 
 			.address {
@@ -121,6 +161,10 @@ page {
 		.icon {
 			padding: 30rpx 0 30rpx 30rpx;
 		}
+	}
+
+	.active {
+		border-color: #fe978d;
 	}
 }
 </style>

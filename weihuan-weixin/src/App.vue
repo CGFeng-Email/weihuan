@@ -39,6 +39,13 @@ image {
 	vertical-align: bottom;
 }
 
+.head {
+	.title {
+		font-size: 28rpx;
+		font-weight: bold;
+	}
+}
+
 .over1 {
 	white-space: nowrap;
 	overflow: hidden;
@@ -69,7 +76,7 @@ image {
 	.navigation {
 		display: flex;
 		text-align: center;
-		border-radius: 34rpx;
+		border-radius: 24rpx 6rpx;
 		overflow: hidden;
 		margin-left: 20rpx;
 
@@ -81,6 +88,7 @@ image {
 			font-weight: 500;
 			padding: 0 30rpx;
 			color: #000;
+			border-radius: 24rpx 6rpx;
 		}
 
 		.active {

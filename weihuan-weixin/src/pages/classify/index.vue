@@ -10,7 +10,7 @@
 	<!-- 顶部区域占位 -->
 	<view style="height: 170rpx"></view>
 	<!-- 主体 -->
-	<swiper class="swiper" :current="swiperIndex" @change="swiperChange">
+	<swiper class="swiper" :current="swiperIndex" :duration="1000" @change="swiperChange">
 		<block v-for="(item, index) in categoryList" :key="item.id">
 			<swiper-item>
 				<view class="swiper-item">
@@ -81,7 +81,7 @@ const menu_id = ref('');
 const menu_index = ref(0);
 
 // 主体切换
-const MenuChildRef = ref();
+const MenuChildRef = ref(null);
 function swiperChange(e) {
 	menu_index.value = e.detail.current;
 	menu_id.value = categoryList.value[e.detail.current].id;
@@ -105,12 +105,11 @@ onLoad(() => {
 					menu_id.value = e.id;
 					// 调用子组件方法
 					MenuChildRef.value.menuItemClick(menu_index.value, menu_id.value);
-					setTimeout(() => {
-						uni.hideLoading();
-						return;
-					}, 200);
 				}
 			});
+			setTimeout(() => {
+				uni.hideLoading();
+			}, 1000);
 		}
 	});
 });

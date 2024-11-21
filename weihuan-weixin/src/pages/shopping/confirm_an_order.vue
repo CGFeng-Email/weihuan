@@ -2,44 +2,46 @@
 <template>
 	<page-meta :page-style="'overflow:' + (isScroll ? 'hidden' : 'visible')"></page-meta>
 	<view class="main">
-		<!-- 自提，自提店家信息 -->
-		<view class="store box_shadow box_border_radius">
+		<!-- 配送方式：物流配送 -->
+		<view class="user_location box_shadow box_border_radius" v-if="deliveryIndex == 0" @click="open_location_list">
+			<view class="head" v-if="Object.keys(shipping_address).length == 0">
+				<text class="title">请添加配送地址</text>
+			</view>
+			<view class="content" v-else>
+				<view class="head">
+					<text class="title">{{ shipping_address.name }}</text>
+					<text class="phone">{{ userMobileComputed(shipping_address.mobile) }}</text>
+				</view>
+				<view class="address">{{ shipping_address.address.join('') + shipping_address.content }}</view>
+			</view>
+			<uni-icons type="right" size="18"></uni-icons>
+		</view>
+		<!-- 配送方式：自提 -->
+		<view class="store box_shadow box_border_radius" @click="open_store" v-else>
 			<view class="head">
-				<image class="cover box_border_radius" src="https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/product_banner1.png" mode="aspectFill"></image>
+				<image class="cover box_border_radius" :src="pick_up_store.image" mode="aspectFill"></image>
 				<view class="content">
 					<view class="store_top">
-						<view class="title">天河鲜肉生鲜自提点</view>
-						<view class="distance">200m</view>
+						<view class="title">{{ pick_up_store.store_title }}</view>
+						<view class="distance">{{ pick_up_store.distance }}</view>
 					</view>
 					<view class="store_bottom">
 						<view class="left_bottom">
-							<view class="lead">联系人：张先生</view>
-							<view class="lead">联系电话：13636986542</view>
-							<view class="lead">营业时间：09:00 - 23:00</view>
+							<view class="lead">联系人：{{ pick_up_store.store }}</view>
+							<view class="lead">联系电话：{{ pick_up_store.mobile }}</view>
+							<view class="lead">营业时间：{{ pick_up_store.date }}</view>
 						</view>
 						<uni-icons type="right" size="18"></uni-icons>
 					</view>
 				</view>
 			</view>
 			<view class="select_address">
-				<view class="location_name">地址：{{ location_name }}</view>
-				<view class="open_location btn_bg" @click="open_location">
+				<view class="location_name">地址：{{ pick_up_store.title }}</view>
+				<view class="open_location btn_bg" @click.stop="open_location">
 					<text class="iconfont icon-dizhi"></text>
 					<text class="address_text">导航</text>
 				</view>
 			</view>
-		</view>
-
-		<!-- 用户信息，地址 -->
-		<view class="user_location box_shadow box_border_radius">
-			<view class="content">
-				<view class="head">
-					<text class="title">谷志华</text>
-					<text class="phone">{{ userMobileComputed(13428198877) }}</text>
-				</view>
-				<view class="address">{{ location_name }}</view>
-			</view>
-			<uni-icons type="right" size="18"></uni-icons>
 		</view>
 
 		<!-- 商品 -->
@@ -100,37 +102,6 @@
 				<view class="name">购买服务</view>
 				<view class="right lead">摔坏包赔 / 7天无理由退货 / 商品冷链运输</view>
 			</view>
-			<!-- <view class="li">
-				<view class="name">是否需要发票</view>
-				<view class="right lead">
-					<view class="invoice">
-						<view class="select" :class="{ active: deliveryIndex == 0 }" @click="deliveryChange(0)">
-							<text class="circle"></text>
-							<text class="text">不需要</text>
-						</view>
-						<view class="select" :class="{ active: deliveryIndex == 1 }" @click="deliveryChange(1)">
-							<text class="circle"></text>
-							<text class="text">需要</text>
-						</view>
-					</view>
-				</view>
-			</view>
-			<view class="li email_li">
-				<view class="name">电子邮箱</view>
-				<view class="right lead">
-					<view class="email">
-						<uni-easyinput
-							v-model="email"
-							trim
-							:inputBorder="false"
-							primaryColor="#A2A2A2"
-							placeholder="请填写您的电子邮箱"
-							placeholderStyle="#A2A2A2"
-							@input="emailInput"
-						></uni-easyinput>
-					</view>
-				</view>
-			</view> -->
 			<view class="li">
 				<view class="name">优惠卷</view>
 				<view class="right lead coupon" @click="open_coupon">
@@ -217,16 +188,91 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onBeforeUnmount } from 'vue';
+import { onLoad, onShow } from '@dcloudio/uni-app';
+// 配送方式
+const deliveryIndex = ref(0);
+// 配送地址，可以先请求查看是否有默认地址
+const shipping_address = ref({});
+// 自提点，可以先请求获取最近的自提点
+const pick_up_store = ref({
+	id: 6,
+	width: 28,
+	height: 41,
+	latitude: 23.120406941577873,
+	longitude: 113.35739805816652,
+	store_title: '天河员村生鲜自提点',
+	title: '广东省广州市天河区员村南街',
+	iconPath: '/static/img/map.png',
+	image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
+	store: '陈先生',
+	mobile: 13636986542,
+	date: '09:00 - 23:00',
+	distance: '200m',
+	callout: {
+		content: '员村南街',
+		display: 'ALWAYS',
+		textAlign: 'center',
+		padding: '6',
+		bgColor: '#fff',
+		borderRadius: 8,
+		fontSize: 14,
+		color: '#000'
+	}
+});
 
-const location_name = ref('广东省广州市天河区黄埔大道中258号');
-// 打开地图，选择地址
+onLoad((load) => {
+	const params = JSON.parse(load.params);
+	console.log('params', params);
+	if (Object.keys(params).length > 0) {
+		// 配送方式
+		deliveryIndex.value = params.deliveryIndex;
+		// 自提点
+		pick_up_store.value = params.pick_up_store;
+	}
+});
+
+onShow((show) => {
+	// 选择配送地址
+	uni.$on('location', function (location) {
+		console.log('location', location);
+		shipping_address.value = location;
+	});
+
+	// 选择自提点
+	uni.$on('select_store', function (store) {
+		console.log('store', store);
+		pick_up_store.value = store;
+	});
+});
+
+// 卸载之前
+onBeforeUnmount(() => {
+	uni.$off('location');
+	uni.$off('select_store');
+});
+
+// 选择配送地址
+function open_location_list() {
+	uni.navigateTo({
+		url: `/pages/address/index?select=${true}`
+	});
+}
+
+// 跳转自提点列表
+function open_store() {
+	uni.navigateTo({
+		url: `/pages/self_pick_up/list?select=${true}`
+	});
+}
+
+// 自提点地图，选择地址
 const open_location = () => {
 	uni.openLocation({
-		latitude: 23.12463,
-		longitude: 113.36199,
-		address: '广东省广州市天河区黄埔大道中258号',
-		name: '黄埔大道中258号店'
+		latitude: pick_up_store.value.latitude,
+		longitude: pick_up_store.value.longitude,
+		address: pick_up_store.value.title,
+		name: pick_up_store.value.store_title
 	});
 };
 
@@ -254,12 +300,6 @@ const deCrement = () => {
 };
 const inCrement = () => {
 	quantity.value += 1;
-};
-
-// 配送方式
-const deliveryIndex = ref(0);
-const deliveryChange = (i) => {
-	deliveryIndex.value = i;
 };
 
 // 电子邮箱

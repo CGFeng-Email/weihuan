@@ -143,13 +143,10 @@ function open_register() {
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		padding: 10rpx 0;
 		.check {
 			display: flex;
 			align-items: center;
-
-			.icon {
-				transform: translateY(2px);
-			}
 		}
 		.jump {
 			color: #34489e;

@@ -319,6 +319,13 @@ function open_pickup() {
 	});
 }
 
+// 跳转菜单分类
+function open_classify() {
+	uni.switchTab({
+		url: '/pages/classify/index'
+	});
+}
+
 // 跳转商品分类
 function open_classify_item(e) {
 	console.log(e);

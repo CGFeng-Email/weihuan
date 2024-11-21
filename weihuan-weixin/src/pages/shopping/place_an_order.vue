@@ -8,7 +8,7 @@
 	<uni-transition mode-class="fade" :show="loading">
 		<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
 			<view class="left_icon" @click="left_return">
-				<uni-icons type="left" size="18" :color="scrollTop == 'white_default' ? '#fff' : '#000'"></uni-icons>
+				<uni-icons type="left" size="24" :color="scrollTop == 'white_default' ? '#fff' : '#000'"></uni-icons>
 			</view>
 			{{ scrollTop != 'white_default' ? '产品详情' : '' }}
 		</view>
@@ -165,11 +165,11 @@
 			<view class="delivery">
 				<view class="delivery_select" :class="{ active: deliveryIndex == 0 }" @click="deliveryChange(0)">
 					<text class="circle"></text>
-					<text class="text">配送蓝</text>
+					<text class="text">物流配送</text>
 				</view>
 				<view class="delivery_select" :class="{ active: deliveryIndex == 1 }" @click="deliveryChange(1)">
 					<text class="circle"></text>
-					<text class="text">自提蓝</text>
+					<text class="text">门店自提</text>
 				</view>
 			</view>
 			<view class="quantity">
@@ -195,7 +195,7 @@
 <script setup>
 // 列表组件
 import List from '@/pages/shopping/list.vue';
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onUnmounted } from 'vue';
 //onPageScroll:滚动事件
 import { onPageScroll } from '@dcloudio/uni-app';
 // 胶囊信息
@@ -355,11 +355,22 @@ const specificationChange = (i) => {
 	specificationIndex.value = i;
 };
 
-// 配送方式
+// 配送方式 配送：0，自提：1
 const deliveryIndex = ref(0);
+// 获取是否有自提点信息，有数据则默认以自提点方式进行配送，没有则物流配送
+const pick_up_store = uni.getStorageSync('pick_up_store');
+console.log('pick_up_store', pick_up_store);
+if (Object.keys(pick_up_store).length > 0) {
+	deliveryIndex.value = 1;
+}
 const deliveryChange = (i) => {
 	deliveryIndex.value = i;
 };
+
+// 卸载
+onUnmounted(() => {
+	uni.removeStorageSync('pick_up_store');
+});
 
 // 购买数量
 const quantity = ref(1);
@@ -379,8 +390,12 @@ const left_return = () => {
 // 提交订单
 const submit_order = () => {
 	if (confirmType.value == 'immed') {
+		const params = {
+			deliveryIndex: deliveryIndex.value,
+			pick_up_store: pick_up_store
+		};
 		uni.navigateTo({
-			url: '/pages/shopping/confirm_an_order'
+			url: `/pages/shopping/confirm_an_order?params=${JSON.stringify(params)}`
 		});
 	} else {
 		uni.showToast({
@@ -389,10 +404,9 @@ const submit_order = () => {
 			mask: true,
 			duration: 2000,
 			success: () => {
-				popup_close()
+				popup_close();
 			}
 		});
-		
 	}
 };
 

@@ -6,12 +6,19 @@
 	<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
 		<view class="navigation_wrap">
 			<view class="navigation box_border_radius box_shadow">
-				<view class="navigation_btn" :class="{ active: head_title_index == 0 }" @click="switchPage(0)">配送蓝</view>
-				<view class="navigation_btn" :class="{ active: head_title_index == 1 }" @click="switchPage(1)">自提蓝</view>
+				<view class="navigation_btn" :class="{ active: head_title_index == 0 }" @click="switchPage(0)">自提商品</view>
+				<view class="navigation_btn" :class="{ active: head_title_index == 1 }" @click="switchPage(1)">配送商品</view>
 			</view>
 		</view>
 	</view>
 	<view :style="{ height: useMenuButton().topView }"></view>
+
+	<view class="head" :style="{ top: useMenuButton().topView }">
+		<text class="title">点击以上按钮切换选择 "配送" 或 "自提" 购物车</text>
+	</view>
+
+	<view style="height: 31px"></view>
+
 	<view class="main">
 		<view class="list box_border_radius box_shadow">
 			<block v-for="(item, index) in cartList" :key="item.id">
@@ -422,8 +429,19 @@ page {
 	display: flex;
 }
 
+.head {
+	padding: 5rpx 30rpx 15rpx;
+	position: fixed;
+	left: 0;
+	background: #fff;
+	width: 100%;
+	height: 31px;
+	z-index: 10;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 .main {
-	padding: 10rpx 30rpx;
+	padding: 20rpx 30rpx;
 	.list {
 		overflow: hidden;
 		.item {
