@@ -3,14 +3,98 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Home</title>
+    <title>炜洹商城</title>
     @@include('head.html')
 </head>
 
 <body>
     @@include('header.html')
-    <div class="index" style="height: 2000px;"></div>
+    <div class="swiper-container index_banner">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide slide">
+                <div class="cover_box">
+                    <img class="cover" src="../../img/index_banner1.png" alt="">
+                </div>
+                <div class="content">
+                    <div class="container">
+                        <h2 class="banner_title inline_block ani" swiper-animate-effect="fadeInLeft"
+                            swiper-animate-duration="0.3s">全球一站式</h2>
+                        <h3 class="banner_sub_title ani" swiper-animate-effect="fadeInLeft"
+                            swiper-animate-duration="0.6s">优质食材冷链供应及餐饮服务平台！</h3>
+                        <div class="banner_line ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.8s">
+                        </div>
+                        <div class="lead uppercase ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="1s">
+                            High-quality food cold chain supply and catering service
+                            platform!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide slide">
+                <div class="cover_box">
+                    <img class="cover" src="../../img/index_banner1.png" alt="">
+                </div>
+                <div class="content">
+                    <div class="container">
+                        <h2 class="banner_title inline_block ani" swiper-animate-effect="fadeInLeft"
+                            swiper-animate-duration="0.3s">全球一站式</h2>
+                        <h3 class="banner_sub_title ani" swiper-animate-effect="fadeInLeft"
+                            swiper-animate-duration="0.6s">优质食材冷链供应及餐饮服务平台！</h3>
+                        <div class="banner_line ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.8s">
+                        </div>
+                        <div class="lead uppercase ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="1s">
+                            High-quality food cold chain supply and catering service
+                            platform!
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide slide">
+                <div class="cover_box">
+                    <img class="cover" src="../../img/index_banner1.png" alt="">
+                </div>
+                <div class="content">
+                    <div class="container">
+                        <h2 class="banner_title inline_block ani" swiper-animate-effect="fadeInLeft"
+                            swiper-animate-duration="0.3s">全球一站式</h2>
+                        <h3 class="banner_sub_title ani" swiper-animate-effect="fadeInLeft"
+                            swiper-animate-duration="0.6s">优质食材冷链供应及餐饮服务平台！</h3>
+                        <div class="banner_line ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.8s">
+                        </div>
+                        <div class="lead uppercase ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="1s">
+                            High-quality food cold chain supply and catering service
+                            platform!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bottom_cover" data-aos="fade-up" data-aos-duration="1200">
+            <img src="../../img/index_banner_bottom.png" alt="">
+        </div>
+    </div>
+    <div style="height: 1000px;"></div>
     @@include('footer.html')
 </body>
+<script>
+    let index_banner = new Swiper('.index_banner', {
+        autoplay: {
+            delay: 500000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+        speed: 1400,
+        // effect: 'fade',
+        on: {
+            init: function () {
+                swiperAnimateCache(this);
+                swiperAnimate(this);
+            },
+            slideChangeTransitionEnd: function () {
+                swiperAnimate(this);
+            }
+        }
+    })
+</script>
 
 </html>

@@ -2,6 +2,19 @@
   .header .content .right .nav .li .head_title {
     padding: 0 20px;
   }
+  .index_banner .slide .content .banner_title {
+    font-size: 34px;
+    line-height: 46px;
+    padding: 8px 20px;
+  }
+  .index_banner .slide .content .banner_sub_title {
+    font-size: 24px;
+    line-height: 34px;
+  }
+  .index_banner .slide .content .lead {
+    font-size: 14px;
+    line-height: 24px;
+  }
 }
 @media screen and (max-width: 1200px) {
   .header .content .right .nav .li .head_title {
@@ -63,5 +76,21 @@
   .title {
     font-size: 18px;
     line-height: 28px;
+  }
+  .index_banner .slide .content .banner_title {
+    width: 90%;
+    font-size: 24px;
+    line-height: 36px;
+    padding: 8px 20px;
+  }
+  .index_banner .slide .content .banner_sub_title {
+    width: 90%;
+    font-size: 18px;
+    line-height: 28px;
+  }
+  .index_banner .slide .content .lead {
+    width: 90%;
+    font-size: 14px;
+    line-height: 24px;
   }
 }

@@ -8,7 +8,7 @@
 			<view class="cover_box">
 				<image class="cover" src="/src/static/img/logo.png" mode="widthFix"></image>
 			</view>
-			<view class="lead">炜洹诚信为本非常重视商业信誉，从不销售品质低劣的产品</view>
+			<view class="lead">精彩美味之旅由此开启。一键登录，尊享专属优惠&会员好礼</view>
 			<button class="wx_btn btn_bg" open-type="login" @click="wx_login">微信登录</button>
 			<view class="condition">
 				<view class="check" @click="condition = !condition">
@@ -18,14 +18,15 @@
 				<text class="jump" @click="open_agreement">炜洹用户协议、</text>
 				<text class="jump" @click="open_privacy">隐私政策</text>
 			</view>
-			<view class="tips" @click="open_register">手机号登录/注册</view>
+			<!-- <view class="tips" @click="open_register">手机号登录/注册</view> -->
 		</view>
 	</uni-popup>
 </template>
 
 <script setup>
 import { ref, watch, defineEmits, defineProps } from 'vue';
-const emit = defineEmits(['on-save-ok']);
+const emit = defineEmits(['maskClick']);
+import { wxLogin } from '@/api/index.js';
 
 // 参数
 const props = defineProps({
@@ -64,16 +65,30 @@ function wx_login() {
 		title: '登录中',
 		mask: true
 	});
+
 	wx.login({
-		success(res) {
+		success: async (res) => {
 			console.log('res', res);
 
-			setTimeout(function () {
-				if (res.errMsg == 'login:ok') {
-					emit('maskClick');
+			if (res.errMsg == 'login:ok') {
+				const reslogin = await wxLogin({
+					code: res.code
+				});
+				console.log('reslogin', reslogin);
+				if (reslogin.code == 1) {
+					// 存储openid
+					uni.setStorageSync('openid', reslogin.data.openid);
+					// 未注册
+					if (reslogin.data.is_reg == 0) {
+						uni.navigateTo({
+							url: `/pages/login/register`
+						});
+					}
 				}
+
+				emit('maskClick');
 				uni.hideLoading();
-			}, 700);
+			}
 		}
 	});
 }
@@ -98,11 +113,11 @@ function open_privacy() {
 }
 
 // 跳转注册
-function open_register() {
-	uni.navigateTo({
-		url: '/pages/login/register'
-	});
-}
+// function open_register() {
+// 	uni.navigateTo({
+// 		url: '/pages/login/register'
+// 	});
+// }
 </script>
 
 <style lang="scss" scoped>

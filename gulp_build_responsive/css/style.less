@@ -216,6 +216,10 @@ body::-webkit-scrollbar-thumb:hover {
     justify-content: center;
 }
 
+.inline_block {
+    display: inline-block;
+}
+
 .header {
     position: fixed;
     top: 0;
@@ -459,11 +463,14 @@ body::-webkit-scrollbar-thumb:hover {
 .h5_nav {
     position: fixed;
     top: 0;
-    left: 0;
+    left: 100%;
     width: 100%;
     height: 100%;
     background: linear-gradient(257.93deg, #6cbb41 0%, #33499c 100%);
     padding: 80px 20px;
+    transition: .7s ease-out;
+    overflow: hidden;
+    z-index: 10;
 
     .left_ {
         position: absolute;
@@ -482,16 +489,167 @@ body::-webkit-scrollbar-thumb:hover {
     .li {
 
         .head_title {
-            padding: 12px 0;
-            font-size: 20px;
-            font-weight: 500;
-            color: #fff;
+            padding: 14px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, .3);
+
+            .title,
+            .iconfont {
+                font-size: 18px;
+                font-weight: 500;
+                color: #fff;
+                display: inline-block;
+            }
+        }
+
+        .child {
+            .lis {
+                text-align: right;
+
+                .child_head_title {
+                    padding: 14px 0;
+                    border-bottom: 1px solid rgba(255, 255, 255, .3);
+
+                    .child_title,
+                    .iconfont {
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: #fff;
+                    }
+                }
+            }
         }
 
         .box {
             text-align: right;
-
-            .link {}
         }
+    }
+
+    .child_li {
+
+        .head_title {
+            .rotateIcon {
+                transform: rotate(90deg);
+            }
+        }
+
+        .child {
+            height: 0;
+            opacity: 0;
+        }
+
+        .childActive {
+            height: auto;
+            opacity: 1;
+        }
+    }
+
+    .h5_language {
+        display: flex;
+        border-bottom: 1px solid rgba(255, 255, 255, .3);
+
+        .box {
+            flex: 1;
+            text-align: center;
+            position: relative;
+
+            .link {
+                padding: 20px 0;
+                font-size: 18px;
+                font-weight: 500;
+                color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .cover {
+                    width: 24px;
+                }
+
+                .text {
+                    padding-left: 6px;
+                }
+            }
+        }
+
+        .box:nth-child(2) {
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                transform: translateY(-50%);
+                left: 0;
+                width: 1px;
+                height: 70%;
+                background: #fff;
+            }
+        }
+    }
+}
+
+.h5_nav_active {
+    left: 0;
+}
+
+.index_banner {
+    .slide {
+        position: relative;
+
+        .cover {
+            height: 100vh;
+        }
+
+        .content {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .banner_title {
+                width: 50%;
+                padding: 12px 30px;
+                background: linear-gradient(90.00deg, #6bbb41 0%, #51935600 100%);
+                font-size: 50px;
+                line-height: 60px;
+                font-weight: 500;
+                color: #fff;
+            }
+
+            .banner_sub_title {
+                width: 50%;
+                padding: 20px 0;
+                font-size: 40px;
+                line-height: 50px;
+                color: #fff;
+                font-weight: 400;
+            }
+
+            .banner_line {
+                width: 131px;
+                height: 8px;
+                background: linear-gradient(90.00deg, #6bbb41 0%, #63a84a00 100%);
+                opacity: 0.81;
+            }
+
+            .lead {
+                width: 50%;
+                font-size: 20px;
+                line-height: 30px;
+                color: #fff;
+                font-weight: 400;
+                margin-top: 20px;
+            }
+        }
+    }
+
+    .bottom_cover {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 10;
     }
 }

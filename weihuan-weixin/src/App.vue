@@ -131,6 +131,17 @@ image {
 	}
 }
 
+button {
+	&::after {
+		content: '';
+		display: none;
+	}
+	
+	&::before {
+		display: none;
+	}
+}
+
 .btn_bg {
 	background: linear-gradient(257.93deg, #fdb681 0%, #ff8992 100%);
 }

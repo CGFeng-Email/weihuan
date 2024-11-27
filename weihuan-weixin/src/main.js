@@ -12,6 +12,7 @@ export function createApp() {
 	const app = createSSRApp(App);
 	app.mixin(share);
 	app.component('login-popup', login_popup);
+	
 	return {
 		app,
 	};

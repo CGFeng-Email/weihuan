@@ -3,7 +3,7 @@
 		<view class="cover_box">
 			<image class="cover" src="/src/static/img/logo.png" mode="widthFix"></image>
 		</view>
-		<view class="lead">炜洹诚信为本非常重视商业信誉，从不销售品质低劣的产品</view>
+		<view class="lead">精彩美味之旅由此开启。一键登录，尊享专属优惠&会员好礼</view>
 		<view class="form">
 			<view class="input_box">
 				<picker mode="selector" :range="check_list" :value="selectIndex" range-key="title" @change="checkChange">
@@ -17,13 +17,15 @@
 			<view class="input_box">
 				<input class="input" type="number" placeholder="请输入验证码" v-model="code" :maxlength="6" confirm-type="done" placeholder-class="placeholder" />
 			</view>
-			<button class="btn_bg login_btn" @click="wx_login">登录</button>
+			<button class="login_btn" :class="isDisabled ? '' : 'btn_bg'" :disabled="isDisabled" @click="wx_login">登录</button>
 		</view>
 	</view>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import { phoneLogin } from '@/api/index.js';
+
 const selectIndex = ref(0);
 const phone = ref(null);
 const code = ref(null);
@@ -80,14 +82,26 @@ function get_code() {
 
 // 开始倒计时
 function start_times() {
-	console.log('start');
-	const timesId = setInterval(() => {
-		times.value--;
-		if (times.value == 1) {
-			times.value = 60;
-			clearInterval(timesId);
-		}
-	}, 1000);
+	// 手机号正则
+	const regExp = new RegExp(/^1[3|4|5|7|8|9][0-9]\d{8}$/);
+	const reg = regExp.test(phone.value);
+
+	if (!reg) {
+		uni.showToast({
+			title: '请输入手机号',
+			mask: true,
+			icon: 'none',
+			duration: 1200
+		});
+	} else {
+		const timesId = setInterval(() => {
+			times.value--;
+			if (times.value == 1) {
+				times.value = 60;
+				clearInterval(timesId);
+			}
+		}, 1000);
+	}
 }
 
 // 计算登录验证
@@ -97,45 +111,38 @@ const isDisabled = computed(() => {
 	const reg = regExp.test(phone.value);
 
 	if (!reg) {
-		return 'phone';
+		return true;
 	}
 
 	if (!code.value || String(code.value).length < 4) {
-		return 'code';
+		return true;
 	}
 
-	return 'success';
+	return false;
 });
 
 // 登录
-function wx_login() {
+async function wx_login() {
 	console.log(isDisabled.value);
-	switch (isDisabled.value) {
-		case 'phone':
-			uni.showToast({
-				title: '请输入正确的手机号',
-				mask: true,
-				icon: 'none',
-				duration: 1200
-			});
-			break;
-		case 'code':
-			uni.showToast({
-				title: '请输入正确的验证码',
-				mask: true,
-				icon: 'none',
-				duration: 1200
-			});
-			break;
-		case 'success':
-			uni.showLoading({
-				title: '登录中',
-				mask: true
-			});
-			setTimeout(function () {
-				uni.hideLoading();
-			}, 700);
-			break;
+
+	uni.showLoading({
+		title: '登录中',
+		mask: true
+	});
+
+	const res = await phoneLogin({
+		openid: uni.getStorageSync('openid'),
+		mobile: phone.value,
+		code: code.value
+	});
+
+	console.log('res', res);
+
+	if (res.code == 1) {
+		uni.setStorageSync('token', res.data.token);
+		uni.setStorageSync('mobile', res.data.mobile);
+		uni.hideLoading();
+		uni.navigateBack();
 	}
 }
 </script>

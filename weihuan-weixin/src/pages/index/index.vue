@@ -144,10 +144,13 @@
 <script setup>
 //onPageScroll:滚动事件
 import { onPageScroll } from '@dcloudio/uni-app';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 console.log('useMenuButton', useMenuButton());
+// api
+import { getIndexBanner } from '@/api/index.js';
+
 // 页面加载
 const loading = ref(false);
 const user_title = ref('炜洹游客用户');
@@ -178,6 +181,12 @@ const swiper_list = ref([
 		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner3.png'
 	}
 ]);
+
+// 首页轮播图
+const getSwiperBanner = async () => {
+	const res = await getIndexBanner();
+	console.log('res', res);
+};
 
 // 分类列表
 const classify_list = ref([
@@ -415,6 +424,10 @@ const getLocation = () => {
 };
 
 getLocation();
+
+onMounted(() => {
+	getSwiperBanner();
+});
 </script>
 
 <style lang="scss" scoped>
