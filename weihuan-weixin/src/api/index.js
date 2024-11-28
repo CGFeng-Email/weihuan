@@ -25,3 +25,39 @@ export const phoneLogin = (params) => {
 		data: params
 	})
 }
+
+// 用户信息
+export const getUserData = (params) => {
+	return request({
+		url: '/mini/user/getUserInfo',
+		method: 'post',
+		data: params
+	})
+}
+
+
+// 获取设备经纬度
+export const getPhoneLocation = () => {
+	return request({
+		url: '/mini/common/getLocation',
+		method: 'get'
+	})
+}
+
+// 上传图片
+export const uploadImg = (params) => {
+	return request({
+		url: '/mini/upload/image',
+		method: 'post',
+		data: params
+	})
+}
+
+// 修改用户信息
+export const editUserData = (params) => {
+	return request({
+		url: '/mini/user/saveUserInfo',
+		method: 'post',
+		data: params
+	})
+}

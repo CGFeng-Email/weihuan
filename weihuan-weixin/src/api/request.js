@@ -16,7 +16,8 @@ function request(params) {
 
 	// 获取本地token
 	if (uni.getStorageSync("token")) {
-		header['Authorization'] = 'Bearer ' + uni.getStorageSync("token");
+		data.token = uni.getStorageSync("token");
+		// header['Authorization'] = 'Bearer ' + uni.getStorageSync("token");
 	}
 
 	return new Promise((resolve, reject) => {
@@ -25,17 +26,28 @@ function request(params) {
 			method: method,
 			header: header,
 			data: data,
-			success: (response) => {
-				const res = response;
+			success: (res) => {
 				// 根据返回的状态码做出对应的操作
-				console.log(res.statusCode);
 				if (res.statusCode == 200) {
-					resolve(res.data);
+					switch (res.data.code) {
+						case -1:
+							console.log('没有权限，请登录', res.data);
+							// 如果不是弹窗，可以直接跳转到登录页
+							reject('401');
+							break;
+						case 0:
+							console.log('接口异常500', res.data);
+							reject('500');
+							break;
+						case 1:
+							resolve(res.data);
+							break;
+					}
 				} else {
 					// 清理本地缓存
 					// uni.clearStorageSync();
-					switch (res.statusCode) {
-						case 401:
+					switch (res.data.code) {
+						case -1:
 							console.log('没有权限，请登录');
 							// 如果不是弹窗，可以直接跳转到登录页
 							reject('401');
@@ -52,6 +64,7 @@ function request(params) {
 						case 500:
 						case 501:
 						case 503:
+						case 0:
 							console.log('接口异常500', res.data);
 							uni.showToast({
 								title: '出现异常错误',

@@ -14,7 +14,7 @@
 	<view :class="['location', scrollTop, scrollTop != 'white_default' ? 'scroll_loacation' : '']" :style="{ top: useMenuButton().topView }">
 		<view class="address" @click="jump_selectAddress">
 			<text class="iconfont icon-dizhi"></text>
-			<text class="text">广州.荔湾</text>
+			<text class="text">{{ address }}</text>
 		</view>
 		<view class="search" @click="open_shopping_search">
 			<text class="iconfont icon-sousuo"></text>
@@ -27,38 +27,37 @@
 		<swiper class="swiper_banner" autoplay :interval="5000" :duration="1000" circular>
 			<block v-for="item in swiper_list" :key="item.src">
 				<swiper-item class="swiper-item">
-					<image class="cover" :src="item.src" mode="widthFix"></image>
+					<image class="cover" :src="item.thumb" mode="widthFix"></image>
 				</swiper-item>
 			</block>
 		</swiper>
 
-		<!-- 用户信息 -->
-		<view class="user" v-if="true">
+		<!-- 未登录 -->
+		<view class="user" v-if="!token">
 			<view class="wrap">
 				<image class="head_portrait" src="/src/static/img/head_portrait.png" mode="widthFix"></image>
 				<view class="content">
-					<view class="name">{{ user_title }}</view>
-					<view class="lead">
-						{{ user_lead }}
-					</view>
+					<view class="name">{{ nickName }}</view>
+					<view class="lead">为给您提供更好的服务请授权登录</view>
 				</view>
 				<view class="login_btn" @click="show_login">登录/注册</view>
 			</view>
 		</view>
+		<!-- 已登录 -->
 		<view class="user" v-else>
-			<view class="wrap">
+			<view class="wrap" @click="open_personal">
 				<view class="head_portrait">
-					<image class="cover" src="/static/img/head_portrait.png" mode="widthFix"></image>
+					<image class="cover" :src="headPortrait" mode="widthFix"></image>
 					<image class="vip" src="/static/img/head_vip.png" mode="widthFix"></image>
 				</view>
 				<view class="content">
 					<view class="name">
-						{{ user_title }}
+						{{ nickName }}
 						<image class="vip" src="/static/img/vip.png" mode="widthFix" lazy-load></image>
 					</view>
 					<view class="lead">
 						<image class="phone" src="/src/static/img/phone.png" mode="widthFix" lazy-load></image>
-						{{ userMobileComputed }}
+						{{ MobileEncryption(userMobile) }}
 					</view>
 				</view>
 				<image class="star_cover" src="/src/static/img/user_star.png" mode="widthFix"></image>
@@ -143,21 +142,24 @@
 
 <script setup>
 //onPageScroll:滚动事件
-import { onPageScroll } from '@dcloudio/uni-app';
+import { onPageScroll, onShow } from '@dcloudio/uni-app';
 import { ref, computed, onMounted } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
-console.log('useMenuButton', useMenuButton());
 // api
-import { getIndexBanner } from '@/api/index.js';
+import { getIndexBanner, getUserData, getPhoneLocation } from '@/api/index.js';
+// 工具函数
+import { MobileEncryption } from '@/hooks/useTool.js';
 
-// 页面加载
-const loading = ref(false);
-const user_title = ref('炜洹游客用户');
-const user_lead = ref('为给您提供更好的服务请授权登录');
-const user_mobile = ref('13428198898');
+const token = ref('');
+const headPortrait = ref('/static/img/head_portrait.png');
+const nickName = ref('微信用户');
+const userMobile = ref(null);
+const address = ref(null);
 // 登录弹窗
 const login_show = ref(false);
+// 轮播图
+const swiper_list = ref([]);
 
 // 打开登录弹窗
 function show_login() {
@@ -169,23 +171,29 @@ function maskClick() {
 	login_show.value = false;
 }
 
-// 轮播图
-const swiper_list = ref([
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner1.png'
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner2.png'
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/banner3.png'
+// 用户信息
+const getUserDataFn = async () => {
+	const res = await getUserData();
+	nickName.value = res.data.nickname;
+	userMobile.value = res.data.mobile;
+	const avatar = res.data.avatar;
+	if (avatar) {
+		headPortrait.value = avatar;
 	}
-]);
+};
 
 // 首页轮播图
 const getSwiperBanner = async () => {
 	const res = await getIndexBanner();
-	console.log('res', res);
+	console.log('banner', res);
+	swiper_list.value = res.data.lists;
+};
+
+// 获取定位ip
+const getLocation = async () => {
+	const res = await getPhoneLocation();
+	console.log('location', res);
+	address.value = res.data.ad_info.district;
 };
 
 // 分类列表
@@ -292,11 +300,6 @@ const coupon_list = ref([
 	}
 ]);
 
-// 手机号码加密
-const userMobileComputed = computed(() => {
-	return user_mobile.value.substr(0, 3) + '****' + user_mobile.value.substring(7);
-});
-
 // 跳转选择收货地址
 const jump_selectAddress = () => {
 	uni.navigateTo({
@@ -367,6 +370,13 @@ function open_shopping_search() {
 	});
 }
 
+// 跳转个人资料页
+function open_personal() {
+	uni.navigateTo({
+		url: '/pages/me/personal_data'
+	});
+}
+
 // 顶部区域滚动
 const scrollTop = ref('white_default');
 onPageScroll((e) => {
@@ -383,51 +393,57 @@ onPageScroll((e) => {
 });
 
 // 获取用户经纬度
-const getLocation = () => {
-	uni.getLocation({
-		type: 'wgs84',
-		success: (res) => {
-			console.log('获取经纬度', res);
-		},
-		fail: (err) => {
-			console.log('err', err);
-			uni.authorize({
-				scope: 'scope.userLocation',
-				success: (authorizeRes) => {
-					console.log('authorizeRes', authorizeRes);
-				},
-				fail: (authoruzeErr) => {
-					console.log('authoruzeErr', authoruzeErr);
-					uni.showModal({
-						content: '当前位置有偏差？快去授权',
-						success: function (modal) {
-							if (modal.confirm) {
-								console.log('去授权');
-								uni.openSetting({
-									success: (openSetting) => {
-										console.log('openSetting', openSetting);
-										getLocation();
-									},
-									fail: (openSettingErr) => {
-										console.log('openSettingErr', openSettingErr);
-									}
-								});
-							} else if (modal.cancel) {
-								console.log('取消');
-							}
-						}
-					});
-				}
-			});
-		}
-	});
-};
+// const getLocation = () => {
+// 	uni.getLocation({
+// 		type: 'wgs84',
+// 		success: (res) => {
+// 			console.log('获取经纬度', res);
+// 		},
+// 		fail: (err) => {
+// 			console.log('err', err);
+// 			uni.authorize({
+// 				scope: 'scope.userLocation',
+// 				success: (authorizeRes) => {
+// 					console.log('authorizeRes', authorizeRes);
+// 				},
+// 				fail: (authoruzeErr) => {
+// 					console.log('authoruzeErr', authoruzeErr);
+// 					uni.showModal({
+// 						content: '当前位置有偏差？快去授权',
+// 						success: function (modal) {
+// 							if (modal.confirm) {
+// 								console.log('去授权');
+// 								uni.openSetting({
+// 									success: (openSetting) => {
+// 										console.log('openSetting', openSetting);
+// 										getLocation();
+// 									},
+// 									fail: (openSettingErr) => {
+// 										console.log('openSettingErr', openSettingErr);
+// 									}
+// 								});
+// 							} else if (modal.cancel) {
+// 								console.log('取消');
+// 							}
+// 						}
+// 					});
+// 				}
+// 			});
+// 		}
+// 	});
+// };
 
-getLocation();
-
-onMounted(() => {
-	getSwiperBanner();
+onMounted(async () => {
+	token.value = uni.getStorageSync('token');
+	// 获取用户信息
+	await getUserDataFn();
+	// 获取定位ip
+	await getLocation();
+	// 获取swiper轮播图
+	await getSwiperBanner();
 });
+
+onShow(() => {});
 </script>
 
 <style lang="scss" scoped>
@@ -548,6 +564,7 @@ onMounted(() => {
 			position: relative;
 			.cover {
 				width: 100%;
+				border-radius: 50%;
 			}
 
 			.vip {

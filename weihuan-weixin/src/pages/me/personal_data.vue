@@ -9,7 +9,7 @@
 				</view>
 				<view class="right">
 					<button class="btn" open-type="chooseAvatar" @chooseavatar="chooseAvatar">
-						<image class="cover" :src="portrait" mode="aspectFill"></image>
+						<image class="cover" :src="headPortrait" mode="aspectFill"></image>
 					</button>
 				</view>
 			</view>
@@ -19,7 +19,7 @@
 					<text class="tips">点击可更换昵称</text>
 				</view>
 				<view class="right">
-					<input class="input" type="nickname" v-model="nickName" maxlength="8" @blur="nickNameBlur" />
+					<input class="input" type="nickname" v-model="nickName" maxlength="6" @blur="nickNameBlur" />
 				</view>
 			</view>
 			<view class="item">
@@ -28,7 +28,7 @@
 				</view>
 				<view class="right">
 					<view class="value">
-						<input class="uni-input input" placeholder="请输入您的姓名" maxlength="12" v-model="userName" />
+						<input class="uni-input input" v-model="userName" placeholder="请输入您的姓名" maxlength="12" />
 					</view>
 				</view>
 			</view>
@@ -38,7 +38,7 @@
 				</view>
 				<view class="right">
 					<view class="value">
-						<input type="tel" class="uni-input input" placeholder="请输入您的电话号码" maxlength="11" v-model="mobile" />
+						<input type="tel" class="uni-input input" disabled placeholder="请输入您的电话号码" maxlength="11" v-model="userMobile" />
 					</view>
 				</view>
 			</view>
@@ -48,7 +48,7 @@
 				</view>
 				<view class="right">
 					<view class="value">
-						<input type="text" class="uni-input input" placeholder="请输入您的邮箱" maxlength="11" v-model="email" />
+						<input type="text" class="uni-input input" placeholder="请输入您的邮箱" v-model="userEmail" />
 					</view>
 				</view>
 			</view>
@@ -60,42 +60,71 @@
 
 <script setup>
 import { ref } from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
 import bottomVue from '../component/bottom.vue';
-const portrait = ref('/static/img/head_portrait.png');
-const nickName = ref('炜洹游客用户');
+import { imageBase64 } from '@/hooks/useTool.js';
+import { getUserData, uploadImg, editUserData } from '@/api/index.js';
+const headPortrait = ref('/static/img/head_portrait.png');
+const nickName = ref('微信用户');
+const userName = ref(null);
+const userMobile = ref(null);
+const mobile = ref(null);
+const userEmail = ref(null);
+
+// 用户信息
+const getUserDataFn = async () => {
+	const res = await getUserData();
+	console.log('用户信息', res);
+	nickName.value = res.data.nickname;
+	userMobile.value = res.data.mobile;
+	const name = res.data.real_name;
+	const email = res.data.email;
+	const avatar = res.data.avatar;
+	if (name) userName.value = name;
+	if (email) userEmail.value = email;
+	if (avatar) headPortrait.value = avatar;
+};
+
 // 头像
-const chooseAvatar = (e) => {
-	console.log(e);
-	portrait.value = e.detail.avatarUrl;
+const chooseAvatar = async (e) => {
+	const url = e.detail.avatarUrl;
+	const base64 = await imageBase64(url, 'png');
+	const getUploadImg = await uploadImg({ file: base64 });
+	headPortrait.value = getUploadImg.data.url;
 };
 // 昵称
 const nickNameBlur = (e) => {
-	console.log(e);
 	nickName.value = e.detail.value;
 };
-// 姓名
-const userName = ref(null);
-// 电话
-const mobile = ref(null);
-// 邮箱
-const email = ref(null);
+
 // 确认修改
-function bottom_click() {
+const bottom_click = async () => {
 	uni.showLoading({
 		title: '修改中',
-		mask: true,
-		success: () => {
-			setTimeout(function () {
-				uni.hideLoading();
-				uni.showToast({
-					title: '修改成功',
-					icon: 'none',
-					mask: true
-				});
-			}, 1000);
-		}
+		mask: true
 	});
-}
+
+	// 修改用户信息
+	const res = await editUserData({
+		avatar: headPortrait.value,
+		nickname: nickName.value,
+		real_name: userName.value,
+		email: userEmail.value
+	});
+
+	console.log('res', res);
+
+	uni.hideLoading();
+	uni.showToast({
+		title: '修改成功',
+		icon: 'none',
+		mask: true
+	});
+};
+
+onLoad(() => {
+	getUserDataFn();
+});
 </script>
 
 <style>
