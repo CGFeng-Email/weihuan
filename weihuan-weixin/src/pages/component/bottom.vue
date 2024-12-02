@@ -12,7 +12,7 @@
 import _, { map } from 'underscore';
 import { defineEmits, defineProps } from 'vue';
 
-const emit = defineEmits(['on-save-ok']);
+const emit = defineEmits(['bottom_click']);
 
 const props = defineProps({
 	title: {

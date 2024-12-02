@@ -15,40 +15,35 @@
 		</view>
 
 		<!-- 我的地址列表 -->
-		<view class="address_list" v-if="userMobile">
-			<!-- <view class="li">
-				<view class="title">崧茶怡品·园林茶馆(信息港店)</view>
-				<view class="address_info">
-					<text class="name">陈志远</text>
-					<text class="age">先生</text>
-					<text class="mobile">13428197788</text>
-				</view>
-			</view> -->
-
-			<view class="empty">
-				<view class="to_btn">
-					<button class="btn_bg" @click="open_addressList">添加地址</button>
-				</view>
-				<emptyComp tips="请先添加地址" />
+		<view class="address_list">
+			<view class="wrap" v-if="shoppingList.length > 0">
+				<block v-for="item in shoppingList" :key="item.id">
+					<view class="li">
+						<view class="address_info">
+							<text class="name">{{ item.consignee }}</text>
+							<text class="mobile">{{ item.mobile }}</text>
+						</view>
+						<view class="title">{{ item.province }}{{ item.city }}{{ item.district }}</view>
+						<view class="lead">{{ item.address }}</view>
+					</view>
+				</block>
 			</view>
-		</view>
 
-		<!-- 提示登录 -->
-		<view class="tips_login" v-else>
-			<view class="title">登录后查看我的收货地址</view>
-			<view class="login_btn">立即登录</view>
+			<view class="empty" v-else>
+				<Empty tips="暂无收货地址" />
+			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { getPhoneLocation, getUserData } from '@/api/index.js';
-import emptyComp from '../component/empty.vue';
+import { getPhoneLocation, getUserData, getShoppingAddress } from '@/api/index.js';
+import Empty from '../component/empty.vue';
 const province = ref(null);
 const city = ref(null);
 const address = ref(null);
-const userMobile = ref(null);
+const shoppingList = ref([]);
 
 // 获取定位ip
 const getLocation = async () => {
@@ -63,22 +58,17 @@ const getLocation = async () => {
 	uni.hideLoading();
 };
 
-// 用户信息
-const getUserDataFn = async () => {
-	const res = await getUserData();
-	userMobile.value = res.data.mobile;
+// 获取收货地址
+const getShoppingAddressList = async () => {
+	const res = await getShoppingAddress({ size: 20 });
+	if (res.code == 1) {
+		shoppingList.value = res.data.lists;
+	}
 };
-
-// 跳转新增地址
-function open_addressList() {
-	uni.navigateTo({
-		url: '/pages/address/add_address'
-	});
-}
 
 onMounted(() => {
 	getLocation();
-	getUserDataFn();
+	getShoppingAddressList();
 });
 </script>
 
@@ -91,7 +81,7 @@ onMounted(() => {
 
 	.address {
 		padding: 30rpx 0;
-		font-size: 28rpx;
+		font-size: 32rpx;
 		line-height: 34rpx;
 		color: #000;
 		font-weight: 500;
@@ -126,12 +116,10 @@ onMounted(() => {
 		.iconfont {
 			font-size: 34rpx;
 			font-weight: 500;
-			color: #9a9a9a;
 		}
 		.text {
-			font-size: 28rpx;
+			font-size: 32rpx;
 			font-weight: 500;
-			color: #9a9a9a;
 			padding-left: 6rpx;
 		}
 	}
@@ -145,7 +133,6 @@ onMounted(() => {
 			padding-left: 46rpx;
 			font-size: 28rpx;
 			font-weight: 500;
-			color: #9a9a9a;
 			flex: 1;
 		}
 
@@ -166,32 +153,35 @@ onMounted(() => {
 
 	.address_list {
 		.li {
-			padding: 30rpx 46rpx;
-			// border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+			margin: 30rpx 0;
+			padding: 30rpx;
+			box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+			border-radius: 8rpx;
+
+			.address_info {
+				.name,
+				.mobile {
+					font-size: 30rpx;
+					font-weight: 600;
+				}
+
+				.name {
+					padding-right: 10rpx;
+				}
+			}
+
 			.title {
 				font-size: 28rpx;
 				line-height: 36rpx;
-				color: #000;
+				font-weight: 500;
+				padding: 10rpx 0;
+				font-weight: 600;
+			}
+
+			.lead {
+				font-size: 26rpx;
 				font-weight: 500;
 			}
-			.address_info {
-				padding-top: 20rpx;
-				.name,
-				.age,
-				.mobile {
-					font-size: 26rpx;
-					color: #9a9a9a;
-				}
-
-				.age {
-					padding: 0 10rpx;
-				}
-			}
-		}
-
-		.li:last-child {
-			border-bottom: 0;
-			padding-bottom: 0;
 		}
 	}
 }

@@ -12,12 +12,12 @@ function request(params) {
 		header = {
 			'Content-Type': 'application/json'
 		};
-	}
-
-	// 获取本地token
-	if (uni.getStorageSync("token")) {
-		data.token = uni.getStorageSync("token");
-		// header['Authorization'] = 'Bearer ' + uni.getStorageSync("token");
+		
+		// 获取本地token
+		if (uni.getStorageSync("token")) {
+			data.token = uni.getStorageSync("token");
+			// header['Authorization'] = 'Bearer ' + uni.getStorageSync("token");
+		}
 	}
 
 	return new Promise((resolve, reject) => {
@@ -31,78 +31,43 @@ function request(params) {
 				if (res.statusCode == 200) {
 					switch (res.data.code) {
 						case -1:
-							console.log('没有权限，请登录', res.data);
-							// 如果不是弹窗，可以直接跳转到登录页
-							reject('401');
+							// 没有权限
+							resolve('401');
 							break;
 						case 0:
-							console.log('接口异常500', res.data);
-							reject('500');
+							// 异常
+							uni.showToast({
+								title: res.data.msg,
+								icon: 'none',
+								mask: true,
+								success: () => {
+									resolve(res.data);
+								}
+							})
 							break;
 						case 1:
+							// 成功
 							resolve(res.data);
-							break;
-					}
-				} else {
-					// 清理本地缓存
-					// uni.clearStorageSync();
-					switch (res.data.code) {
-						case -1:
-							console.log('没有权限，请登录');
-							// 如果不是弹窗，可以直接跳转到登录页
-							reject('401');
-							break;
-						case 404:
-							console.log('接口不存在');
-							uni.showToast({
-								title: '请求地址不存在...',
-								icon: 'none',
-								duration: 2000,
-							})
-							reject('404');
-							break;
-						case 500:
-						case 501:
-						case 503:
-						case 0:
-							console.log('接口异常500', res.data);
-							uni.showToast({
-								title: '出现异常错误',
-								icon: 'none',
-								duration: 2000,
-							})
-							reject('500');
-							break;
-						default:
-							uni.showToast({
-								title: '请重试...',
-								duration: 2000,
-							})
 							break;
 					}
 				}
 			},
 			fail: (err) => {
-				console.log(err)
+				console.log('接口异常', err)
 				if (err.errMsg.indexOf('request:fail') !== -1) {
 					wx.showToast({
 						title: '网络异常',
 						icon: 'none',
-						duration: 2000
+						mask: true
 					})
 				} else {
 					wx.showToast({
 						title: '未知异常',
 						icon: 'none',
-						duration: 2000
+						mask: true
 					})
 				}
 				reject(err);
-			},
-			complete() {
-				// 不管成功还是失败都会执行
-				uni.hideLoading();
-				uni.hideToast();
 			}
 		});
 	})

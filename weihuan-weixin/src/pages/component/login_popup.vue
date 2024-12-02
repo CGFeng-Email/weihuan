@@ -68,24 +68,30 @@ function wx_login() {
 
 	wx.login({
 		success: async (res) => {
-			console.log('res', res);
-
+			console.log('code', res);
 			if (res.errMsg == 'login:ok') {
 				const reslogin = await wxLogin({
 					code: res.code
 				});
-				console.log('reslogin', reslogin);
+				console.log('微信登录', reslogin);
 				if (reslogin.code == 1) {
-					// 存储openid
-					uni.setStorageSync('openid', reslogin.data.openid);
-					// 未注册
 					if (reslogin.data.is_reg == 0) {
+						// 未注册
 						uni.navigateTo({
 							url: `/pages/login/register`
 						});
+					} else {
+						// 已注册
+						if (reslogin.data.openid && reslogin.data.token && reslogin.data.mobile) {
+							uni.setStorageSync('openid', reslogin.data.openid);
+							uni.setStorageSync('token', reslogin.data.token);
+							uni.setStorageSync('mobile', reslogin.data.mobile);
+							emit('maskClick', { login: 'success' });
+							uni.hideLoading();
+							return;
+						}
 					}
 				}
-
 				emit('maskClick');
 				uni.hideLoading();
 			}
@@ -111,13 +117,6 @@ function open_privacy() {
 		url: '/pages/condition/privacy'
 	});
 }
-
-// 跳转注册
-// function open_register() {
-// 	uni.navigateTo({
-// 		url: '/pages/login/register'
-// 	});
-// }
 </script>
 
 <style lang="scss" scoped>

@@ -5,13 +5,13 @@
 			<view class="item">
 				<view class="name">收货人</view>
 				<view class="box">
-					<input class="uni-input input" focus placeholder="请输入姓名" v-model="name" />
+					<input class="uni-input input" focus maxlength="6" placeholder="请输入姓名" v-model="name" />
 				</view>
 			</view>
 			<view class="item">
 				<view class="name">手机号码</view>
 				<view class="box">
-					<input class="uni-input input" type="tel" placeholder="请输入手机号码" v-model="mobile" />
+					<input class="uni-input input" type="tel" maxlength="11" placeholder="请输入手机号码" v-model="mobile" />
 				</view>
 			</view>
 			<view class="item">
@@ -32,7 +32,7 @@
 			<view class="item address_item">
 				<view class="name">详细地址</view>
 				<view class="box">
-					<textarea class="input textarea_box" placeholder="小区楼栋/乡村名称" v-model="address" />
+					<textarea class="input textarea_box" maxlength="200" placeholder="小区楼栋/乡村名称" v-model="address" />
 				</view>
 			</view>
 			<view class="default_address" @click="check = !check">
@@ -47,10 +47,10 @@
 	<view style="height: 170rpx"></view>
 	<view class="fixed_bottom_btn multi">
 		<button class="del btn">
-			<button>删除</button>
+			<button @click="delAddress">删除</button>
 		</button>
 		<view class="btn_bg btn">
-			<button>确认</button>
+			<button @click="confirmEditAddress">确认</button>
 		</view>
 	</view>
 </template>
@@ -58,24 +58,109 @@
 <script setup>
 import { ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
+import { shoppingAddressDetails, addShoppingAddress, delShoppingAddress } from '@/api/index.js';
 
+const id = ref('');
 const name = ref('');
 const mobile = ref(null);
 const location = ref([]);
 const address = ref('');
 const check = ref(false);
+
 function bindPickerChange(e) {
 	console.log('picker发送选择改变，携带值为', e.detail.value);
 	location.value = e.detail.value;
 }
 
+// 地址详情
+const getAddressDetails = async () => {
+	const res = await shoppingAddressDetails({ id: id.value });
+	console.log('地址详情', res);
+	if (res.code == 1) {
+		name.value = res.data.consignee;
+		mobile.value = res.data.mobile;
+		location.value[0] = res.data.province;
+		location.value[1] = res.data.city;
+		location.value[2] = res.data.district;
+		address.value = res.data.address;
+		if (res.data.is_default == 1) {
+			check.value = true;
+		} else {
+			check.value = false;
+		}
+	}
+};
+
+// 确认修改地址
+const confirmEditAddress = async () => {
+	const params = {
+		id: id.value,
+		consignee: name.value,
+		mobile: mobile.value,
+		province: location.value[0],
+		city: location.value[1],
+		district: location.value[2],
+		address: address.value,
+		is_default: check.value ? 1 : 0
+	};
+
+	const res = await addShoppingAddress(params);
+	console.log('修改地址', res);
+	if (res.code == 1) {
+		uni.showToast({
+			title: '修改成功',
+			icon: 'none',
+			mask: true,
+			success: () => {
+				setTimeout(() => {
+					uni.$emit('addressListLoad');
+					uni.navigateBack();
+				}, 1500);
+			}
+		});
+	} else {
+		uni.showToast({
+			title: res.msg,
+			icon: 'none',
+			mask: true
+		});
+	}
+};
+
+// 删除地址
+const delAddress = async () => {
+	uni.showModal({
+		content: '确认要删除该地址吗?',
+		success: async (res) => {
+			if (res.confirm) {
+				const res = await delShoppingAddress({
+					id: id.value
+				});
+				console.log('删除地址', res);
+				if (res.code == 1) {
+					uni.showToast({
+						title: '地址已删除',
+						icon: 'none',
+						mask: true,
+						success: () => {
+							setTimeout(() => {
+								uni.$emit('addressListLoad');
+								uni.navigateBack();
+							}, 1500);
+						}
+					});
+				}
+			}
+		}
+	});
+};
+
 onLoad((e) => {
-	const data = JSON.parse(e.item);
-	console.log('data', data);
-	name.value = data.name;
-	mobile.value = data.mobile;
-	location.value = data.address;
-	address.value = data.content;
+	console.log('load', e);
+	id.value = e.id;
+	if (id.value) {
+		getAddressDetails();
+	}
 });
 </script>
 

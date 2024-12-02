@@ -5,13 +5,13 @@
 			<view class="item">
 				<view class="name">收货人</view>
 				<view class="box">
-					<input class="uni-input input" focus placeholder="请输入姓名" v-model="name" />
+					<input class="uni-input input" maxlength="6" focus placeholder="请输入姓名" v-model="name" />
 				</view>
 			</view>
 			<view class="item">
 				<view class="name">手机号码</view>
 				<view class="box">
-					<input class="uni-input input" type="tel" placeholder="请输入手机号码" v-model="mobile" />
+					<input class="uni-input input" type="tel" maxlength="11" placeholder="请输入手机号码" v-model="mobile" />
 				</view>
 			</view>
 			<view class="item">
@@ -32,7 +32,7 @@
 			<view class="item address_item">
 				<view class="name">详细地址</view>
 				<view class="box">
-					<textarea class="input textarea_box" placeholder="小区楼栋/乡村名称" v-model="address" />
+					<textarea class="input textarea_box" maxlength="200" placeholder="小区楼栋/乡村名称" v-model="address" />
 				</view>
 			</view>
 			<view class="default_address" @click="check = !check">
@@ -44,25 +44,52 @@
 		</view>
 	</view>
 
-	<view style="height: 170rpx"></view>
-	<view class="fixed_bottom_btn">
-		<view class="btn_bg btn">
-			<button>确认并保存</button>
-		</view>
-	</view>
+	<Bottom title="确认并保存" @bottom_click="bottom_click" />
 </template>
 
 <script setup>
 import { ref } from 'vue';
+import Bottom from '../component/bottom.vue';
+import { addShoppingAddress } from '@/api/index.js';
+
 const name = ref('');
 const mobile = ref(null);
 const location = ref([]);
 const address = ref('');
 const check = ref(false);
+
 function bindPickerChange(e) {
 	console.log('picker发送选择改变，携带值为', e.detail.value);
 	location.value = e.detail.value;
 }
+
+// 提交
+const bottom_click = async () => {
+	const params = {
+		consignee: name.value,
+		mobile: mobile.value,
+		province: location.value[0],
+		city: location.value[1],
+		district: location.value[2],
+		address: address.value,
+		is_default: check.value ? 1 : 0
+	};
+
+	console.log('params', params);
+	const res = await addShoppingAddress(params);
+	console.log('res', res);
+	if (res.code == 1) {
+		uni.showToast({
+			title: res.msg,
+			icon: 'none',
+			mask: true,
+			success: () => {
+				uni.$emit('addressListLoad');
+				uni.navigateBack();
+			}
+		});
+	}
+};
 </script>
 
 <style>

@@ -61,3 +61,55 @@ export const editUserData = (params) => {
 		data: params
 	})
 }
+
+// 添加/编辑收货地址
+export const addShoppingAddress = (params) => {
+	return request({
+		url: '/mini/address/addEdit',
+		method: 'post',
+		data: params
+	})
+}
+
+// 获取收货地址列表
+export const getShoppingAddress = (params) => {
+	return request({
+		url: '/mini/address/getList',
+		method: 'post',
+		data: params
+	})
+}
+
+// 收货地址详情
+export const shoppingAddressDetails = (params) => {
+	return request({
+		url: '/mini/address/detail',
+		method: 'post',
+		data: params
+	})
+}
+
+// 删除收货地址
+export const delShoppingAddress = (params) => {
+	return request({
+		url: '/mini/address/delete',
+		method: 'post',
+		data: params
+	})
+}
+
+// 公告列表
+export const noticeList = () => {
+	return request({
+		url: '/mini/notice/getList',
+		method: 'get'
+	})
+}
+
+// 公共详情
+export const noticeDetails = (id) => {
+	return request(({
+		url: '/mini/notice/detail?id=' + id,
+		method: 'get'
+	}))
+}

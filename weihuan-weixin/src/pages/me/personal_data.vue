@@ -115,10 +115,17 @@ const bottom_click = async () => {
 	console.log('res', res);
 
 	uni.hideLoading();
+
 	uni.showToast({
 		title: '修改成功',
 		icon: 'none',
-		mask: true
+		mask: true,
+		success: () => {
+			setTimeout(() => {
+				uni.$emit('meLoad');
+				uni.navigateBack();
+			}, 1500);
+		}
 	});
 };
 

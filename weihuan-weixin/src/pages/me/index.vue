@@ -1,4 +1,8 @@
 <template>
+	<!-- 打开弹窗时，禁止滑动页面，必须要在第一个节点 -->
+	<page-meta :page-style="'overflow:' + (login_show ? 'hidden' : 'visible')"></page-meta>
+	<!-- 登录弹窗 -->
+	<login-popup :show="login_show" @maskClick="maskClick"></login-popup>
 	<!-- 顶部到胶囊的高度 -->
 	<view class="top" :class="scrollTop" :style="{ height: useMenuButton().top }"></view>
 	<!-- 标题 -->
@@ -14,22 +18,22 @@
 	</view>
 	<!-- 用户信息 -->
 	<view class="user">
-		<view class="wrap">
+		<view class="wrap" @click="isLogin">
 			<view class="head_portrait">
-				<image class="cover" src="/static/img/head_portrait.png" mode="widthFix"></image>
+				<image class="cover" :src="headPortrait" mode="widthFix"></image>
 				<image class="vip" src="/static/img/head_vip.png" mode="widthFix"></image>
 			</view>
 			<view class="content">
 				<view class="name">
-					{{ user_title }}
+					{{ nickName }}
 					<image class="vip" src="/static/img/vip2.png" mode="widthFix" lazy-load></image>
 				</view>
 				<view class="lead">
 					<text class="iconfont icon-shouji"></text>
-					<text class="text">{{ userMobileComputed }}</text>
+					<text class="text">{{ mobile || '***********' }}</text>
 				</view>
 			</view>
-			<view class="set" @click="jump_personal_data">
+			<view class="set" @click.stop="jump_personal_data">
 				<uni-icons type="gear" size="22" color="#fff"></uni-icons>
 				<text class="text">个人资料</text>
 			</view>
@@ -102,19 +106,60 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 //onPageScroll:滚动事件
 import { onPageScroll } from '@dcloudio/uni-app';
-const user_title = ref('炜洹游客用户');
+// api
+import { getUserData } from '@/api/index.js';
+// 登录弹窗
+const login_show = ref(false);
+// 用户名
+const nickName = ref('微信用户');
 // 手机号
-const user_mobile = ref('13428198898');
+const mobile = ref(null);
+// 头像
+const headPortrait = ref('/static/img/head_portrait.png');
 
-// 手机号码加密
-const userMobileComputed = computed(() => {
-	return user_mobile.value.substr(0, 3) + '****' + user_mobile.value.substring(7);
-});
+// 打开登录弹窗
+function show_login() {
+	login_show.value = true;
+}
+
+// 点击登录弹窗遮罩，关闭弹窗
+function maskClick(e) {
+	if (e && e.login == 'success') {
+		mobile.value = uni.getStorageSync('mobile');
+		getUserDataFn();
+	}
+	login_show.value = false;
+}
+
+// 判断用户是否登录
+function isLogin() {
+	if (!mobile.value) {
+		show_login();
+		return false;
+	}
+
+	return true;
+}
+
+// 用户信息
+const getUserDataFn = async () => {
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	});
+	const res = await getUserData();
+	nickName.value = res.data.nickname;
+	const avatar = res.data.avatar;
+	if (avatar) {
+		headPortrait.value = avatar;
+	}
+	uni.hideLoading();
+};
 
 // 订单列表
 const order_list = ref([
@@ -161,28 +206,36 @@ const order_list = ref([
 ]);
 
 // 订单列表 click
-const open_order = (item) => {
+const open_order = async (item) => {
+	const getLogin = await isLogin();
+	if (!getLogin) return;
 	uni.navigateTo({
 		url: `${item.url}?index=${item.index}&head_title_index=${item.head_title_index}`
 	});
 };
 
 // 跳转个人资料
-const jump_personal_data = () => {
+const jump_personal_data = async () => {
+	const getLogin = await isLogin();
+	if (!getLogin) return;
 	uni.navigateTo({
 		url: '/pages/me/personal_data'
 	});
 };
 
 // 跳转我的收藏
-const open_collect = () => {
+const open_collect = async () => {
+	const getLogin = await isLogin();
+	if (!getLogin) return;
 	uni.navigateTo({
 		url: '/pages/shopping/collect'
 	});
 };
 
 // 跳转优惠卷
-const open_coupon = () => {
+const open_coupon = async () => {
+	const getLogin = await isLogin();
+	if (!getLogin) return;
 	uni.navigateTo({
 		url: '/pages/coupon/index'
 	});
@@ -231,7 +284,9 @@ const functionList = ref([
 ]);
 
 // 跳转链接
-const open_function_link = (url) => {
+const open_function_link = async (url) => {
+	const getLogin = await isLogin();
+	if (!getLogin) return;
 	uni.navigateTo({
 		url
 	});
@@ -275,6 +330,23 @@ onPageScroll((e) => {
 	} else if (e.scrollTop > 100) {
 		scrollTop.value = 'white_100';
 	}
+});
+
+onMounted(async () => {
+	uni.$on('meLoad', async () => {
+		mobile.value = uni.getStorageSync('mobile');
+		return await getUserDataFn();
+	});
+
+	mobile.value = uni.getStorageSync('mobile');
+	if (mobile.value) {
+		// 获取用户信息
+		await getUserDataFn();
+	}
+});
+
+onUnmounted(() => {
+	uni.$off('meLoad');
 });
 </script>
 
@@ -322,6 +394,8 @@ page {
 			position: relative;
 			.cover {
 				width: 100%;
+				border-radius: 50%;
+				overflow: hidden;
 			}
 
 			.vip {

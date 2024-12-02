@@ -33,7 +33,7 @@
 		</swiper>
 
 		<!-- 未登录 -->
-		<view class="user" v-if="!token">
+		<view class="user" v-if="!mobile">
 			<view class="wrap">
 				<image class="head_portrait" src="/src/static/img/head_portrait.png" mode="widthFix"></image>
 				<view class="content">
@@ -57,7 +57,7 @@
 					</view>
 					<view class="lead">
 						<image class="phone" src="/src/static/img/phone.png" mode="widthFix" lazy-load></image>
-						{{ MobileEncryption(userMobile) }}
+						{{ MobileEncryption(mobile) }}
 					</view>
 				</view>
 				<image class="star_cover" src="/src/static/img/user_star.png" mode="widthFix"></image>
@@ -107,8 +107,8 @@
 					background-color="#F1F1F1"
 					color="#FD6F23"
 					textColor="#000"
-					text="精选猕猴桃，德国进口，新品上架，限时抢购"
-					@click="open_notice_details"
+					:text="noticeText"
+					@click="open_notice"
 				></uni-notice-bar>
 			</view>
 		</view>
@@ -142,24 +142,25 @@
 
 <script setup>
 //onPageScroll:滚动事件
-import { onPageScroll, onShow } from '@dcloudio/uni-app';
-import { ref, computed, onMounted } from 'vue';
+import { onPageScroll } from '@dcloudio/uni-app';
+import { ref, onMounted } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 // api
-import { getIndexBanner, getUserData, getPhoneLocation } from '@/api/index.js';
+import { getIndexBanner, getUserData, getPhoneLocation, noticeList } from '@/api/index.js';
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
 
-const token = ref('');
 const headPortrait = ref('/static/img/head_portrait.png');
 const nickName = ref('微信用户');
-const userMobile = ref(null);
+const mobile = ref(null);
 const address = ref(null);
 // 登录弹窗
 const login_show = ref(false);
 // 轮播图
 const swiper_list = ref([]);
+// 公告
+const noticeText = ref('');
 
 // 打开登录弹窗
 function show_login() {
@@ -167,7 +168,11 @@ function show_login() {
 }
 
 // 点击登录弹窗遮罩，关闭弹窗
-function maskClick() {
+function maskClick(e) {
+	if (e.login == 'success') {
+		mobile.value = uni.getStorageSync('mobile');
+		getUserDataFn();
+	}
 	login_show.value = false;
 }
 
@@ -175,7 +180,6 @@ function maskClick() {
 const getUserDataFn = async () => {
 	const res = await getUserData();
 	nickName.value = res.data.nickname;
-	userMobile.value = res.data.mobile;
 	const avatar = res.data.avatar;
 	if (avatar) {
 		headPortrait.value = avatar;
@@ -194,6 +198,17 @@ const getLocation = async () => {
 	const res = await getPhoneLocation();
 	console.log('location', res);
 	address.value = res.data.ad_info.district;
+};
+
+// 获取公告列表
+const getNoticeList = async () => {
+	const res = await noticeList();
+	console.log('公告列表', res);
+	if (res.code == 1 && res.data.length > 0) {
+		res.data.forEach((item) => {
+			noticeText.value += item.title + '：' + item.remark + ' ';
+		});
+	}
 };
 
 // 分类列表
@@ -350,9 +365,9 @@ function open_classify_item(e) {
 }
 
 // 跳转公告详情
-function open_notice_details() {
+function open_notice() {
 	uni.navigateTo({
-		url: '/pages/notice/details'
+		url: '/pages/notice/index'
 	});
 }
 
@@ -392,58 +407,19 @@ onPageScroll((e) => {
 	}
 });
 
-// 获取用户经纬度
-// const getLocation = () => {
-// 	uni.getLocation({
-// 		type: 'wgs84',
-// 		success: (res) => {
-// 			console.log('获取经纬度', res);
-// 		},
-// 		fail: (err) => {
-// 			console.log('err', err);
-// 			uni.authorize({
-// 				scope: 'scope.userLocation',
-// 				success: (authorizeRes) => {
-// 					console.log('authorizeRes', authorizeRes);
-// 				},
-// 				fail: (authoruzeErr) => {
-// 					console.log('authoruzeErr', authoruzeErr);
-// 					uni.showModal({
-// 						content: '当前位置有偏差？快去授权',
-// 						success: function (modal) {
-// 							if (modal.confirm) {
-// 								console.log('去授权');
-// 								uni.openSetting({
-// 									success: (openSetting) => {
-// 										console.log('openSetting', openSetting);
-// 										getLocation();
-// 									},
-// 									fail: (openSettingErr) => {
-// 										console.log('openSettingErr', openSettingErr);
-// 									}
-// 								});
-// 							} else if (modal.cancel) {
-// 								console.log('取消');
-// 							}
-// 						}
-// 					});
-// 				}
-// 			});
-// 		}
-// 	});
-// };
-
 onMounted(async () => {
-	token.value = uni.getStorageSync('token');
-	// 获取用户信息
-	await getUserDataFn();
-	// 获取定位ip
-	await getLocation();
 	// 获取swiper轮播图
 	await getSwiperBanner();
+	// 获取定位ip
+	await getLocation();
+	// 公告列表
+	await getNoticeList();
+	mobile.value = uni.getStorageSync('mobile');
+	if (mobile.value) {
+		// 获取用户信息
+		await getUserDataFn();
+	}
 });
-
-onShow(() => {});
 </script>
 
 <style lang="scss" scoped>
