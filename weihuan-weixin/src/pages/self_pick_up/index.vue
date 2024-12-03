@@ -12,7 +12,7 @@
 		</view>
 	</view>
 	<!-- 顶部导航栏占位符 -->
-	<view :style="{ height: (useMenuButton().topHeight) + 'px' }"></view>
+	<view :style="{ height: useMenuButton().topHeight + 'px' }"></view>
 
 	<map
 		:style="{ height: getSystem().screenHeight - useMenuButton().topHeight + 'px' }"
@@ -83,7 +83,9 @@ const { proxy } = getCurrentInstance();
 import useMenuButton from '../../hooks/useMenu.js';
 // 系统信息
 import getSystem from '../../hooks/getSystem.js';
-let mapContent = ref(null);
+import { storeList } from '@/api/index.js';
+
+const mapContent = ref(null);
 const latitude = ref(null);
 const longitude = ref(null);
 const scale = ref(16);
@@ -216,23 +218,37 @@ const markersList = ref([
 	}
 ]);
 
+// 获取自提点列表
 const get_location = () => {
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	});
+
 	uni.getLocation({
 		type: 'gcj02',
-		success: function (res) {
+		success: async (res) => {
 			console.log('res', res);
 			latitude.value = res.latitude;
 			longitude.value = res.longitude;
 			if (res.latitude && res.longitude) {
-				mapContent.value = uni.createMapContext('mapId', proxy);
+				const params = {
+					longitude: longitude.value,
+					latitude: latitude.value
+				};
+				const res = await storeList(params);
+				console.log('自提点列表', res);
+				if (res.code == 1) {
+					mapContent.value = uni.createMapContext('mapId', proxy);
+				}
 			}
-
-			console.log('mapContent', mapContent.value);
 		},
 		fail: (err) => {
 			console.log('err', err);
 		}
 	});
+
+	uni.hideLoading();
 };
 
 // 轮播切换

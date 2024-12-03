@@ -52,9 +52,12 @@ const getLocation = async () => {
 		mask: true
 	});
 	const res = await getPhoneLocation();
-	province.value = res.data.ad_info.province;
-	city.value = res.data.ad_info.city;
-	address.value = res.data.ad_info.district;
+	if (res.code == 1) {
+		province.value = res.data.ad_info.province;
+		city.value = res.data.ad_info.city;
+		address.value = res.data.ad_info.district;
+		uni.setStorageSync('location', res.data.location);
+	}
 	uni.hideLoading();
 };
 

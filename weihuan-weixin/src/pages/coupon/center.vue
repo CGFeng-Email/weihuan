@@ -2,78 +2,77 @@
 <template>
 	<view class="list">
 		<view class="item" v-for="item in list" :key="item.id">
-			<view class="box" :class="{ type2: item.type == 3 }" @click="open_details">
-				<view class="ide">{{item.tips}}</view>
-				<view class="price">{{ item.price }}</view>
-				<view class="lead">{{ item.title }}</view>
-				<view class="btn" @click.stop="get_coupon">立即领取</view>
+			<view class="box" @click="open_details(item)">
+				<view class="ide">{{ item.title }}</view>
+				<view class="price" v-if="item.coupon_type == 1">{{ item.money }}</view>
+				<view class="discount" v-else>{{ item.coupon_type_name }}</view>
+				<view class="lead">{{ item.remark }}</view>
+				<button class="btn" @click.stop="getCouponItem(item.is_get, item.id)">{{ item.is_get == 1 ? '立即使用' : '立即领取' }}</button>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-const list = ref([
-	{
-		id: 1,
-		tips: '双11通用券',
-		price: 150,
-		title: '满600可用',
-		type: 1
-	},
-	{
-		id: 2,
-		tips: '满减券',
-		price: 150,
-		title: '满400可用',
-		type: 1
-	},
-	{
-		id: 3,
-		tips: '双11通用券',
-		price: 150,
-		title: '满500可用',
-		type: 1
-	},
-	{
-		id: 4,
-		price: 150,
-		tips: '双11通用券',
-		title: '满600可用',
-		type: 1
-	},
-	{
-		id: 5,
-		price: 150,
-		tips: '双11通用券',
-		title: '满300可用',
-		type: 1
-	},
-	{
-		id: 6,
-		price: 150,
-		tips: '满减券',
-		title: '满1200可用',
-		type: 1
+import { ref, onMounted } from 'vue';
+import { couponCenter, getCoupon } from '@/api/index.js';
+
+// 领劵中心
+const list = ref([]);
+
+// 优惠卷
+const getCouponList = async () => {
+	const res = await couponCenter();
+	console.log('优惠卷', res);
+	if (res.code == 1) {
+		list.value = res.data;
 	}
-]);
+};
+
 // 优惠券详情
-const open_details = () => {
+const open_details = (item) => {
 	uni.navigateTo({
-		url: '/pages/coupon/details'
-	})
-}
+		url: `/pages/coupon/details?item=${JSON.stringify(item)}`
+	});
+};
 
 // 领取优惠券
-function get_coupon() {
-	uni.showToast({
-		title: '领取成功',
-		icon: 'none',
-		duration: 2000,
+const getCouponItem = async (is_get, id) => {
+	if (!id) return;
+
+	// 立即使用
+	if (is_get == 1) {
+		uni.switchTab({
+			url: '/pages/classify/index'
+		});
+		return;
+	}
+
+	uni.showLoading({
+		title: '领取中...',
 		mask: true
 	});
-}
+
+	const res = await getCoupon({ coupon_id: id });
+	console.log('领取优惠券', res);
+
+	uni.hideLoading();
+
+	uni.showToast({
+		title: res.msg,
+		icon: 'none',
+		mask: true,
+		success: () => {
+			setTimeout(() => {
+				getCouponList();
+			}, 1500);
+		}
+	});
+};
+
+onMounted(() => {
+	getCouponList();
+});
 </script>
 
 <style lang="scss" scoped>
@@ -101,9 +100,18 @@ function get_coupon() {
 			}
 
 			.price {
-				font-size: 82rpx;
+				height: 80rpx;
+				line-height: 80rpx;
+				font-size: 60rpx;
 				font-weight: 600;
-				padding: 10rpx 0;
+				color: #fff;
+			}
+			
+			.discount {
+				height: 80rpx;
+				line-height: 80rpx;
+				font-size: 40rpx;
+				font-weight: 600;
 				color: #fff;
 			}
 
@@ -125,18 +133,6 @@ function get_coupon() {
 				margin-top: 8rpx;
 				text-align: center;
 				margin-top: 30rpx;
-			}
-
-			.type2_btn {
-				background: #000;
-				color: #fff;
-				opacity: 0.3;
-			}
-
-			.type3_btn {
-				background: #000;
-				color: #fff;
-				opacity: 0.2;
 			}
 		}
 

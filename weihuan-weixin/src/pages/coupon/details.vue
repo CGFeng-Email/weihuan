@@ -7,7 +7,8 @@
 		<view class="return_icon" @click="return_page">
 			<uni-icons type="left" size="23" color="#fff"></uni-icons>
 		</view>
-		{{ scrollTop != 'white_default' ? '我的' : '' }}
+		<text class="page_title_text" v-if="scrollTop != 'white_default'">优惠卷详情</text>
+		<text class="page_title_text default_title" v-else>优惠卷详情</text>
 	</view>
 	<!-- 占位 -->
 	<view :style="{ height: useMenuButton().top }"></view>
@@ -17,38 +18,35 @@
 		<image class="cover" src="/static/img/me_banner.png" mode="widthFix"></image>
 	</view>
 	<view class="main">
-		<view class="coupon_module">
+		<view class="coupon_module box_border_radius box_shadow">
 			<view class="bg">
-				<image class="cover" src="/static/img/coupon_bg.png" mode="aspectFit"></image>
+				<image class="cover" src="/static/img/coupon_bg.png" mode="aspectFill"></image>
 			</view>
 			<view class="content">
 				<view class="top_content">
 					<view class="price">
-						{{ coupon_data.price }}
+						{{ coupon_data.money }}
 					</view>
 					<view class="tips">
-						{{ coupon_data.tips }}
+						{{ coupon_data.title }}
 					</view>
 
 					<view class="list">
 						<view class="lead">
 							<text class="name">使用条件：</text>
-							<text class="text">{{ coupon_data.condition }}</text>
+							<text class="text">{{ coupon_data.coupon_type_name }}</text>
 						</view>
 						<view class="lead">
 							<text class="name">有效日期：</text>
-							<text class="text">{{ coupon_data.date }}</text>
+							<text class="text">{{ coupon_data.end_time }}</text>
 						</view>
 						<view class="lead">
 							<text class="name">使用说明：</text>
-							<text class="text">{{ coupon_data.explain }}</text>
+							<text class="text">{{ coupon_data.remark }}</text>
 						</view>
 					</view>
 				</view>
-
-				<view class="btn" v-if="coupon_data.type == 1" @click="open_shoppingList">立即使用</view>
-				<view class="btn" :class="{ type2_btn: coupon_data.type == 2 }" v-else-if="coupon_data.type == 2">已使用</view>
-				<view class="btn" :class="{ type3_btn: coupon_data.type == 3 }" v-else>已过期</view>
+				<!-- <view class="btn" @click="open_shoppingList">立即使用</view> -->
 			</view>
 		</view>
 	</view>
@@ -59,29 +57,22 @@ import { ref } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 //onPageScroll:滚动事件
-import { onPageScroll } from '@dcloudio/uni-app';
+import { onLoad, onPageScroll } from '@dcloudio/uni-app';
+
 // 优惠卷
-const coupon_data = ref({
-	id: 1,
-	price: 150,
-	tips: '双12购物节购物优惠券',
-	condition: '适应所有商品',
-	date: '2024/08/22 至 2024/12/30',
-	explain: '超过有效日期会自动失效',
-	type: 1
-});
+const coupon_data = ref();
 
 // 使用优惠券
-const open_shoppingList = () =>{
+const open_shoppingList = () => {
 	uni.switchTab({
 		url: '/pages/shopping/index'
-	})
-}
+	});
+};
 
 // 返回
 const return_page = () => {
-	uni.navigateBack()
-}
+	uni.navigateBack();
+};
 
 // 顶部区域滚动
 const scrollTop = ref('white_default');
@@ -95,6 +86,14 @@ onPageScroll((e) => {
 		scrollTop.value = 'white_60';
 	} else if (e.scrollTop > 100) {
 		scrollTop.value = 'white_100';
+	}
+});
+
+onLoad((load) => {
+	console.log('load', JSON.parse(load.item));
+	const item = JSON.parse(load.item);
+	if (item) {
+		coupon_data.value = item;
 	}
 });
 </script>
@@ -128,9 +127,10 @@ onPageScroll((e) => {
 }
 .coupon_module {
 	width: 640rpx;
-	height: 920rpx;
+	height: 740rpx;
 	margin: auto;
 	position: relative;
+	overflow: hidden;
 	.bg {
 		position: absolute;
 		z-index: -1;
@@ -152,6 +152,7 @@ onPageScroll((e) => {
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 50rpx;
+		overflow: hidden;
 		.top_content {
 			.price {
 				font-size: 100rpx;
@@ -193,17 +194,17 @@ onPageScroll((e) => {
 			color: #fff;
 			background: linear-gradient(92.65deg, #ff8992 0%, #fdba80 100%);
 		}
-		
+
 		.type2_btn {
 			background: #000;
 			color: #fff;
-			opacity: .3;
+			opacity: 0.3;
 		}
-		
+
 		.type3_btn {
 			background: #000;
 			color: #fff;
-			opacity: .2;
+			opacity: 0.2;
 		}
 	}
 }

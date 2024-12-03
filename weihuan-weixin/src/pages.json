@@ -133,7 +133,8 @@
 
 			"path": "pages/notice/details",
 			"style": {
-				"navigationStyle": "custom"
+				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTitleText": "公告详情"
 			}
 		},
 		{

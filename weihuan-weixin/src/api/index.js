@@ -113,3 +113,39 @@ export const noticeDetails = (id) => {
 		method: 'get'
 	}))
 }
+
+// 领劵中心
+export const couponCenter = (params) => {
+	return request({
+		url: '/mini/coupon/index',
+		method: 'post',
+		data: params
+	})
+}
+
+// 领取优惠卷
+export const getCoupon = (params) => {
+	return request({
+		url: '/mini/coupon/receive',
+		method: 'post',
+		data: params
+	})
+}
+
+// 我的优惠卷
+export const myCoupon = (params) => {
+	return request({
+		url: '/mini/coupon/mine',
+		method: 'post',
+		data: params
+	})
+}
+
+// 自提点列表
+export const storeList = (params) => {
+	return request({
+		url: '/mini/store/getNearByStore',
+		method: 'post',
+		data: params
+	})
+}

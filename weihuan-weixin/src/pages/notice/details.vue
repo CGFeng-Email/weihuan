@@ -1,16 +1,16 @@
 <template>
 	<!-- 顶部到胶囊的高度 -->
-	<view class="top" :class="scrollTop" :style="{ height: useMenuButton().top }"></view>
+	<!-- <view class="top" :class="scrollTop" :style="{ height: useMenuButton().top }"></view> -->
 	<!-- 标题 -->
-	<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
+	<!-- <view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
 		<view class="return_icon" @click="return_page">
 			<uni-icons type="left" size="23" :color="scrollTop == 'white_default' ? '#fff' : '#000'"></uni-icons>
 		</view>
 		{{ scrollTop != 'white_default' ? '系统公告' : '' }}
-	</view>
+	</view> -->
 	<!-- 占位 -->
-	<view :style="{ height: useMenuButton().top }"></view>
-	<view :style="{ height: useMenuButton().height }"></view>
+	<!-- 	<view :style="{ height: useMenuButton().top }"></view>
+	<view :style="{ height: useMenuButton().height }"></view> -->
 	<!-- 顶部背景 -->
 	<view class="fixed_top_bg">
 		<image class="cover" src="/static/img/me_banner.png" mode="widthFix"></image>
@@ -18,14 +18,14 @@
 	<!-- 内容 -->
 	<view class="wrap">
 		<image class="cover" :src="details.image" mode="widthFix"></image>
-		<view class="main box_border_radius box_shadow">
+		<view class="main">
 			<view class="title">{{ details.title }}</view>
 			<view class="author">
 				<text class="date">时间：{{ details.add_at }}</text>
 				<text class="name">来源：炜洹集团</text>
 			</view>
 
-			<rich-text type="text" :preview="true" :nodes="details.content"></rich-text>
+			<rich-text class="rich_box" type="text" :preview="true" :nodes="content"></rich-text>
 
 			<view class="return_btn">
 				<view class="btn btn_bg" @click="return_page">返回列表</view>
@@ -35,12 +35,10 @@
 </template>
 
 <script setup>
-import { onLoad } from '@dcloudio/uni-app';
-import { ref } from 'vue';
+import { onLoad, onPageScroll } from '@dcloudio/uni-app';
+import { ref, computed } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
-//onPageScroll:滚动事件
-import { onPageScroll } from '@dcloudio/uni-app';
 import { noticeDetails } from '@/api/index.js';
 
 const id = ref('');
@@ -53,19 +51,19 @@ const return_page = () => {
 };
 
 // 顶部区域滚动
-const scrollTop = ref('white_default');
-onPageScroll((e) => {
-	if (e.scrollTop < 30) {
-		scrollTop.value = 'white_default';
-	}
-	if (e.scrollTop > 30 && e.scrollTop < 60) {
-		scrollTop.value = 'white_30';
-	} else if (e.scrollTop > 60 && e.scrollTop < 100) {
-		scrollTop.value = 'white_60';
-	} else if (e.scrollTop > 100) {
-		scrollTop.value = 'white_100';
-	}
-});
+// const scrollTop = ref('white_default');
+// onPageScroll((e) => {
+// 	if (e.scrollTop < 30) {
+// 		scrollTop.value = 'white_default';
+// 	}
+// 	if (e.scrollTop > 30 && e.scrollTop < 60) {
+// 		scrollTop.value = 'white_30';
+// 	} else if (e.scrollTop > 60 && e.scrollTop < 100) {
+// 		scrollTop.value = 'white_60';
+// 	} else if (e.scrollTop > 100) {
+// 		scrollTop.value = 'white_100';
+// 	}
+// });
 
 // 获取公告详情
 const getNoticeDetails = async () => {
@@ -75,6 +73,17 @@ const getNoticeDetails = async () => {
 		details.value = res.data;
 	}
 };
+
+const content = computed(() => {
+	return details.value.content
+		.replace(/<p([\s\w"=\/\.:;]+)((?:(style="[^"]+")))/gi, '<p')
+		.replace(/<p>/gi, '<p style="font-size: 15Px; line-height: 25Px;">')
+		.replace(/<img([\s\w"-=\/\.:;]+)((?:(height="[^"]+")))/gi, '<img$1')
+		.replace(/<img([\s\w"-=\/\.:;]+)((?:(width="[^"]+")))/gi, '<img$1')
+		.replace(/<img([\s\w"-=\/\.:;]+)((?:(style="[^"]+")))/gi, '<img$1')
+		.replace(/<img([\s\w"-=\/\.:;]+)((?:(alt="[^"]+")))/gi, '<img$1')
+		.replace(/<img([\s\w"-=\/\.:;]+)/gi, '<img$1 style="width: 100%; border-radius: 8Px;"');
+});
 
 onLoad((load) => {
 	console.log('load', load);
@@ -116,13 +125,13 @@ page {
 }
 
 .wrap {
-	padding: 0 30rpx 160rpx;
+	padding: 30rpx 20rpx 160rpx;
 	.cover {
 		width: 100%;
 	}
 	.main {
 		background: #fff;
-		padding: 0 20rpx 20rpx;
+		padding: 20rpx;
 
 		.title {
 			font-size: 32rpx;
@@ -164,6 +173,10 @@ page {
 				font-size: 28rpx;
 				font-weight: 500;
 			}
+		}
+
+		img {
+			width: 100%;
 		}
 	}
 }

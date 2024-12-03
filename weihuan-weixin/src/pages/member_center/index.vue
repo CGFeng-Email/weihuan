@@ -6,7 +6,8 @@
 		<view class="return_icon" @click="return_page">
 			<uni-icons type="left" size="23" :color="scrollTop == 'white_default' ? '#fff' : '#000'"></uni-icons>
 		</view>
-		{{ scrollTop != 'white_default' ? '会员中心' : '' }}
+		<text class="page_title_text" v-if="scrollTop != 'white_default'">会员中心</text>
+		<text class="page_title_text default_title" v-else>会员中心</text>
 	</view>
 	<!-- 占位 -->
 	<view :style="{ height: useMenuButton().top }"></view>
@@ -169,9 +170,7 @@ onPageScroll((e) => {
 	}
 });
 
-function bottom_click() {
-	
-}
+function bottom_click() {}
 </script>
 
 <style>

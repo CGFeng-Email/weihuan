@@ -11,7 +11,6 @@ export default {
 
 		// 获取设备信息
 		const getSystem = uni.getStorageSync('system');
-		console.log('getSystem', getSystem);
 		if (!getSystem) {
 			uni.getSystemInfo({
 				success: function (res) {
@@ -37,6 +36,10 @@ scroll-view {
 image {
 	height: auto;
 	vertical-align: bottom;
+}
+
+.default_title {
+	color: #fff;
 }
 
 .head {

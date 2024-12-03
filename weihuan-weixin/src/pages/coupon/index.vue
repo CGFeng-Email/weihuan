@@ -2,107 +2,97 @@
 <template>
 	<!-- 导航栏组件 -->
 	<navigate :list="navigate" :itemIndex="navigateIndex" @itemClick="navigateItem"></navigate>
-	<view class="list">
+	<view class="list" v-if="list.length > 0">
 		<view class="item" v-for="item in list" :key="item.id">
-			<view class="box" :class="{ type2: item.type == 3 }" @click="open_details">
+			<view class="box" :class="{ type2: item.status == 2 }" @click="open_details(item)">
 				<view class="ide">{{ item.title }}</view>
-				<view class="price">{{ item.price }}</view>
-				<view class="lead">{{ item.tips }}</view>
-				<view class="btn" @click.stop="use_coupon(item.price)" v-if="item.type == 1">立即使用</view>
-				<view class="btn" :class="{ type2_btn: item.type == 2 }" v-else-if="item.type == 2">已使用</view>
-				<view class="btn" :class="{ type3_btn: item.type == 3 }" v-else>已过期</view>
+				<view class="price">{{ item.money }}</view>
+				<view class="lead">{{ item.remark }}</view>
+				<view class="btn" @click.stop="open_shopping" v-if="item.status == 0">立即使用</view>
+				<view class="btn" :class="{ type2_btn: item.status == 1 }" v-else-if="item.status == 1">已使用</view>
+				<view class="btn" :class="{ type3_btn: item.status == 2 }" v-else-if="item.status == 2">已过期</view>
 			</view>
 		</view>
 	</view>
+	<Empty v-else />
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
 import Navigate from '../component/navigate.vue';
+import { myCoupon } from '@/api/index.js';
+import Empty from '../component/empty.vue';
+
+const page = ref(1);
+const size = ref(20);
 const navigateIndex = ref(0);
 const navigate = ref([
 	{
-		title: '全部'
+		title: '全部',
+		index: ''
 	},
 	{
-		title: '待使用'
+		title: '待使用',
+		index: 0
 	},
 	{
-		title: '已使用'
+		title: '已使用',
+		index: 1
 	},
 	{
-		title: '已过期'
+		title: '已过期',
+		index: 2
 	}
 ]);
 
+const list = ref([]);
+
+// 切换导航
 const navigateItem = (e) => {
+	if (navigateIndex.value == e.i) return;
 	navigateIndex.value = e.i;
+	getMyCoupon();
 };
 
-const list = ref([
-	{
-		id: 1,
-		title: '双11通用券',
-		price: 150,
-		tips: '满600可用',
-		type: 1
-	},
-	{
-		id: 2,
-		title: '满减券',
-		price: 150,
-		tips: '满600可用',
-		type: 1
-	},
-	{
-		id: 3,
-		title: '双11通用券',
-		price: 150,
-		tips: '满600可用',
-		type: 2
-	},
-	{
-		id: 4,
-		price: 150,
-		title: '双11通用券',
-		tips: '满600可用',
-		type: 2
-	},
-	{
-		id: 5,
-		price: 150,
-		title: '双11通用券',
-		tips: '满600可用',
-		type: 3
-	},
-	{
-		id: 6,
-		price: 150,
-		title: '满减券',
-		tips: '满600可用',
-		type: 3
-	}
-]);
-
 // 跳转优惠券详情
-const open_details = () => {
+const open_details = (item) => {
 	uni.navigateTo({
-		url: '/pages/coupon/details'
+		url: `/pages/coupon/details?item=${JSON.stringify(item)}`
 	});
 };
 
 // 使用优惠券
-function use_coupon(price) {
-	uni.$emit('update_coupon', { price });
-	uni.navigateBack();
+function open_shopping() {
+	uni.switchTab({
+		url: '/pages/classify/index'
+	});
 }
-</script>
 
-<style>
-page {
-	background: #fbfbfb;
-}
-</style>
+// 获取我的优惠卷
+const getMyCoupon = async () => {
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	});
+
+	const params = {
+		status: navigate.value[navigateIndex.value].index,
+		page: page.value,
+		size: size.value
+	};
+	const res = await myCoupon(params);
+	console.log('获取我的优惠卷', res);
+	if (res.code == 1) {
+		list.value = res.data.lists;
+		page.value = 1;
+	}
+	uni.hideLoading();
+};
+
+onMounted(() => {
+	getMyCoupon();
+});
+</script>
 
 <style lang="scss" scoped>
 .list {

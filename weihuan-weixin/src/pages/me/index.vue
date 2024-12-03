@@ -1,4 +1,5 @@
 <template>
+	
 	<!-- 打开弹窗时，禁止滑动页面，必须要在第一个节点 -->
 	<page-meta :page-style="'overflow:' + (login_show ? 'hidden' : 'visible')"></page-meta>
 	<!-- 登录弹窗 -->
@@ -21,12 +22,12 @@
 		<view class="wrap" @click="isLogin">
 			<view class="head_portrait">
 				<image class="cover" :src="headPortrait" mode="widthFix"></image>
-				<image class="vip" src="/static/img/head_vip.png" mode="widthFix"></image>
+				<image class="vip" src="/static/img/head_vip.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
 			</view>
 			<view class="content">
 				<view class="name">
 					{{ nickName }}
-					<image class="vip" src="/static/img/vip2.png" mode="widthFix" lazy-load></image>
+					<image class="vip" src="/static/img/vip2.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
 				</view>
 				<view class="lead">
 					<text class="iconfont icon-shouji"></text>
@@ -119,6 +120,8 @@ const login_show = ref(false);
 const nickName = ref('微信用户');
 // 手机号
 const mobile = ref(null);
+// 是否svip
+const isVip = ref('普通会员');
 // 头像
 const headPortrait = ref('/static/img/head_portrait.png');
 
@@ -154,6 +157,7 @@ const getUserDataFn = async () => {
 	});
 	const res = await getUserData();
 	nickName.value = res.data.nickname;
+	isVip.value = res.data.grade;
 	const avatar = res.data.avatar;
 	if (avatar) {
 		headPortrait.value = avatar;
