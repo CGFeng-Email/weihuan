@@ -70,7 +70,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onUnmounted } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import Search from '../component/search.vue';
 import MenuChild from './menu.vue';
@@ -90,6 +90,7 @@ function swiperChange(e) {
 }
 
 onLoad(() => {
+	// 首页分类
 	uni.$on('classify_params', (e) => {
 		console.log('once - e', e);
 		if (e.id) {
@@ -109,8 +110,13 @@ onLoad(() => {
 			});
 			setTimeout(() => {
 				uni.hideLoading();
-			}, 1000);
+			}, 5000);
 		}
+	});
+
+	// 自提点，去下单
+	uni.$on('delivery_type', (e) => {
+		console.log('去下单', e);
 	});
 });
 
@@ -724,6 +730,7 @@ const company_list = ref([
 	{ id: 2, value: '服务项目' },
 	{ id: 3, value: '礼品卡/代金券' }
 ]);
+
 // 所属公司下标
 const company_index = ref(0);
 // 所属公司change
@@ -746,6 +753,11 @@ function open_search() {
 		url: '/pages/shopping/shopping_search'
 	});
 }
+
+onUnmounted(() => {
+	uni.$off('classify_params');
+	uni.$off('delivery_type');
+});
 </script>
 
 <style lang="scss" scoped>

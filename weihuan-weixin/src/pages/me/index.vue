@@ -1,5 +1,4 @@
 <template>
-	
 	<!-- 打开弹窗时，禁止滑动页面，必须要在第一个节点 -->
 	<page-meta :page-style="'overflow:' + (login_show ? 'hidden' : 'visible')"></page-meta>
 	<!-- 登录弹窗 -->
@@ -43,15 +42,15 @@
 	<!-- 分类 -->
 	<view class="classify">
 		<view class="item" @click="open_order(order_list[1])">
-			<view class="num">3</view>
+			<view class="num">{{ wait_take_order_count || '-' }}</view>
 			<view class="name">待自提订单</view>
 		</view>
 		<view class="item" @click="open_coupon">
-			<view class="num">5</view>
+			<view class="num">{{ coupon_count || '-' }}</view>
 			<view class="name">优惠券</view>
 		</view>
 		<view class="item" @click="open_collect">
-			<view class="num">28</view>
+			<view class="num">{{ collect_count || '-' }}</view>
 			<view class="name">我的收藏</view>
 		</view>
 	</view>
@@ -124,6 +123,12 @@ const mobile = ref(null);
 const isVip = ref('普通会员');
 // 头像
 const headPortrait = ref('/static/img/head_portrait.png');
+// 待自提订单数量
+const wait_take_order_count = ref('-');
+// 已领取优惠卷数量
+const coupon_count = ref('-');
+// 用户收藏订单数量
+const collect_count = ref('-');
 
 // 打开登录弹窗
 function show_login() {
@@ -158,6 +163,9 @@ const getUserDataFn = async () => {
 	const res = await getUserData();
 	nickName.value = res.data.nickname;
 	isVip.value = res.data.grade;
+	wait_take_order_count.value = res.data.wait_take_order_count;
+	coupon_count.value = res.data.coupon_count;
+	collect_count.value = res.data.collect_count;
 	const avatar = res.data.avatar;
 	if (avatar) {
 		headPortrait.value = avatar;

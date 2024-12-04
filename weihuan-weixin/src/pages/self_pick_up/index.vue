@@ -35,7 +35,7 @@
 	<swiper class="store box_border_radius box_shadow" circular :current="current" @change="swiperChange">
 		<block v-for="item in markersList" :key="item.id">
 			<swiper-item class="item">
-				<view class="store_info" @click="open_details">
+				<view class="store_info" @click="open_details(item.id)">
 					<image class="cover" :src="item.image" mode="aspectFill"></image>
 					<view class="content">
 						<view class="store_top">
@@ -49,22 +49,22 @@
 						<view class="store_bottom">
 							<view class="li">
 								<text class="name">联系人：</text>
-								<text class="text">{{ item.store }}</text>
+								<text class="text">{{ item.contact }}</text>
 							</view>
 							<view class="li">
 								<text class="name">联系电话：</text>
-								<text class="text">{{ item.mobile }}</text>
+								<text class="text">{{ item.phone }}</text>
 							</view>
 							<view class="li">
 								<text class="name">营业时间：</text>
-								<text class="text">{{ item.date }}</text>
+								<text class="text">{{ item.open_hours }}</text>
 							</view>
 						</view>
 					</view>
 				</view>
 				<view class="address">
 					<view class="location over2">
-						{{ item.title }}
+						{{ item.address }}
 					</view>
 					<view class="location_btn btn_bg" @click="openLocation(item)">
 						<text class="iconfont icon-dizhi"></text>
@@ -91,132 +91,11 @@ const longitude = ref(null);
 const scale = ref(16);
 const defaultImg = ref('/static/img/map_store.png');
 const iconActive = ref('/static/img/map.png');
-const iconActiveWidth = ref(46);
-const iconActiveHeight = ref(72);
+const iconActiveWidth = ref(38);
+const iconActiveHeight = ref(62);
 
 // 标记点
-const markersList = ref([
-	{
-		id: 3,
-		width: iconActiveWidth.value,
-		height: iconActiveHeight.value,
-		latitude: 23.12463,
-		longitude: 113.36199,
-		title: '广东省广州市天河区黄埔大道中258号',
-		iconPath: iconActive.value,
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '黄埔大道中258号店',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: 7,
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 16,
-			color: '#000'
-		}
-	},
-	{
-		id: 4,
-		width: 28,
-		height: 42,
-		latitude: 23.122686,
-		longitude: 113.36604,
-		title: '广东省广州市天河区黄埔大道中199号',
-		iconPath: '/static/img/map_store.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '黄埔大道中199店',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: 7,
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 16,
-			color: '#000'
-		}
-	},
-	{
-		id: 5,
-		width: 28,
-		height: 42,
-		latitude: 23.12103843540073,
-		longitude: 113.36126043914797,
-		title: '广东省广州市天河区员村西街7号大院',
-		iconPath: '/static/img/map_store.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '员村西街7号大院',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: 7,
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 16,
-			color: '#000'
-		}
-	},
-	{
-		id: 6,
-		width: 28,
-		height: 42,
-		latitude: 23.120406941577873,
-		longitude: 113.35739805816652,
-		title: '广东省广州市天河区员村南街',
-		iconPath: '/static/img/map_store.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '员村南街',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: 7,
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 16,
-			color: '#000'
-		}
-	},
-	{
-		id: 7,
-		width: 28,
-		height: 42,
-		latitude: 23.128132,
-		longitude: 113.365929,
-		title: '广东省广州市天河区黄埔大道员村段',
-		iconPath: '/static/img/map_store.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '黄埔大道员村店',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: 7,
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 16,
-			color: '#000'
-		}
-	}
-]);
+const markersList = ref([]);
 
 // 获取自提点列表
 const get_location = () => {
@@ -228,7 +107,6 @@ const get_location = () => {
 	uni.getLocation({
 		type: 'gcj02',
 		success: async (res) => {
-			console.log('res', res);
 			latitude.value = res.latitude;
 			longitude.value = res.longitude;
 			if (res.latitude && res.longitude) {
@@ -237,9 +115,37 @@ const get_location = () => {
 					latitude: latitude.value
 				};
 				const res = await storeList(params);
-				console.log('自提点列表', res);
 				if (res.code == 1) {
 					mapContent.value = uni.createMapContext('mapId', proxy);
+					if (res.data.length > 0) {
+						const list = res.data.map((item, index) => {
+							item.longitude = Number(item.longitude);
+							item.latitude = Number(item.latitude);
+							if (index == 0) {
+								item.width = iconActiveWidth.value;
+								item.height = iconActiveHeight.value;
+								item.iconPath = iconActive.value;
+							} else {
+								item.width = 28;
+								item.height = 42;
+								item.iconPath = defaultImg.value;
+							}
+
+							item.callout = {
+								content: item.title,
+								display: 'ALWAYS',
+								textAlign: 'center',
+								padding: 7,
+								bgColor: '#fff',
+								borderRadius: 4,
+								fontSize: 14,
+								color: '#000'
+							};
+							return item;
+						});
+						markersList.value = list;
+						console.log('markersList', markersList.value);
+					}
 				}
 			}
 		},
@@ -299,27 +205,41 @@ const openMapApp = (item) => {
 	});
 };
 
+// 自提点列表
 const jump_list = () => {
+	const location = {
+		longitude: longitude.value,
+		latitude: latitude.value
+	};
+
 	uni.navigateTo({
-		url: '/pages/self_pick_up/list'
+		url: `/pages/self_pick_up/list?location=${JSON.stringify(location)}`
 	});
 };
-
-function open_details() {
-	uni.navigateTo({
-		url: '/pages/self_pick_up/details'
-	});
-}
 
 // 打开地图
 const openLocation = (item) => {
+	console.log('item', item);
 	uni.openLocation({
-		latitude: item.latitude,
 		longitude: item.longitude,
-		address: item.title,
-		name: item.callout.content
+		latitude: item.latitude,
+		address: item.address,
+		name: item.title
 	});
 };
+
+// 自提点详情
+function open_details(id) {
+	const params = {
+		id,
+		longitude: longitude.value,
+		latitude: latitude.value
+	};
+
+	uni.navigateTo({
+		url: `/pages/self_pick_up/details?params=${JSON.stringify(params)}`
+	});
+}
 
 onMounted(() => {
 	get_location();

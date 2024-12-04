@@ -56,7 +56,10 @@ const getLocation = async () => {
 		province.value = res.data.ad_info.province;
 		city.value = res.data.ad_info.city;
 		address.value = res.data.ad_info.district;
-		uni.setStorageSync('location', res.data.location);
+		uni.setStorageSync('location', {
+			location: res.data.location,
+			address: res.data.ad_info
+		});
 	}
 	uni.hideLoading();
 };

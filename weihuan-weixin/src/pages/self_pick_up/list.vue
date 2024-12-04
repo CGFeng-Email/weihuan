@@ -16,7 +16,7 @@
 	<view class="location_search" :style="{ top: useMenuButton().topView }">
 		<view class="address" @click="jump_selectAddress">
 			<text class="iconfont icon-dizhi"></text>
-			<text class="text">广州.荔湾</text>
+			<text class="text">{{ address }}</text>
 		</view>
 		<view class="search" @click="open_shopping_search">
 			<text class="iconfont icon-sousuo"></text>
@@ -31,13 +31,13 @@
 	<!-- 列表 -->
 	<view class="list">
 		<block v-for="(item, index) in markersList" :key="index">
-			<view class="item box_border_radius box_shadow" @click="itemClick(item)">
+			<view class="item box_border_radius box_shadow" @click="open_details(item.id)">
 				<view class="store_info">
 					<image class="cover" :src="item.image" mode="aspectFill"></image>
 					<view class="content">
 						<view class="store_top">
 							<view class="title over2">
-								{{ item.callout.content }}
+								{{ item.title }}
 							</view>
 							<view class="distance">
 								{{ item.distance }}
@@ -46,22 +46,22 @@
 						<view class="store_bottom">
 							<view class="li">
 								<text class="name">联系人：</text>
-								<text class="text">{{ item.store }}</text>
+								<text class="text">{{ item.contact }}</text>
 							</view>
 							<view class="li">
 								<text class="name">联系电话：</text>
-								<text class="text">{{ item.mobile }}</text>
+								<text class="text">{{ item.phone }}</text>
 							</view>
 							<view class="li">
 								<text class="name">营业时间：</text>
-								<text class="text">{{ item.date }}</text>
+								<text class="text">{{ item.open_hours }}</text>
 							</view>
 						</view>
 					</view>
 				</view>
 				<view class="address">
 					<view class="location over2">
-						{{ item.title }}
+						{{ item.address }}
 					</view>
 					<view class="location_btn btn_bg" @click.stop="openLocation(item)">
 						<text class="iconfont icon-dizhi"></text>
@@ -77,180 +77,75 @@
 import { onLoad } from '@dcloudio/uni-app';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
+import { storeList } from '@/api/index.js';
+
 // 是否点击item返回
 const isSelect = ref(false);
+const address = ref('');
+const markersList = ref([]);
+const location = ref({});
 
 onLoad((load) => {
 	console.log('load', load);
 	isSelect.value = load.select;
+
+	// 经纬度
+	location.value = JSON.parse(load.location);
+
+	// 地区
+	const getLocation = uni.getStorageSync('location');
+	address.value = getLocation.address.district;
+
+	getStoreList();
 });
 
-// 页面加载
-const loading = ref(false);
+// 获取自提点列表
+const getStoreList = async () => {
+	const res = await storeList(location.value);
+	console.log('获取自提点列表', res);
+	if (res.code == 1) {
+		markersList.value = res.data;
+	}
+};
 
-// 跳转选择收货地址
+// 选择地区
 const jump_selectAddress = () => {
 	uni.navigateTo({
 		url: '/pages/select_address/index'
 	});
 };
 
-// 标记点
-const markersList = ref([
-	{
-		id: 3,
-		width: 28,
-		height: 41,
-		latitude: 23.12463,
-		longitude: 113.36199,
-		store_title: '黄埔生鲜自提点',
-		title: '广东省广州市天河区黄埔大道中258号',
-		iconPath: '/static/img/map.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '黄埔大道中258号店',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: '6',
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 14,
-			color: '#000'
-		}
-	},
-	{
-		id: 4,
-		width: 28,
-		height: 41,
-		latitude: 23.122686,
-		longitude: 113.36604,
-		store_title: '黄埔生鲜自提点',
-		title: '广东省广州市天河区黄埔大道中199号',
-		iconPath: '/static/img/map.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '黄埔大道中199店',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: '6',
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 14,
-			color: '#000'
-		}
-	},
-	{
-		id: 5,
-		width: 28,
-		height: 41,
-		latitude: 23.12103843540073,
-		longitude: 113.36126043914797,
-		store_title: '天河员村生鲜自提点',
-		title: '广东省广州市天河区员村西街7号大院',
-		iconPath: '/static/img/map.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '员村西街7号大院',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: '6',
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 14,
-			color: '#000'
-		}
-	},
-	{
-		id: 6,
-		width: 28,
-		height: 41,
-		latitude: 23.120406941577873,
-		longitude: 113.35739805816652,
-		store_title: '天河员村生鲜自提点',
-		title: '广东省广州市天河区员村南街',
-		iconPath: '/static/img/map.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '员村南街',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: '6',
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 14,
-			color: '#000'
-		}
-	},
-	{
-		id: 7,
-		width: 28,
-		height: 41,
-		latitude: 23.128132,
-		longitude: 113.365929,
-		store_title: '黄埔生鲜自提点',
-		title: '广东省广州市天河区黄埔大道员村段',
-		iconPath: '/static/img/map.png',
-		image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
-		store: '陈先生',
-		mobile: 13636986542,
-		date: '09:00 - 23:00',
-		distance: '200m',
-		callout: {
-			content: '黄埔大道员村店',
-			display: 'ALWAYS',
-			textAlign: 'center',
-			padding: '6',
-			bgColor: '#fff',
-			borderRadius: 8,
-			fontSize: 14,
-			color: '#000'
-		}
-	}
-]);
-
 // 返回上一页
 const returnPage = () => {
 	uni.navigateBack();
 };
 
-// 使用应用内置地图查看位置
+// 打开地图
 const openLocation = (item) => {
+	// console.log('item', item);
+	const longitude = Number(item.longitude);
+	const latitude = Number(item.latitude);
 	uni.openLocation({
-		latitude: item.latitude,
-		longitude: item.longitude,
-		address: item.title,
-		name: item.callout.content
+		longitude,
+		latitude,
+		address: item.address,
+		name: item.title
 	});
 };
 
-// 跳转详情
-const itemClick = (item) => {
-	if (isSelect.value) {
-		uni.$emit('select_store', item);
-		uni.navigateBack();
-	} else {
-		uni.navigateTo({
-			url: '/pages/self_pick_up/details'
-		});
-	}
-};
+// 自提点详情
+function open_details(id) {
+	const params = {
+		id,
+		longitude: location.value.longitude,
+		latitude: location.value.latitude
+	};
+
+	uni.navigateTo({
+		url: `/pages/self_pick_up/details?params=${JSON.stringify(params)}`
+	});
+}
 
 // 跳转搜索商品页
 function open_shopping_search() {
@@ -258,10 +153,6 @@ function open_shopping_search() {
 		url: '/pages/shopping/shopping_search'
 	});
 }
-
-onMounted(() => {
-	loading.value = true;
-});
 </script>
 
 <style>

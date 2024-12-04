@@ -25,7 +25,12 @@
 			<view class="content">
 				<view class="top_content">
 					<view class="price">
-						{{ coupon_data.money }}
+						<text v-if="coupon_data.coupon_type == 1">
+							{{ coupon_data.money }}
+						</text>
+						<text v-else>
+							{{ coupon_data.coupon_type_name }}
+						</text>
 					</view>
 					<view class="tips">
 						{{ coupon_data.title }}
@@ -38,7 +43,7 @@
 						</view>
 						<view class="lead">
 							<text class="name">有效日期：</text>
-							<text class="text">{{ coupon_data.end_time }}</text>
+							<text class="text">{{ coupon_data.end_date }}</text>
 						</view>
 						<view class="lead">
 							<text class="name">使用说明：</text>

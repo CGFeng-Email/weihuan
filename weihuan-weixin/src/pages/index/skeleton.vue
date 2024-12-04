@@ -1,20 +1,3 @@
-<!--
-此文件为开发者工具生成，生成时间: 2024/12/3下午6:37:41
-使用方法：
-在 E:\github\weihuan\weihuan-weixin\dist\dev\mp-weixin\pages\index\index.wxml 引入模板
-
-```
-<import src="index.skeleton.wxml"/>
-<template is="skeleton" wx:if="{{loading}}" />
-```
-
-在 E:\github\weihuan\weihuan-weixin\dist\dev\mp-weixin\pages\index\index.wxss 中引入样式
-```
-@import "./index.skeleton.wxss";
-```
-
-更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
--->
 <template name="skeleton">
 	<view class="sk-container">
 		<view class="data-v-83a5a03c data-v-83a5a03c">
@@ -116,16 +99,7 @@
 </template>
 
 <style>
-/*
-	此文件为开发者工具生成，生成时间: 2024/12/3下午6:37:41
-	
-	在 E:\github\weihuan\weihuan-weixin\dist\dev\mp-weixin\pages\index\index.wxss 中引入样式
-	```
-	@import "./index.skeleton.wxss";
-	```
-	
-	更多详细信息可以参考文档：https://developers.weixin.qq.com/miniprogram/dev/devtools/skeleton.html
-	*/
+
 .sk-transparent {
 	color: transparent !important;
 }

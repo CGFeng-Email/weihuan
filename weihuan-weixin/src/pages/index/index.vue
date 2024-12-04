@@ -1,7 +1,7 @@
 <template>
 	<!-- 打开弹窗时，禁止滑动页面，必须要在第一个节点 -->
 	<page-meta :page-style="'overflow:' + (login_show ? 'hidden' : 'visible')"></page-meta>
-	<Skeleton v-if="login" />
+	<Skeleton v-if="loading" />
 	<view v-else>
 		<!-- 登录弹窗 -->
 		<login-popup :show="login_show" @maskClick="maskClick"></login-popup>
@@ -117,7 +117,7 @@
 		</view>
 
 		<!-- 优惠卷 -->
-		<view class="coupon">
+		<view class="coupon" v-if="coupon_list.length > 0">
 			<swiper class="swiper_coupon" skip-hidden-item-layout autoplay :interval="5000" :duration="1000" circular>
 				<swiper-item class="item" v-for="(item, index) in coupon_list" :key="index">
 					<block v-for="(item2, index2) in item" :key="index2">
@@ -160,7 +160,7 @@ import { getIndexBanner, getUserData, getPhoneLocation, noticeList, couponCenter
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
 // 加载
-const login = ref(true);
+const loading = ref(true);
 const headPortrait = ref('/static/img/head_portrait.png');
 const nickName = ref('微信用户');
 const mobile = ref(null);
@@ -281,7 +281,10 @@ const getLocation = async () => {
 	console.log('定位', res);
 	if (res.code == 1) {
 		address.value = res.data.ad_info.district;
-		uni.setStorageSync('location', res.data.location);
+		uni.setStorageSync('location', {
+			location: res.data.location,
+			address: res.data.ad_info
+		});
 	}
 };
 
@@ -459,9 +462,7 @@ onMounted(async () => {
 		// 优惠卷
 		await getCouponList();
 	}
-	setTimeout(() => {
-		login.value = false;
-	}, 50000000);
+	loading.value = false;
 });
 </script>
 

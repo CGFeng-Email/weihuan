@@ -149,3 +149,12 @@ export const storeList = (params) => {
 		data: params
 	})
 }
+
+// 自提点详情
+export const storeDetails = (params) => {
+	return request({
+		url: '/mini/store/detail',
+		method: 'post',
+		data: params
+	})
+}

@@ -14,82 +14,70 @@
 
 	<view class="main">
 		<view class="banner">
-			<image class="cover" src="https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png" mode="aspectFill"></image>
+			<image class="cover" :src="details.image" mode="aspectFill"></image>
 			<view class="bottom_radius"></view>
 		</view>
 		<view class="store">
 			<view class="head">
-				<text class="title">天河鲜肉生鲜自提点</text>
-				<text class="distance">200m</text>
+				<text class="title">{{ details.title }}</text>
+				<text class="distance">{{ details.distance }}</text>
 			</view>
 			<view class="info">
-				<view class="li">联系人：张先生</view>
-				<view class="li">联系电话：13636986542</view>
-				<view class="li">营业时间：09:00 - 23:00</view>
-				<view class="li">地址：广东省广州市天河区中山大道中18号</view>
+				<view class="li">联系人：{{ details.contact || '-' }}</view>
+				<view class="li">联系电话：{{ details.phone }}</view>
+				<view class="li">营业时间：{{ details.open_hours }}</view>
+				<view class="li">地址：{{ details.address }}</view>
 			</view>
 			<view class="location">
-				<view class="btn_bg location_btn" @click="openLocation(item)">
+				<view class="btn_bg location_btn" @click="openLocation">
 					<text class="iconfont icon-dizhi"></text>
 					<text class="text">导航</text>
 				</view>
 			</view>
 			<view class="line"></view>
-			<view class="lead">
-				属下首家公司“广州炜洹贸易有限公司”成立于1999年，是华南地区优秀的专业的冷冻食品进口商和餐饮服务商。炜洹诚信为本非常重视商业信誉，从不销售品质低劣的产品，在行内一直享有较高的声誉
-				。从2007年至今，连续十四年获得广州市工商局颁发“守合同、重信用企业”称号。
-				在2013年，成立“广州炜洹冷藏供应链服务有限公司”，自建15000吨高标准国际冷库，专业冷链运输车队，车队装备GPS行驶温度实时监控仪，严格执行IS09001，ISO14001，ISO45001全方位质量管理体系，严格执行GB/T27341,GB14881,HACCP食品安全控制体系和GB/T
-				22000,ISO22000,CNCA/CTS0012/CTS0013.CCAA0020/CCAA0021食品安全管理体系,荣获诚信管理体系5星认证，企业信用等级5星认证(AAA级)，售后服务5星认证(五星级)，
-			</view>
-			<image class="cover" src="https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png" mode="widthFix"></image>
-			<view class="lead">
-				在全国率先实行实时库位管理和移动互联网应用管理系统，实时温控数据直接对接商务部全国农产品冷链流通监控平台，通过移动终端无缝对接，接受社会监督，为广大客户提供高质量的安全冷链食品提供保障，为行业打造食品安全冷链供应链新典范
-			</view>
+			<rich-text class="rich_box" type="text" :preview="true" :nodes="content"></rich-text>
 		</view>
 	</view>
 
-	<view style="height: 140rpx"></view>
-	<!-- 底部栏-购物车 -->
-	<view class="fixed_bottom_btn">
-		<view class="btn btn_bg">
-			<button @click="open_classify">去下单</button>
-		</view>
-	</view>
+	<Bottom title="去下单" @bottom_click="open_classify"></Bottom>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-//onPageScroll:滚动事件
-import { onPageScroll } from '@dcloudio/uni-app';
-// 胶囊信息
+import { ref, computed } from 'vue';
+import { onLoad, onPageScroll } from '@dcloudio/uni-app';
 import useMenuButton from '../../hooks/useMenu.js';
+import { storeDetails } from '@/api/index.js';
+import Bottom from '../component/bottom.vue';
 
+const params = ref({});
 // 自提点信息
-const pick_up_store = ref({
-	id: 6,
-	width: 28,
-	height: 41,
-	latitude: 23.120406941577873,
-	longitude: 113.35739805816652,
-	store_title: '天河员村生鲜自提点',
-	title: '广东省广州市天河区员村南街',
-	iconPath: '/static/img/map.png',
-	image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
-	store: '陈先生',
-	mobile: 13636986542,
-	date: '09:00 - 23:00',
-	distance: '200m',
-	callout: {
-		content: '员村南街',
-		display: 'ALWAYS',
-		textAlign: 'center',
-		padding: '6',
-		bgColor: '#fff',
-		borderRadius: 8,
-		fontSize: 14,
-		color: '#000'
-	}
+const details = ref({});
+
+const content = computed(() => {
+	return details.value.content
+		.replace(/<p([\s\w"=\/\.:;]+)((?:(style="[^"]+")))/gi, '<p')
+		.replace(/<p>/gi, '<p style="font-size: 14Px; line-height: 24Px; color: #111;">')
+		.replace(/<img([\s\w"-=\/\.:;]+)((?:(height="[^"]+")))/gi, '<img$1')
+		.replace(/<img([\s\w"-=\/\.:;]+)((?:(width="[^"]+")))/gi, '<img$1')
+		.replace(/<img([\s\w"-=\/\.:;]+)((?:(style="[^"]+")))/gi, '<img$1')
+		.replace(/<img([\s\w"-=\/\.:;]+)((?:(alt="[^"]+")))/gi, '<img$1')
+		.replace(/<img([\s\w"-=\/\.:;]+)/gi, '<img$1 style="width: 100%; border-radius: 8Px;"');
 });
+
+onLoad((load) => {
+	params.value = JSON.parse(load.params);
+	console.log('params', params.value);
+	getStoreDetails();
+});
+
+// 获取自提点详情
+const getStoreDetails = async () => {
+	const res = await storeDetails(params.value);
+	console.log('获取自提点详情', res);
+	if (res.code == 1) {
+		details.value = res.data;
+	}
+};
 
 // 顶部区域滚动
 const scrollTop = ref('white_default');
@@ -106,9 +94,9 @@ onPageScroll((e) => {
 	}
 });
 
-// 跳转分类页面
+// 去下单，跳转分类页
 const open_classify = () => {
-	uni.setStorageSync('pick_up_store', pick_up_store.value);
+	uni.$emit('delivery_type', { delivery_type: 20 });
 
 	uni.switchTab({
 		url: '/pages/classify/index'
@@ -117,11 +105,13 @@ const open_classify = () => {
 
 // 使用应用内置地图查看位置
 const openLocation = () => {
+	const longitude = Number(details.value.longitude);
+	const latitude = Number(details.value.latitude);
 	uni.openLocation({
-		latitude: 23.128132,
-		longitude: 113.365929,
-		address: '广东省广州市天河区中山大道中18号',
-		name: '天河鲜肉生鲜自提点'
+		longitude,
+		latitude,
+		address: details.value.address,
+		name: details.value.title
 	});
 };
 
