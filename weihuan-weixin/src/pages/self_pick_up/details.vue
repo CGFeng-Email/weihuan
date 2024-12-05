@@ -94,9 +94,9 @@ onPageScroll((e) => {
 	}
 });
 
-// 去下单，跳转分类页
+// 跳转分类 (自提)
 const open_classify = () => {
-	uni.$emit('delivery_type', { delivery_type: 20 });
+	uni.$emit('delivery_type', { delivery_type: 1 });
 
 	uni.switchTab({
 		url: '/pages/classify/index'

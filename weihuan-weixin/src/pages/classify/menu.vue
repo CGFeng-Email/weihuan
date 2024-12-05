@@ -25,7 +25,7 @@
 
 <script setup>
 import { defineProps, defineEmits, getCurrentInstance, ref, onMounted, defineExpose } from 'vue';
-const emit = defineEmits(['on-save-ok']);
+const emit = defineEmits(['menuClick']);
 const that = getCurrentInstance();
 const props = defineProps({
 	list: {
@@ -54,14 +54,14 @@ function menuItemClick(index, id) {
 			scrollLeft.value = item.left - 150;
 		}
 	});
-
+	
 	emit('menuClick', { index, id });
 }
 
 // 解决父组件调用不了子组件的问题
 defineExpose({
 	menuItemClick
-})
+});
 
 onMounted(() => {
 	const query = uni.createSelectorQuery().in(that);

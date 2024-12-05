@@ -90,13 +90,23 @@ onLoad((load) => {
 	console.log('load', load);
 	isSelect.value = load.select;
 
-	// 经纬度
-	location.value = JSON.parse(load.location);
-
 	// 地区
 	const getLocation = uni.getStorageSync('location');
 	address.value = getLocation.address.district;
 
+	// 经纬度
+	if (load.location) {
+		// 使用用户精准的经纬度
+		location.value = JSON.parse(load.location);
+	} else {
+		// 使用ip经纬度
+		location.value = {
+			longitude: getLocation.location.lng,
+			latitude: getLocation.location.lat
+		};
+	}
+
+	// 自提点列表
 	getStoreList();
 });
 

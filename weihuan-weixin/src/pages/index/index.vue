@@ -73,7 +73,7 @@
 				<block v-for="(item, index) in classify_list" :key="item.src">
 					<view class="item" @click="open_classify_item(item)" v-if="index < 8">
 						<view class="cover_box">
-							<image class="cover" :src="item.src" mode="widthFix" lazy-load></image>
+							<image class="cover" :src="item.image" mode="widthFix" lazy-load></image>
 						</view>
 						<view class="title">{{ item.title }}</view>
 					</view>
@@ -156,7 +156,7 @@ import Skeleton from './skeleton.vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 // api
-import { getIndexBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon } from '@/api/index.js';
+import { getIndexBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon, classifyList } from '@/api/index.js';
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
 // 加载
@@ -174,6 +174,8 @@ const swiper_list = ref([]);
 const noticeText = ref('');
 // 优惠卷
 const coupon_list = ref([]);
+// 分类
+const classify_list = ref([]);
 
 // 打开登录弹窗
 function show_login() {
@@ -288,6 +290,20 @@ const getLocation = async () => {
 	}
 };
 
+// 获取分类
+const getClassify = async () => {
+	const params = {
+		cate_id: 0,
+		is_recommend: 1,
+		size: 8
+	};
+	const res = await classifyList(params);
+	console.log('分类', res);
+	if (res.code == 1) {
+		classify_list.value = res.data;
+	}
+};
+
 // 获取公告列表
 const getNoticeList = async () => {
 	const res = await noticeList();
@@ -298,60 +314,6 @@ const getNoticeList = async () => {
 		});
 	}
 };
-
-// 分类列表
-const classify_list = ref([
-	{
-		id: 23819289,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify1.png',
-		title: '海鲜鱼类'
-	},
-	{
-		id: 34242664,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify2.png',
-		title: '进口肉类'
-	},
-	{
-		id: 132131244,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify3.png',
-		title: '西式甜品'
-	},
-	{
-		id: 378647269,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify4.png',
-		title: '精品果茶'
-	},
-	{
-		id: 3264978326,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify5.png',
-		title: '新鲜海鲜'
-	},
-	{
-		id: 3671263877,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify6.png',
-		title: '国产肉类'
-	},
-	{
-		id: 3434634327,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify7.png',
-		title: '宴席食材'
-	},
-	{
-		id: 6453571263877,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify8.png',
-		title: '特色小吃'
-	},
-	{
-		id: 43126827368732,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify9.png',
-		title: '薯片零食'
-	},
-	{
-		id: 342424564652,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/classify10.png',
-		title: '特惠饮料'
-	}
-]);
 
 // 推荐列表
 const recommend_list = ref([
@@ -380,15 +342,16 @@ function get_coupon() {
 	});
 }
 
-// 自提点
+// 跳转分类 (自提)
 function open_pickup() {
 	uni.switchTab({
 		url: '/pages/self_pick_up/index'
 	});
 }
 
-// 跳转菜单分类
+// 跳转分类 (物流配送)
 function open_classify() {
+	uni.$emit('delivery_type', { delivery_type: 0 });
 	uni.switchTab({
 		url: '/pages/classify/index'
 	});
@@ -455,6 +418,8 @@ onMounted(async () => {
 	await getLocation();
 	// 公告列表
 	await getNoticeList();
+	// 分类
+	await getClassify();
 	mobile.value = uni.getStorageSync('mobile');
 	if (mobile.value) {
 		// 获取用户信息

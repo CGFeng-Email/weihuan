@@ -158,3 +158,21 @@ export const storeDetails = (params) => {
 		data: params
 	})
 }
+
+// 商品分类
+export const classifyList = (params) => {
+	return request({
+		url: '/mini/goods/getGoodsCate',
+		method: 'get',
+		data: params
+	})
+}
+
+// 商品列表
+export const shoppingList = (params) => {
+	return request({
+		url: '/mini/goods/getList',
+		method: 'post',
+		data: params
+	})
+}

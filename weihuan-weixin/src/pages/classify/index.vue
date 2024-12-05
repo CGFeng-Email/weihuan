@@ -5,67 +5,72 @@
 	</view>
 	<!-- 菜单栏 -->
 	<view class="menu_wrap">
-		<MenuChild ref="MenuChildRef" :list="categoryList" :menu_id="menu_id" :current="menu_index" bgColor="#fff0ef" @menuClick="menuClick"></MenuChild>
+		<MenuChild ref="MenuChildRef" :list="classify_list" :menu_id="menu_id" :current="menu_index" bgColor="#fff0ef" @menuClick="menuClick"></MenuChild>
 	</view>
 	<!-- 顶部区域占位 -->
 	<view style="height: 170rpx"></view>
 	<!-- 主体 -->
 	<swiper class="swiper" :current="swiperIndex" :duration="1000" @change="swiperChange">
-		<block v-for="(item, index) in categoryList" :key="item.id">
-			<swiper-item>
-				<view class="swiper-item">
-					<scroll-view class="left_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive>
-						<block v-for="(item, index) in categoryList" :key="item.id">
-							<view class="item" :class="{ active: categoryIndex == index }" @click="left_menu_item(index, item.id)">
-								<text class="text over1">{{ item.title }}</text>
-								<image class="cover" src="/src/static/img/category_active.png" mode="scaleToFill"></image>
-							</view>
-						</block>
-					</scroll-view>
-
-					<scroll-view class="right_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive>
-						<!-- 分类导航 -->
-						<view class="classify_navigation">
-							<view class="item company">
-								<picker class="picker" mode="selector" :range="company_list" :value="company_index" range-key="value" @change="company_change">
-									<input
-										type="text"
-										class="input"
-										v-model="company_list[company_index].value"
-										disabled
-										placeholder-class="input_placeholder"
-										focus
-										placeholder="请选择开票类型"
-									/>
-								</picker>
-							</view>
-							<view class="item spec">
-								<view class="text">销量</view>
-								<view class="icon">
-									<i class="iconfont icon-shang"></i>
-									<i class="iconfont icon-xiala active"></i>
+		<uni-transition :show="childCategory.length > 0">
+			<block v-for="(item, index) in classify_list" :key="item.id">
+				<swiper-item>
+					<view class="swiper-item">
+						<!-- 分类 -->
+						<scroll-view class="left_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive>
+							<block v-for="(item, index) in childCategory" :key="item.id">
+								<view class="item" :class="{ active: categoryIndex == index }" @click="left_menu_item(index, item.id)">
+									<text class="text over1">{{ item.title }}</text>
+									<image class="cover" src="/src/static/img/category_active.png" mode="scaleToFill"></image>
 								</view>
-							</view>
-							<view class="item spec">
-								<view class="text">价格</view>
-								<view class="icon">
-									<i class="iconfont icon-shang"></i>
-									<i class="iconfont icon-xiala active"></i>
-								</view>
-							</view>
-						</view>
-						<!-- 列表 -->
-						<view class="list">
-							<block v-for="item2 in item.children" :key="item2.id">
-								<Item :item="item2" @itemClick="itemClick"></Item>
 							</block>
+						</scroll-view>
 
-							<view style="height: 20px"></view>
-						</view>
-					</scroll-view>
-				</view>
-			</swiper-item>
-		</block>
+						<!-- 右侧商品 -->
+						<scroll-view class="right_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive>
+							<!-- 分类导航 -->
+							<view class="classify_navigation">
+								<view class="item company">
+									<picker class="picker" mode="selector" :range="company_list" :value="company_index" range-key="value" @change="company_change">
+										<input
+											type="text"
+											class="input"
+											v-model="company_list[company_index].value"
+											disabled
+											placeholder-class="input_placeholder"
+											focus
+											placeholder="请选择开票类型"
+										/>
+									</picker>
+								</view>
+								<view class="item spec">
+									<view class="text">销量</view>
+									<view class="icon">
+										<i class="iconfont icon-shang"></i>
+										<i class="iconfont icon-xiala active"></i>
+									</view>
+								</view>
+								<view class="item spec">
+									<view class="text">价格</view>
+									<view class="icon">
+										<i class="iconfont icon-shang"></i>
+										<i class="iconfont icon-xiala active"></i>
+									</view>
+								</view>
+							</view>
+
+							<!-- 列表 -->
+							<view class="list">
+								<block v-for="item2 in allShoppingList" :key="item2.id">
+									<Item :item="item2" @itemClick="itemClick"></Item>
+								</block>
+
+								<view style="height: 20px"></view>
+							</view>
+						</scroll-view>
+					</view>
+				</swiper-item>
+			</block>
+		</uni-transition>
 	</swiper>
 </template>
 
@@ -75,13 +80,41 @@ import { onLoad } from '@dcloudio/uni-app';
 import Search from '../component/search.vue';
 import MenuChild from './menu.vue';
 import Item from './item.vue';
-
+import Empty from '../component/empty.vue';
+import { classifyList, shoppingList } from '@/api/index.js';
+// swiper下标
 const swiperIndex = ref(0);
+// 一级分类分类id
 const menu_id = ref('');
-const menu_index = ref(0);
-
+// 左侧分类导航栏下标
+const categoryIndex = ref(0);
 // 主体切换
 const MenuChildRef = ref(null);
+// 分页
+const page = ref(1);
+// 条数
+const size = ref(20);
+// 关键词
+const keyword = ref('');
+// 一级分类id
+const cate_id = ref('');
+// 一级分类下标
+const menu_index = ref(0);
+// 一级分类
+const classify_list = ref([]);
+// 二级分类id
+const cate_id_2 = ref('');
+// 二级分类
+const childCategory = ref([]);
+// 商品列表规格 价格升序: 'asc',
+const order_by = ref({
+	shop_price: ''
+});
+// 配送方式 '':全部, 0:配送, 1:自提
+const is_self_take = ref('');
+// 商品列表
+const allShoppingList = ref([]);
+
 function swiperChange(e) {
 	menu_index.value = e.detail.current;
 	menu_id.value = categoryList.value[e.detail.current].id;
@@ -89,15 +122,16 @@ function swiperChange(e) {
 	MenuChildRef.value.menuItemClick(menu_index.value, menu_id.value);
 }
 
-onLoad(() => {
+onLoad(async () => {
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	});
+
 	// 首页分类
 	uni.$on('classify_params', (e) => {
 		console.log('once - e', e);
 		if (e.id) {
-			uni.showLoading({
-				title: '加载中',
-				mask: true
-			});
 			// classifyId.value = e.id;
 			categoryList.value.forEach((item, index) => {
 				if (item.id == e.id) {
@@ -108,9 +142,6 @@ onLoad(() => {
 					MenuChildRef.value.menuItemClick(menu_index.value, menu_id.value);
 				}
 			});
-			setTimeout(() => {
-				uni.hideLoading();
-			}, 5000);
 		}
 	});
 
@@ -118,13 +149,61 @@ onLoad(() => {
 	uni.$on('delivery_type', (e) => {
 		console.log('去下单', e);
 	});
+
+	// 一级分类
+	await getClassify();
+	// 二级分类
+	await getClassify();
+	// 商品列表
+	await getShoppingList();
+
+	uni.hideLoading();
 });
 
+// 一级分类Item
 function menuClick(e) {
-	menu_id.value = e.id;
-	menu_index.value = e.index;
 	swiperIndex.value = e.index;
+	if (menu_index.value == e.index) return;
+	menu_index.value = e.index;
+	getClassify();
 }
+
+// 获取分类
+const getClassify = async () => {
+	// 一级分类id
+	if (classify_list.value.length > 0) {
+		var id = classify_list.value[menu_index.value].id;
+	}
+
+	// cate_id:0 一级分类，传入一级分类id获取二级分类
+	const params = {
+		cate_id: id || 0,
+		size: 20
+	};
+
+	const res = await classifyList(params);
+
+	if (res.code == 1) {
+		if (!id) {
+			console.log('一级分类', res);
+			classify_list.value = res.data;
+		} else {
+			console.log('二级分类', res);
+			childCategory.value = res.data;
+		}
+	}
+};
+
+// 商品列表
+const getShoppingList = async () => {
+	const params = {
+		cate_id: classify_list.value[menu_index.value].id
+	};
+
+	const res = await shoppingList(params);
+	console.log('商品列表', res);
+};
+
 // 分类列表
 const categoryList = ref([
 	{
@@ -709,8 +788,6 @@ const categoryList = ref([
 	}
 ]);
 
-// 左侧分类导航栏下标
-const categoryIndex = ref(0);
 // 左侧分类导航栏
 const left_menu_item = (e, id) => {
 	console.log('id', id);
