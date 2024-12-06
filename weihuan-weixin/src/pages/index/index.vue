@@ -71,7 +71,7 @@
 		<view class="classify">
 			<view class="wrap">
 				<block v-for="(item, index) in classify_list" :key="item.src">
-					<view class="item" @click="open_classify_item(item)" v-if="index < 8">
+					<view class="item" @click="open_classify_item(item.id)" v-if="index < 8">
 						<view class="cover_box">
 							<image class="cover" :src="item.image" mode="widthFix" lazy-load></image>
 						</view>
@@ -371,12 +371,11 @@ function open_classify() {
 }
 
 // 跳转商品分类
-function open_classify_item(e) {
-	console.log(e);
+function open_classify_item(id) {
 	uni.switchTab({
 		url: '/pages/classify/index',
 		success: () => {
-			uni.$emit('classify_params', { id: e.id });
+			uni.$emit('classifyMenu', { id });
 		}
 	});
 }

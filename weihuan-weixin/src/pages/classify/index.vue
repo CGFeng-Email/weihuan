@@ -123,19 +123,21 @@ onLoad(async () => {
 		title: '加载中...',
 		mask: true
 	});
+	// 公共数据
+	await getCommonData();
+	// 一级分类
+	await getClassify();
+	// 二级分类
+	await getClassify();
 
-	// 首页分类
-	uni.$on('classify_params', (e) => {
-		console.log('once - e', e);
+	// 首页跳转的分类
+	uni.$on('classifyMenu', (e) => {
 		if (e.id) {
-			// classifyId.value = e.id;
-			categoryList.value.forEach((item, index) => {
+			classify_list.value.forEach((item, index) => {
 				if (item.id == e.id) {
-					console.log('==', item.id);
-					menu_index.value = index;
-					cate_id.value = e.id;
+					console.log('==');
 					// 调用子组件方法
-					MenuChildRef.value.menuItemClick(menu_index.value, cate_id.value);
+					MenuChildRef.value.menuItemClick(index);
 				}
 			});
 		}
@@ -146,12 +148,6 @@ onLoad(async () => {
 		console.log('去下单', e);
 	});
 
-	// 公共数据
-	await getCommonData();
-	// 一级分类
-	await getClassify();
-	// 二级分类
-	await getClassify();
 	uni.hideLoading();
 });
 
