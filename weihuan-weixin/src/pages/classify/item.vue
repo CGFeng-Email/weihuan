@@ -1,41 +1,44 @@
 <template>
-	<view class="item" @click="itemClick">
-		<view class="cover_box">
-			<image class="cover type3" :src="item.src" mode="aspectFill"></image>
+	<uni-transition :show="Object.keys(item).length > 0" mode-class="fade" :duration="600">
+		<view class="item" @click="itemClick">
+			<view class="cover_box">
+				<image class="cover box_border_radius" :src="item.images[0]" mode="widthFix"></image>
+			</view>
+			<view class="content">
+				<view class="title">
+					{{ item.title }}
+				</view>
+				<view class="specification">
+					<block v-for="item2 in item.tags" :key="item2.id">
+						<image class="cover" :src="item2.image" mode="heightFix" lazy-load></image>
+					</block>
+				</view>
+				<view class="lead over2">
+					{{ item.tips }}
+				</view>
+				<view class="total_price">
+					<view class="price_box">
+						<text class="symbol">￥</text>
+						<text class="price">{{ item.shop_price }}</text>
+					</view>
+					<view class="primary_price">
+						<text class="primary_symbol">原价:</text>
+						<text class="price">￥{{ item.market_price }}</text>
+					</view>
+				</view>
+				<view class="bottom_cart">
+					<view class="cart">
+						<i class="iconfont icon-gouwuche-tianchong"></i>
+					</view>
+				</view>
+			</view>
 		</view>
-		<view class="content">
-			<view class="title">
-				{{ item.title }}
-			</view>
-			<view class="specification">
-				<view class="hot spec">畅销</view>
-				<view class="isPick spec">不可自提</view>
-			</view>
-			<view class="lead over2">
-				{{ item.tips }}
-			</view>
-			<view class="total_price">
-				<view class="price_box">
-					<text class="symbol">￥</text>
-					<text class="price">{{ item.price }}</text>
-				</view>
-				<view class="primary_price">
-					<text class="primary_symbol">原价:</text>
-					<text class="price">￥{{ item.primary_price }}</text>
-				</view>
-			</view>
-			<view class="bottom_cart">
-				<view class="cart">
-					<i class="iconfont icon-gouwuche-tianchong"></i>
-				</view>
-			</view>
-		</view>
-	</view>
+	</uni-transition>
 </template>
 
 <script setup>
 import { defineProps, defineEmits } from 'vue';
-const emit = defineEmits(['on-save-ok']);
+const emit = defineEmits(['itemClick']);
 const props = defineProps({
 	item: {
 		type: Object,
@@ -55,19 +58,17 @@ function itemClick() {
 	background: #fff;
 	border-radius: 10rpx;
 	overflow: hidden;
-	box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
 	height: 250rpx;
+	padding-left: 20rpx;
 
 	.cover_box {
 		width: 190rpx;
 		height: 100%;
 		flex: none;
+		overflow: hidden;
 		.cover {
-			display: block;
 			width: 100%;
-			height: 100%;
-			object-fit: cover;
-			vertical-align: middle;
+			height: auto;
 		}
 	}
 	.content {
@@ -103,6 +104,12 @@ function itemClick() {
 
 			.isPick {
 				background: linear-gradient(83.83deg, #2ac2f2 0%, #0b6ff2 100%);
+			}
+
+			.cover {
+				width: auto;
+				height: 30rpx;
+				margin-right: 20rpx;
 			}
 		}
 

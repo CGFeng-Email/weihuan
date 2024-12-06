@@ -156,7 +156,7 @@ import Skeleton from './skeleton.vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 // api
-import { getIndexBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon, classifyList } from '@/api/index.js';
+import { getIndexBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon, classifyList, commonData } from '@/api/index.js';
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
 // 加载
@@ -315,6 +315,19 @@ const getNoticeList = async () => {
 	}
 };
 
+// 获取公告数据
+const getCommonData = async () => {
+	const res = await commonData();
+	console.log('公共数据', res);
+	if (res.code == 1) {
+		// express_list: 物流公司
+		// hot_search: 热门搜索词
+		// tag_list: 商品标签
+		// organ_list: 商品机构
+		uni.setStorageSync('commonData', res.data);
+	}
+};
+
 // 推荐列表
 const recommend_list = ref([
 	{
@@ -420,6 +433,8 @@ onMounted(async () => {
 	await getNoticeList();
 	// 分类
 	await getClassify();
+	// 公共数据
+	await getCommonData();
 	mobile.value = uni.getStorageSync('mobile');
 	if (mobile.value) {
 		// 获取用户信息

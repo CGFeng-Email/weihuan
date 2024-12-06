@@ -176,3 +176,11 @@ export const shoppingList = (params) => {
 		data: params
 	})
 }
+
+// 公共数据
+export const commonData = () => {
+	return request({
+		url: '/mini/common/getOpts',
+		method: 'post'
+	})
+}

@@ -4,14 +4,21 @@
 		class="menu"
 		:style="{ background: bgColor }"
 		:scroll-x="true"
-		:scroll-into-view="'item' + menu_id"
+		:scroll-into-view="'item' + cate_id"
 		:scroll-left="scrollLeft"
 		:scroll-anchoring="true"
 		:scroll-with-animation="true"
 		:enable-passive="true"
 	>
 		<view class="wrap">
-			<view class="item" :class="current == index ? 'active' : ''" v-for="(item, index) in list" :key="item.id" :id="'item' + item.id" @click="menuItemClick(index, item.id)">
+			<view
+				class="item menu_item"
+				:class="current == index ? 'active' : ''"
+				v-for="(item, index) in list"
+				:key="item.id"
+				:id="'item' + item.id"
+				@click="menuItemClick(index, item.id)"
+			>
 				<view class="cover_box">
 					<image class="cover" :src="item.image" mode="aspectFit"></image>
 				</view>
@@ -24,7 +31,7 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, getCurrentInstance, ref, onMounted, defineExpose } from 'vue';
+import { defineProps, defineEmits, getCurrentInstance, ref, defineExpose, watch, nextTick } from 'vue';
 const emit = defineEmits(['menuClick']);
 const that = getCurrentInstance();
 const props = defineProps({
@@ -40,21 +47,19 @@ const props = defineProps({
 		type: Number,
 		default: 0
 	},
-	menu_id: {
+	cate_id: {
 		type: String,
 		default: ''
 	}
 });
+
+// scroll向左滑动的距离
 const scrollLeft = ref(0);
+// 获取每个item的view
 const listItem = ref([]);
 
 function menuItemClick(index, id) {
-	listItem.value.forEach((item) => {
-		if (item.id == 'item' + id) {
-			scrollLeft.value = item.left - 150;
-		}
-	});
-	
+	scrollLeft.value = listItem.value[index].left - 145;
 	emit('menuClick', { index, id });
 }
 
@@ -63,13 +68,28 @@ defineExpose({
 	menuItemClick
 });
 
-onMounted(() => {
+// 获取每个item的View信息
+const getItemView = () => {
 	const query = uni.createSelectorQuery().in(that);
-	query.selectAll(`.item`).boundingClientRect((data) => {
+	query.selectAll(`.menu_item`).boundingClientRect((data) => {
 		listItem.value = data;
 	});
 	query.exec();
-});
+};
+
+watch(
+	props.list,
+	(newVal) => {
+		if (newVal.length > 0) {
+			nextTick(() => {
+				getItemView();
+			});
+		}
+	},
+	{
+		immediate: true
+	}
+);
 </script>
 
 <style lang="scss" scoped>
@@ -80,7 +100,6 @@ onMounted(() => {
 	.item {
 		flex: none;
 		width: 160rpx;
-		// height: 190rpx;
 		padding: 0 10rpx 20rpx;
 		text-align: center;
 		.cover_box {
