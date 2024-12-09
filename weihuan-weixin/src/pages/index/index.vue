@@ -198,6 +198,7 @@ function maskClick(e) {
 const getUserDataFn = async () => {
 	const res = await getUserData();
 	console.log('用户信息', res);
+	
 	nickName.value = res.data.nickname;
 	isVip.value = res.data.grade;
 	const avatar = res.data.avatar;

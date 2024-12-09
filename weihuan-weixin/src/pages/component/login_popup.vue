@@ -86,6 +86,7 @@ function wx_login() {
 							uni.setStorageSync('openid', reslogin.data.openid);
 							uni.setStorageSync('token', reslogin.data.token);
 							uni.setStorageSync('mobile', reslogin.data.mobile);
+
 							emit('maskClick', { login: 'success' });
 							uni.hideLoading();
 							return;

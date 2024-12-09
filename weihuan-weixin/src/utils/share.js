@@ -27,7 +27,7 @@ export default {
         // 获取加载的页面
         let pages = getCurrentPages(),
             // 获取当前页面的对象
-            view = pages[pages.length - 1];
+        view = pages[pages.length - 1];
         this.share.path = `/${view.route}`;
         
         //转发参数
@@ -40,7 +40,7 @@ export default {
             // 获取当前页面的对象
             view = pages[pages.length - 1];
         // console.log("获取加载的页面", pages);
-        console.log("当前页面的对象", view);
+        // console.log("当前页面的对象", view);
         this.share.path = `/${view.route}`;
         //转发参数
         return this.share;

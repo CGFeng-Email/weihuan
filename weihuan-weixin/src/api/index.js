@@ -184,3 +184,47 @@ export const commonData = () => {
 		method: 'post'
 	})
 }
+
+// 订单详情
+export const orderDetails = (params) => {
+	return request({
+		url: '/mini/goods/detail',
+		method: 'post',
+		data: params
+	})
+}
+
+// 商品规格
+export const shoppingSpecification = (id, mod_id) => {
+	return request({
+		url: `/mini/goods/getGoodsSpec?goods_id=${id}&mod_id=${mod_id}`,
+		method: 'get',
+	})
+}
+
+// 选中的规格获取价格
+export const selectSpecification = async (params) => {
+	return request({
+		url: '/mini/goods/getSpecPrice',
+		method: 'post',
+		data: params
+	})
+}
+
+// 立即下单/购买
+export const immedOrder = async (params) => {
+	return request({
+		url: '/mini/order/buy',
+		method: 'post',
+		data: params
+	})
+}
+
+// 加入购物车
+export const addCart = async (params) => {
+	return request({
+		url: '/mini/cart/add',
+		method: 'post',
+		data: params
+	})
+}

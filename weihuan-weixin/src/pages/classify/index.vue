@@ -262,9 +262,9 @@ const childCategoryItem = (index) => {
 };
 
 // 下单详情
-function itemClick() {
+function itemClick(params) {
 	uni.navigateTo({
-		url: '/pages/shopping/place_an_order'
+		url: `/pages/shopping/place_an_order?id=${params.id}`
 	});
 }
 

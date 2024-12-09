@@ -1,6 +1,6 @@
 <template>
 	<uni-transition :show="Object.keys(item).length > 0" mode-class="fade" :duration="600">
-		<view class="item" @click="itemClick">
+		<view class="item" @click="itemClick(item.id)">
 			<view class="cover_box">
 				<image class="cover box_border_radius" :src="item.images[0]" mode="widthFix"></image>
 			</view>
@@ -46,8 +46,8 @@ const props = defineProps({
 	}
 });
 
-function itemClick() {
-	emit('itemClick');
+function itemClick(id) {
+	emit('itemClick', { id });
 }
 </script>
 

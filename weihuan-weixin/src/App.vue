@@ -26,6 +26,7 @@ export default {
 
 <style lang="scss">
 @import url('/src/static/font/iconfont.css');
+
 view,
 scroll-view {
 	padding: 0;
@@ -122,7 +123,7 @@ image {
 	z-index: 10;
 	background: transparent;
 	transition: 0.3s ease;
-	
+
 	.return_icon {
 		position: absolute;
 		top: 50%;
@@ -139,7 +140,7 @@ button {
 		content: '';
 		display: none;
 	}
-	
+
 	&::before {
 		display: none;
 	}
