@@ -135,6 +135,10 @@ image {
 	}
 }
 
+.location {
+	transition: 0.3s ease;
+}
+
 button {
 	&::after {
 		content: '';

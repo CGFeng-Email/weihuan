@@ -1011,8 +1011,8 @@ onUnmounted(() => {
 			}
 
 			.quantity_number {
-				min-width: 88rpx;
-				padding: 0 24rpx;
+				min-width: 80rpx;
+				text-align: center;
 			}
 		}
 	}
