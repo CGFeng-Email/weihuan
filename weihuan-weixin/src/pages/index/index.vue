@@ -45,6 +45,7 @@
 					<view class="login_btn" @click="show_login">登录/注册</view>
 				</view>
 			</view>
+
 			<!-- 已登录 -->
 			<view class="user" v-else>
 				<view class="wrap" @click="open_personal">
@@ -151,7 +152,8 @@
 <script setup>
 //onPageScroll:滚动事件
 import { onPageScroll } from '@dcloudio/uni-app';
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted, watch, nextTick } from 'vue';
+
 import Skeleton from './skeleton.vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
@@ -159,8 +161,15 @@ import useMenuButton from '../../hooks/useMenu.js';
 import { getIndexBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon, classifyList, commonData } from '@/api/index.js';
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
+// store的state
+import { useState } from '@/store/useState.js';
+// store
+import { useStore } from 'vuex';
+const useStoreFn = useStore();
+
 // 加载
 const loading = ref(true);
+// 默认头像
 const headPortrait = ref('/static/img/head_portrait.png');
 const nickName = ref('微信用户');
 const mobile = ref(null);
@@ -176,6 +185,14 @@ const noticeText = ref('');
 const coupon_list = ref([]);
 // 分类
 const classify_list = ref([]);
+// 用户数据
+const { userData } = useState(['userData']);
+// 监听用户信息
+watch(userData, (newVal, oldVal) => {
+	if (newVal) {
+		getUserDataFn();
+	}
+});
 
 // 打开登录弹窗
 function show_login() {
@@ -198,12 +215,20 @@ function maskClick(e) {
 const getUserDataFn = async () => {
 	const res = await getUserData();
 	console.log('用户信息', res);
-	
-	nickName.value = res.data.nickname;
-	isVip.value = res.data.grade;
-	const avatar = res.data.avatar;
-	if (avatar) {
-		headPortrait.value = avatar;
+	if (res.code == 1) {
+		nextTick(() => {
+			nickName.value = res.data.nickname;
+			isVip.value = res.data.grade;
+			mobile.value = res.data.mobile;
+			const avatar = res.data.avatar;
+			if (avatar) {
+				headPortrait.value = avatar;
+			}
+			if (!userData) {
+				// 存储用户数据
+				useStoreFn.commit('storageUserData', res.data);
+			}
+		});
 	}
 };
 

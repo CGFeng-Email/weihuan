@@ -30,7 +30,7 @@
 			</swiper-item>
 		</swiper>
 		<!-- 数字 -->
-		<view class="serial_number" v-if="details.images.length > 0">
+		<view class="serial_number">
 			<text class="num">0{{ swiper_current }}</text>
 			<text>/0{{ details.images.length }}</text>
 		</view>
@@ -64,26 +64,26 @@
 		</view>
 		<view class="title">{{ details.title }}</view>
 		<view class="specification">
-			<view class="sku" @click="specificationDebounce">
+			<view class="sku" @click="commonSubmit('immed')">
 				<text class="text">{{ specificationIndex != null ? specificationList.title + ': ' + specificationList.children[specificationIndex].title : '请选择规格' }}</text>
 				<uni-icons type="down" size="14" color="#000"></uni-icons>
 			</view>
 		</view>
 		<view class="serve">
-			<view class="name">商品服务</view>
-			<view class="hint">
-				<uni-icons type="checkbox" size="18"></uni-icons>
-				<text class="text">包邮</text>
+			<view class="serve_wrap" v-if="details.goods_service.length > 0">
+				<view class="name">商品服务</view>
+				<view class="hint" v-for="item in details.goods_service" :key="item">
+					<uni-icons type="checkbox" size="18"></uni-icons>
+					<text class="text">{{ item }}</text>
+				</view>
+				<view class="line"></view>
 			</view>
-			<view class="hint">
-				<uni-icons type="checkbox" size="18"></uni-icons>
-				<text class="text">摔坏包赔 / 7天无理由退货 / 商品冷链运输</text>
-			</view>
-			<view class="line"></view>
-			<view class="name">商品优惠</view>
-			<view class="place">
-				<text class="place_btn">下单满减</text>
-				<text class="text">每满1000元减100元</text>
+			<view class="serve_wrap" v-if="details.full_reduce_switch == 1">
+				<view class="name">商品优惠</view>
+				<view class="place">
+					<text class="place_btn">下单满减</text>
+					<text class="text">每满{{ details.full_reduce_list[0].full_price }}元减{{ details.full_reduce_list[0].reduce_price }}元</text>
+				</view>
 			</view>
 		</view>
 	</view>
@@ -103,10 +103,10 @@
 	<!-- 底部栏-购物车 -->
 	<view class="bottom_cart_navigation">
 		<view class="btn">
-			<button @click="addShoppingCart">加入购物车</button>
+			<button @click="commonSubmit('add')">加入购物车</button>
 		</view>
 		<view class="btn">
-			<button @click="specificationDebounce">立即购买</button>
+			<button @click="commonSubmit('immed')">立即购买</button>
 		</view>
 	</view>
 
@@ -145,10 +145,10 @@
 							<text class="name">已售:</text>
 							<text class="price">{{ details.sales_sum }}+</text>
 						</view>
-						<!-- <view class="market_box">
+						<view class="market_box">
 							<text class="name">库存:</text>
-							<text class="price">269</text>
-						</view> -->
+							<text class="price">{{ shoppingStoreCount }}</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -187,15 +187,17 @@
 					<text class="text">门店自提</text>
 				</button>
 			</view>
-			<view class="quantity">
-				<view class="name">数量</view>
-				<view class="quantity_box">
-					<view class="icon" @click="deCrement">
-						<i class="iconfont icon-jianhao"></i>
-					</view>
-					<view class="quantity_number">{{ quantity }}</view>
-					<view class="icon" @click="inCrement">
-						<i class="iconfont icon-jia"></i>
+			<view class="quantity animate">
+				<view class="quantity_wrap" v-if="shoppingStoreCount > 0">
+					<view class="name">数量</view>
+					<view class="quantity_box">
+						<view class="icon" @click="deCrement">
+							<i class="iconfont icon-jianhao"></i>
+						</view>
+						<view class="quantity_number">{{ quantity }}</view>
+						<view class="icon" @click="inCrement">
+							<i class="iconfont icon-jia"></i>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -213,8 +215,14 @@ import List from '@/pages/shopping/list.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
 import { orderDetails, shoppingSpecification, selectSpecification, getUserData, addCart } from '@/api/index.js';
+// 防抖、节流
 import _ from 'underscore';
+// store
+import { useStore } from 'vuex';
+const useStoreFn = useStore();
 
+// 商品id
+const id = ref('');
 // 禁止页面滑动
 const pageMeta = ref(false);
 // 用户手机号
@@ -246,116 +254,38 @@ const deliverySelectIndex = ref(null);
 const specificationRef = ref(null);
 // 下单方式， 添加进购物车 add / 立即购买 immed
 const typeOrder = ref('');
+// 选中的商品库存
+const shoppingStoreCount = ref(0);
+// 推荐商品列表
+const recommentShoppingList = ref([]);
+// 购买商品数量
+const quantity = ref(1);
 
 onLoad(async (load) => {
+	uni.showLoading({
+		title: '加载中...'
+	});
+
 	console.log('load', load);
-	if (load.id) {
-		await getOrderDetails(load.id);
+	id.value = load.id;
+
+	if (id.value) {
+		await getOrderDetails();
+	}
+
+	mobile.value = uni.getStorageSync('mobile');
+	if (mobile.value) {
+		// 获取用户信息
 		await getUserDataFn();
 	}
+
+	uni.hideLoading();
 });
 
 // 轮播切换
 const swiperChange = (e) => {
 	swiper_current.value = e.detail.current + 1;
 };
-
-// 搭配建议商品列表
-const shopping_list = ref([
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: true,
-		price: 130,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 120,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 110,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 100,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 180,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: true,
-		price: 130,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	}
-]);
-
-// 加入购物车
-const addShoppingCart = () => {
-	typeOrder.value = 'add';
-	openSpecificationPopup('add');
-};
-
-// 立即购买
-function openSpecificationPopup(typeOrder = 'immed') {
-	// 打开登录弹窗
-	if (!mobile.value) return show_login();
-	// 下单方式
-	if (typeOrder == 'immed') typeOrder.value = typeOrder;
-	// 打开规格弹窗
-	specificationRef.value.open();
-	// 页面滑动
-	pageMeta.value = true;
-}
-
-// 防抖规格弹窗
-const specificationDebounce = _.debounce(openSpecificationPopup, 100);
 
 // 打开登录弹窗
 function show_login() {
@@ -377,7 +307,7 @@ const maskClick = async (e) => {
 const specificationChange = (i, id) => {
 	if (specificationIndex.value == i) {
 		specificationIndex.value = null;
-		price.value = defaultPrice.value;
+		shoppingStoreCount.value = 0;
 		return;
 	}
 	specificationIndex.value = i;
@@ -393,13 +323,13 @@ const deliveryChange = (index) => {
 	console.log('配送方式', index);
 };
 
-// 购买数量
-const quantity = ref(1);
+// 商品数量 减
 const deCrement = () => {
 	if (quantity.value <= 1) return;
 	quantity.value -= 1;
 };
 
+// 商品上来 加
 const inCrement = () => {
 	quantity.value += 1;
 };
@@ -426,6 +356,11 @@ const isDisabled = computed(() => {
 		}
 	}
 
+	if (shoppingStoreCount.value == 0) flag = true;
+
+	// 库存的数量不能比购买数量高
+	if (shoppingStoreCount.value > 0 && quantity.value > shoppingStoreCount.value) flag = true;
+
 	return flag;
 });
 
@@ -433,22 +368,75 @@ const isDisabled = computed(() => {
 const submitOrder = async () => {
 	// deliverySelectIndex.value == 1 自提，deliverySelectIndex.value == 2 配送
 	if (typeOrder.value == 'immed') {
-		// 跳转订单详情 pages/order/details
-	} else {
-		uni.showToast({
-			title: '加入购物车成功',
-			icon: 'none',
-			mask: true,
-			duration: 2000,
-			success: () => {
-				popup_close();
-			}
+		const params = {
+			delivery_type: deliverySelectIndex.value == 1 ? 20 : 10,
+			buy_goods: [
+				{
+					goods_id: details.value.id,
+					spec_key: specificationList.value.children[specificationIndex.value].id,
+					quantity: quantity.value,
+					specificationTitle: specificationList.value.title,
+					selectSpecificationTitle: specificationList.value.children[specificationIndex.value].title,
+					image: details.value.images[0],
+					price: price.value,
+					title: details.value.title,
+					outPrice: details.value.market_price,
+					storeCount: shoppingStoreCount.value,
+					serve: details.goods_service
+				}
+			]
+		};
+
+		console.log('立即购买', params);
+		// 跳转 确认订单 pages/shopping/confirm_an_order
+		uni.redirectTo({
+			url: `/pages/shopping/confirm_an_order?params=${JSON.stringify(params)}`
 		});
+	} else {
+		const params = {
+			goods_id: details.value.id,
+			spec_key: specificationList.value.children[specificationIndex.value].id,
+			goods_num: quantity.value
+		};
+		const res = await addCart(params);
+		console.log('加入购物车', res);
+		if (res.code == 1) {
+			uni.showToast({
+				title: res.msg,
+				icon: 'none',
+				mask: true,
+				duration: 1500,
+				success: () => {
+					setTimeout(async () => {
+						// 规格下标
+						specificationIndex.value = null;
+						// 配送方式
+						deliverySelectIndex.value = null;
+						// 详情
+						await getOrderDetails();
+						// 关闭弹窗
+						await maskClick();
+					}, 1500);
+				}
+			});
+		}
 	}
 };
 
-// 防抖下单
-const submitOrderDebounce = _.debounce(submitOrder, 500);
+// 立即购买/添加进购物车
+const commonSubmit = (text) => {
+	// 打开登录弹窗
+	if (!mobile.value) return show_login();
+	// 打开规格弹窗
+	specificationRef.value.open();
+	// 页面滑动
+	pageMeta.value = true;
+	// 购买方式
+	typeOrder.value = text;
+};
+
+// 规格确认提交
+const submitOrderDebounce = _.debounce(submitOrder, 200);
 
 // 跳转商品详情
 const jump_order_details = () => {
@@ -473,8 +461,8 @@ onPageScroll((e) => {
 });
 
 // 订单详情
-const getOrderDetails = async (id) => {
-	const res = await orderDetails({ id });
+const getOrderDetails = async () => {
+	const res = await orderDetails({ id: id.value });
 	console.log('订单详情', res);
 	if (res.code == 1) {
 		details.value = res.data;
@@ -509,6 +497,8 @@ const getSelectSpecification = async (id) => {
 	const res = await selectSpecification(params);
 	console.log('选中规格获取价格信息', res);
 	if (res.code == 1) {
+		// 库存
+		shoppingStoreCount.value = res.data.store_count;
 		// 会员等级
 		if (grade.value == '普通会员') {
 			price.value = res.data.market_price;
@@ -523,8 +513,12 @@ const getSelectSpecification = async (id) => {
 const getUserDataFn = async () => {
 	const res = await getUserData();
 	console.log('用户信息', res);
-	mobile.value = res.data.mobile;
-	grade.value = res.data.grade;
+	if (res.code == 1) {
+		mobile.value = res.data.mobile;
+		grade.value = res.data.grade;
+		// 存储用户数据
+		useStoreFn.commit('storageUserData', res.data);
+	}
 };
 
 // 转发分享
@@ -535,8 +529,6 @@ onShareAppMessage((res) => {
 		};
 	}
 });
-
-onMounted(() => {});
 
 // 卸载
 onUnmounted(() => {
@@ -985,10 +977,13 @@ onUnmounted(() => {
 	}
 
 	.quantity {
-		padding: 30rpx 0 40rpx;
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
+		min-height: 40rpx;
+		.quantity_wrap {
+			padding: 30rpx 0 40rpx;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
 		.name {
 			margin-bottom: 0;
 		}

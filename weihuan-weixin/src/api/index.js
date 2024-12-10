@@ -211,8 +211,8 @@ export const selectSpecification = async (params) => {
 	})
 }
 
-// 立即下单/购买
-export const immedOrder = async (params) => {
+// 立即购买
+export const immedPayment = async (params) => {
 	return request({
 		url: '/mini/order/buy',
 		method: 'post',
@@ -224,6 +224,33 @@ export const immedOrder = async (params) => {
 export const addCart = async (params) => {
 	return request({
 		url: '/mini/cart/add',
+		method: 'post',
+		data: params
+	})
+}
+
+// 收藏列表
+export const collectList = async (params) => {
+	return request({
+		url: '/mini/goods/collectList',
+		method: 'post',
+		data: params
+	})
+}
+
+// 最近自提点
+export const nearStore = async (params) => {
+	return request({
+		url: '/mini/store/getRecentStore',
+		method: 'post',
+		data: params
+	})
+}
+
+// 订单支付
+export const OrderPayment = async (params) => {
+	return request({
+		url: '/mini/order/pay',
 		method: 'post',
 		data: params
 	})

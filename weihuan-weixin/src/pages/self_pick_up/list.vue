@@ -31,7 +31,7 @@
 	<!-- 列表 -->
 	<view class="list">
 		<block v-for="(item, index) in markersList" :key="index">
-			<view class="item box_border_radius box_shadow" @click="open_details(item.id)">
+			<view class="item box_border_radius box_shadow" @click="open_details(item)">
 				<view class="store_info">
 					<image class="cover" :src="item.image" mode="aspectFill"></image>
 					<view class="content">
@@ -80,7 +80,7 @@ import useMenuButton from '../../hooks/useMenu.js';
 import { ref } from 'vue';
 import { storeList } from '@/api/index.js';
 
-// 是否点击item返回
+// 是否选择自提点，并且返回
 const isSelect = ref(false);
 const address = ref('');
 const markersList = ref([]);
@@ -145,16 +145,21 @@ const openLocation = (item) => {
 };
 
 // 自提点详情
-function open_details(id) {
-	const params = {
-		id,
-		longitude: location.value.longitude,
-		latitude: location.value.latitude
-	};
+function open_details(item) {
+	if (isSelect.value) {
+		uni.$emit('selectStore', item);
+		uni.navigateBack();
+	} else {
+		const params = {
+			id: item.id,
+			longitude: location.value.longitude,
+			latitude: location.value.latitude
+		};
 
-	uni.navigateTo({
-		url: `/pages/self_pick_up/details?params=${JSON.stringify(params)}`
-	});
+		uni.navigateTo({
+			url: `/pages/self_pick_up/details?params=${JSON.stringify(params)}`
+		});
+	}
 }
 
 // 跳转搜索商品页

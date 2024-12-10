@@ -1,42 +1,48 @@
 <!-- 确认订单 -->
 <template>
-	<page-meta :page-style="'overflow:' + (isScroll ? 'hidden' : 'visible')"></page-meta>
+	<page-meta :page-style="'overflow:' + (couponPopup ? 'hidden' : 'visible')"></page-meta>
+
 	<view class="main">
 		<!-- 配送方式：物流配送 -->
-		<view class="user_location box_shadow box_border_radius" v-if="deliveryIndex == 0" @click="open_location_list">
-			<view class="head" v-if="Object.keys(shipping_address).length == 0">
-				<text class="title">请添加配送地址</text>
-			</view>
-			<view class="content" v-else>
+		<view class="user_location box_shadow box_border_radius" v-if="deliveryType == 10">
+			<view class="content" @click="open_address" v-if="defaultAddress.length > 0 || Object.keys(defaultAddress).length > 0">
 				<view class="head">
-					<text class="title">{{ shipping_address.name }}</text>
-					<text class="phone">{{ userMobileComputed(shipping_address.mobile) }}</text>
+					<text class="title">{{ defaultAddress.consignee }}</text>
+					<text class="phone">{{ defaultAddress.mobile }}</text>
 				</view>
-				<view class="address">{{ shipping_address.address.join('') + shipping_address.content }}</view>
+				<view class="address">{{ defaultAddress.province + defaultAddress.city + defaultAddress.district + defaultAddress.address }}</view>
+			</view>
+
+			<view class="content" @click="open_address" v-else>
+				<view class="head">
+					<text class="title">添加收货地址</text>
+				</view>
 			</view>
 			<uni-icons type="right" size="18"></uni-icons>
 		</view>
+
 		<!-- 配送方式：自提 -->
-		<view class="store box_shadow box_border_radius" @click="open_store" v-else>
+		<view class="store box_shadow box_border_radius" @click="open_storeList" v-if="deliveryType == 20">
 			<view class="head">
-				<image class="cover box_border_radius" :src="pick_up_store.image" mode="aspectFill"></image>
+				<image class="cover box_border_radius" :src="store.image" mode="aspectFill"></image>
 				<view class="content">
 					<view class="store_top">
-						<view class="title">{{ pick_up_store.store_title }}</view>
-						<view class="distance">{{ pick_up_store.distance }}</view>
+						<view class="title">{{ store.title }}</view>
+						<view class="distance"></view>
 					</view>
 					<view class="store_bottom">
 						<view class="left_bottom">
-							<view class="lead">联系人：{{ pick_up_store.store }}</view>
-							<view class="lead">联系电话：{{ pick_up_store.mobile }}</view>
-							<view class="lead">营业时间：{{ pick_up_store.date }}</view>
+							<view class="lead">联系人：{{ store.contact }}</view>
+							<view class="lead">联系电话：{{ store.phone }}</view>
+							<view class="lead">营业时间：{{ store.open_hours }}</view>
 						</view>
 						<uni-icons type="right" size="18"></uni-icons>
 					</view>
 				</view>
 			</view>
+
 			<view class="select_address">
-				<view class="location_name">地址：{{ pick_up_store.title }}</view>
+				<view class="location_name">地址：{{ store.address }}</view>
 				<view class="open_location btn_bg" @click.stop="open_location">
 					<text class="iconfont icon-dizhi"></text>
 					<text class="address_text">导航</text>
@@ -44,52 +50,32 @@
 			</view>
 		</view>
 
-		<!-- 商品 -->
-		<view class="shopping box_shadow box_border_radius">
-			<image class="cover box_border_radius" src="https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/product_banner1.png" mode="aspectFill"></image>
-			<view class="content">
-				<view class="shopping_top">
-					<view class="title over2">盒子慕斯罐小蛋糕</view>
-					<view class="spec">原味*3+雪域牛乳*3</view>
-				</view>
-				<view class="shopping_bottom">
-					<view class="price_box">
-						<text class="symbol">￥</text>
-						<text class="price">{{ priceToFixed(332) }}</text>
-						<text class="primary_price">￥{{ priceToFixed(180) }}</text>
-					</view>
-					<view class="quantity_box">
-						<view class="icon" @click="deCrement">
-							<i class="iconfont icon-jianhao"></i>
-						</view>
-						<view class="quantity_number">{{ quantity }}</view>
-						<view class="icon" @click="inCrement">
-							<i class="iconfont icon-jia"></i>
+		<!-- 商品列表 -->
+		<view class="shopping_list">
+			<view class="shopping box_shadow box_border_radius" v-for="(item, index) in shoppingList" :key="item.id">
+				<image class="cover box_border_radius" :src="item.image" mode="aspectFill"></image>
+				<view class="content">
+					<view class="shopping_top">
+						<view class="title over2">{{ item.title }}</view>
+						<view class="spec">
+							<text>{{ item.specificationTitle }}: {{ item.selectSpecificationTitle }}</text>
+							<text class="store_count">库存: {{ item.storeCount }}</text>
 						</view>
 					</view>
-				</view>
-			</view>
-		</view>
-		<view class="shopping box_shadow box_border_radius">
-			<image class="cover box_border_radius" src="https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/product_banner1.png" mode="aspectFill"></image>
-			<view class="content">
-				<view class="shopping_top">
-					<view class="title over2">盒子慕斯罐小蛋糕</view>
-					<view class="spec">原味*3+雪域牛乳*3</view>
-				</view>
-				<view class="shopping_bottom">
-					<view class="price_box">
-						<text class="symbol">￥</text>
-						<text class="price">{{ priceToFixed(332) }}</text>
-						<text class="primary_price">￥{{ priceToFixed(180) }}</text>
-					</view>
-					<view class="quantity_box">
-						<view class="icon" @click="deCrement">
-							<i class="iconfont icon-jianhao"></i>
+					<view class="shopping_bottom">
+						<view class="price_box">
+							<text class="symbol">￥</text>
+							<text class="price">{{ item.price }}</text>
+							<text class="primary_price">￥{{ item.outPrice }}</text>
 						</view>
-						<view class="quantity_number">{{ quantity }}</view>
-						<view class="icon" @click="inCrement">
-							<i class="iconfont icon-jia"></i>
+						<view class="quantity_box">
+							<view class="icon" @click="deCrement(index)">
+								<i class="iconfont icon-jianhao"></i>
+							</view>
+							<view class="quantity_number">{{ item.quantity }}</view>
+							<view class="icon" @click="inCrement(item.storeCount, index)">
+								<i class="iconfont icon-jia"></i>
+							</view>
 						</view>
 					</view>
 				</view>
@@ -103,10 +89,16 @@
 				<view class="right lead">摔坏包赔 / 7天无理由退货 / 商品冷链运输</view>
 			</view>
 			<view class="li">
-				<view class="name">优惠卷</view>
-				<view class="right lead coupon" @click="open_coupon">
-					<text v-if="coupon_number">-¥{{ priceToFixed(coupon_number) }}</text>
-					<text class="text" v-else>选择优惠卷</text>
+				<view class="name">优惠券</view>
+				<view class="right lead coupon" @click="openCoupon">
+					<view class="text_box" v-if="selectCouponIndex !== null">
+						<text class="select_price" v-if="couponList[selectCouponIndex].coupon_type == 1">-￥{{ couponList[selectCouponIndex].money }}</text>
+						<text class="select_price" v-else>{{ couponList[selectCouponIndex].remark }}</text>
+					</view>
+					<view class="text_box" v-else>
+						<text class="coupon_count">{{ couponCount }}</text>
+						<text class="text">张可用</text>
+					</view>
 					<uni-icons class="icon" type="right" size="13" color="#a2a2a2"></uni-icons>
 				</view>
 			</view>
@@ -128,43 +120,48 @@
 			</view>
 			<view class="li">
 				<view class="price_box">
-					<text class="quantity_num">共1件</text>
+					<text class="quantity_num">共{{ shoppingList.length }}件</text>
 					<text class="price_name">总计:</text>
 					<text class="price_icon">￥</text>
-					<text class="total_price">{{ priceToFixed(282) }}</text>
+					<text class="total_price">{{ totalPrice }}</text>
 				</view>
 			</view>
 		</view>
 	</view>
 
 	<!-- 优惠卷弹窗 -->
-	<uni-popup ref="coupon_popup" type="bottom" :safe-area="false" @maskClick="close_popup">
+	<uni-popup ref="couponPopup" type="bottom" :safe-area="false" @maskClick="hidePopup">
 		<view class="coupon_content">
-			<uni-icons class="close" type="closeempty" size="20"></uni-icons>
+			<uni-icons class="close" type="closeempty" size="20" @click="hidePopup"></uni-icons>
 			<view class="coupon_head">
-				<view class="title" :class="{ active: coupon_is_index == 0 }" @click="switch_coupon(0)">可用优惠卷(3)</view>
-				<view class="title" :class="{ active: coupon_is_index == 1 }" @click="switch_coupon(1)">不可用优惠卷(7)</view>
+				<view class="title" :class="{ active: couponPopupTabsIndex == 0 }" @click="switch_coupon(0)">可用优惠卷({{ couponCount }})</view>
 			</view>
 			<scroll-view class="scroll_view" scroll-y enable-back-to-top scroll-anchoring enhanced enable-passive>
 				<view class="list">
-					<block v-for="(item, index) in 8" :key="index">
-						<view class="item" @click="coupon_item(index, 5)">
+					<block v-for="(item, index) in couponList" :key="item.id">
+						<view class="item" @click="selectCoupon(index)">
 							<view class="left_box">
-								<text class="ide">￥</text>
-								<text class="number">5</text>
+								<!-- 金额 -->
+								<view class="" v-if="item.coupon_type == 1">
+									<text class="ide">￥</text>
+									<text class="number">{{ item.money }}</text>
+								</view>
+								<!-- 满减 -->
+								<text class="price_text" v-else>
+									{{ item.coupon_type_name }}
+								</text>
 							</view>
 							<view class="right_box">
 								<view class="content">
-									<view class="title">双12购物节购物优惠券</view>
-									<view class="date">2024/08/22 至 2024/12/30</view>
-									<view class="lead">使用条件: 适应所有商品</view>
-									<view class="lead">使用说明: 超过有效日期会自动失效</view>
+									<view class="title over1">{{ item.title }}</view>
+									<view class="lead">使用说明: {{ item.remark }}</view>
+									<view class="date">截止有效时间: {{ item.end_date }}</view>
 								</view>
 								<view class="icon">
 									<uni-icons
-										:type="coupon_index == index ? 'checkbox-filled' : 'circle'"
+										:type="selectCouponIndex == index ? 'checkbox-filled' : 'circle'"
 										size="22"
-										:color="coupon_index == index ? '#FF8992' : '#aaa'"
+										:color="selectCouponIndex == index ? '#FF8992' : '#aaa'"
 									></uni-icons>
 								</view>
 							</view>
@@ -173,181 +170,305 @@
 				</view>
 			</scroll-view>
 			<view class="bottom_btn">
-				<button class="btn_bg" @click="coupon_submit">确认</button>
+				<button class="btn_bg" @click="hidePopup">确认</button>
 			</view>
 		</view>
 	</uni-popup>
 
-	<view style="height: 170rpx"></view>
-
-	<view class="fixed_bottom_btn">
-		<view class="btn_bg btn">
-			<button>立即支付</button>
-		</view>
-	</view>
+	<Bottom title="立即支付" @bottom_click="submitOrder"></Bottom>
 </template>
 
 <script setup>
-import { ref, computed, onBeforeUnmount } from 'vue';
-import { onLoad, onShow } from '@dcloudio/uni-app';
-// 配送方式
-const deliveryIndex = ref(0);
-// 配送地址，可以先请求查看是否有默认地址
-const shipping_address = ref({});
-// 自提点，可以先请求获取最近的自提点
-const pick_up_store = ref({
-	id: 6,
-	width: 28,
-	height: 41,
-	latitude: 23.120406941577873,
-	longitude: 113.35739805816652,
-	store_title: '天河员村生鲜自提点',
-	title: '广东省广州市天河区员村南街',
-	iconPath: '/static/img/map.png',
-	image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop2.png',
-	store: '陈先生',
-	mobile: 13636986542,
-	date: '09:00 - 23:00',
-	distance: '200m',
-	callout: {
-		content: '员村南街',
-		display: 'ALWAYS',
-		textAlign: 'center',
-		padding: '6',
-		bgColor: '#fff',
-		borderRadius: 8,
-		fontSize: 14,
-		color: '#000'
-	}
-});
+import { onLoad } from '@dcloudio/uni-app';
+import { ref, onUnmounted } from 'vue';
+import Bottom from '../component/bottom.vue';
+import { getUserData, getShoppingAddress, nearStore, myCoupon, immedPayment, OrderPayment } from '@/api/index.js';
 
-onLoad((load) => {
-	const params = JSON.parse(load.params);
-	console.log('params', params);
-	if (Object.keys(params).length > 0) {
-		// 配送方式
-		deliveryIndex.value = params.deliveryIndex;
-		// 自提点
-		pick_up_store.value = params.pick_up_store;
-	}
-});
+// 页面滚动
+const isScroll = ref(false);
+// openid
+const openid = ref('');
+// 配送方式 10物流配送 20上门自提
+const deliveryType = ref('');
+// 商品列表
+const shoppingList = ref([]);
+// 用户默认收货地址
+const defaultAddress = ref([]);
+// 经纬度
+const location = ref({});
+// 最近自提点
+const store = ref({});
+// 可用优惠券
+const couponList = ref([]);
+// 可用优惠卷
+const couponCount = ref(0);
+// 优惠券弹窗
+const couponPopup = ref(false);
+// 优惠券弹窗tabs下标
+const couponPopupTabsIndex = ref(0);
+// 选中的可用优惠券下标
+const selectCouponIndex = ref(null);
+// 备注
+const textarta = ref('');
+// 条数
+const size = ref(20);
+// 总计价格
+const totalPrice = ref(null);
 
-onShow((show) => {
-	// 选择配送地址
-	uni.$on('location', function (location) {
-		console.log('location', location);
-		shipping_address.value = location;
+onLoad(async (load) => {
+	uni.showLoading({
+		title: '加载中...'
+	});
+
+	openid.value = uni.getStorageSync('openid');
+
+	// 获取定位ip
+	const locationData = uni.getStorageSync('location');
+	location.value = {
+		longitude: locationData.location.lng,
+		latitude: locationData.location.lat
+	};
+
+	// 用户信息
+	await getUserDataFn();
+
+	const { delivery_type, buy_goods, shopping } = JSON.parse(load.params);
+	console.log('delivery_type', delivery_type);
+	console.log('buy_goods', buy_goods);
+	deliveryType.value = delivery_type;
+	shoppingList.value = buy_goods;
+
+	// 自提点
+	if (deliveryType.value == 20) {
+		await getNearStore();
+	}
+
+	// 我的优惠券
+	await getMyCoupon();
+
+	// 获取立即购买数据
+	await getImmetPayment();
+
+	// 选择地址
+	uni.$on('selectAddress', (item) => {
+		console.log('选择地址', item);
+		defaultAddress.value = item;
 	});
 
 	// 选择自提点
-	uni.$on('select_store', function (store) {
-		console.log('store', store);
-		pick_up_store.value = store;
+	uni.$on('selectStore', (item) => {
+		console.log('选择自提点', item);
+		store.value = item;
 	});
+
+	uni.hideLoading();
 });
 
-// 卸载之前
-onBeforeUnmount(() => {
-	uni.$off('location');
-	uni.$off('select_store');
-});
+// 总计价格
+// const totalPrice = computed(() => {
+// 	let num = 0;
 
-// 选择配送地址
-function open_location_list() {
+// 	shoppingList.value.forEach((item) => {
+// 		num += Number(item.price);
+// 	});
+
+// 	// 使用优惠券
+// 	if (couponList.value.length > 0 && selectCouponIndex.value != null) {
+// 		if (couponList.value[selectCouponIndex.value].coupon_type == 1) {
+// 			const couponCount = Number(couponList.value[selectCouponIndex.value].money);
+// 			num = num - couponCount;
+// 		}
+// 	}
+
+// 	return num.toFixed(2);
+// });
+
+// 用户信息
+const getUserDataFn = async () => {
+	const res = await getUserData();
+	console.log('用户信息', res);
+	if (res.code == 1) {
+		// 可用优惠卷
+		couponCount.value = res.data.coupon_count;
+		if (res.data.default_address.length > 0) {
+			// 有默认地址
+			defaultAddress.value = res.data.default_address;
+		} else {
+			// 没有默认地址，获取地址列表
+			const addressList = await getShoppingAddress();
+			console.log('地址列表', addressList);
+			if (addressList.code == 1 && addressList.data.lists.length > 0) {
+				defaultAddress.value = addressList.data.lists[0];
+			}
+		}
+	}
+};
+
+// 获取最近自提点
+const getNearStore = async () => {
+	const res = await nearStore(location.value);
+	console.log('最近自提点', res);
+	if (res.code == 1) {
+		store.value = res.data;
+	}
+};
+
+// 获取我的优惠券
+const getMyCoupon = async () => {
+	const res = await myCoupon({ size: size.value });
+	console.log('获取我的优惠券', res);
+	couponList.value = res.data.lists;
+};
+
+// 跳转添加收货地址
+const open_address = () => {
 	uni.navigateTo({
 		url: `/pages/address/index?select=${true}`
 	});
-}
+};
 
 // 跳转自提点列表
-function open_store() {
+const open_storeList = () => {
 	uni.navigateTo({
 		url: `/pages/self_pick_up/list?select=${true}`
 	});
-}
+};
 
 // 自提点地图，选择地址
 const open_location = () => {
+	const longitude = Number(store.value.longitude);
+	const latitude = Number(store.value.latitude);
 	uni.openLocation({
-		latitude: pick_up_store.value.latitude,
-		longitude: pick_up_store.value.longitude,
-		address: pick_up_store.value.title,
-		name: pick_up_store.value.store_title
+		longitude,
+		latitude,
+		name: store.value.title,
+		address: store.value.address
 	});
 };
 
-// 手机号码加密
-const userMobileComputed = computed(() => {
-	return (e) => {
-		const phone = String(e);
-		return phone.substr(0, 3) + '****' + phone.substring(7);
+// 商品数量 减
+const deCrement = (index) => {
+	if (shoppingList.value[index].quantity > 1) {
+		shoppingList.value[index].quantity -= 1;
+		getImmetPayment();
+	}
+};
+
+// 商品数量 加
+const inCrement = (storeCount, index) => {
+	if (shoppingList.value[index].quantity < storeCount) {
+		shoppingList.value[index].quantity += 1;
+		getImmetPayment();
+	}
+};
+
+// 打开优惠卷弹窗
+const openCoupon = () => {
+	isScroll.value = true;
+	couponPopup.value.open();
+};
+
+// 关闭优惠券弹窗
+const hidePopup = () => {
+	isScroll.value = false;
+	couponPopup.value.close();
+};
+
+// 选择优惠卷
+const selectCoupon = (index) => {
+	if (selectCouponIndex.value == index) {
+		selectCouponIndex.value = null;
+		return getImmetPayment();
+	}
+	selectCouponIndex.value = index;
+	console.log('selectCouponIndex', selectCouponIndex.value);
+	getImmetPayment();
+};
+
+// 立即支付
+const submitOrder = async () => {
+	// 获取支付订单
+	const res = await getImmetPayment(0);
+	console.log('立即支付', res);
+	if (res.code == 1) {
+		// 订单支付
+		const params = {
+			is_settle: 0,
+			pay_type: 20,
+			order_id: res.data.order_id,
+			openid: openid.value
+		};
+
+		const res2 = await OrderPayment(params);
+		console.log('订单支付', res2);
+		if (res2.code == 1) {
+			// 微信支付
+			await wxPayment();
+		}
+	}
+};
+
+// 获取立即购买数据
+// isSettle:1 任何修改, isSettle:0 去支付
+const getImmetPayment = async (isSettle = 1) => {
+	// 规格列表
+	const list = shoppingList.value.map((item) => {
+		return {
+			goods_id: item.goods_id,
+			spec_key: item.spec_key,
+			goods_num: item.quantity
+		};
+	});
+	console.log('list', list);
+
+	const params = {
+		delivery_type: deliveryType.value,
+		address_id: defaultAddress.value.id || '',
+		store_id: store.value.id || '',
+		coupon_id: selectCouponIndex.value != null ? couponList.value[selectCouponIndex.value].id : '',
+		is_settle: isSettle,
+		buy_goods: list,
+		buyer_remark: textarta.value
 	};
-});
 
-// 计算属性金额后面补.00
-const priceToFixed = computed(() => {
-	return (e) => {
-		const priceNumber = e + '.00';
-		return priceNumber;
-	};
-});
+	console.log('params', params);
 
-// 购买数量
-const quantity = ref(1);
-const deCrement = () => {
-	if (quantity.value <= 1) return;
-	quantity.value -= 1;
-};
-const inCrement = () => {
-	quantity.value += 1;
+	const res = await immedPayment(params);
+
+	console.log('获取立即购买数据', res);
+
+	if (res.code == 1) {
+		totalPrice.value = res.data.pay_price;
+	}
+
+	if (isSettle == 0) return res;
 };
 
-// 电子邮箱
-const email = ref('');
-const textarta = ref('');
-const emailInput = (e) => {
-	console.log('e', e);
-};
-
-// 弹窗优惠卷
-const isScroll = ref(false);
-const coupon_is_index = ref(0);
-const coupon_index = ref(null);
-const coupon_number = ref(null);
-const coupon_popup = ref(null);
-function switch_coupon(i) {
-	uni.showLoading({
-		title: '加载中',
-		mask: true,
-		success: () => {
-			setTimeout(function () {
-				coupon_index.value = null;
-				coupon_is_index.value = i;
-				uni.hideLoading();
-			}, 1000);
+// 微信支付
+const wxPayment = () => {
+	return;
+	// 仅作为示例，非真实参数信息。
+	uni.requestPayment({
+		provider: 'wxpay',
+		timeStamp: String(Date.now()),
+		nonceStr: 'A1B2C3D4E5',
+		package: 'prepay_id=wx20180101abcdefg',
+		signType: 'MD5',
+		paySign: '',
+		success: function (res) {
+			console.log('success:' + JSON.stringify(res));
+		},
+		fail: function (err) {
+			console.log('fail:' + JSON.stringify(err));
 		}
 	});
-}
-function coupon_item(i, price) {
-	if (coupon_index.value == i) {
-		coupon_index.value = null;
-		coupon_number.value = null;
-		return;
-	}
-	coupon_index.value = i;
-	coupon_number.value = price;
-}
-function coupon_submit() {
-	close_popup();
-}
-function open_coupon() {
-	isScroll.value = true;
-	coupon_popup.value.open();
-}
-function close_popup() {
-	isScroll.value = false;
-	coupon_popup.value.close();
-}
+};
+
+// 卸载之前，清除跨页面监听事件
+onUnmounted(() => {
+	uni.$off('selectAddress');
+	uni.$off('selectStore');
+});
 </script>
 
 <style>
@@ -460,12 +581,13 @@ page {
 
 			.phone {
 				font-size: 26rpx;
-				color: #919191;
 				padding-left: 20rpx;
+				font-weight: 600;
 			}
 		}
 		.address {
-			font-size: 26rpx;
+			font-size: 28rpx;
+			line-height: 38rpx;
 			color: #919191;
 			margin-top: 10rpx;
 		}
@@ -506,6 +628,10 @@ page {
 				font-size: 24rpx;
 				color: #acacac;
 				padding-top: 10rpx;
+			}
+
+			.store_count {
+				padding-left: 20rpx;
 			}
 		}
 
@@ -577,7 +703,8 @@ page {
 			flex: 1;
 		}
 		.lead {
-			font-size: 26rpx;
+			text-align: right;
+			font-size: 24rpx;
 			line-height: 36rpx;
 			color: #a2a2a2;
 		}
@@ -587,6 +714,21 @@ page {
 			color: #ff0000;
 			font-weight: 600;
 			font-size: 30rpx;
+			display: flex;
+			align-items: center;
+			justify-content: flex-end;
+
+			.text_box {
+				display: flex;
+				align-items: center;
+			}
+
+			.coupon_count {
+				color: #000;
+				font-size: 26rpx;
+				font-weight: 600;
+				padding: 0 4rpx;
+			}
 
 			.text {
 				color: #a2a2a2;
@@ -596,6 +738,13 @@ page {
 
 			.icon {
 				margin-left: 6rpx;
+			}
+
+			.select_price {
+				olor: #ff0000;
+				font-size: 24rpx;
+				font-weight: 600;
+				padding: 0 4rpx;
 			}
 		}
 
@@ -736,21 +885,27 @@ page {
 					color: #ff0000;
 				}
 				.number {
-					font-size: 50rpx;
+					font-size: 36rpx;
+					font-weight: bold;
+					color: #ff0000;
+				}
+
+				.price_text {
+					font-size: 32rpx;
 					font-weight: bold;
 					color: #ff0000;
 				}
 			}
 			.right_box {
 				flex: 1;
-				padding: 10rpx 20rpx;
+				padding: 30rpx 20rpx;
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
 				.content {
 					flex: 1;
 					.title {
-						font-size: 30rpx;
+						font-size: 32rpx;
 						font-weight: bold;
 						color: #000;
 						line-height: 40rpx;
@@ -759,13 +914,12 @@ page {
 						font-size: 24rpx;
 						line-height: 36rpx;
 						color: #aaaaaa;
-						padding: 5rpx 0;
 					}
 					.lead {
 						font-size: 24rpx;
 						line-height: 36rpx;
 						color: #aaaaaa;
-						padding: 5rpx 0;
+						padding: 10rpx 0;
 					}
 				}
 

@@ -23,7 +23,7 @@
 		</block>
 	</view>
 
-	<Empty tips="暂无收货地址" v-else />
+	<Empty tips="添加收货地址" v-else />
 
 	<Bottom title="新增地址" @bottom_click="open_add_address" />
 </template>
@@ -35,7 +35,7 @@ import Bottom from '../component/bottom.vue';
 import Empty from '../component/empty.vue';
 import { getShoppingAddress } from '@/api/index.js';
 
-// 是否点击item返回
+// 选择地址
 const isSelect = ref(false);
 
 // 收货地址
@@ -44,8 +44,7 @@ const shoppingList = ref([]);
 // 点击item
 function itemClick(item, index) {
 	if (isSelect.value) {
-		isSelect.value = false;
-		uni.$emit('location', item);
+		uni.$emit('selectAddress', item);
 		uni.navigateBack();
 	}
 }
