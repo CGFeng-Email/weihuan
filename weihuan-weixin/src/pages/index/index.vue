@@ -139,9 +139,9 @@
 		<!-- 推荐 -->
 		<view class="recommend">
 			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
-				<block v-for="item in recommend_list" :key="item.src">
-					<swiper-item class="item" @click="open_shopping_details">
-						<image class="cover" :src="item.src" mode="aspectFit"></image>
+				<block v-for="item in recommendBannerList" :key="item.src">
+					<swiper-item class="item" @click="open_shopping_details(item.id)">
+						<image class="cover" :src="item.thumb" mode="aspectFit"></image>
 					</swiper-item>
 				</block>
 			</swiper>
@@ -158,7 +158,7 @@ import Skeleton from './skeleton.vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 // api
-import { getIndexBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon, classifyList, commonData } from '@/api/index.js';
+import { getBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon, classifyList, commonData } from '@/api/index.js';
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
 // store的state
@@ -187,6 +187,9 @@ const coupon_list = ref([]);
 const classify_list = ref([]);
 // 用户数据
 const { userData } = useState(['userData']);
+// 推荐列表
+const recommendBannerList = ref([]);
+
 // 监听用户信息
 watch(userData, (newVal, oldVal) => {
 	if (newVal) {
@@ -297,10 +300,19 @@ const open_coupon_details = (item) => {
 };
 
 // 首页轮播图
-const getSwiperBanner = async () => {
-	const res = await getIndexBanner();
+const getSwiperBanner = async (type = 1) => {
+	const params = {
+		pos_type: type
+	};
+	const res = await getBanner(params);
 	console.log('banner', res);
-	swiper_list.value = res.data.lists;
+	if (res.code == 1) {
+		if (type == 1) {
+			swiper_list.value = res.data.lists;
+		} else {
+			recommendBannerList.value = res.data.lists;
+		}
+	}
 };
 
 // 获取定位ip
@@ -354,16 +366,6 @@ const getCommonData = async () => {
 	}
 };
 
-// 推荐列表
-const recommend_list = ref([
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/recommend1.png'
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/recommend2.png'
-	}
-]);
-
 // 跳转选择收货地址
 const jump_selectAddress = () => {
 	uni.navigateTo({
@@ -413,10 +415,11 @@ function open_notice() {
 	});
 }
 
-// 跳转推荐
-function open_shopping_details() {
+// 热门推荐 跳转商品下单
+function open_shopping_details(id) {
+	if (!id) return;
 	uni.navigateTo({
-		url: '/pages/shopping/place_an_order'
+		url: `/pages/shopping/place_an_order?id=${id}`
 	});
 }
 
@@ -460,6 +463,8 @@ onMounted(async () => {
 	await getClassify();
 	// 公共数据
 	await getCommonData();
+	// 热门推荐
+	await getSwiperBanner(2);
 	mobile.value = uni.getStorageSync('mobile');
 	if (mobile.value) {
 		// 获取用户信息

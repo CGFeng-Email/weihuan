@@ -3,38 +3,23 @@
 	<!-- 列表 -->
 	<view class="list">
 		<block v-for="item in list" :key="item.src">
-			<view class="item" v-if="item.type == 'type1'" @click="itemClick">
-				<uni-transition mode-class="slide-bottom" :show="item ? true : false">
-					<view class="item_wrap"></view>
-					<view class="cover_box">
-						<image class="cover type1" :src="item.src" mode="aspectFill"></image>
-					</view>
-				</uni-transition>
-			</view>
-			<view class="item item3" v-else-if="item.type == 'type3'" @click="itemClick">
+			<view class="item" @click="debounceClick(item.id)">
 				<uni-transition mode-class="slide-bottom" :show="item ? true : false">
 					<view class="cover_box">
-						<image class="cover type3" :src="item.src" mode="aspectFill"></image>
-					</view>
-				</uni-transition>
-			</view>
-			<view class="item" v-else @click="itemClick">
-				<uni-transition mode-class="slide-bottom" :show="item ? true : false">
-					<view class="cover_box">
-						<image class="cover" :src="item.src" mode="aspectFill"></image>
+						<image class="cover" :src="item.images[0]" mode="widthFix"></image>
 					</view>
 					<view class="content">
-						<view class="title">
+						<view class="title over1">
 							{{ item.title }}
 						</view>
 						<view class="specification">
-							<view class="hot spec">畅销</view>
-							<view class="isPick spec">不可自提</view>
+							<block v-for="item2 in item.tags" :key="item2.id">
+								<image class="cover" :src="item2.image" mode="heightFix" lazy-load></image>
+							</block>
 						</view>
 						<view class="bottom_cart">
 							<view class="left">
-								<view class="tips">{{ item.tips }}</view>
-								<view class="tips_location">配送至{{ item.location }}</view>
+								<view class="tips">{{ item.cate_name }}</view>
 							</view>
 							<view class="cart">
 								<i class="iconfont icon-gouwuche-tianchong"></i>
@@ -43,11 +28,11 @@
 						<view class="total_price">
 							<view class="price_box">
 								<text class="symbol">￥</text>
-								<text class="price">{{ priceToFixed(item.price) }}</text>
+								<text class="price">{{ item.shop_price }}</text>
 							</view>
 							<view class="primary_price">
 								<text class="primary_symbol">原价:</text>
-								<text class="price">￥{{ item.primary_price }}</text>
+								<text class="price">￥{{ item.market_price }}</text>
 							</view>
 						</view>
 					</view>
@@ -57,26 +42,26 @@
 	</view>
 </template>
 
-<script>
-export default {
-	props: {
-		list: {
-			type: Array,
-			default: []
-		}
-	},
-	methods: {
-		// 计算属性金额后面补.00
-		priceToFixed(e) {
-			const priceNumber = e + '.00';
-			return priceNumber;
-		},
-		// 点击item
-		itemClick(e) {
-			this.$emit('itemClick', e);
-		}
+<script setup>
+import { ref, defineProps, defineEmits } from 'vue';
+import _ from 'underscore';
+
+const id = ref('');
+const emit = defineEmits(['itemClick']);
+
+const props = defineProps({
+	list: {
+		type: Array,
+		default: []
 	}
+});
+
+const returnClick = (id) => {
+	emit('itemClick', id);
 };
+
+const debounceClick = _.debounce(returnClick, 300);
+
 </script>
 
 <style lang="scss" scoped>
@@ -86,7 +71,6 @@ export default {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
-	background: #fbfbfb;
 
 	.item {
 		width: calc(50% - 10rpx);
@@ -94,25 +78,18 @@ export default {
 		background: #fff;
 		border-radius: 10rpx;
 		box-shadow: 0 0 10rpx rgba(0, 0, 0, 0.1);
+		overflow: hidden;
 
 		.cover_box {
 			.cover {
 				display: block;
 				width: 100%;
-				height: 336rpx;
-				object-fit: cover;
-			}
-			.type1 {
-				height: 634rpx;
-			}
-
-			.type3 {
-				height: 276rpx;
+				overflow: hidden;
 			}
 		}
 
 		.content {
-			padding: 18rpx;
+			padding: 10rpx 18rpx;
 			.title {
 				font-size: 26rpx;
 				color: #000;
@@ -125,8 +102,8 @@ export default {
 				align-items: center;
 				padding-top: 10rpx;
 				.spec {
-					height: 34rpx;
-					line-height: 34rpx;
+					height: 30rpx;
+					line-height: 30rpx;
 					border-radius: 4rpx;
 					margin-right: 10rpx;
 					padding: 0 20rpx;
@@ -143,6 +120,12 @@ export default {
 				.isPick {
 					background: linear-gradient(83.83deg, #2ac2f2 0%, #0b6ff2 100%);
 				}
+
+				.cover {
+					width: auto;
+					height: 30rpx;
+					margin-right: 20rpx;
+				}
 			}
 
 			.total_price {
@@ -150,7 +133,8 @@ export default {
 				display: flex;
 				align-items: center;
 				.price_box {
-					color: #fc7600;
+					// color: #fc7600;
+					color: #f00;
 					font-weight: 600;
 					font-size: 36rpx;
 					.symbol {
@@ -179,7 +163,6 @@ export default {
 						font-size: 24rpx;
 						color: #4a4a4a;
 						line-height: 34rpx;
-						padding-bottom: 10rpx;
 					}
 					.tips_location {
 						font-size: 24rpx;

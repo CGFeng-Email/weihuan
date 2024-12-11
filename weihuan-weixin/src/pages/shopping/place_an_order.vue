@@ -56,7 +56,7 @@
 					<uni-icons type="redo" size="22"></uni-icons>
 					<view class="text">分享</view>
 				</button>
-				<view class="box">
+				<view class="box" @click="switchCollect">
 					<uni-icons :type="details.is_collect ? 'star-filled' : 'star'" size="22" :color="details.is_collect ? '#ff0000' : '#565656'"></uni-icons>
 					<view class="text">收藏</view>
 				</view>
@@ -78,11 +78,11 @@
 				</view>
 				<view class="line"></view>
 			</view>
-			<view class="serve_wrap" v-if="details.full_reduce_switch == 1">
+			<view class="serve_wrap" v-if="details.full_reduce_list.length > 0">
 				<view class="name">商品优惠</view>
-				<view class="place">
+				<view class="place" v-for="item in details.full_reduce_list" :key="item.full_price">
 					<text class="place_btn">下单满减</text>
-					<text class="text">每满{{ details.full_reduce_list[0].full_price }}元减{{ details.full_reduce_list[0].reduce_price }}元</text>
+					<text class="text">每满{{ item.full_price }}减{{ item.reduce_price }}</text>
 				</view>
 			</view>
 		</view>
@@ -94,10 +94,10 @@
 	<!-- 搭配建议 -->
 	<view class="match">
 		<view class="btn btn_bg">
-			<view class="text">搭配建议</view>
+			<view class="text">热门推荐</view>
 		</view>
 
-		<List :list="shopping_list" @itemClick="jump_order_details"></List>
+		<List :list="hotRecommentList" @itemClick="hotRecommentItem"></List>
 	</view>
 
 	<!-- 底部栏-购物车 -->
@@ -214,7 +214,7 @@ import { onLoad, onPageScroll, onShareAppMessage } from '@dcloudio/uni-app';
 import List from '@/pages/shopping/list.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
-import { orderDetails, shoppingSpecification, selectSpecification, getUserData, addCart } from '@/api/index.js';
+import { orderDetails, shoppingSpecification, selectSpecification, getUserData, addCart, isCollect, shoppingList } from '@/api/index.js';
 // 防抖、节流
 import _ from 'underscore';
 // store
@@ -260,6 +260,14 @@ const shoppingStoreCount = ref(0);
 const recommentShoppingList = ref([]);
 // 购买商品数量
 const quantity = ref(1);
+// 页码
+const page = ref(1);
+// 每页显示的条数
+const size = ref(10);
+// 总页数
+const totalPage = ref(0);
+// 热门推荐列表
+const hotRecommentList = ref([]);
 
 onLoad(async (load) => {
 	uni.showLoading({
@@ -270,6 +278,7 @@ onLoad(async (load) => {
 	id.value = load.id;
 
 	if (id.value) {
+		// 详情数据
 		await getOrderDetails();
 	}
 
@@ -278,6 +287,9 @@ onLoad(async (load) => {
 		// 获取用户信息
 		await getUserDataFn();
 	}
+
+	// 热门推荐
+	await getHotRecommend();
 
 	uni.hideLoading();
 });
@@ -438,13 +450,6 @@ const commonSubmit = (text) => {
 // 规格确认提交
 const submitOrderDebounce = _.debounce(submitOrder, 200);
 
-// 跳转商品详情
-const jump_order_details = () => {
-	uni.navigateTo({
-		url: '/pages/shopping/place_an_order'
-	});
-};
-
 // 顶部区域滚动
 const scrollTop = ref('white_default');
 onPageScroll((e) => {
@@ -519,6 +524,43 @@ const getUserDataFn = async () => {
 		// 存储用户数据
 		useStoreFn.commit('storageUserData', res.data);
 	}
+};
+
+// 添加收藏，取消收藏
+const switchCollect = async () => {
+	const params = {
+		id: id.value,
+		type: details.value.is_collect ? 0 : 1
+	};
+	console.log('params', params);
+	const res = await isCollect(params);
+	console.log('切换收藏', res);
+
+	if (res.code == 1) {
+		getOrderDetails();
+	}
+};
+
+// 热门推荐
+const getHotRecommend = async () => {
+	const params = {
+		page: page.value,
+		size: size.value,
+		is_recommend: 1
+	};
+	const res = await shoppingList(params);
+	console.log('推荐商品', res);
+	if (res.code == 1) {
+		totalPage.value = res.data.page_no;
+		hotRecommentList.value = res.data.lists;
+	}
+};
+
+// 热门推荐点击
+const hotRecommentItem = (id) => {
+	uni.redirectTo({
+		url: `/pages/shopping/place_an_order?id=${id}`
+	});
 };
 
 // 转发分享
@@ -689,6 +731,7 @@ onUnmounted(() => {
 		border-radius: 30rpx;
 		box-shadow: 0 0 20rpx #a5a5a529;
 		padding: 30rpx;
+		margin-bottom: 30rpx;
 		.name {
 			font-size: 30rpx;
 			color: #434343;

@@ -64,6 +64,10 @@ import { onLoad } from '@dcloudio/uni-app';
 import bottomVue from '../component/bottom.vue';
 import { imageBase64 } from '@/hooks/useTool.js';
 import { getUserData, uploadImg, editUserData } from '@/api/index.js';
+// store
+import { useStore } from 'vuex';
+const useStoreFn = useStore();
+
 const headPortrait = ref('/static/img/head_portrait.png');
 const nickName = ref('微信用户');
 const userName = ref(null);
@@ -116,17 +120,20 @@ const bottom_click = async () => {
 
 	uni.hideLoading();
 
-	uni.showToast({
-		title: '修改成功',
-		icon: 'none',
-		mask: true,
-		success: () => {
-			setTimeout(() => {
-				uni.$emit('meLoad');
-				uni.navigateBack();
-			}, 1500);
-		}
-	});
+	if (res.code == 1) {
+		
+		// 存储用户数据
+		useStoreFn.commit('storageUserData', {
+			nickname: nickName.value,
+			avatar: headPortrait.value
+		});
+		
+		uni.showToast({
+			title: '修改成功',
+			icon: 'none',
+			mask: true
+		});
+	}
 };
 
 onLoad(() => {

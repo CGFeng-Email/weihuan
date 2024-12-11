@@ -1,10 +1,11 @@
 import request from "./request";
 
 // 首页轮播图
-export const getIndexBanner = () => {
+export const getBanner = (params) => {
 	return request({
 		url: '/mini/ad/getList',
-		method: 'get',
+		method: 'post',
+		data: params
 	})
 }
 
@@ -251,6 +252,15 @@ export const nearStore = async (params) => {
 export const OrderPayment = async (params) => {
 	return request({
 		url: '/mini/order/pay',
+		method: 'post',
+		data: params
+	})
+}
+
+// 添加收藏，取消收藏
+export const isCollect = async (params) => {
+	return request({
+		url: '/mini/goods/setCollect',
 		method: 'post',
 		data: params
 	})

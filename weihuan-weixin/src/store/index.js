@@ -7,6 +7,8 @@ const store = createStore({
 		return {
 			// 用户信息
 			userData: {},
+			stateNickName: '微信用户',
+			stateHeadPortrait: '/static/img/head_portrait.png'
 		}
 	},
 	// 同步，唯一修改state的途径
@@ -17,7 +19,11 @@ const store = createStore({
 		// 存储用户信息
 		storageUserData(state, payload) {
 			console.log('payload', payload);
-			state.userData = payload;
+			if (payload.grade || payload.mobile) {
+				state.userData = payload;
+			}
+			if (payload.nickname) state.stateNickName = payload.nickname;
+			if (payload.avatar) state.stateHeadPortrait = payload.avatar;
 		}
 	},
 	// 异步，axios请求都在这里执行
@@ -27,7 +33,9 @@ const store = createStore({
 	// 辅助函数: mapActions
 	actions: {},
 	// 辅助函数、计算属性
-	getters: {}
+	getters: {
+
+	}
 })
 
 export default store

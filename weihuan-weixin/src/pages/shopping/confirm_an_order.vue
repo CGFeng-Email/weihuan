@@ -89,11 +89,21 @@
 				<view class="right lead">摔坏包赔 / 7天无理由退货 / 商品冷链运输</view>
 			</view>
 			<view class="li">
+				<view class="name">订单运费</view>
+				<view class="right lead" :class="{ freight: orderFreight }">
+					<text class="price_icon">￥</text>
+					<text>{{ orderFreight || 0 }}</text>
+				</view>
+			</view>
+			<view class="li">
 				<view class="name">优惠券</view>
 				<view class="right lead coupon" @click="openCoupon">
-					<view class="text_box" v-if="selectCouponIndex !== null">
-						<text class="select_price" v-if="couponList[selectCouponIndex].coupon_type == 1">-￥{{ couponList[selectCouponIndex].money }}</text>
-						<text class="select_price" v-else>{{ couponList[selectCouponIndex].remark }}</text>
+					<view class="text_box freight" v-if="selectCouponIndex !== null">
+						<block v-if="couponList[selectCouponIndex].coupon_type == 1">
+							<text class="price_icon">-￥</text>
+							<text>{{ couponList[selectCouponIndex].money }}</text>
+						</block>
+						<text v-else>{{ couponList[selectCouponIndex].remark }}</text>
 					</view>
 					<view class="text_box" v-else>
 						<text class="coupon_count">{{ couponCount }}</text>
@@ -118,6 +128,7 @@
 					</view>
 				</view>
 			</view>
+
 			<view class="li">
 				<view class="price_box">
 					<text class="quantity_num">共{{ shoppingList.length }}件</text>
@@ -182,7 +193,7 @@
 import { onLoad } from '@dcloudio/uni-app';
 import { ref, onUnmounted } from 'vue';
 import Bottom from '../component/bottom.vue';
-import { getUserData, getShoppingAddress, nearStore, myCoupon, immedPayment, OrderPayment } from '@/api/index.js';
+import { getUserData, getShoppingAddress, nearStore, immedPayment, OrderPayment } from '@/api/index.js';
 
 // 页面滚动
 const isScroll = ref(false);
@@ -210,6 +221,8 @@ const couponPopupTabsIndex = ref(0);
 const selectCouponIndex = ref(null);
 // 备注
 const textarta = ref('');
+// 订单运费
+const orderFreight = ref(0);
 // 条数
 const size = ref(20);
 // 总计价格
@@ -243,9 +256,6 @@ onLoad(async (load) => {
 		await getNearStore();
 	}
 
-	// 我的优惠券
-	await getMyCoupon();
-
 	// 获取立即购买数据
 	await getImmetPayment();
 
@@ -263,25 +273,6 @@ onLoad(async (load) => {
 
 	uni.hideLoading();
 });
-
-// 总计价格
-// const totalPrice = computed(() => {
-// 	let num = 0;
-
-// 	shoppingList.value.forEach((item) => {
-// 		num += Number(item.price);
-// 	});
-
-// 	// 使用优惠券
-// 	if (couponList.value.length > 0 && selectCouponIndex.value != null) {
-// 		if (couponList.value[selectCouponIndex.value].coupon_type == 1) {
-// 			const couponCount = Number(couponList.value[selectCouponIndex.value].money);
-// 			num = num - couponCount;
-// 		}
-// 	}
-
-// 	return num.toFixed(2);
-// });
 
 // 用户信息
 const getUserDataFn = async () => {
@@ -311,13 +302,6 @@ const getNearStore = async () => {
 	if (res.code == 1) {
 		store.value = res.data;
 	}
-};
-
-// 获取我的优惠券
-const getMyCoupon = async () => {
-	const res = await myCoupon({ size: size.value });
-	console.log('获取我的优惠券', res);
-	couponList.value = res.data.lists;
 };
 
 // 跳转添加收货地址
@@ -439,6 +423,8 @@ const getImmetPayment = async (isSettle = 1) => {
 
 	if (res.code == 1) {
 		totalPrice.value = res.data.pay_price;
+		orderFreight.value = res.data.express_price;
+		couponList.value = res.data.coupon_list;
 	}
 
 	if (isSettle == 0) return res;
@@ -709,6 +695,16 @@ page {
 			color: #a2a2a2;
 		}
 
+		.freight {
+			color: #ff0000;
+			font-size: 28rpx;
+			font-weight: 600;
+
+			.price_icon {
+				font-size: 24rpx;
+			}
+		}
+
 		.coupon {
 			text-align: right;
 			color: #ff0000;
@@ -728,6 +724,7 @@ page {
 				font-size: 26rpx;
 				font-weight: 600;
 				padding: 0 4rpx;
+				color: #ff0000;
 			}
 
 			.text {

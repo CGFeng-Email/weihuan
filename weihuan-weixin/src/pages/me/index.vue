@@ -75,8 +75,19 @@
 		</view>
 
 		<!-- 广告 -->
-		<view class="advertising">
+		<!-- <view class="advertising">
 			<image class="cover" src="/src/static/img/me_advertising.png" mode="widthFix"></image>
+		</view> -->
+
+		<!-- 推荐 -->
+		<view class="recommend">
+			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
+				<block v-for="item in recommendBannerList" :key="item.src">
+					<swiper-item class="item" @click="open_shopping_details(item.id)">
+						<image class="cover" :src="item.thumb" mode="aspectFit"></image>
+					</swiper-item>
+				</block>
+			</swiper>
 		</view>
 
 		<!-- 平台相关 -->
@@ -106,13 +117,24 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 //onPageScroll:滚动事件
 import { onPageScroll } from '@dcloudio/uni-app';
 // api
-import { getUserData } from '@/api/index.js';
+import { getUserData, getBanner } from '@/api/index.js';
+// store
+import { useStore } from 'vuex';
+import { useState } from '@/store/useState.js';
+const useStoreFn = useStore();
+const { stateNickName, stateMobile, stateHeadPortrait } = useState(['stateNickName', 'stateHeadPortrait']);
+
+watch([stateNickName, stateHeadPortrait], (newVal, oldVal) => {
+	console.log('newVal', newVal);
+	if (nickName.value != newVal[0] || headPortrait.value != newVal[1]) getUserDataFn();
+});
+
 // 登录弹窗
 const login_show = ref(false);
 // 用户名
@@ -129,6 +151,8 @@ const wait_take_order_count = ref('-');
 const coupon_count = ref('-');
 // 用户收藏订单数量
 const collect_count = ref('-');
+// 推荐banner
+const recommendBannerList = ref([]);
 
 // 打开登录弹窗
 function show_login() {
@@ -154,6 +178,18 @@ function isLogin() {
 	return true;
 }
 
+// 首页轮播图
+const getSwiperBanner = async () => {
+	const params = {
+		pos_type: 2
+	};
+	const res = await getBanner(params);
+	console.log('banner', res);
+	if (res.code == 1) {
+		recommendBannerList.value = res.data.lists;
+	}
+};
+
 // 用户信息
 const getUserDataFn = async () => {
 	uni.showLoading({
@@ -161,15 +197,22 @@ const getUserDataFn = async () => {
 		mask: true
 	});
 	const res = await getUserData();
-	nickName.value = res.data.nickname;
-	isVip.value = res.data.grade;
-	wait_take_order_count.value = res.data.wait_take_order_count;
-	coupon_count.value = res.data.coupon_count;
-	collect_count.value = res.data.collect_count;
-	const avatar = res.data.avatar;
-	if (avatar) {
-		headPortrait.value = avatar;
+
+	if (res.code == 1) {
+		nickName.value = res.data.nickname;
+		isVip.value = res.data.grade;
+		wait_take_order_count.value = res.data.wait_take_order_count;
+		coupon_count.value = res.data.coupon_count;
+		collect_count.value = res.data.collect_count;
+		mobile.value = res.data.mobile;
+		const avatar = res.data.avatar;
+		if (avatar) {
+			headPortrait.value = avatar;
+		}
+		// 存储用户数据
+		useStoreFn.commit('storageUserData', res.data);
 	}
+
 	uni.hideLoading();
 };
 
@@ -252,6 +295,14 @@ const open_coupon = async () => {
 		url: '/pages/coupon/index'
 	});
 };
+
+// 热门推荐 跳转商品下单
+function open_shopping_details(id) {
+	if (!id) return;
+	uni.navigateTo({
+		url: `/pages/shopping/place_an_order?id=${id}`
+	});
+}
 
 // 平台相关 - 功能
 const functionList = ref([
@@ -344,21 +395,9 @@ onPageScroll((e) => {
 	}
 });
 
-onMounted(async () => {
-	uni.$on('meLoad', async () => {
-		mobile.value = uni.getStorageSync('mobile');
-		return await getUserDataFn();
-	});
-
-	mobile.value = uni.getStorageSync('mobile');
-	if (mobile.value) {
-		// 获取用户信息
-		await getUserDataFn();
-	}
-});
-
-onUnmounted(() => {
-	uni.$off('meLoad');
+onMounted(() => {
+	getUserDataFn();
+	getSwiperBanner();
 });
 </script>
 
@@ -552,6 +591,21 @@ page {
 		padding: 30rpx 0;
 		.cover {
 			width: 100%;
+		}
+	}
+}
+
+.recommend {
+	margin: 20rpx 0;
+	background: #f1f1f1;
+	.recommend_swiper {
+		width: 100%;
+		height: 384rpx;
+		.item {
+			.cover {
+				width: 100%;
+				height: 384rpx;
+			}
 		}
 	}
 }

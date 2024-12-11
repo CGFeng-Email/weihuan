@@ -143,11 +143,6 @@ onLoad(async () => {
 		}
 	});
 
-	// 自提点，去下单
-	uni.$on('delivery_type', (e) => {
-		console.log('去下单', e);
-	});
-
 	uni.hideLoading();
 });
 
@@ -155,10 +150,12 @@ onLoad(async () => {
 function swiperChange(e) {
 	// Menu自动切换
 	MenuChildRef.value.menuItemClick(e.detail.current);
+	childCategoryIndex.value = 0;
 }
 
 // 一级分类MenuItem点击
 function menuClick(e) {
+	childCategoryIndex.value = 0;
 	swiperIndex.value = e.index;
 	if (menu_index.value == e.index) return;
 	menu_index.value = e.index;
@@ -247,7 +244,6 @@ const getShoppingList = async () => {
 		if (res.code == 1) {
 			allShoppingList.value = res.data.lists;
 			totalPage.value = res.page_no;
-			childCategoryIndex.value = 0;
 		}
 	}
 };
@@ -278,7 +274,6 @@ function open_search() {
 // 卸载之后
 onUnmounted(() => {
 	uni.$off('classify_params');
-	uni.$off('delivery_type');
 });
 </script>
 
@@ -307,11 +302,12 @@ onUnmounted(() => {
 
 	.left_menus {
 		flex: none;
-		width: 180rpx;
+		width: 160rpx;
 		.item {
-			padding: 30rpx 26rpx;
+			padding: 30rpx 0;
 			position: relative;
 			z-index: 2;
+			text-align: center;
 			.text {
 				font-size: 26rpx;
 				color: #000;
