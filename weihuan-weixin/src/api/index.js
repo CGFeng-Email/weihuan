@@ -124,7 +124,7 @@ export const couponCenter = (params) => {
 	})
 }
 
-// 领取优惠卷
+// 领取优惠券
 export const getCoupon = (params) => {
 	return request({
 		url: '/mini/coupon/receive',
@@ -133,10 +133,19 @@ export const getCoupon = (params) => {
 	})
 }
 
-// 我的优惠卷
+// 我的优惠券
 export const myCoupon = (params) => {
 	return request({
 		url: '/mini/coupon/mine',
+		method: 'post',
+		data: params
+	})
+}
+
+// 优惠券列表
+export const collectList = (params) => {
+	return request({
+		url: '/mini/goods/collectList',
 		method: 'post',
 		data: params
 	})
@@ -230,15 +239,6 @@ export const addCart = async (params) => {
 	})
 }
 
-// 收藏列表
-export const collectList = async (params) => {
-	return request({
-		url: '/mini/goods/collectList',
-		method: 'post',
-		data: params
-	})
-}
-
 // 最近自提点
 export const nearStore = async (params) => {
 	return request({
@@ -261,6 +261,23 @@ export const OrderPayment = async (params) => {
 export const isCollect = async (params) => {
 	return request({
 		url: '/mini/goods/setCollect',
+		method: 'post',
+		data: params
+	})
+}
+
+// 购物车
+export const getCartList = async (params) => {
+	return request({
+		url: '/mini/cart/getList',
+		method: 'post',
+		data: params
+	})
+}
+// 购物车删除商品
+export const delCartShopping = async (params) => {
+	return request({
+		url: '/mini/cart/clear',
 		method: 'post',
 		data: params
 	})

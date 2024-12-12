@@ -1,5 +1,5 @@
 // 全局请求封装
-const base_url = 'http://test.cnmaris.cn';
+const base_url = 'https://test.cnmaris.cn';
 
 // 需要修改token，和根据实际修改请求头
 function request(params) {
@@ -36,14 +36,15 @@ function request(params) {
 							break;
 						case 0:
 							// 异常
-							uni.showToast({
-								title: res.data.msg,
-								icon: 'none',
-								mask: true,
-								success: () => {
-									resolve(res.data);
-								}
-							})
+							// uni.showToast({
+							// 	title: res.data.msg,
+							// 	icon: 'none',
+							// 	mask: true,
+							// 	success: () => {
+									
+							// 	}
+							// })
+							resolve(res.data);
 							break;
 						case 1:
 							// 成功

@@ -1,94 +1,48 @@
 <!-- 我的收藏 -->
 <template>
-	<List :list="shopping_list" @itemClick="jump_place_order"></List>
+	<List :list="list" @itemClick="jump_place_order"></List>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, onMounted } from 'vue';
+import { collectList } from '@/api/index.js';
 // 列表组件
 import List from './list.vue';
-// 列表
-const shopping_list = ref([
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: true,
-		price: 130,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 120,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 110,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 100,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 180,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: true,
-		price: 130,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	}
-]);
 
-// 跳转商品下单页
-const jump_place_order = () => {
+// 列表
+const list = ref([]);
+const page = ref(1);
+const size = ref(20);
+const totalPage = ref(0);
+
+// 收藏列表
+const getCollectList = async () => {
+	uni.showLoading({
+		title: '加载中...'
+	});
+	const params = {
+		page: page.value,
+		size: size.value
+	};
+	const res = await collectList(params);
+	console.log('收藏列表', res);
+	if (res.code == 1) {
+		list.value = res.data.lists;
+		totalPage.value = res.data.page_no;
+	}
+	uni.hideLoading();
+};
+
+// 产品详情
+const jump_place_order = (id) => {
 	uni.navigateTo({
-		url: '/pages/shopping/place_an_order'
+		url: `/pages/shopping/place_an_order?id=${id}`
 	});
 };
+
+onMounted(() => {
+	getCollectList();
+});
 </script>
 
 <style></style>

@@ -6,8 +6,8 @@
 	<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
 		<view class="navigation_wrap">
 			<view class="navigation box_border_radius box_shadow">
-				<view class="navigation_btn" :class="{ active: head_title_index == 0 }" @click="switchPage(0)">自提商品</view>
-				<view class="navigation_btn" :class="{ active: head_title_index == 1 }" @click="switchPage(1)">配送商品</view>
+				<view class="navigation_btn" :class="{ active: head_title_index == 0 }" @click="switchPage(0)">配送商品</view>
+				<view class="navigation_btn" :class="{ active: head_title_index == 1 }" @click="switchPage(1)">自提商品</view>
 			</view>
 		</view>
 	</view>
@@ -19,42 +19,41 @@
 
 	<view style="height: 31px"></view>
 
-	<view class="main">
+	<view class="main" v-if="list.length > 0">
+		<!-- 购物车列表 -->
 		<view class="list box_border_radius box_shadow">
-			<block v-for="(item, index) in cartList" :key="item.id">
+			<block v-for="(item, index) in list" :key="item.id">
 				<view class="item">
 					<uni-swipe-action>
 						<uni-swipe-action-item>
 							<view class="shopping_item">
 								<uni-icons
 									class="icon"
-									:type="item.check ? 'checkbox-filled' : 'circle'"
+									:type="item.selected == 1 ? 'checkbox-filled' : 'circle'"
 									size="24"
-									:color="item.check ? '#FF8992' : '#bcbcbc'"
+									:color="item.selected == 1 ? '#FF8992' : '#bcbcbc'"
 									@click="switchIcon(index)"
 								></uni-icons>
-								<view class="right_content" @click="jump_order_details">
-									<image class="cover box_border_radius" :src="item.src" mode="aspectFill"></image>
+								<view class="right_content" @click="hotRecommentItem(item.goods_id, item.spec_key)">
+									<image class="cover box_border_radius" :src="item.image" mode="widthFix"></image>
 									<view class="content">
 										<view class="shopping_top">
-											<view class="title over2">{{ item.title }}</view>
-											<view class="specification">
-												<view class="hot spec">畅销</view>
-												<view class="isPick spec">不可自提</view>
+											<view class="title over2">{{ item.goods_name }}</view>
+											<view class="spec lead over2">
+												{{ item.key_name }}
 											</view>
-											<view class="spec">{{ item.sku }}</view>
 										</view>
 										<view class="shopping_bottom">
 											<view class="price_box">
 												<text class="symbol">￥</text>
-												<text class="price">{{ priceToFixed(item.price) }}</text>
+												<text class="price">{{ item.market_price }}</text>
 											</view>
 											<view class="quantity_box">
 												<view class="icon" @click.stop="deCrement(index)">
 													<i class="iconfont icon-jianhao"></i>
 												</view>
-												<view class="quantity_number">{{ item.quantity }}</view>
-												<view class="icon" @click.stop="inCrement(index)">
+												<view class="quantity_number">{{ item.goods_num }}</view>
+												<view class="icon" @click.stop="inCrement(index, item.store_count)">
 													<i class="iconfont icon-jia"></i>
 												</view>
 											</view>
@@ -64,7 +63,7 @@
 							</view>
 
 							<template v-slot:right>
-								<view class="item_del" @click="item_del(index)"><text>删除</text></view>
+								<view class="item_del" @click="delShopping(item.goods_id)"><text>删除</text></view>
 							</template>
 						</uni-swipe-action-item>
 					</uni-swipe-action>
@@ -73,17 +72,21 @@
 		</view>
 	</view>
 
-	<view class="recomment_title">
-		<text class="line"></text>
-		<text class="title">猜你喜欢</text>
-		<text class="line"></text>
+	<Empty imgSrc="../../static/img/empty_cart.png" tips="购物车还是空的哦~" v-show="isEmpty"></Empty>
+
+	<!-- 推荐 -->
+	<view class="hot_recommend">
+		<view class="recomment_title">
+			<text class="line"></text>
+			<text class="title">猜你喜欢</text>
+			<text class="line"></text>
+		</view>
+		<List :list="hotRecommentList" @itemClick="hotRecommentItem"></List>
 	</view>
 
-	<List :list="shopping_list" @itemClick="jump_order_details"></List>
+	<view style="height: 40px"></view>
 
-	<view style="height: 160rpx"></view>
-
-	<view class="bottom_cart">
+	<view class="bottom_cart" v-if="list.length > 0">
 		<view class="check_all" @click="switch_check_all">
 			<uni-icons :type="computedCheckAll ? 'checkbox-filled' : 'circle'" size="24" :color="computedCheckAll ? '#FF8992' : '#bcbcbc'"></uni-icons>
 			<text class="text">全选</text>
@@ -93,11 +96,11 @@
 				<view class="total_price">
 					<text class="name">合计:</text>
 					<text class="icon">￥</text>
-					<text class="price">{{ priceToFixed(total_price) }}</text>
+					<text class="price">{{ totalPrice }}</text>
 				</view>
 				<view class="details" @click="open_popup">
-					<text class="text">共减: ￥20.00</text>
-					<text class="price_details">优惠明细</text>
+					<text class="text" v-show="discountsPrice">共减: ￥{{ discountsPrice }}</text>
+					<text class="price_details">订单明细</text>
 					<uni-icons :type="isScroll ? 'up' : 'down'" size="12" color="#FF0000"></uni-icons>
 				</view>
 			</view>
@@ -105,6 +108,7 @@
 		</view>
 	</view>
 
+	<!-- 订单明细 -->
 	<uni-popup ref="cart_popup" type="bottom" @maskClick="hide_popup">
 		<view class="cart_popup_content">
 			<view class="close" @click="hide_popup">
@@ -117,19 +121,23 @@
 			<view class="list">
 				<view class="lis">
 					<view class="name">商品总价</view>
-					<view class="total_price">￥{{ priceToFixed(total_price) }}</view>
+					<view class="total_price">￥{{ originalPrice }}</view>
+				</view>
+				<view class="lis">
+					<view class="name">满减金额</view>
+					<view class="total_price">￥{{ reduceMoney }}</view>
+				</view>
+				<view class="lis">
+					<view class="name">优惠金额</view>
+					<view class="total_price">￥{{ discountsPrice }}</view>
 				</view>
 				<view class="lis">
 					<view class="name">配送费</view>
-					<view class="total_price">￥{{ priceToFixed(total_price) }}</view>
-				</view>
-				<view class="lis">
-					<view class="name">共减</view>
-					<view class="total_price">￥{{ priceToFixed(total_price) }}</view>
+					<view class="total_price">￥{{ orderFreight }}</view>
 				</view>
 				<view class="lis">
 					<view class="name">合计</view>
-					<view class="total_price">￥{{ priceToFixed(total_price) }}</view>
+					<view class="total_price">￥{{ totalPrice }}</view>
 				</view>
 			</view>
 		</view>
@@ -137,31 +145,174 @@
 </template>
 
 <script setup>
-// 列表组件
-import List from '@/pages/shopping/list.vue';
-import { ref, computed, watch } from 'vue';
-// 胶囊信息
+import { onShow, onPullDownRefresh } from '@dcloudio/uni-app';
+import { ref, computed, watch, onMounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
+import Empty from '@/pages/component/empty.vue';
+import List from '@/pages/shopping/list.vue';
+import { getCartList, shoppingList, immedPayment, delCartShopping } from '@/api/index.js';
+// store的state
+import { useState } from '@/store/useState.js';
+const { userData } = useState(['userData']);
+
+// 监听用户信息
+watch(userData, (newVal, oldVal) => {
+	console.log('购物车', newVal);
+	if (newVal) {
+		getCartListFn();
+	}
+});
+
 // 防止弹窗打开后，页面继续滚动
 const isScroll = ref(false);
 // 明细弹窗
 const cart_popup = ref(null);
-// 自提产品:0，物流产品:1
+// 0:配送，1:自提
 const head_title_index = ref(0);
+// 页码
+const page = ref(1);
+// 条数
+const size = ref(20);
+// 总页数
+const totalPage = ref(1);
+// 购物车列表
+const list = ref([]);
+// 是否显示Empty
+const isEmpty = ref(false);
+// 热门推荐列表
+const hotRecommentList = ref([]);
+// 推荐页码
+const recommendPage = ref(1);
+// 推荐总页数
+const recommendTotalPage = ref(1);
+// 订单优惠前的总价
+const originalPrice = ref(0);
+// 优惠金额
+const discountsPrice = ref(0);
+// 满减金额
+const reduceMoney = ref(0);
+// 订单运费 运费价格没算进
+const orderFreight = ref(0);
+// 合计,实际支付金额
+const totalPrice = ref(0);
+
+// 获取购物车列表
+const getCartListFn = async () => {
+	uni.showLoading({
+		title: '加载中...'
+	});
+
+	const params = {
+		page: page.value,
+		size: size.value,
+		is_self_take: head_title_index.value
+	};
+	const res = await getCartList(params);
+	console.log('获取购物车列表', res);
+	if (res.code == 1) {
+		if (res.data.lists.length > 0) {
+			list.value = res.data.lists;
+			totalPage.value = res.data.page_no;
+			// 获取立即购买数据
+			await getImmetPayment();
+			uni.hideLoading();
+			return;
+		} else {
+			isEmpty.value = true;
+		}
+	}
+	
+	uni.hideLoading();
+};
+
+// 热门推荐
+const getHotRecommend = async () => {
+	const params = {
+		page: recommendPage.value,
+		size: size.value,
+		is_recommend: 1,
+		is_hot: 1
+	};
+	const res = await shoppingList(params);
+	console.log('推荐商品', res);
+	if (res.code == 1) {
+		recommendTotalPage.value = res.data.page_no;
+		hotRecommentList.value = res.data.lists;
+	}
+};
+
+// 获取立即购买数据
+// isSettle:1 任何修改, isSettle:0 去支付
+const getImmetPayment = async (isSettle = 1) => {
+	uni.showLoading({
+		title: '加载中...'
+	});
+	// 规格列表
+	const buy_goods = [];
+	list.value.forEach((item) => {
+		if (item.selected == 1) {
+			buy_goods.push({
+				goods_id: item.goods_id,
+				spec_key: item.spec_key,
+				goods_num: item.goods_num
+			});
+		}
+	});
+
+	const params = {
+		delivery_type: head_title_index.value == 0 ? 10 : 20,
+		is_settle: isSettle,
+		buy_goods,
+		is_cart: 1
+	};
+
+	const res = await immedPayment(params);
+
+	console.log('获取立即购买数据', res);
+
+	if (res.code == 1) {
+		// 任何修改
+		if (isSettle == 1) {
+			// 订单优惠前的总价
+			originalPrice.value = res.data.total_price;
+			// 优惠金额
+			discountsPrice.value = res.data.coupon_money;
+			// 满减金额
+			reduceMoney.value = res.data.reduce_money;
+			// 运费
+			orderFreight.value = res.data.express_price;
+			// 合计,实际支付金额
+			totalPrice.value = res.data.pay_price;
+		}
+		uni.hideLoading();
+		// 真正去支付，获取订单id
+		if (isSettle == 0) return res;
+	}
+
+	uni.hideLoading();
+};
+
+// 删除商品
+const delShopping = async (id) => {
+	const params = {
+		ids: [id]
+	};
+	const res = await delCartShopping(params);
+	console.log('删除商品', res);
+	if (res.code == 1) {
+		// 购物车
+		await getCartListFn();
+	}
+};
+
 // 页面切换
 function switchPage(i) {
 	if (head_title_index.value == i) return;
-	uni.showLoading({
-		title: '加载中',
-		mask: true,
-		success: () => {
-			setTimeout(() => {
-				head_title_index.value = i;
-				uni.hideLoading();
-			}, 300);
-		}
-	});
+	head_title_index.value = i;
+	page.value = 1;
+	getCartListFn();
 }
+
 // 打开明细弹窗
 function open_popup() {
 	if (isScroll.value) {
@@ -171,239 +322,79 @@ function open_popup() {
 		cart_popup.value.open();
 	}
 }
+
 // 关闭明细弹窗
 function hide_popup() {
 	isScroll.value = false;
 	cart_popup.value.close();
 }
 
-// 购物车列表
-const cartList = ref([
-	{
-		id: 1,
-		check: true,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/product_banner1.png',
-		title: '盒子慕斯罐小蛋糕',
-		sku: '原味*3+雪域牛乳*3',
-		quantity: 1,
-		price: 150
-	},
-	{
-		id: 2,
-		check: true,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/product_banner1.png',
-		title: '盒子慕斯罐小蛋糕',
-		sku: '原味*3+雪域牛乳*3',
-		quantity: 1,
-		price: 120
-	},
-	{
-		id: 3,
-		check: true,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
-		title: '盒子慕斯罐小蛋糕',
-		sku: '原味*3+雪域牛乳*3',
-		quantity: 1,
-		price: 100
-	},
-	{
-		id: 4,
-		check: true,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		sku: '原味*3+雪域牛乳*3',
-		quantity: 1,
-		price: 80
-	},
-	{
-		id: 5,
-		check: true,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
-		title: '盒子慕斯罐小蛋糕',
-		sku: '原味*3+雪域牛乳*3',
-		quantity: 1,
-		price: 70
-	},
-	{
-		id: 6,
-		check: true,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
-		title: '盒子慕斯罐小蛋糕',
-		sku: '原味*3+雪域牛乳*3',
-		quantity: 1,
-		price: 50
-	}
-]);
-
-// 推荐商品列表
-const shopping_list = ref([
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: true,
-		price: 130,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 120,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 110,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 100,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: false,
-		price: 180,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	},
-	{
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		boom: true,
-		price: 130,
-		primary_price: 210,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		isPick: true,
-		hot: true
-	}
-]);
-
-// 计算属性金额后面补.00
-const priceToFixed = computed(() => {
-	return (e) => {
-		const priceNumber = e + '.00';
-		return priceNumber;
-	};
-});
-
 // 商品icon切换
 const switchIcon = (index) => {
-	cartList.value[index].check = !cartList.value[index].check;
+	list.value[index].selected = list.value[index].selected == 1 ? 0 : 1;
+	getImmetPayment();
 };
 
 // 购买数量 减
 const deCrement = (index) => {
-	if (cartList.value[index].quantity <= 1) return;
-	cartList.value[index].quantity -= 1;
+	if (list.value[index].goods_num <= 1) return;
+	list.value[index].goods_num -= 1;
+	getImmetPayment();
 };
 
 // 购买数量 加
-const inCrement = (index) => {
-	cartList.value[index].quantity += 1;
-};
-
-// 删除
-const item_del = (index) => {
-	cartList.value.splice(index, 1);
+const inCrement = (index, storeCount) => {
+	console.log(index, storeCount);
+	if (list.value[index].goods_num < storeCount) {
+		list.value[index].goods_num += 1;
+		getImmetPayment();
+	} else {
+		uni.showToast({
+			title: '客观小伟没有更多存货了',
+			icon: 'none',
+			mask: true
+		});
+	}
 };
 
 // 计算属性 - 全选
 const computedCheckAll = computed(() => {
-	for (let i in cartList.value) {
-		if (!cartList.value[i].check) {
+	for (let i in list.value) {
+		// 只要有一个没选中
+		if (list.value[i].selected == 0) {
 			return false;
 			break;
 		}
 	}
-
 	return true;
 });
 
-// 点击切换全选
+// 切换全选、全不选
 const switch_check_all = () => {
-	console.log('computedCheckAll', computedCheckAll.value);
-	const isCheck = !computedCheckAll.value;
-	const list = cartList.value.map((item) => {
-		item.check = isCheck;
+	const isCheck = computedCheckAll.value == 1 ? 0 : 1;
+	const lists = list.value.map((item) => {
+		item.selected = isCheck;
 		return item;
 	});
-	console.log('list', list);
+	list.value = lists;
+	getImmetPayment();
 };
 
-// 计算属性 - 总金额
-const total_price = computed(() => {
-	// 总金额
-	let price_number = 0;
-	// 计算出每一个商品的金额
-	const list = cartList.value.map((item) => {
-		return Number(item.price) * Number(item.quantity);
-	});
-
-	if (list.length > 0) {
-		list.forEach((item) => {
-			price_number += item;
-		});
-	}
-
-	return price_number;
-});
-
-// 是否能支付
-const isPayment = ref(true);
-watch(
-	() => cartList.value.map((item) => item.check),
-	(newVal, oldVal) => {
-		const isIndex = newVal.findIndex((item) => item == true);
-		if (isIndex >= 0) {
-			isPayment.value = false;
-		} else {
-			isPayment.value = true;
+// 计算属性，是否能支付
+const isPayment = computed(() => {
+	if (list.value.length > 0) {
+		for (let i in list.value) {
+			// 只要有一个没选中
+			if (list.value[i].selected == 1) {
+				return false;
+				break;
+			}
 		}
-	},
-	{
-		immediate: true
 	}
-);
 
-// 跳转商品详情
-const jump_order_details = () => {
-	uni.navigateTo({
-		url: '/pages/shopping/place_an_order'
-	});
-};
+	// 默认禁止点击
+	return true;
+});
 
 // 去支付
 const jump_place_order = () => {
@@ -411,13 +402,32 @@ const jump_place_order = () => {
 		url: '/pages/shopping/confirm_an_order'
 	});
 };
-</script>
 
-<style>
-page {
-	background: #fbfbfb;
-}
-</style>
+// 热门推荐点击
+const hotRecommentItem = (id, spec_key) => {
+	uni.navigateTo({
+		url: `/pages/shopping/place_an_order?id=${id}&spec_key=${spec_key}`
+	});
+};
+
+// 开启下拉刷新
+onPullDownRefresh(async () => {
+	// 购物车
+	await getCartListFn();
+	// 关闭下拉刷新
+	uni.stopPullDownRefresh();
+});
+
+onShow(async () => {
+	// 购物车
+	await getCartListFn();
+});
+
+onMounted(async () => {
+	// 热门推荐
+	await getHotRecommend();
+});
+</script>
 
 <style lang="scss" scoped>
 .top {
@@ -491,8 +501,8 @@ page {
 							align-items: center;
 							padding-top: 10rpx;
 							.spec {
-								height: 34rpx;
-								line-height: 34rpx;
+								height: 30rpx;
+								line-height: 30rpx;
 								border-radius: 4rpx;
 								margin-right: 10rpx;
 								padding: 0 20rpx;
@@ -508,6 +518,12 @@ page {
 
 							.isPick {
 								background: linear-gradient(83.83deg, #2ac2f2 0%, #0b6ff2 100%);
+							}
+
+							.cover {
+								width: auto;
+								height: 30rpx;
+								margin-right: 20rpx;
 							}
 						}
 
@@ -554,7 +570,8 @@ page {
 								}
 
 								.quantity_number {
-									padding: 0 20rpx;
+									min-width: 70rpx;
+									text-align: center;
 								}
 							}
 						}
@@ -637,6 +654,7 @@ page {
 			}
 			.details {
 				font-size: 24rpx;
+				text-align: right;
 				.price_details {
 					padding-left: 10rpx;
 					color: #ff0000;

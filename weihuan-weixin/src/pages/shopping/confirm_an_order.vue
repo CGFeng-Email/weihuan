@@ -92,7 +92,7 @@
 				<view class="name">订单运费</view>
 				<view class="right lead" :class="{ freight: orderFreight }">
 					<text class="price_icon">￥</text>
-					<text>{{ orderFreight || 0 }}</text>
+					<text>{{ orderFreight }}</text>
 				</view>
 			</view>
 			<view class="li">

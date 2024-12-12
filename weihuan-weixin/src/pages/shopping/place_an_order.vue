@@ -223,6 +223,8 @@ const useStoreFn = useStore();
 
 // 商品id
 const id = ref('');
+// 购物车传递进来的规格id，选中规格
+const spec_key = ref('');
 // 禁止页面滑动
 const pageMeta = ref(false);
 // 用户手机号
@@ -276,7 +278,8 @@ onLoad(async (load) => {
 
 	console.log('load', load);
 	id.value = load.id;
-
+	spec_key.value = load.spec_key;
+	
 	if (id.value) {
 		// 详情数据
 		await getOrderDetails();
@@ -479,11 +482,18 @@ const getOrderDetails = async () => {
 };
 
 // 商品规格
-const getShoppingSpecification = async (id, mod_id) => {
+const getShoppingSpecification = async (id, spec_key) => {
 	const res = await shoppingSpecification(id, mod_id);
 	console.log('商品规格', res);
 	if (res.code == 1) {
 		specificationList.value = res.data[0];
+		// 有规格id的情况下
+		if (spec_key.value && specificationList.value.children.length > 0) {
+			console.log('规格', spec_key.value);
+			specificationList.value.forEach(item => {
+				
+			})
+		}
 	}
 };
 

@@ -1,6 +1,6 @@
 <template>
 	<view class="empty">
-		<image class="cover" src="../../static/img/empty.png" mode="widthFix"></image>
+		<image class="cover" :src="imgSrc" mode="widthFix"></image>
 		<view class="lead">{{ tips }}</view>
 	</view>
 </template>
@@ -11,6 +11,10 @@ const props = defineProps({
 	tips: {
 		type: String,
 		default: '抱歉，小炜尽力了'
+	},
+	imgSrc: {
+		type: String,
+		default: '../../static/img/empty_content.png'
 	}
 });
 </script>
