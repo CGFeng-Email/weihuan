@@ -32,28 +32,32 @@
 									:type="item.selected == 1 ? 'checkbox-filled' : 'circle'"
 									size="24"
 									:color="item.selected == 1 ? '#FF8992' : '#bcbcbc'"
-									@click="switchIcon(index)"
+									@click="switchIcon(index, item.id, item.goods_num, item.selected)"
 								></uni-icons>
-								<view class="right_content" @click="hotRecommentItem(item.goods_id, item.spec_key)">
-									<image class="cover box_border_radius" :src="item.image" mode="widthFix"></image>
+								<view class="right_content" @click="hotRecommentItem(item.goods_id, item.spec_key, item.goods_num, item.is_buyable)">
+									<view class="cover_box">
+										<image class="cover box_border_radius" :src="item.image" mode="widthFix" lazy-load></image>
+										<view class="tips" v-if="item.is_buyable != 1">已下架</view>
+									</view>
 									<view class="content">
 										<view class="shopping_top">
-											<view class="title over2">{{ item.goods_name }}</view>
+											<view class="title over2" :class="{ out_title: item.is_buyable != 1 }">{{ item.goods_name }}</view>
 											<view class="spec lead over2">
-												{{ item.key_name }}
+												<text class="text">{{ item.key_name }}</text>
+												<text class="text">库存:{{ item.store_count }}</text>
 											</view>
 										</view>
 										<view class="shopping_bottom">
 											<view class="price_box">
 												<text class="symbol">￥</text>
-												<text class="price">{{ item.market_price }}</text>
+												<text class="price">{{ item.goods_price }}</text>
 											</view>
 											<view class="quantity_box">
-												<view class="icon" @click.stop="deCrement(index)">
+												<view class="icon" @click.stop="deCrementUnderscore(index, item.id, item.selected, item.is_buyable)">
 													<i class="iconfont icon-jianhao"></i>
 												</view>
 												<view class="quantity_number">{{ item.goods_num }}</view>
-												<view class="icon" @click.stop="inCrement(index, item.store_count)">
+												<view class="icon" @click.stop="inCrementUnderscore(index, item.store_count, item.id, item.selected, item.is_buyable)">
 													<i class="iconfont icon-jia"></i>
 												</view>
 											</view>
@@ -63,7 +67,7 @@
 							</view>
 
 							<template v-slot:right>
-								<view class="item_del" @click="delShopping(item.goods_id)"><text>删除</text></view>
+								<view class="item_del" @click="delShopping(item.id)"><text>删除</text></view>
 							</template>
 						</uni-swipe-action-item>
 					</uni-swipe-action>
@@ -72,7 +76,7 @@
 		</view>
 	</view>
 
-	<Empty imgSrc="../../static/img/empty_cart.png" tips="购物车还是空的哦~" v-show="isEmpty"></Empty>
+	<Empty imgSrc="../../static/img/empty_cart.png" tips="购物车还是空的哦~" v-else></Empty>
 
 	<!-- 推荐 -->
 	<view class="hot_recommend">
@@ -104,7 +108,7 @@
 					<uni-icons :type="isScroll ? 'up' : 'down'" size="12" color="#FF0000"></uni-icons>
 				</view>
 			</view>
-			<button class="pay_btn btn_bg" :class="{ disabled_bg: isPayment }" :disabled="isPayment" @click="jump_place_order">去支付</button>
+			<button class="pay_btn btn_bg" :class="{ disabled_bg: isPayment }" :disabled="isPayment" @click="jump_place_order">去结算</button>
 		</view>
 	</view>
 
@@ -150,18 +154,9 @@ import { ref, computed, watch, onMounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
 import Empty from '@/pages/component/empty.vue';
 import List from '@/pages/shopping/list.vue';
-import { getCartList, shoppingList, immedPayment, delCartShopping } from '@/api/index.js';
-// store的state
-import { useState } from '@/store/useState.js';
-const { userData } = useState(['userData']);
-
-// 监听用户信息
-watch(userData, (newVal, oldVal) => {
-	console.log('购物车', newVal);
-	if (newVal) {
-		getCartListFn();
-	}
-});
+import { getCartList, shoppingList, immedPayment, delCartShopping, editCartShopping } from '@/api/index.js';
+// 防抖、节流
+import _ from 'underscore';
 
 // 防止弹窗打开后，页面继续滚动
 const isScroll = ref(false);
@@ -210,18 +205,12 @@ const getCartListFn = async () => {
 	const res = await getCartList(params);
 	console.log('获取购物车列表', res);
 	if (res.code == 1) {
-		if (res.data.lists.length > 0) {
-			list.value = res.data.lists;
-			totalPage.value = res.data.page_no;
-			// 获取立即购买数据
-			await getImmetPayment();
-			uni.hideLoading();
-			return;
-		} else {
-			isEmpty.value = true;
-		}
+		list.value = res.data.lists;
+		totalPage.value = res.data.page_no;
+		// 获取立即购买数据
+		await getImmetPayment();
 	}
-	
+
 	uni.hideLoading();
 };
 
@@ -305,6 +294,17 @@ const delShopping = async (id) => {
 	}
 };
 
+// 编辑商品数量
+const editShopping = async (id, quantity, isSelected) => {
+	const params = {
+		id,
+		goods_num: quantity,
+		selected: isSelected == 1 ? 0 : 1
+	};
+	const res = await editCartShopping(params);
+	console.log('编辑商品数量', res);
+};
+
 // 页面切换
 function switchPage(i) {
 	if (head_title_index.value == i) return;
@@ -330,24 +330,36 @@ function hide_popup() {
 }
 
 // 商品icon切换
-const switchIcon = (index) => {
+const switchIcon = async (index, id, quantity, isSelected) => {
 	list.value[index].selected = list.value[index].selected == 1 ? 0 : 1;
-	getImmetPayment();
+	// 修改购物车商品
+	await editShopping(id, quantity, isSelected);
+	// 获取立即购买数据
+	await getImmetPayment();
 };
 
 // 购买数量 减
-const deCrement = (index) => {
+
+const deCrement = async (index, id, isSelected, isPay) => {
+	if (isPay != 1) return;
 	if (list.value[index].goods_num <= 1) return;
 	list.value[index].goods_num -= 1;
-	getImmetPayment();
+	// 修改购物车商品
+	await editShopping(id, list.value[index].goods_num, isSelected);
+	// 获取立即购买数据
+	await getImmetPayment();
 };
+const deCrementUnderscore = _.debounce(deCrement, 200);
 
 // 购买数量 加
-const inCrement = (index, storeCount) => {
-	console.log(index, storeCount);
+const inCrement = async (index, storeCount, id, isSelected, isPay) => {
+	if (isPay != 1) return;
 	if (list.value[index].goods_num < storeCount) {
 		list.value[index].goods_num += 1;
-		getImmetPayment();
+		// 修改购物车商品
+		await editShopping(id, list.value[index].goods_num, isSelected);
+		// 获取立即购买数据
+		await getImmetPayment();
 	} else {
 		uni.showToast({
 			title: '客观小伟没有更多存货了',
@@ -356,6 +368,7 @@ const inCrement = (index, storeCount) => {
 		});
 	}
 };
+const inCrementUnderscore = _.debounce(inCrement, 200);
 
 // 计算属性 - 全选
 const computedCheckAll = computed(() => {
@@ -396,22 +409,52 @@ const isPayment = computed(() => {
 	return true;
 });
 
-// 去支付
+// 去结算 跳转订单确认
 const jump_place_order = () => {
+	const buy_goods = [];
+
+	list.value.forEach((item) => {
+		console.log('item', item);
+		if (item.selected == 1 && item.is_buyable == 1) {
+			buy_goods.push({
+				goods_id: item.goods_id,
+				spec_key: item.spec_key,
+				quantity: item.goods_num,
+				selectSpecificationTitle: item.key_name,
+				image: item.image,
+				price: item.goods_price,
+				title: item.goods_name,
+				outPrice: 21.0,
+				storeCount: item.store_count
+			});
+		}
+	});
+
+	const params = {
+		delivery_type: head_title_index.value == 1 ? 20 : 10,
+		buy_goods,
+		isCart: 1
+	};
+
+	console.log('params', params);
+
+	// 跳转 确认订单 pages/shopping/confirm_an_order
 	uni.navigateTo({
-		url: '/pages/shopping/confirm_an_order'
+		url: `/pages/shopping/confirm_an_order?params=${JSON.stringify(params)}`
 	});
 };
 
 // 热门推荐点击
-const hotRecommentItem = (id, spec_key) => {
+const hotRecommentItem = (id, spec_key, quantity, isPay) => {
+	if (isPay != 1) return;
 	uni.navigateTo({
-		url: `/pages/shopping/place_an_order?id=${id}&spec_key=${spec_key}`
+		url: `/pages/shopping/place_an_order?id=${id}&spec_key=${spec_key}&quantity=${quantity}`
 	});
 };
 
 // 开启下拉刷新
 onPullDownRefresh(async () => {
+	console.log('用户下拉刷新');
 	// 购物车
 	await getCartListFn();
 	// 关闭下拉刷新
@@ -460,6 +503,7 @@ onMounted(async () => {
 				display: flex;
 				justify-content: space-between;
 				align-items: center;
+
 				.icon {
 					flex: none;
 				}
@@ -469,10 +513,28 @@ onMounted(async () => {
 					flex: 1;
 					display: flex;
 					justify-content: space-between;
-					.cover {
-						width: 190rpx;
-						height: 190rpx;
+					.cover_box {
 						flex: none;
+						position: relative;
+						width: 190rpx;
+						.cover {
+							width: 100%;
+						}
+
+						.tips {
+							position: absolute;
+							top: 50%;
+							left: 50%;
+							transform: translate(-50%, -50%);
+							background: rgba(0, 0, 0, 0.6);
+							color: #fff;
+							font-weight: 500;
+							border-radius: 45rpx;
+							padding: 10rpx 0;
+							font-size: 24rpx;
+							width: 80%;
+							text-align: center;
+						}
 					}
 
 					.content {
@@ -489,10 +551,18 @@ onMounted(async () => {
 								font-weight: 600;
 							}
 
+							.out_title {
+								color: #b2b2b2;
+							}
+
 							.spec {
 								font-size: 24rpx;
 								color: #acacac;
 								padding-top: 10rpx;
+							}
+
+							.text {
+								padding-right: 20rpx;
 							}
 						}
 

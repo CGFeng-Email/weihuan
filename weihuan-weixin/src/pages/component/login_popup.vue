@@ -66,38 +66,37 @@ function wx_login() {
 		mask: true
 	});
 
-	wx.login({
+	uni.login({
+		provider: 'weixin',
 		success: async (res) => {
-			console.log('code', res);
+			console.log('获取code', res);
 			if (res.errMsg == 'login:ok') {
 				const reslogin = await wxLogin({
 					code: res.code
 				});
 				console.log('微信登录', reslogin);
 				if (reslogin.code == 1) {
+					// 登录成功
+					uni.setStorageSync('openid', reslogin.data.openid);
+					uni.setStorageSync('token', reslogin.data.token);
+					uni.setStorageSync('mobile', reslogin.data.mobile);
+					
 					if (reslogin.data.is_reg == 0) {
 						// 未注册
 						uni.navigateTo({
 							url: `/pages/login/register`
 						});
-					} else {
-						// 已注册
-						if (reslogin.data.openid && reslogin.data.token && reslogin.data.mobile) {
-							uni.setStorageSync('openid', reslogin.data.openid);
-							uni.setStorageSync('token', reslogin.data.token);
-							uni.setStorageSync('mobile', reslogin.data.mobile);
-
-							emit('maskClick', { login: 'success' });
-							uni.hideLoading();
-							return;
-						}
 					}
 				}
 				emit('maskClick');
-				uni.hideLoading();
 			}
+		},
+		fail: (err) => {
+			console.log('err', err);
 		}
 	});
+	
+	uni.hideLoading();
 }
 
 // 关闭弹窗

@@ -59,9 +59,11 @@
 
 						<!-- 列表 -->
 						<view class="list">
-							<block v-for="item2 in allShoppingList" :key="item2.id">
+							<block v-for="item2 in allShoppingList" :key="item2.id" v-if="allShoppingList.length > 0">
 								<Item :item="item2" @itemClick="itemClick"></Item>
 							</block>
+							
+							<Empty v-else tips="小伟正在紧急补充货源哟"></Empty>
 
 							<view style="height: 20px"></view>
 						</view>
@@ -74,7 +76,7 @@
 
 <script setup>
 import { ref, onUnmounted, nextTick } from 'vue';
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 import Search from '../component/search.vue';
 import MenuChild from './menu.vue';
 import Item from './item.vue';
@@ -274,6 +276,24 @@ function open_search() {
 // 卸载之后
 onUnmounted(() => {
 	uni.$off('classify_params');
+});
+
+// 开启下拉刷新
+onPullDownRefresh(async () => {
+	uni.showLoading({
+		title: '加载中...',
+		mask: true
+	});
+	// 公共数据
+	await getCommonData();
+	// 一级分类
+	await getClassify();
+	// 二级分类
+	await getClassify();
+
+	uni.hideLoading();
+	// 关闭下拉刷新
+	uni.stopPullDownRefresh();
 });
 </script>
 

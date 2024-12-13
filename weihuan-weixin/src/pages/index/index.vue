@@ -1,8 +1,7 @@
 <template>
 	<!-- 打开弹窗时，禁止滑动页面，必须要在第一个节点 -->
 	<page-meta :page-style="'overflow:' + (login_show ? 'hidden' : 'visible')"></page-meta>
-	<Skeleton v-if="loading" />
-	<view v-else>
+	<view>
 		<!-- 登录弹窗 -->
 		<login-popup :show="login_show" @maskClick="maskClick"></login-popup>
 		<!-- 顶部到胶囊的高度 -->
@@ -55,12 +54,12 @@
 					</view>
 					<view class="content">
 						<view class="name">
-							{{ nickName }}
+							<text>{{ nickName }}</text>
 							<image class="vip" src="/static/img/vip.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
 						</view>
 						<view class="lead">
 							<image class="phone" src="/src/static/img/phone.png" mode="widthFix" lazy-load></image>
-							{{ MobileEncryption(mobile) }}
+							<text class="mobile">{{ MobileEncryption(mobile) }}</text>
 						</view>
 					</view>
 					<image class="star_cover" src="/src/static/img/user_star.png" mode="widthFix"></image>
@@ -151,24 +150,15 @@
 
 <script setup>
 //onPageScroll:滚动事件
-import { onPageScroll } from '@dcloudio/uni-app';
+import { onPageScroll, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 import { ref, computed, onMounted, watch, nextTick } from 'vue';
-
-import Skeleton from './skeleton.vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 // api
 import { getBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon, classifyList, commonData } from '@/api/index.js';
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
-// store的state
-import { useState } from '@/store/useState.js';
-// store
-import { useStore } from 'vuex';
-const useStoreFn = useStore();
 
-// 加载
-const loading = ref(true);
 // 默认头像
 const headPortrait = ref('/static/img/head_portrait.png');
 const nickName = ref('微信用户');
@@ -185,17 +175,8 @@ const noticeText = ref('');
 const coupon_list = ref([]);
 // 分类
 const classify_list = ref([]);
-// 用户数据
-const { userData } = useState(['userData']);
 // 推荐列表
 const recommendBannerList = ref([]);
-
-// 监听用户信息
-watch(userData, (newVal, oldVal) => {
-	if (newVal) {
-		getUserDataFn();
-	}
-});
 
 // 打开登录弹窗
 function show_login() {
@@ -203,14 +184,11 @@ function show_login() {
 }
 
 // 点击登录弹窗遮罩，关闭弹窗
-function maskClick(e) {
-	if (e.login == 'success') {
-		mobile.value = uni.getStorageSync('mobile');
-		// 获取用户数据
-		getUserDataFn();
-		// 优惠卷
-		getCouponList();
-	}
+function maskClick() {
+	// 获取用户数据
+	getUserDataFn();
+	// 优惠卷
+	getCouponList();
 	login_show.value = false;
 }
 
@@ -226,10 +204,6 @@ const getUserDataFn = async () => {
 			const avatar = res.data.avatar;
 			if (avatar) {
 				headPortrait.value = avatar;
-			}
-			if (!userData) {
-				// 存储用户数据
-				useStoreFn.commit('storageUserData', res.data);
 			}
 		});
 	}
@@ -465,14 +439,37 @@ onMounted(async () => {
 	await getCommonData();
 	// 热门推荐
 	await getSwiperBanner(2);
-	mobile.value = uni.getStorageSync('mobile');
-	if (mobile.value) {
-		// 获取用户信息
-		await getUserDataFn();
-		// 优惠卷
-		await getCouponList();
-	}
-	loading.value = false;
+	// 获取用户信息
+	await getUserDataFn();
+	// 优惠卷
+	await getCouponList();
+});
+
+// 开启下拉刷新
+onPullDownRefresh(async () => {
+	// 获取swiper轮播图
+	await getSwiperBanner();
+	// 获取定位ip
+	await getLocation();
+	// 公告列表
+	await getNoticeList();
+	// 分类
+	await getClassify();
+	// 公共数据
+	await getCommonData();
+	// 热门推荐
+	await getSwiperBanner(2);
+	// 获取用户信息
+	await getUserDataFn();
+	// 优惠卷
+	await getCouponList();
+	// 关闭下拉刷新
+	uni.stopPullDownRefresh();
+});
+
+onShow(() => {
+	// 获取用户信息
+	getUserDataFn();
 });
 </script>
 
@@ -612,6 +609,8 @@ onMounted(async () => {
 				font-size: 30rpx;
 				font-weight: 600;
 				color: #000;
+				display: flex;
+				align-items: center;
 			}
 			.vip {
 				width: 46rpx;
@@ -620,9 +619,15 @@ onMounted(async () => {
 				font-size: 24rpx;
 				color: #000;
 				margin-top: 10rpx;
+				display: flex;
+				align-items: center;
 			}
 			.phone {
 				width: 14rpx;
+			}
+
+			.mobile {
+				padding-left: 6rpx;
 			}
 		}
 

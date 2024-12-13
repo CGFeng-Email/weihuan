@@ -84,6 +84,7 @@ import useMenuButton from '../../hooks/useMenu.js';
 // 系统信息
 import getSystem from '../../hooks/getSystem.js';
 import { storeList } from '@/api/index.js';
+import { onPullDownRefresh } from '@dcloudio/uni-app';
 
 const mapContent = ref(null);
 const latitude = ref(null);
@@ -244,6 +245,12 @@ function open_details(id) {
 onMounted(() => {
 	get_location();
 });
+
+onPullDownRefresh(() =>{
+	get_location();
+	// 关闭下拉刷新
+	uni.stopPullDownRefresh();
+})
 </script>
 
 <style lang="scss" scoped>

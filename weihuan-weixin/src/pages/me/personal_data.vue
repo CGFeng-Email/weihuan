@@ -59,14 +59,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { onLoad } from '@dcloudio/uni-app';
+import { ref, onMounted } from 'vue';
 import bottomVue from '../component/bottom.vue';
 import { imageBase64 } from '@/hooks/useTool.js';
 import { getUserData, uploadImg, editUserData } from '@/api/index.js';
-// store
-import { useStore } from 'vuex';
-const useStoreFn = useStore();
 
 const headPortrait = ref('/static/img/head_portrait.png');
 const nickName = ref('微信用户');
@@ -81,11 +77,9 @@ const getUserDataFn = async () => {
 	console.log('用户信息', res);
 	nickName.value = res.data.nickname;
 	userMobile.value = res.data.mobile;
-	const name = res.data.real_name;
-	const email = res.data.email;
+	userName.value = res.data.real_name;
+	userEmail.value = res.data.email;
 	const avatar = res.data.avatar;
-	if (name) userName.value = name;
-	if (email) userEmail.value = email;
 	if (avatar) headPortrait.value = avatar;
 };
 
@@ -121,13 +115,6 @@ const bottom_click = async () => {
 	uni.hideLoading();
 
 	if (res.code == 1) {
-		
-		// 存储用户数据
-		useStoreFn.commit('storageUserData', {
-			nickname: nickName.value,
-			avatar: headPortrait.value
-		});
-		
 		uni.showToast({
 			title: '修改成功',
 			icon: 'none',
@@ -136,7 +123,7 @@ const bottom_click = async () => {
 	}
 };
 
-onLoad(() => {
+onMounted(() => {
 	getUserDataFn();
 });
 </script>

@@ -25,7 +25,7 @@
 			</view>
 			<view class="content">
 				<view class="name">
-					{{ nickName }}
+					<text class="text">{{ nickName }}</text>
 					<image class="vip" src="/static/img/vip2.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
 				</view>
 				<view class="lead">
@@ -74,11 +74,6 @@
 			</view>
 		</view>
 
-		<!-- 广告 -->
-		<!-- <view class="advertising">
-			<image class="cover" src="/src/static/img/me_advertising.png" mode="widthFix"></image>
-		</view> -->
-
 		<!-- 推荐 -->
 		<view class="recommend">
 			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
@@ -121,19 +116,9 @@ import { ref, onMounted, watch, computed } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 //onPageScroll:滚动事件
-import { onPageScroll } from '@dcloudio/uni-app';
+import { onPageScroll, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 // api
 import { getUserData, getBanner } from '@/api/index.js';
-// store
-import { useStore } from 'vuex';
-import { useState } from '@/store/useState.js';
-const useStoreFn = useStore();
-const { stateNickName, stateMobile, stateHeadPortrait } = useState(['stateNickName', 'stateHeadPortrait']);
-
-watch([stateNickName, stateHeadPortrait], (newVal, oldVal) => {
-	console.log('newVal', newVal);
-	if (nickName.value != newVal[0] || headPortrait.value != newVal[1]) getUserDataFn();
-});
 
 // 登录弹窗
 const login_show = ref(false);
@@ -160,11 +145,8 @@ function show_login() {
 }
 
 // 点击登录弹窗遮罩，关闭弹窗
-function maskClick(e) {
-	if (e && e.login == 'success') {
-		mobile.value = uni.getStorageSync('mobile');
-		getUserDataFn();
-	}
+function maskClick() {
+	getUserDataFn();
 	login_show.value = false;
 }
 
@@ -174,7 +156,6 @@ function isLogin() {
 		show_login();
 		return false;
 	}
-
 	return true;
 }
 
@@ -209,8 +190,6 @@ const getUserDataFn = async () => {
 		if (avatar) {
 			headPortrait.value = avatar;
 		}
-		// 存储用户数据
-		useStoreFn.commit('storageUserData', res.data);
 	}
 
 	uni.hideLoading();
@@ -395,9 +374,18 @@ onPageScroll((e) => {
 	}
 });
 
-onMounted(() => {
+onShow(() => {
+	console.log('我的 onShow');
 	getUserDataFn();
 	getSwiperBanner();
+});
+
+// 开启下拉刷新
+onPullDownRefresh(async () => {
+	await getUserDataFn();
+	await getSwiperBanner();
+	// 关闭下拉刷新
+	uni.stopPullDownRefresh();
 });
 </script>
 
@@ -464,6 +452,8 @@ page {
 				font-size: 30rpx;
 				font-weight: 600;
 				color: #fff;
+				display: flex;
+				align-items: center;
 			}
 			.vip {
 				width: 64rpx;
@@ -472,6 +462,8 @@ page {
 				font-size: 24rpx;
 				color: #fff;
 				margin-top: 10rpx;
+				display: flex;
+				align-items: center;
 			}
 			.phone {
 				width: 14rpx;
@@ -480,6 +472,10 @@ page {
 			.icon-shouji {
 				font-size: 24rpx;
 				color: #fff;
+				margin-right: 6rpx;
+			}
+			.text {
+				padding-right: 10rpx;
 			}
 		}
 

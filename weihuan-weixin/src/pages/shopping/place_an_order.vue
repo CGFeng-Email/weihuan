@@ -210,16 +210,13 @@
 </template>
 
 <script setup>
-import { onLoad, onPageScroll, onShareAppMessage } from '@dcloudio/uni-app';
+import { onLoad, onPageScroll, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import List from '@/pages/shopping/list.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
 import { orderDetails, shoppingSpecification, selectSpecification, getUserData, addCart, isCollect, shoppingList } from '@/api/index.js';
 // 防抖、节流
 import _ from 'underscore';
-// store
-import { useStore } from 'vuex';
-const useStoreFn = useStore();
 
 // 商品id
 const id = ref('');
@@ -279,17 +276,17 @@ onLoad(async (load) => {
 	console.log('load', load);
 	id.value = load.id;
 	spec_key.value = load.spec_key;
-	
+	if (load.quantity) {
+		quantity.value = Number(load.quantity);
+	}
+
 	if (id.value) {
 		// 详情数据
 		await getOrderDetails();
 	}
 
-	mobile.value = uni.getStorageSync('mobile');
-	if (mobile.value) {
-		// 获取用户信息
-		await getUserDataFn();
-	}
+	// 获取用户信息
+	await getUserDataFn();
 
 	// 热门推荐
 	await getHotRecommend();
@@ -309,10 +306,8 @@ function show_login() {
 }
 
 // 点击弹窗遮罩，关闭弹窗
-const maskClick = async (e) => {
-	if (e && e.login == 'success') {
-		await getUserDataFn();
-	}
+const maskClick = async () => {
+	await getUserDataFn();
 	specificationRef.value.close();
 	login_show.value = false;
 	pageMeta.value = false;
@@ -399,7 +394,8 @@ const submitOrder = async () => {
 					storeCount: shoppingStoreCount.value,
 					serve: details.goods_service
 				}
-			]
+			],
+			isCart: 0
 		};
 
 		console.log('立即购买', params);
@@ -411,7 +407,8 @@ const submitOrder = async () => {
 		const params = {
 			goods_id: details.value.id,
 			spec_key: specificationList.value.children[specificationIndex.value].id,
-			goods_num: quantity.value
+			goods_num: quantity.value,
+			isCart: 0
 		};
 		const res = await addCart(params);
 		console.log('加入购物车', res);
@@ -482,17 +479,19 @@ const getOrderDetails = async () => {
 };
 
 // 商品规格
-const getShoppingSpecification = async (id, spec_key) => {
+const getShoppingSpecification = async (id, mod_id) => {
 	const res = await shoppingSpecification(id, mod_id);
 	console.log('商品规格', res);
 	if (res.code == 1) {
 		specificationList.value = res.data[0];
 		// 有规格id的情况下
 		if (spec_key.value && specificationList.value.children.length > 0) {
-			console.log('规格', spec_key.value);
-			specificationList.value.forEach(item => {
-				
-			})
+			specificationList.value.children.forEach(async (item, index) => {
+				if (item.id == spec_key.value) {
+					specificationIndex.value = index;
+					await getSelectSpecification(item.id);
+				}
+			});
 		}
 	}
 };
@@ -531,8 +530,6 @@ const getUserDataFn = async () => {
 	if (res.code == 1) {
 		mobile.value = res.data.mobile;
 		grade.value = res.data.grade;
-		// 存储用户数据
-		useStoreFn.commit('storageUserData', res.data);
 	}
 };
 
@@ -573,13 +570,21 @@ const hotRecommentItem = (id) => {
 	});
 };
 
-// 转发分享
+// 分享聊天，朋友
 onShareAppMessage((res) => {
-	if (res.from == 'button') {
-		return {
-			title: details.value.title
-		};
-	}
+	console.log('分享', res);
+	return {
+		title: details.value.title,
+		path: `/pages/shopping/place_an_order?id=${id.value}`
+	};
+});
+
+// 转发朋友圈
+onShareTimeline(() => {
+	return {
+		title: details.value.title,
+		path: `/pages/shopping/place_an_order?id=${id.value}`
+	};
 });
 
 // 卸载

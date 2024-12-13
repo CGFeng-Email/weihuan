@@ -1,6 +1,6 @@
 <!-- 确认订单 -->
 <template>
-	<page-meta :page-style="'overflow:' + (couponPopup ? 'hidden' : 'visible')"></page-meta>
+	<page-meta :page-style="'overflow:' + (isScroll ? 'hidden' : 'visible')"></page-meta>
 
 	<view class="main">
 		<!-- 配送方式：物流配送 -->
@@ -58,7 +58,7 @@
 					<view class="shopping_top">
 						<view class="title over2">{{ item.title }}</view>
 						<view class="spec">
-							<text>{{ item.specificationTitle }}: {{ item.selectSpecificationTitle }}</text>
+							<text>{{ item.specificationTitle }} {{ item.specificationTitle ? ':' : '' }} {{ item.selectSpecificationTitle }}</text>
 							<text class="store_count">库存: {{ item.storeCount }}</text>
 						</view>
 					</view>
@@ -179,7 +179,9 @@
 						</view>
 					</block>
 				</view>
+				<Empty tips="暂无可用优惠券"></Empty>
 			</scroll-view>
+			
 			<view class="bottom_btn">
 				<button class="btn_bg" @click="hidePopup">确认</button>
 			</view>
@@ -194,6 +196,7 @@ import { onLoad } from '@dcloudio/uni-app';
 import { ref, onUnmounted } from 'vue';
 import Bottom from '../component/bottom.vue';
 import { getUserData, getShoppingAddress, nearStore, immedPayment, OrderPayment } from '@/api/index.js';
+import Empty from '../component/empty.vue';
 
 // 页面滚动
 const isScroll = ref(false);
@@ -227,6 +230,8 @@ const orderFreight = ref(0);
 const size = ref(20);
 // 总计价格
 const totalPrice = ref(null);
+// 是否购物车下单 1=是
+const defaultIsCart = ref(0);
 
 onLoad(async (load) => {
 	uni.showLoading({
@@ -245,11 +250,15 @@ onLoad(async (load) => {
 	// 用户信息
 	await getUserDataFn();
 
-	const { delivery_type, buy_goods, shopping } = JSON.parse(load.params);
+	const { delivery_type, buy_goods, shopping, isCart } = JSON.parse(load.params);
 	console.log('delivery_type', delivery_type);
 	console.log('buy_goods', buy_goods);
+	// 配送方式
 	deliveryType.value = delivery_type;
+	// 商品列表
 	shoppingList.value = buy_goods;
+	// 是否购物车下单
+	defaultIsCart.value = isCart;
 
 	// 自提点
 	if (deliveryType.value == 20) {
@@ -387,7 +396,7 @@ const submitOrder = async () => {
 		console.log('订单支付', res2);
 		if (res2.code == 1) {
 			// 微信支付
-			await wxPayment();
+			await wxPayment(res2.data.wechat_payinfo);
 		}
 	}
 };
@@ -412,7 +421,8 @@ const getImmetPayment = async (isSettle = 1) => {
 		coupon_id: selectCouponIndex.value != null ? couponList.value[selectCouponIndex.value].id : '',
 		is_settle: isSettle,
 		buy_goods: list,
-		buyer_remark: textarta.value
+		buyer_remark: textarta.value,
+		is_cart: defaultIsCart.value
 	};
 
 	console.log('params', params);
@@ -431,21 +441,33 @@ const getImmetPayment = async (isSettle = 1) => {
 };
 
 // 微信支付
-const wxPayment = () => {
-	return;
+const wxPayment = (params) => {
 	// 仅作为示例，非真实参数信息。
 	uni.requestPayment({
 		provider: 'wxpay',
-		timeStamp: String(Date.now()),
-		nonceStr: 'A1B2C3D4E5',
-		package: 'prepay_id=wx20180101abcdefg',
-		signType: 'MD5',
-		paySign: '',
-		success: function (res) {
-			console.log('success:' + JSON.stringify(res));
+		timeStamp: params.timeStamp,
+		nonceStr: params.nonceStr,
+		package: params.package,
+		signType: params.signType,
+		paySign: params.paySign,
+		success: function (pay) {
+			console.log('支付成功:', pay);
+			if (pay.errMsg == 'requestPayment:ok') {
+				uni.showToast({
+					title: '支付成功',
+					duration: 1500,
+					icon: 'none',
+					mask: true,
+					success: () => {
+						setTimeout(() => {
+							uni.navigateBack();
+						}, 1500);
+					}
+				});
+			}
 		},
-		fail: function (err) {
-			console.log('fail:' + JSON.stringify(err));
+		fail: function (payErr) {
+			console.log('支付失败:', payErr);
 		}
 	});
 };
@@ -466,6 +488,7 @@ page {
 <style lang="scss" scoped>
 .main {
 	padding: 20rpx 30rpx;
+	min-height: 100vh;
 }
 
 .store {
@@ -857,7 +880,6 @@ page {
 		height: 640rpx;
 		padding: 20rpx 0;
 		box-sizing: border-box;
-		background: #f5f5f7;
 		.list {
 			padding: 0 20rpx;
 		}

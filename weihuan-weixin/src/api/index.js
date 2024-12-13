@@ -282,3 +282,12 @@ export const delCartShopping = async (params) => {
 		data: params
 	})
 }
+
+// 修改购物车商品数量
+export const editCartShopping = async (params) => {
+	return request({
+		url: '/mini/cart/change',
+		method: 'post',
+		data: params
+	})
+}
