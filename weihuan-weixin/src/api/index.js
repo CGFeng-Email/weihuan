@@ -291,3 +291,12 @@ export const editCartShopping = async (params) => {
 		data: params
 	})
 }
+
+// 订单列表
+export const orderList = async (params) => {
+	return request({
+		url: '/mini/order/getList',
+		method: 'post',
+		data: params
+	})
+}

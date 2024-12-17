@@ -50,12 +50,14 @@
 				<view class="wrap" @click="open_personal">
 					<view class="head_portrait">
 						<image class="cover" :src="headPortrait" mode="widthFix"></image>
-						<image class="vip" src="/static/img/head_vip.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
 					</view>
 					<view class="content">
 						<view class="name">
 							<text>{{ nickName }}</text>
-							<image class="vip" src="/static/img/vip.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
+							<image class="vip" src="/static/img/me_index.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
+							<image class="vip" src="/static/img/me_v1.png" mode="widthFix" lazy-load v-else-if="isVip == 'vip1'"></image>
+							<image class="vip" src="/static/img/me_v2.png" mode="widthFix" lazy-load v-else-if="isVip == 'vip2'"></image>
+							<image class="vip" src="/static/img/me_v3.png" mode="widthFix" lazy-load v-else-if="isVip == 'vip3'"></image>
 						</view>
 						<view class="lead">
 							<image class="phone" src="/src/static/img/phone.png" mode="widthFix" lazy-load></image>
@@ -161,7 +163,7 @@ import { MobileEncryption } from '@/hooks/useTool.js';
 
 // 默认头像
 const headPortrait = ref('/static/img/head_portrait.png');
-const nickName = ref('微信用户');
+const nickName = ref('炜洹游客用户');
 const mobile = ref(null);
 const isVip = ref('普通会员');
 const address = ref(null);
@@ -206,6 +208,11 @@ const getUserDataFn = async () => {
 				headPortrait.value = avatar;
 			}
 		});
+	} else {
+		mobile.value = null;
+		isVip.value = null;
+		nickName.value = '炜洹游客用户';
+		headPortrait.value = '/static/img/head_portrait.png';
 	}
 };
 
@@ -234,7 +241,9 @@ const getCouponList = async () => {
 
 // 领取优惠券
 const getCouponItem = async (is_get, id) => {
-	if (!id) return;
+	if (!id || !mobile.value) {
+		login_show.value = true;
+	}
 
 	// 立即使用
 	if (is_get == 1) {
@@ -467,7 +476,7 @@ onPullDownRefresh(async () => {
 	uni.stopPullDownRefresh();
 });
 
-onShow(() => {
+onShow(async () => {
 	// 获取用户信息
 	getUserDataFn();
 });
@@ -588,17 +597,9 @@ onShow(() => {
 		.head_portrait {
 			width: 104rpx;
 			flex: none;
-			position: relative;
 			.cover {
 				width: 100%;
 				border-radius: 50%;
-			}
-
-			.vip {
-				position: absolute;
-				top: -16rpx;
-				right: -6rpx;
-				width: 37rpx;
 			}
 		}
 
@@ -613,7 +614,7 @@ onShow(() => {
 				align-items: center;
 			}
 			.vip {
-				width: 46rpx;
+				width: 64rpx;
 			}
 			.lead {
 				font-size: 24rpx;

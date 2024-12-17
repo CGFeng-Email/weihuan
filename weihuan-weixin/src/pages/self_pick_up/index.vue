@@ -110,52 +110,61 @@ const get_location = () => {
 		success: async (res) => {
 			latitude.value = res.latitude;
 			longitude.value = res.longitude;
-			if (res.latitude && res.longitude) {
-				const params = {
-					longitude: longitude.value,
-					latitude: latitude.value
-				};
-				const res = await storeList(params);
-				if (res.code == 1) {
-					mapContent.value = uni.createMapContext('mapId', proxy);
-					if (res.data.length > 0) {
-						const list = res.data.map((item, index) => {
-							item.longitude = Number(item.longitude);
-							item.latitude = Number(item.latitude);
-							if (index == 0) {
-								item.width = iconActiveWidth.value;
-								item.height = iconActiveHeight.value;
-								item.iconPath = iconActive.value;
-							} else {
-								item.width = 28;
-								item.height = 42;
-								item.iconPath = defaultImg.value;
-							}
-
-							item.callout = {
-								content: item.title,
-								display: 'ALWAYS',
-								textAlign: 'center',
-								padding: 7,
-								bgColor: '#fff',
-								borderRadius: 4,
-								fontSize: 14,
-								color: '#000'
-							};
-							return item;
-						});
-						markersList.value = list;
-						console.log('markersList', markersList.value);
-					}
-				}
-			}
+			getStoreList({
+				longitude: res.longitude,
+				latitude: res.latitude
+			});
 		},
 		fail: (err) => {
-			console.log('err', err);
+			console.log('拒绝地址授权', err);
+			const value = uni.getStorageSync('location');
+			longitude.value = value.location.lng;
+			latitude.value = value.location.lat;
+			getStoreList({
+				longitude: value.location.lng,
+				latitude: value.location.lat
+			});
 		}
 	});
 
 	uni.hideLoading();
+};
+
+// 获取自提点列表
+const getStoreList = async (params) => {
+	const res = await storeList(params);
+	if (res.code == 1) {
+		mapContent.value = uni.createMapContext('mapId', proxy);
+		if (res.data.length > 0) {
+			const list = res.data.map((item, index) => {
+				item.longitude = Number(item.longitude);
+				item.latitude = Number(item.latitude);
+				if (index == 0) {
+					item.width = iconActiveWidth.value;
+					item.height = iconActiveHeight.value;
+					item.iconPath = iconActive.value;
+				} else {
+					item.width = 28;
+					item.height = 42;
+					item.iconPath = defaultImg.value;
+				}
+
+				item.callout = {
+					content: item.title,
+					display: 'ALWAYS',
+					textAlign: 'center',
+					padding: 7,
+					bgColor: '#fff',
+					borderRadius: 4,
+					fontSize: 14,
+					color: '#000'
+				};
+				return item;
+			});
+			markersList.value = list;
+			console.log('自提点列表', markersList.value);
+		}
+	}
 };
 
 // 轮播切换
@@ -246,11 +255,11 @@ onMounted(() => {
 	get_location();
 });
 
-onPullDownRefresh(() =>{
+onPullDownRefresh(() => {
 	get_location();
 	// 关闭下拉刷新
 	uni.stopPullDownRefresh();
-})
+});
 </script>
 
 <style lang="scss" scoped>

@@ -49,7 +49,7 @@
 			<view class="order_details">
 				<view class="li">
 					<view class="name">发货时间</view>
-					<view class="val">{{ formatTime(item.code) }}</view>
+					<view class="val">{{ item.code }}</view>
 				</view>
 				<view class="li">
 					<view class="name">收货人</view>
@@ -83,7 +83,7 @@
 				</view>
 				<view class="li">
 					<view class="name">下单时间</view>
-					<view class="val">{{ formatTime(item.order_deta) }}</view>
+					<view class="val">{{ item.order_deta }}</view>
 				</view>
 				<view class="li">
 					<view class="name">订单状态</view>
@@ -112,7 +112,7 @@
 import OrderItem from './item.vue';
 import Bottom from '@/pages/component/bottom.vue';
 import { ref } from 'vue';
-import { formatTime } from '/src/hooks/format_time.js';
+// import { } from '/src/hooks/format_time.js';
 
 const item = ref({
 	id: 1,

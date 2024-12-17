@@ -54,7 +54,7 @@ watch(
 function wx_login() {
 	if (!condition.value) {
 		uni.showToast({
-			title: '请勾选隐私政策',
+			title: '请阅读并勾选用户协议',
 			mask: true,
 			icon: 'none',
 			duration: 2000

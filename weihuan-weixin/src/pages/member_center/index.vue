@@ -28,12 +28,10 @@
 					<!-- 头像 -->
 					<view class="box">
 						<image class="portrait" src="/static/img/head_portrait.png" mode="aspectFit"></image>
-						<image class="vip" src="/static/img/head_vip.png" mode="widthFix"></image>
 					</view>
 					<view class="right_content">
 						<view class="name">
 							<text class="text">思源本兮</text>
-							<image class="icon" src="/src/static/img/vip2.png" mode="widthFix"></image>
 						</view>
 						<view class="phone">
 							<image class="icon" src="/src/static/img/phone.png" mode="widthFix"></image>

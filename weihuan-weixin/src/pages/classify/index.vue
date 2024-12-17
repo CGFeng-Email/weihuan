@@ -10,7 +10,7 @@
 	<!-- 顶部区域占位 -->
 	<view style="height: 170rpx"></view>
 	<!-- 主体 -->
-	<swiper class="swiper" :current="swiperIndex" :duration="700" @change="swiperChange">
+	<swiper class="swiper" :current="swiperIndex" :duration="0" @change="swiperChange">
 		<uni-transition :show="childCategory.length > 0" mode-class="fade" :duration="300">
 			<swiper-item v-for="(item, index) in classify_list" :key="item.id">
 				<view class="swiper-item">
@@ -59,11 +59,11 @@
 
 						<!-- 列表 -->
 						<view class="list">
-							<block v-for="item2 in allShoppingList" :key="item2.id" v-if="allShoppingList.length > 0">
+							<block v-for="item2 in allShoppingList" :key="item2.id">
 								<Item :item="item2" @itemClick="itemClick"></Item>
 							</block>
-							
-							<Empty v-else tips="小伟正在紧急补充货源哟"></Empty>
+
+							<Empty tips="小伟正在紧急补充货源哟" :show="isEmpty"></Empty>
 
 							<view style="height: 20px"></view>
 						</view>
@@ -75,7 +75,7 @@
 </template>
 
 <script setup>
-import { ref, onUnmounted, nextTick } from 'vue';
+import { ref, onUnmounted, nextTick, computed } from 'vue';
 import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
 import Search from '../component/search.vue';
 import MenuChild from './menu.vue';
@@ -146,6 +146,14 @@ onLoad(async () => {
 	});
 
 	uni.hideLoading();
+});
+
+// 空组件是否显示
+const isEmpty = computed(() => {
+	nextTick(() => {
+		if (allShoppingList.value.length > 0) return false;
+		return true;
+	});
 });
 
 // swiper切换
@@ -275,7 +283,7 @@ function open_search() {
 
 // 卸载之后
 onUnmounted(() => {
-	uni.$off('classify_params');
+	uni.$off('classifyMenu');
 });
 
 // 开启下拉刷新

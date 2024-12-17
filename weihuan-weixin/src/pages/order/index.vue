@@ -24,7 +24,26 @@
 		</view>
 	</view>
 	<!-- 导航栏 -->
-	<navigate class="top_navigate" :list="navList" :itemIndex="itemIndex" @itemClick="itemClick" :top="useMenuButton().navigateTop" />
+	<view class="tabs_box" :style="{ top: useMenuButton().navigateTop,  }">
+		<uv-tabs
+			class="tabs"
+			lineWidth="44"
+			lineColor="#fe968d"
+			:list="navList"
+			@click="itemClick"
+			:current="tabsCurrent"
+			:activeStyle="{
+				color: '#000',
+				fontWeight: 'bold'
+			}"
+			:inactiveStyle="{
+				color: '#606266',
+				fontSize: '24rpx'
+			}"
+			itemStyle="padding-left: 12px; padding-right: 12px; height: 82rpx;"
+		></uv-tabs>
+	</view>
+
 	<!-- 占位 -->
 	<view :style="{ height: useMenuButton().orderHeight + 'px' }"></view>
 
@@ -35,10 +54,11 @@
 				<view class="list">
 					<scroll-view class="scroll_view" scroll-y scroll-with-animation enable-back-to-top :scroll-anchoring="true" @scrolltolower="scrolltolower">
 						<view class="scroll_item">
-							<block v-for="(item, index) in shopping_list" :key="item.id">
+							<block v-for="(item, index) in list" :key="item.id">
 								<OrderItem :item="item" :head_title_index="head_title_index" @stateClick="stateClick" @open_details="open_details"></OrderItem>
 							</block>
 						</view>
+						<uni-load-more :status="isMore" v-if="totalPage > 1"></uni-load-more>
 					</scroll-view>
 				</view>
 			</swiper-item>
@@ -60,51 +80,106 @@ import useMenuButton from '../../hooks/useMenu.js';
 import getSystem from '../../hooks/getSystem.js';
 import navigate from '/src/pages/component/navigate.vue';
 import OrderItem from './item.vue';
-import { ref } from 'vue';
+import { ref, nextTick } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
+import { orderList } from '@/api/index.js';
+import _ from 'underscore';
+
+// 页码
+const page = ref(1);
+// 条数
+const size = ref(4);
+// 总页码
+const totalPage = ref(1);
+// 订单类型
+const type = ref('all');
+// tabs下标
+const tabsCurrent = ref(0);
+// 标题页面
+const head_title_index = ref(0);
+// 列表
+const list = ref([]);
+// 列表加载
+const isMore = ref('more');
+// 导航栏列表
+const navList = ref([
+	{
+		name: '全部',
+		type: 'all'
+	},
+	{
+		name: '待付款',
+		type: 'payment'
+	},
+	{
+		name: '待发货',
+		type: 'delivery'
+	},
+	{
+		name: '待收货',
+		type: 'received'
+	},
+	{
+		name: '待自提',
+		type: ' extract'
+	},
+	{
+		name: '已完成',
+		type: 'complete'
+	},
+	{
+		name: '已取消',
+		type: 'cancel'
+	}
+]);
 
 onLoad((params) => {
 	console.log('params', params);
 	if (params.head_title_index && params.index) {
 		head_title_index.value = params.head_title_index;
-		itemIndex.value = params.index;
+		tabsCurrent.value = params.index;
+		getOrderList();
 	}
 });
 
-// 标题页面
-const head_title_index = ref(0);
+// 页面标题切换
 function switchPage(i) {
 	head_title_index.value = i;
 }
 
-// 导航栏列表
-const navList = ref([
-	{
-		title: '全部'
-	},
-	{
-		title: '待付款'
-	},
-	{
-		title: '待发货'
-	},
-	{
-		title: '待收货'
-	},
-	{
-		title: '已完成'
-	},
-	{
-		title: '退换/售后'
+// 获取订单列表
+const getOrderList = async (more = false) => {
+	if (more) {
+		isMore.value = 'loading';
 	}
-]);
-// 导航栏
-const itemIndex = ref(0);
+	const params = {
+		page: page.value,
+		size: size.value,
+		type: navList.value[tabsCurrent.value].type
+	};
+	const res = await orderList(params);
+	console.log('订单列表', res);
+	if (res.code == 1) {
+		if (more) {
+			list.value = [...list.value, ...res.data.lists];
+		} else {
+			list.value = res.data.lists;
+			totalPage.value = res.data.page_no;
+		}
+	}
+
+	if (more) {
+		if (page.value >= totalPage.value) {
+			return (isMore.value = 'no-more');
+		}
+		isMore.value = 'more';
+	}
+};
+
 // 导航栏切换
 function itemClick(e) {
-	if (itemIndex.value != e.i) {
-		itemIndex.value = e.i;
-	}
+	if (tabsCurrent.value == e.index) return;
+	tabsCurrent.value = e.index;
 }
 
 function swiperChange(e) {
@@ -119,147 +194,19 @@ function swiperChange(e) {
 	}, 400);
 }
 
-// 列表
-const shopping_list = ref([
-	{
-		id: 1,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		specification: [
-			{
-				name: '原味',
-				num: 3
-			},
-			{
-				name: '雪域牛乳',
-				num: 2
-			}
-		],
-		boom: true,
-		price: 130,
-		outmodend_price: 210,
-		total_price: 332,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		num: 1,
-		code: 2021053100011,
-		status: '待付款',
-		date: 1729591360322
-	},
-	{
-		id: 2,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		specification: [
-			{
-				name: '原味',
-				num: 3
-			},
-			{
-				name: '雪域牛乳',
-				num: 2
-			}
-		],
-		boom: true,
-		price: 130,
-		outmodend_price: 210,
-		total_price: 332,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		num: 1,
-		code: 2021053100011,
-		status: '待付款',
-		date: 1729591360322
-	},
-	{
-		id: 3,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		specification: [
-			{
-				name: '原味',
-				num: 3
-			},
-			{
-				name: '雪域牛乳',
-				num: 2
-			}
-		],
-		boom: true,
-		price: 130,
-		outmodend_price: 210,
-		total_price: 332,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		num: 1,
-		code: 2021053100011,
-		status: '待付款',
-		date: 1729591360322
-	},
-	{
-		id: 4,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		specification: [
-			{
-				name: '原味',
-				num: 3
-			},
-			{
-				name: '雪域牛乳',
-				num: 2
-			}
-		],
-		boom: true,
-		price: 130,
-		outmodend_price: 210,
-		total_price: 332,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		num: 1,
-		code: 2021053100011,
-		status: '待付款',
-		date: 1729591360322
-	},
-	{
-		id: 5,
-		src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
-		type: 'type2',
-		title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-		specification: [
-			{
-				name: '原味',
-				num: 3
-			},
-			{
-				name: '雪域牛乳',
-				num: 2
-			}
-		],
-		boom: true,
-		price: 130,
-		outmodend_price: 210,
-		total_price: 332,
-		tips: '全程冻品冷链运输，保质保鲜',
-		location: '广州',
-		num: 1,
-		code: 2021053100011,
-		status: '待付款',
-		date: 1729591360322
+// 触底
+const moreScroll = () => {
+	console.log('++');
+	if (page.value < totalPage.value) {
+		page.value++;
+		getOrderList(true);
 	}
-]);
-
-// 滚动到底部时触发
-function scrolltolower(e) {
-	console.log(e);
-}
+};
+const scrolltolower = _.debounce(moreScroll, 800);
 
 // 核销码弹窗
 const checkCodeRef = ref(null);
+
 // 打开核销码弹窗
 function stateClick(e) {
 	console.log(e);
@@ -301,12 +248,6 @@ function return_page() {
 	uni.navigateBack();
 }
 </script>
-
-<style>
-page {
-	background: #fbfbfb;
-}
-</style>
 
 <style lang="scss" scoped>
 .top {
@@ -352,6 +293,15 @@ page {
 	}
 }
 
+.tabs_box {
+	position: fixed;
+	left: 0;
+	z-index: 3;
+	height: 82rpx;
+	background: #fff;
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
 .list {
 	height: 100%;
 }
@@ -376,10 +326,14 @@ page {
 	background: #fff;
 	.scroll_view {
 		height: 100%;
-		padding: 28rpx 0;
+		padding: 10rpx 0 20rpx;
 		.scroll_item {
 			padding: 0 20rpx;
 			margin: 1px 0;
+
+			.item:last-child {
+				margin-bottom: 0;
+			}
 		}
 	}
 }

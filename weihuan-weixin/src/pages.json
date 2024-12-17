@@ -238,6 +238,13 @@
 				"navigationBarTitleText": "开票申请",
 				"navigationBarTextStyle": "black"
 			}
+		},
+		{
+			"path": "pages/order/obligation",
+			"style": {
+				"navigationBarTitleText": "待付款",
+				"navigationBarTextStyle": "black"
+			}
 		}
 	],
 	"globalStyle": {

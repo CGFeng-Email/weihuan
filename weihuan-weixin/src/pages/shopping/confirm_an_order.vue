@@ -106,7 +106,7 @@
 						<text v-else>{{ couponList[selectCouponIndex].remark }}</text>
 					</view>
 					<view class="text_box" v-else>
-						<text class="coupon_count">{{ couponCount }}</text>
+						<text class="coupon_count">{{ couponList.length }}</text>
 						<text class="text">张可用</text>
 					</view>
 					<uni-icons class="icon" type="right" size="13" color="#a2a2a2"></uni-icons>
@@ -116,15 +116,7 @@
 				<view class="name">订单备注</view>
 				<view class="right">
 					<view class="textarea_box">
-						<uni-easyinput
-							type="textarea"
-							v-model="textarta"
-							trim
-							:inputBorder="false"
-							primaryColor="#A2A2A2"
-							placeholder="请填写您的备注内容"
-							placeholderStyle="#A2A2A2"
-						></uni-easyinput>
+						<textarea v-model="textarta" placeholder-class="textarea" placeholder="请填写您的备注内容" />
 					</view>
 				</view>
 			</view>
@@ -148,7 +140,7 @@
 				<view class="title" :class="{ active: couponPopupTabsIndex == 0 }" @click="switch_coupon(0)">可用优惠卷({{ couponCount }})</view>
 			</view>
 			<scroll-view class="scroll_view" scroll-y enable-back-to-top scroll-anchoring enhanced enable-passive>
-				<view class="list">
+				<view class="list" v-if="couponList.length > 0">
 					<block v-for="(item, index) in couponList" :key="item.id">
 						<view class="item" @click="selectCoupon(index)">
 							<view class="left_box">
@@ -179,9 +171,9 @@
 						</view>
 					</block>
 				</view>
-				<Empty tips="暂无可用优惠券"></Empty>
+				<Empty tips="暂无可用优惠券" v-else></Empty>
 			</scroll-view>
-			
+
 			<view class="bottom_btn">
 				<button class="btn_bg" @click="hidePopup">确认</button>
 			</view>
@@ -214,8 +206,6 @@ const location = ref({});
 const store = ref({});
 // 可用优惠券
 const couponList = ref([]);
-// 可用优惠卷
-const couponCount = ref(0);
 // 优惠券弹窗
 const couponPopup = ref(false);
 // 优惠券弹窗tabs下标
@@ -288,8 +278,6 @@ const getUserDataFn = async () => {
 	const res = await getUserData();
 	console.log('用户信息', res);
 	if (res.code == 1) {
-		// 可用优惠卷
-		couponCount.value = res.data.coupon_count;
 		if (res.data.default_address.length > 0) {
 			// 有默认地址
 			defaultAddress.value = res.data.default_address;
@@ -357,6 +345,7 @@ const inCrement = (storeCount, index) => {
 
 // 打开优惠卷弹窗
 const openCoupon = () => {
+	if (couponList.value.length <= 0) return;
 	isScroll.value = true;
 	couponPopup.value.open();
 };
@@ -800,18 +789,17 @@ page {
 			}
 		}
 
-		.email {
-		}
-
-		::v-deep .uni-easyinput__content-textarea {
-			margin: 0;
-			font-size: 26rpx;
-			line-height: 36rpx;
-			color: #000;
-		}
-
 		.textarea_box {
 			padding-left: 20rpx;
+
+			::v-deep textarea {
+				padding: 4rpx 0;
+				font-size: 26rpx;
+				line-height: 36rpx;
+				box-sizing: border-box;
+				width: auto;
+				height: 160rpx;
+			}
 		}
 
 		.price_box {

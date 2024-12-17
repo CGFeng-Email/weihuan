@@ -138,7 +138,7 @@
 					<view class="price_box">
 						<text class="symbol">￥</text>
 						<text class="price">{{ price }}</text>
-						<text class="primary_price">￥{{ details.market_price }}</text>
+						<text class="primary_price">￥{{ marketPrice }}</text>
 					</view>
 					<view class="market">
 						<view class="market_box">
@@ -267,6 +267,8 @@ const size = ref(10);
 const totalPage = ref(0);
 // 热门推荐列表
 const hotRecommentList = ref([]);
+// 市场价
+const marketPrice = ref(0);
 
 onLoad(async (load) => {
 	uni.showLoading({
@@ -408,7 +410,8 @@ const submitOrder = async () => {
 			goods_id: details.value.id,
 			spec_key: specificationList.value.children[specificationIndex.value].id,
 			goods_num: quantity.value,
-			isCart: 0
+			isCart: 0,
+			delivery_type: deliverySelectIndex.value == 1 ? 20 : 10
 		};
 		const res = await addCart(params);
 		console.log('加入购物车', res);
@@ -513,12 +516,17 @@ const getSelectSpecification = async (id) => {
 	if (res.code == 1) {
 		// 库存
 		shoppingStoreCount.value = res.data.store_count;
+		// 市场价
+		marketPrice.value = res.data.market_price;
+		// 实际支付价格
+		price.value = res.data.price;
+		
 		// 会员等级
-		if (grade.value == '普通会员') {
-			price.value = res.data.market_price;
-		} else if (grade.value == 'SVIP') {
-			price.value = res.data.svip_price;
-		}
+		// if (grade.value == '普通会员') {
+		// 	price.value = res.data.price;
+		// } else if (grade.value == 'SVIP') {
+		// 	price.value = res.data.price;
+		// }
 	}
 	uni.hideLoading();
 };

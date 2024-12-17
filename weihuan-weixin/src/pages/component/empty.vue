@@ -1,8 +1,10 @@
 <template>
-	<view class="empty">
-		<image class="cover" :src="imgSrc" mode="widthFix"></image>
-		<view class="lead">{{ tips }}</view>
-	</view>
+	<uni-transition mode-class="fade" :show="show">
+		<view class="empty">
+			<image class="cover" :src="imgSrc" mode="widthFix"></image>
+			<view class="lead">{{ tips }}</view>
+		</view>
+	</uni-transition>
 </template>
 
 <script setup>
@@ -15,6 +17,12 @@ const props = defineProps({
 	imgSrc: {
 		type: String,
 		default: '../../static/img/empty_content.png'
+	},
+	show: {
+		type: Boolean,
+		default: () => {
+			return false;
+		}
 	}
 });
 </script>

@@ -28,7 +28,7 @@
 				</view>
 				<view class="right">
 					<view class="value">
-						<input class="uni-input input" v-model="userName" placeholder="请输入您的姓名" maxlength="12" />
+						<input class="uni-input input" v-model="userName" placeholder="请输入您的姓名" maxlength="12" confirm-type="done" @confirm="userNameConfirm" />
 					</view>
 				</view>
 			</view>
@@ -38,7 +38,16 @@
 				</view>
 				<view class="right">
 					<view class="value">
-						<input type="tel" class="uni-input input" disabled placeholder="请输入您的电话号码" maxlength="11" v-model="userMobile" />
+						<input
+							type="tel"
+							class="uni-input input"
+							disabled
+							placeholder="请输入您的电话号码"
+							maxlength="11"
+							v-model="userMobile"
+							confirm-type="done"
+							@confirm="userMobileConfiem"
+						/>
 					</view>
 				</view>
 			</view>
@@ -48,19 +57,19 @@
 				</view>
 				<view class="right">
 					<view class="value">
-						<input type="text" class="uni-input input" placeholder="请输入您的邮箱" v-model="userEmail" />
+						<input type="text" class="uni-input input" placeholder="请输入您的邮箱" v-model="userEmail" confirm-type="done" @confirm="userEmailConfirm" />
 					</view>
 				</view>
 			</view>
 		</view>
 	</view>
 
-	<bottomVue title="确认修改" @bottom_click="bottom_click"></bottomVue>
+	<Bottom title="退出登录" @bottom_click="quitLogin"></Bottom>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
-import bottomVue from '../component/bottom.vue';
+import { ref, onMounted, nextTick } from 'vue';
+import Bottom from '../component/bottom.vue';
 import { imageBase64 } from '@/hooks/useTool.js';
 import { getUserData, uploadImg, editUserData } from '@/api/index.js';
 
@@ -89,38 +98,69 @@ const chooseAvatar = async (e) => {
 	const base64 = await imageBase64(url, 'png');
 	const getUploadImg = await uploadImg({ file: base64 });
 	headPortrait.value = getUploadImg.data.url;
+	nextTick(() => {
+		editUserDataFn();
+	});
 };
+
 // 昵称
 const nickNameBlur = (e) => {
+	console.log('e.detail.value', e.detail.value);
 	nickName.value = e.detail.value;
+	nextTick(() => {
+		editUserDataFn();
+	});
 };
 
-// 确认修改
-const bottom_click = async () => {
-	uni.showLoading({
-		title: '修改中',
-		mask: true
+// 姓名修改
+const userNameConfirm = () => {
+	nextTick(() => {
+		editUserDataFn();
 	});
+};
 
-	// 修改用户信息
+// 手机号修改
+const userMobileConfiem = () => {
+	nextTick(() => {
+		editUserDataFn();
+	});
+};
+
+// 邮箱修改
+const userEmailConfirm = () => {
+	nextTick(() => {
+		editUserDataFn();
+	});
+};
+
+// 修改用户信息
+const editUserDataFn = async () => {
 	const res = await editUserData({
 		avatar: headPortrait.value,
 		nickname: nickName.value,
 		real_name: userName.value,
 		email: userEmail.value
 	});
+	console.log('修改用户信息', res);
+};
 
-	console.log('res', res);
-
-	uni.hideLoading();
-
-	if (res.code == 1) {
-		uni.showToast({
-			title: '修改成功',
-			icon: 'none',
-			mask: true
-		});
-	}
+// 退出登录
+const quitLogin = () => {
+	uni.showModal({
+		content: '确定退出登录?',
+		success: function (res) {
+			if (res.confirm) {
+				uni.removeStorageSync('mobile');
+				uni.removeStorage({
+					key: 'token',
+					success: () => {
+						console.log('清理缓存成功');
+						uni.navigateBack();
+					}
+				});
+			}
+		}
+	});
 };
 
 onMounted(() => {

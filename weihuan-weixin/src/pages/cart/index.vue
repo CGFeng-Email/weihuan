@@ -19,7 +19,7 @@
 
 	<view style="height: 31px"></view>
 
-	<view class="main" v-if="list.length > 0">
+	<view class="main">
 		<!-- 购物车列表 -->
 		<view class="list box_border_radius box_shadow">
 			<block v-for="(item, index) in list" :key="item.id">
@@ -76,7 +76,7 @@
 		</view>
 	</view>
 
-	<Empty imgSrc="../../static/img/empty_cart.png" tips="购物车还是空的哦~" v-else></Empty>
+	<Empty imgSrc="../../static/img/empty_cart.png" tips="购物车还是空的哦~" :show="list.length > 0 ? false : true"></Empty>
 
 	<!-- 推荐 -->
 	<view class="hot_recommend">

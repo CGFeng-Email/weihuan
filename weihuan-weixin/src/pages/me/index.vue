@@ -21,16 +21,18 @@
 		<view class="wrap" @click="isLogin">
 			<view class="head_portrait">
 				<image class="cover" :src="headPortrait" mode="widthFix"></image>
-				<image class="vip" src="/static/img/head_vip.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
 			</view>
 			<view class="content">
 				<view class="name">
 					<text class="text">{{ nickName }}</text>
-					<image class="vip" src="/static/img/vip2.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
+					<image class="vip" src="/static/img/me_index.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
+					<image class="vip" src="/static/img/me_v1.png" mode="widthFix" lazy-load v-else-if="isVip == 'vip1'"></image>
+					<image class="vip" src="/static/img/me_v2.png" mode="widthFix" lazy-load v-else-if="isVip == 'vip2'"></image>
+					<image class="vip" src="/static/img/me_v3.png" mode="widthFix" lazy-load v-else-if="isVip == 'vip3'"></image>
 				</view>
 				<view class="lead">
 					<text class="iconfont icon-shouji"></text>
-					<text class="text">{{ mobile || '***********' }}</text>
+					<text class="text">{{ MobileEncryption(mobile) || '***********' }}</text>
 				</view>
 			</view>
 			<view class="set" @click.stop="jump_personal_data">
@@ -119,6 +121,8 @@ import useMenuButton from '../../hooks/useMenu.js';
 import { onPageScroll, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 // api
 import { getUserData, getBanner } from '@/api/index.js';
+// 工具函数
+import { MobileEncryption } from '@/hooks/useTool.js';
 
 // 登录弹窗
 const login_show = ref(false);
@@ -127,7 +131,7 @@ const nickName = ref('微信用户');
 // 手机号
 const mobile = ref(null);
 // 是否svip
-const isVip = ref('普通会员');
+const isVip = ref(null);
 // 头像
 const headPortrait = ref('/static/img/head_portrait.png');
 // 待自提订单数量
@@ -178,6 +182,7 @@ const getUserDataFn = async () => {
 		mask: true
 	});
 	const res = await getUserData();
+	console.log('用户信息', res);
 
 	if (res.code == 1) {
 		nickName.value = res.data.nickname;
@@ -190,6 +195,11 @@ const getUserDataFn = async () => {
 		if (avatar) {
 			headPortrait.value = avatar;
 		}
+	} else {
+		mobile.value = null;
+		nickName.value = '炜洹游客用户';
+		headPortrait.value = '/static/img/head_portrait.png';
+		isVip.value = null;
 	}
 
 	uni.hideLoading();
@@ -375,7 +385,7 @@ onPageScroll((e) => {
 });
 
 onShow(() => {
-	console.log('我的 onShow');
+	console.log('我的onShow');
 	getUserDataFn();
 	getSwiperBanner();
 });
@@ -594,6 +604,9 @@ page {
 .recommend {
 	margin: 20rpx 0;
 	background: #f1f1f1;
+	width: 100vw;
+	padding: 0 20rpx;
+	transform: translateX(-30rpx);
 	.recommend_swiper {
 		width: 100%;
 		height: 384rpx;
