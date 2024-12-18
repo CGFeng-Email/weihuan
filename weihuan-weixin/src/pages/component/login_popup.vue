@@ -80,7 +80,7 @@ function wx_login() {
 					uni.setStorageSync('openid', reslogin.data.openid);
 					uni.setStorageSync('token', reslogin.data.token);
 					uni.setStorageSync('mobile', reslogin.data.mobile);
-					
+
 					if (reslogin.data.is_reg == 0) {
 						// 未注册
 						uni.navigateTo({
@@ -95,7 +95,7 @@ function wx_login() {
 			console.log('err', err);
 		}
 	});
-	
+
 	uni.hideLoading();
 }
 
@@ -161,6 +161,9 @@ function open_privacy() {
 		.check {
 			display: flex;
 			align-items: center;
+			.icon {
+				transform: translateY(2px);
+			}
 		}
 		.jump {
 			color: #34489e;

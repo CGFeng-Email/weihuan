@@ -3,18 +3,12 @@
 	<view class="main">
 		<!-- 配送方式：物流配送 -->
 		<view class="user_location box_shadow box_border_radius" v-if="deliveryType == 10">
-			<view class="content" @click="open_address" v-if="defaultAddress.length > 0 || Object.keys(defaultAddress).length > 0">
+			<view class="content" @click="open_address">
 				<view class="head">
-					<text class="title">{{ defaultAddress.consignee }}</text>
-					<text class="phone">{{ defaultAddress.mobile }}</text>
+					<text class="title">{{ address.real_name || address.consignee }}</text>
+					<text class="phone">{{ address.mobile }}</text>
 				</view>
-				<view class="address">{{ defaultAddress.province + defaultAddress.city + defaultAddress.district + defaultAddress.address }}</view>
-			</view>
-
-			<view class="content" @click="open_address" v-else>
-				<view class="head">
-					<text class="title">添加收货地址</text>
-				</view>
+				<view class="address">{{ address.province + address.city + address.district + address.address }}</view>
 			</view>
 			<uni-icons type="right" size="18"></uni-icons>
 		</view>
@@ -54,24 +48,23 @@
 				<image class="cover box_border_radius" :src="item.image" mode="aspectFill"></image>
 				<view class="content">
 					<view class="shopping_top">
-						<view class="title over2">{{ item.title }}</view>
+						<view class="title over2">{{ item.goods_name }}</view>
 						<view class="spec">
-							<text>{{ item.specificationTitle }} {{ item.specificationTitle ? ':' : '' }} {{ item.selectSpecificationTitle }}</text>
-							<text class="store_count">库存: {{ item.storeCount }}</text>
+							<text>{{ item.key_name }}</text>
 						</view>
 					</view>
 					<view class="shopping_bottom">
 						<view class="price_box">
 							<text class="symbol">￥</text>
 							<text class="price">{{ item.price }}</text>
-							<text class="primary_price">￥{{ item.outPrice }}</text>
+							<text class="primary_price">￥{{ item.market_price }}</text>
 						</view>
 						<view class="quantity_box">
-							<view class="icon" @click="deCrement(index)">
+							<view class="icon">
 								<i class="iconfont icon-jianhao"></i>
 							</view>
-							<view class="quantity_number">{{ item.quantity }}</view>
-							<view class="icon" @click="inCrement(item.storeCount, index)">
+							<view class="quantity_number">{{ item.goods_num }}</view>
+							<view class="icon">
 								<i class="iconfont icon-jia"></i>
 							</view>
 						</view>
@@ -94,7 +87,11 @@
 				</view>
 			</view>
 			<view class="li">
-				<view class="name">优惠券</view>
+				<view class="name">优惠金额</view>
+				<view class="right lead freight">
+					<text class="price_icon">￥</text>
+					<text>{{ couponPrice }}</text>
+				</view>
 			</view>
 			<view class="li">
 				<view class="name">订单备注</view>
@@ -122,6 +119,18 @@
 				</view>
 			</view>
 		</view>
+
+		<view class="order_details box_shadow box_border_radius">
+			<view class="title">订单信息</view>
+			<view class="li">
+				<view class="name">订单状态</view>
+				<view class="val">{{ status }}</view>
+			</view>
+			<view class="li">
+				<view class="name">订单日期</view>
+				<view class="val">{{ orderTime }}</view>
+			</view>
+		</view>
 	</view>
 	<Bottom title="立即支付" @bottom_click="submitOrder"></Bottom>
 </template>
@@ -130,53 +139,58 @@
 import { onLoad } from '@dcloudio/uni-app';
 import { ref, onUnmounted } from 'vue';
 import Bottom from '../component/bottom.vue';
-import { getUserData } from '@/api/index.js';
+import { orderDetails, OrderPayment } from '@/api/index.js';
 
 // 页面滚动
 const isScroll = ref(false);
+// 订单id
+const orderId = ref('');
 // openid
 const openid = ref('');
 // 配送方式 10物流配送 20上门自提
-const deliveryType = ref('');
+const deliveryType = ref(null);
+// 配送地址
+const address = ref({});
+// 自提地址
+const store = ref({});
 // 商品列表
 const shoppingList = ref([]);
-// 用户默认收货地址
-const defaultAddress = ref([]);
-// 经纬度
-const location = ref({});
-// 最近自提点
-const store = ref({});
-// 可用优惠券
-const couponList = ref([]);
-// 优惠券弹窗
-const couponPopup = ref(false);
-// 优惠券弹窗tabs下标
-const couponPopupTabsIndex = ref(0);
-// 选中的可用优惠券下标
-const selectCouponIndex = ref(null);
 // 备注
 const textarta = ref('');
 // 订单运费
 const orderFreight = ref(0);
-// 条数
-const size = ref(20);
+// 优惠券金额
+const couponPrice = ref(0);
 // 总计价格
 const totalPrice = ref(null);
-// 是否购物车下单 1=是
-const defaultIsCart = ref(0);
+// 订单编号
+const orderSn = ref('');
+// 订单状态
+const status = ref('');
+// 下单时间
+const orderTime = ref('');
 
 onLoad(async (load) => {
+	console.log('load', load);
+
 	uni.showLoading({
 		title: '加载中...'
 	});
 
+	orderId.value = load.orderId;
+
+	openid.value = uni.getStorageSync('openid');
+
+	// 获取订单详情
+	await getOrderDetails();
+
 	// 获取立即购买数据
-	await getImmetPayment();
+	// await getImmetPayment();
 
 	// 选择地址
 	uni.$on('selectAddress', (item) => {
 		console.log('选择地址', item);
-		defaultAddress.value = item;
+		address.value = item;
 	});
 
 	// 选择自提点
@@ -188,7 +202,28 @@ onLoad(async (load) => {
 	uni.hideLoading();
 });
 
-// 跳转添加收货地址
+// 订单详情
+const getOrderDetails = async () => {
+	const params = {
+		order_id: orderId.value
+	};
+	const res = await orderDetails(params);
+	console.log('订单详情', res);
+	if (res.code == 1) {
+		deliveryType.value = res.data.delivery_type;
+		address.value = res.data.address;
+		store.value = res.data.store;
+		shoppingList.value = res.data.order_goods;
+		textarta.value = res.data.buyer_remark;
+		orderFreight.value = res.data.express_price;
+		couponPrice.value = res.data.coupon_money;
+		totalPrice.value = res.data.total_price;
+		status.value = res.data.status_name;
+		orderTime.value = res.data.add_at;
+	}
+};
+
+// 跳转收货地址
 const open_address = () => {
 	uni.navigateTo({
 		url: `/pages/address/index?select=${true}`
@@ -216,64 +251,28 @@ const open_location = () => {
 
 // 立即支付
 const submitOrder = async () => {
-	// 获取支付订单
-	const res = await getImmetPayment(0);
-	console.log('立即支付', res);
-	if (res.code == 1) {
-		// 订单支付
-		const params = {
-			is_settle: 0,
-			pay_type: 20,
-			order_id: res.data.order_id,
-			openid: openid.value
-		};
+	const params = {
+		is_settle: 1,
+		pay_type: 20,
+		order_id: orderId.value,
+		openid: openid.value
+	};
+	const res = await OrderPayment(params);
+	console.log('订单支付', res);
 
-		const res2 = await OrderPayment(params);
-		console.log('订单支付', res2);
-		if (res2.code == 1) {
-			// 微信支付
-			await wxPayment(res2.data.wechat_payinfo);
+	if (res.code == 1) {
+		// 微信支付
+		if (res.data.wechat_payinfo.length > 0) {
+			await wxPayment(res.data.wechat_payinfo);
+		} else {
+			uni.showToast({
+				title: '抱歉，支付失败',
+				duration: 1500,
+				icon: 'none',
+				mask: true
+			});
 		}
 	}
-};
-
-// 获取立即购买数据
-// isSettle:1 任何修改, isSettle:0 去支付
-const getImmetPayment = async (isSettle = 1) => {
-	// 规格列表
-	const list = shoppingList.value.map((item) => {
-		return {
-			goods_id: item.goods_id,
-			spec_key: item.spec_key,
-			goods_num: item.quantity
-		};
-	});
-	console.log('list', list);
-
-	const params = {
-		delivery_type: deliveryType.value,
-		address_id: defaultAddress.value.id || '',
-		store_id: store.value.id || '',
-		coupon_id: selectCouponIndex.value != null ? couponList.value[selectCouponIndex.value].id : '',
-		is_settle: isSettle,
-		buy_goods: list,
-		buyer_remark: textarta.value,
-		is_cart: defaultIsCart.value
-	};
-
-	console.log('params', params);
-
-	const res = await immedPayment(params);
-
-	console.log('获取立即购买数据', res);
-
-	if (res.code == 1) {
-		totalPrice.value = res.data.pay_price;
-		orderFreight.value = res.data.express_price;
-		couponList.value = res.data.coupon_list;
-	}
-
-	if (isSettle == 0) return res;
 };
 
 // 微信支付
@@ -304,6 +303,12 @@ const wxPayment = (params) => {
 		},
 		fail: function (payErr) {
 			console.log('支付失败:', payErr);
+			uni.showToast({
+				title: payErr.errMsg,
+				duration: 2000,
+				icon: 'none',
+				mask: true
+			});
 		}
 	});
 };
@@ -531,6 +536,7 @@ page {
 .specification_list {
 	padding: 0 24rpx;
 	background: #fff;
+	margin-bottom: 30rpx;
 	.li {
 		padding: 24rpx 0;
 		display: flex;
@@ -793,6 +799,33 @@ page {
 			height: 80rpx;
 			line-height: 80rpx;
 			font-size: 32rpx;
+		}
+	}
+}
+
+.order_details {
+	padding: 20rpx 24rpx;
+	background: #fff;
+	.title {
+		font-size: 28rpx;
+		color: #000;
+		font-weight: 600;
+		padding-bottom: 20rpx;
+	}
+	.li {
+		display: flex;
+		justify-content: space-between;
+		margin-bottom: 20rpx;
+		.name {
+			font-size: 28rpx;
+			color: #707070;
+			font-weight: 500;
+		}
+
+		.val {
+			font-size: 26rpx;
+			color: #000;
+			font-weight: 500;
 		}
 	}
 }

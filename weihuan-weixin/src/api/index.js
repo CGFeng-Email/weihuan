@@ -195,8 +195,8 @@ export const commonData = () => {
 	})
 }
 
-// 订单详情
-export const orderDetails = (params) => {
+// 商品详情
+export const goodsDetails = (params) => {
 	return request({
 		url: '/mini/goods/detail',
 		method: 'post',
@@ -296,6 +296,15 @@ export const editCartShopping = async (params) => {
 export const orderList = async (params) => {
 	return request({
 		url: '/mini/order/getList',
+		method: 'post',
+		data: params
+	})
+}
+
+// 订单详情
+export const orderDetails = async (params) => {
+	return request({
+		url: '/mini/order/detail',
 		method: 'post',
 		data: params
 	})

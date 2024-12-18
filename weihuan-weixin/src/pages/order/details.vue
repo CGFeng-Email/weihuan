@@ -1,11 +1,20 @@
 <template>
 	<view class="main">
-		<OrderItem :item="item" :state_btn="false"></OrderItem>
+		<!-- 收货地址 -->
+		<view class="user_location box_shadow box_border_radius" v-if="deliveryType == 10">
+			<view class="content" @click="open_address">
+				<view class="head">
+					<text class="title">{{ address.real_name || address.consignee }}</text>
+					<text class="phone">{{ address.mobile }}</text>
+				</view>
+				<view class="address">{{ address.province + address.city + address.district + address.address }}</view>
+			</view>
+			<uni-icons type="right" size="18"></uni-icons>
+		</view>
 
 		<!-- 自提点 -->
-		<view class="store_box card_box box_border_radius box_shadow">
+		<view class="store_box card_box box_border_radius box_shadow" v-if="deliveryType == 20">
 			<view class="title">自提点</view>
-
 			<view class="store_info">
 				<image class="cover" :src="store.image" mode="aspectFill"></image>
 				<view class="content">
@@ -44,32 +53,33 @@
 			</view>
 		</view>
 
-		<view class="card_box box_border_radius box_shadow">
-			<view class="title">客户信息</view>
-			<view class="order_details">
-				<view class="li">
-					<view class="name">发货时间</view>
-					<view class="val">{{ item.code }}</view>
-				</view>
-				<view class="li">
-					<view class="name">收货人</view>
-					<view class="val">{{ item.name }}</view>
-				</view>
-				<view class="li">
-					<view class="name">手机号</view>
-					<view class="val">{{ item.phone }}</view>
-				</view>
-				<view class="li">
-					<view class="name">地址</view>
-					<view class="val">{{ item.address }}</view>
-				</view>
-				<view class="li">
-					<view class="name">物流公司</view>
-					<view class="val">{{ item.logistics }}</view>
-				</view>
-				<view class="li">
-					<view class="name">物流单号</view>
-					<view class="val">{{ item.logistics_code }}</view>
+		<!-- 商品列表 -->
+		<view class="shopping_list">
+			<view class="shopping box_shadow box_border_radius" v-for="(item, index) in shoppingList" :key="item.id">
+				<image class="cover box_border_radius" :src="item.image" mode="aspectFill"></image>
+				<view class="content">
+					<view class="shopping_top">
+						<view class="title over2">{{ item.goods_name }}</view>
+						<view class="spec">
+							<text>{{ item.key_name }}</text>
+						</view>
+					</view>
+					<view class="shopping_bottom">
+						<view class="price_box">
+							<text class="symbol">￥</text>
+							<text class="price">{{ item.price }}</text>
+							<text class="primary_price">￥{{ item.market_price }}</text>
+						</view>
+						<view class="quantity_box">
+							<view class="icon">
+								<i class="iconfont icon-jianhao"></i>
+							</view>
+							<view class="quantity_number">{{ item.goods_num }}</view>
+							<view class="icon">
+								<i class="iconfont icon-jia"></i>
+							</view>
+						</view>
+					</view>
 				</view>
 			</view>
 		</view>
@@ -79,104 +89,91 @@
 			<view class="order_details">
 				<view class="li">
 					<view class="name">订单编号</view>
-					<view class="val">{{ item.order_code }}</view>
+					<view class="val">{{ orderSn }}</view>
 				</view>
 				<view class="li">
 					<view class="name">下单时间</view>
-					<view class="val">{{ item.order_deta }}</view>
+					<view class="val">{{ orderTime }}</view>
 				</view>
 				<view class="li">
 					<view class="name">订单状态</view>
-					<view class="val">{{ item.order_status }}</view>
+					<view class="val">{{ status }}</view>
 				</view>
 				<view class="li">
 					<view class="name">配送费</view>
-					<view class="val">{{ item.order_style }}</view>
-				</view>
-				<view class="li">
-					<view class="name">支付状态</view>
-					<view class="val">{{ item.order_price_status }}</view>
+					<view class="val">{{ orderFreight }}</view>
 				</view>
 				<view class="li">
 					<view class="name">订单备注</view>
-					<view class="val">{{ item.order_textarea }}</view>
+					<view class="val">{{ textarta }}</view>
 				</view>
 			</view>
 		</view>
-	
-		<Bottom title="确认核销" />
+
+		<Bottom title="确认核销" v-if="head_title_index == 1 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 20" />
 	</view>
 </template>
 
 <script setup>
-import OrderItem from './item.vue';
 import Bottom from '@/pages/component/bottom.vue';
 import { ref } from 'vue';
-// import { } from '/src/hooks/format_time.js';
+import { onLoad } from '@dcloudio/uni-app';
+import { orderDetails } from '@/api/index.js';
 
-const item = ref({
-	id: 1,
-	src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-	type: 'type2',
-	title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-	specification: [
-		{
-			name: '原味',
-			num: 3
-		},
-		{
-			name: '雪域牛乳',
-			num: 2
-		}
-	],
-	boom: true,
-	price: 130,
-	outmodend_price: 210,
-	total_price: 332,
-	tips: '全程冻品冷链运输，保质保鲜',
-	location: '广州',
-	num: 1,
-	code: 2021053100011,
-	status: '待付款',
-	date: 1729580946317,
-	name: '谷志华',
-	phone: 13654345217,
-	address: '广东省广州市天河区中山大道中38号',
-	logistics: '圆通速递',
-	logistics_code: 123654231258,
-	order_code: 2021053100111,
-	order_deta: 1729588815329,
-	order_status: '已发货',
-	order_style: '包邮',
-	order_price_status: '已支付',
-	order_textarea: '暂无备注信息'
+// 订单id
+const orderId = ref('');
+// openid
+const openid = ref('');
+// 配送方式 10物流配送 20上门自提
+const deliveryType = ref(null);
+// 配送地址
+const address = ref({});
+// 自提地址
+const store = ref({});
+// 商品列表
+const shoppingList = ref([]);
+// 备注
+const textarta = ref('');
+// 订单运费
+const orderFreight = ref(0);
+// 优惠券金额
+const couponPrice = ref(0);
+// 总计价格
+const totalPrice = ref(null);
+// 订单编号
+const orderSn = ref('');
+// 订单状态
+const status = ref('');
+// 下单时间
+const orderTime = ref('');
+
+onLoad((load) => {
+	console.log(load);
+	orderId.value = load.orderId;
+	getOrderDetails();
 });
 
-// 自提点
-const store = ref({
-	id: 3,
-	width: 28,
-	height: 41,
-	latitude: 23.12463,
-	longitude: 113.36199,
-	title: '广东省广州市天河区黄埔大道中258号',
-	iconPath: '/static/img/map.png',
-	image: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/shop.png',
-	store: '陈先生',
-	mobile: 13636986542,
-	date: '09:00 - 23:00',
-	distance: '200m',
-	callout: {
-		content: '黄埔大道中258号店',
-		display: 'ALWAYS',
-		textAlign: 'center',
-		padding: '6',
-		bgColor: '#fff',
-		borderRadius: 8,
-		fontSize: 14,
-		color: '#000'
+// 订单详情
+const getOrderDetails = async () => {
+	const params = {
+		order_id: orderId.value
+	};
+	const res = await orderDetails(params);
+	console.log('订单详情', res);
+	if (res.code == 1) {
+		deliveryType.value = res.data.delivery_type;
+		address.value = res.data.address;
+		store.value = res.data.store;
+		shoppingList.value = res.data.order_goods;
+		textarta.value = res.data.buyer_remark;
+		orderFreight.value = res.data.express_price;
+		couponPrice.value = res.data.coupon_money;
+		totalPrice.value = res.data.total_price;
+		status.value = res.data.status_name;
+		orderTime.value = res.data.add_at;
+		orderSn.value = res.data.order_sn;
 	}
-});
+};
 
 // 使用应用内置地图查看位置
 const openLocation = (latitude, longitude) => {
@@ -197,6 +194,40 @@ page {
 <style lang="scss" scoped>
 .main {
 	padding: 30rpx;
+}
+
+.user_location {
+	background: #fff;
+	padding: 24rpx;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24rpx;
+	.content {
+		flex: 1;
+		.head {
+			.title {
+				font-size: 30rpx;
+				font-weight: 600;
+			}
+
+			.phone {
+				font-size: 26rpx;
+				padding-left: 20rpx;
+				font-weight: 600;
+			}
+		}
+		.address {
+			font-size: 28rpx;
+			line-height: 38rpx;
+			color: #919191;
+			margin-top: 10rpx;
+		}
+	}
+
+	.icon {
+		flex: none;
+	}
 }
 
 .store_box {
@@ -268,6 +299,91 @@ page {
 			.iconfont {
 				font-size: 24rpx;
 				padding-right: 8rpx;
+			}
+		}
+	}
+}
+
+.shopping {
+	padding: 24rpx;
+	background: #fff;
+	margin-bottom: 24rpx;
+	display: flex;
+	justify-content: space-between;
+	.cover {
+		width: 190rpx;
+		height: 190rpx;
+		flex: none;
+	}
+
+	.content {
+		flex: 1;
+		padding-left: 24rpx;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		.shopping_top {
+			.title {
+				font-size: 30rpx;
+				line-height: 40rpx;
+				font-weight: 600;
+			}
+
+			.spec {
+				font-size: 24rpx;
+				color: #acacac;
+				padding-top: 10rpx;
+			}
+
+			.store_count {
+				padding-left: 20rpx;
+			}
+		}
+
+		.shopping_bottom {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+
+			.price_box {
+				color: #ff0000;
+				font-weight: 600;
+				font-size: 24rpx;
+				padding-right: 10rpx;
+				.price {
+					font-size: 34rpx;
+					padding-right: 10rpx;
+				}
+
+				.primary_price {
+					font-weight: 500;
+					color: #cbcbcb;
+					text-decoration: line-through;
+				}
+			}
+
+			.quantity_box {
+				display: flex;
+				align-items: center;
+				.icon {
+					width: 40rpx;
+					height: 40rpx;
+					line-height: 40rpx;
+					text-align: center;
+					line-height: 40rpx;
+					background: #d8d8d8;
+					border-radius: 8rpx;
+					.iconfont {
+						font-size: 24rpx;
+						color: #000;
+						font-weight: 600;
+					}
+				}
+
+				.quantity_number {
+					padding: 0 20rpx;
+				}
 			}
 		}
 	}

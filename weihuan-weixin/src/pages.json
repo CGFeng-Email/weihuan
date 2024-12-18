@@ -240,7 +240,7 @@
 			}
 		},
 		{
-			"path": "pages/order/obligation",
+			"path": "pages/order/no_payment",
 			"style": {
 				"navigationBarTitleText": "待付款",
 				"navigationBarTextStyle": "black"

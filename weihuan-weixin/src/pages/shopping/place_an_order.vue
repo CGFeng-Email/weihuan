@@ -214,7 +214,7 @@ import { onLoad, onPageScroll, onShareAppMessage, onShareTimeline } from '@dclou
 import List from '@/pages/shopping/list.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
-import { orderDetails, shoppingSpecification, selectSpecification, getUserData, addCart, isCollect, shoppingList } from '@/api/index.js';
+import { goodsDetails, shoppingSpecification, selectSpecification, getUserData, addCart, isCollect, shoppingList } from '@/api/index.js';
 // 防抖、节流
 import _ from 'underscore';
 
@@ -470,7 +470,7 @@ onPageScroll((e) => {
 
 // 订单详情
 const getOrderDetails = async () => {
-	const res = await orderDetails({ id: id.value });
+	const res = await goodsDetails({ id: id.value });
 	console.log('订单详情', res);
 	if (res.code == 1) {
 		details.value = res.data;
@@ -520,7 +520,7 @@ const getSelectSpecification = async (id) => {
 		marketPrice.value = res.data.market_price;
 		// 实际支付价格
 		price.value = res.data.price;
-		
+
 		// 会员等级
 		// if (grade.value == '普通会员') {
 		// 	price.value = res.data.price;
@@ -1032,10 +1032,12 @@ onUnmounted(() => {
 				font-size: 24rpx;
 				font-weight: 500;
 				padding-left: 10rpx;
+				color: #000;
 			}
 		}
 
 		.active {
+			background: rgba(0, 0, 0, 0.1);
 			.circle {
 				border-color: #fdb681;
 			}

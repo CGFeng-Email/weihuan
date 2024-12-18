@@ -1,6 +1,6 @@
 <template>
 	<uni-transition mode-class="fade" :show="item ? true : false">
-		<view class="item box_shadow box_border_radius" @click="openDetailsClick">
+		<view class="item box_shadow box_border_radius" @click="openDetailsClick(item.id)">
 			<view class="status">
 				<view class="status_title">订单状态:</view>
 				<view class="text orligation" v-if="item.status == 10 && item.pay_status == 10">等待付款</view>
@@ -21,7 +21,7 @@
 						:lazy-load="true"
 						:observeLazyLoad="true"
 						:fade="true"
-						duration="500"
+						duration="200"
 					></uv-image>
 					<!-- <image class="cover" :src="item2.image" mode="widthFix"></image> -->
 				</view>
@@ -38,7 +38,7 @@
 						<view class="outmoded">原价:￥{{ item2.market_price }}</view>
 					</view>
 					<view class="after_sale">
-						<button class="btn">退款/售后</button>
+						<button class="btn" v-if="item.status == 30 && item2.is_refund == 0 && item2.is_expire_refund == 0">退款/售后</button>
 					</view>
 				</view>
 				<view class="shopping_num">
@@ -47,42 +47,35 @@
 				</view>
 			</view>
 
-			<!-- <view class="order_details">
-			<view class="li">
-				<view class="name">订单编号</view>
-				<view class="val">{{ props.item.code }}</view>
-			</view>
-			<view class="li">
-				<view class="name">订单状态</view>
-				<view class="val">{{ props.item.status }}</view>
-			</view>
-			<view class="li">
-				<view class="name">订单日期</view>
-				<view class="val">{{ formatTime(props.item.date) }}</view>
-			</view>
-		</view> -->
-			<!-- <view class="stats">
-			<view class="cancel_btn">
-				<button class="common_btn btn_bg" @click.stop="statusBtnClick('立即核销')" v-if="cancel">立即核销</button>
-			</view>
-			<view class="right_state">
-				<view class="tips">共{{ props.item.num }}件商品</view>
-				<view class="name">总计：</view>
-				<view class="price">
-					<text class="icon">￥</text>
-					<text class="number">{{ props.item.total_price }}</text>
-				</view>
-			</view>
-		</view> -->
 			<view class="state_btn">
 				<!-- 待付款 -->
-				<button class="common_btn btn_bg" @click.stop="statusBtnClick('立即支付')" v-if="item.status == 10 && item.pay_status == 10">立即支付</button>
+				<button class="common_btn btn_bg" @click.stop="statusBtnClick({ type: 'payment', data: { order_id: item.id } })" v-if="item.status == 10 && item.pay_status == 10">
+					立即支付
+				</button>
 				<!-- 发货之前 -->
-				<button class="common_btn" @click.stop="statusBtnClick('物流信息')" v-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.delivery_status == 10">取消订单</button>
+				<button
+					class="common_btn"
+					@click.stop="statusBtnClick('cancel')"
+					v-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.delivery_status == 10"
+				>
+					取消订单
+				</button>
 				<!-- 待收货状态 -->
-				<button class="common_btn" @click.stop="statusBtnClick('物流信息')" v-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 20 && item.receipt_status == 10">物流信息</button>
-				<!-- 核销码： -->
-				<button v-if="head_title_index == 1" class="common_btn btn_bg" @click.stop="statusBtnClick('核销码')">核销码</button>
+				<button
+					class="common_btn"
+					@click.stop="statusBtnClick('logistics')"
+					v-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 20 && item.receipt_status == 10"
+				>
+					物流信息
+				</button>
+				<!-- 核销码 -->
+				<button
+					v-if="head_title_index == 1 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 20"
+					class="common_btn btn_bg"
+					@click.stop="statusBtnClick('核销码')"
+				>
+					核销码
+				</button>
 			</view>
 		</view>
 	</uni-transition>
@@ -120,20 +113,20 @@ const props = defineProps({
 });
 
 // 底部按钮点击
-const statusBtnClick = (e) => {
-	emit('statusBtn', e);
+const statusBtnClick = (params) => {
+	emit('statusBtn', params);
 };
 
 // 跳转详情
-const openDetailsClick = () => {
-	emit('orderDetails');
+const openDetailsClick = (id) => {
+	emit('orderDetails', id);
 };
 </script>
 
 <style lang="scss" scoped>
 .item {
 	background: #fff;
-	padding: 20rpx;
+	padding: 20rpx 20rpx 10rpx;
 	margin-bottom: 20rpx;
 	.status {
 		display: flex;
@@ -192,7 +185,7 @@ const openDetailsClick = () => {
 
 			.price_box {
 				display: flex;
-				align-items: center;
+				align-items: flex-end;
 			}
 		}
 
@@ -202,14 +195,16 @@ const openDetailsClick = () => {
 	}
 
 	.price {
+		display: flex;
+		align-items: center;
 		.icon {
-			font-size: 26rpx;
-			line-height: 36rpx;
+			font-size: 24rpx;
+			line-height: 34rpx;
 			color: #ff0000;
 			font-weight: 500;
 		}
 		.number {
-			font-size: 36rpx;
+			font-size: 34rpx;
 			color: #ff0000;
 			font-weight: 600;
 		}
@@ -298,7 +293,7 @@ const openDetailsClick = () => {
 	}
 
 	.state_btn {
-		margin-top: 20rpx;
+		margin-top: 10rpx;
 		text-align: right;
 		button {
 			display: inline-block;

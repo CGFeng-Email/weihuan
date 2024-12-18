@@ -24,7 +24,7 @@
 		</view>
 	</view>
 	<!-- 导航栏 -->
-	<view class="tabs_box" :style="{ top: useMenuButton().navigateTop,  }">
+	<view class="tabs_box" :style="{ top: useMenuButton().navigateTop }">
 		<uv-tabs
 			class="tabs"
 			lineWidth="44"
@@ -52,10 +52,11 @@
 			<swiper-item>
 				<!-- 列表 -->
 				<view class="list">
+					<Empty :show="list.length == 0 ? true : false" tips="您还没有相关订单"></Empty>
 					<scroll-view class="scroll_view" scroll-y scroll-with-animation enable-back-to-top :scroll-anchoring="true" @scrolltolower="scrolltolower">
 						<view class="scroll_item">
 							<block v-for="(item, index) in list" :key="item.id">
-								<OrderItem :item="item" :head_title_index="head_title_index" @stateClick="stateClick" @open_details="open_details"></OrderItem>
+								<OrderItem :item="item" :head_title_index="head_title_index" @statusBtn="statusBtn" @orderDetails="orderDetails"></OrderItem>
 							</block>
 						</view>
 						<uni-load-more :status="isMore" v-if="totalPage > 1"></uni-load-more>
@@ -84,11 +85,12 @@ import { ref, nextTick } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { orderList } from '@/api/index.js';
 import _ from 'underscore';
+import Empty from '@/pages/component/empty.vue';
 
 // 页码
 const page = ref(1);
 // 条数
-const size = ref(4);
+const size = ref(8);
 // 总页码
 const totalPage = ref(1);
 // 订单类型
@@ -145,17 +147,25 @@ onLoad((params) => {
 // 页面标题切换
 function switchPage(i) {
 	head_title_index.value = i;
+	getOrderList();
 }
 
 // 获取订单列表
 const getOrderList = async (more = false) => {
 	if (more) {
 		isMore.value = 'loading';
+	} else {
+		uni.showLoading({
+			title: '加载中...',
+			
+			mask: true
+		});
 	}
 	const params = {
 		page: page.value,
 		size: size.value,
-		type: navList.value[tabsCurrent.value].type
+		type: navList.value[tabsCurrent.value].type,
+		delivery_type: head_title_index.value == 1 ? 20 : 10
 	};
 	const res = await orderList(params);
 	console.log('订单列表', res);
@@ -164,6 +174,7 @@ const getOrderList = async (more = false) => {
 			list.value = [...list.value, ...res.data.lists];
 		} else {
 			list.value = res.data.lists;
+			page.value = 1;
 			totalPage.value = res.data.page_no;
 		}
 	}
@@ -173,6 +184,8 @@ const getOrderList = async (more = false) => {
 			return (isMore.value = 'no-more');
 		}
 		isMore.value = 'more';
+	} else {
+		uni.hideLoading();
 	}
 };
 
@@ -180,18 +193,13 @@ const getOrderList = async (more = false) => {
 function itemClick(e) {
 	if (tabsCurrent.value == e.index) return;
 	tabsCurrent.value = e.index;
+	getOrderList();
 }
 
+// swiper切换
 function swiperChange(e) {
-	uni.showLoading({
-		title: '加载中',
-		mask: true
-	});
-
-	setTimeout(function () {
-		itemIndex.value = e.detail.current;
-		uni.hideLoading();
-	}, 400);
+	tabsCurrent.value = e.detail.current;
+	getOrderList();
 }
 
 // 触底
@@ -208,11 +216,13 @@ const scrolltolower = _.debounce(moreScroll, 800);
 const checkCodeRef = ref(null);
 
 // 打开核销码弹窗
-function stateClick(e) {
+function statusBtn(e) {
 	console.log(e);
-
-	switch (e) {
-		case '立即支付':
+	switch (e.type) {
+		case 'payment':
+			uni.navigateTo({
+				url: `/pages/order/no_payment?orderId=${e.data.order_id}`
+			});
 			break;
 		case '核销码':
 			checkCodeRef.value.open();
@@ -237,9 +247,9 @@ function checkCodeChange(e) {
 }
 
 // 订单详情
-function open_details() {
+function orderDetails(orderId) {
 	uni.navigateTo({
-		url: '/pages/order/details'
+		url: `/pages/order/details?orderId=${orderId}`
 	});
 }
 

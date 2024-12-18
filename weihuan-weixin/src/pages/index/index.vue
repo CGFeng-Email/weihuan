@@ -223,7 +223,8 @@ const getCouponList = async () => {
 	if (res.code == 1 && res.data.length > 0) {
 		const list = [];
 		let sonList = [];
-		res.data.map((item, index) => {
+
+		res.data.forEach((item, index) => {
 			if (sonList.length <= 1) {
 				sonList.push(item);
 			} else {
@@ -232,7 +233,10 @@ const getCouponList = async () => {
 				sonList = [];
 			}
 		});
-		list.push(sonList);
+
+		if (sonList.length > 0) {
+			list.push(sonList);
+		}
 		sonList = [];
 		coupon_list.value = list;
 		console.log('优惠卷', list);

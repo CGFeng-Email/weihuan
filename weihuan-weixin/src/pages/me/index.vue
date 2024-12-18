@@ -200,6 +200,9 @@ const getUserDataFn = async () => {
 		nickName.value = '炜洹游客用户';
 		headPortrait.value = '/static/img/head_portrait.png';
 		isVip.value = null;
+		wait_take_order_count.value = '-';
+		coupon_count.value = '-';
+		collect_count.value = '-';
 	}
 
 	uni.hideLoading();
@@ -216,7 +219,7 @@ const order_list = ref([
 	{
 		title: '自提订单',
 		head_title_index: 1,
-		index: 0,
+		index: 4,
 		url: '/pages/order/index'
 	},
 	{
@@ -244,7 +247,7 @@ const order_list = ref([
 		title: '已完成',
 		head_title_index: 0,
 		image: '/static/img/order4.png',
-		index: 4,
+		index: 5,
 		url: '/pages/order/index'
 	}
 ]);
