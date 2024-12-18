@@ -107,6 +107,10 @@
 					<view class="name">订单备注</view>
 					<view class="val">{{ textarta }}</view>
 				</view>
+				<view class="li">
+					<view class="name">订单金额</view>
+					<view class="val">￥{{ orderPrice }}</view>
+				</view>
 			</view>
 		</view>
 
@@ -146,6 +150,8 @@ const orderSn = ref('');
 const status = ref('');
 // 下单时间
 const orderTime = ref('');
+// 订单金额
+const orderPrice = ref('');
 
 onLoad((load) => {
 	console.log(load);
@@ -172,6 +178,7 @@ const getOrderDetails = async () => {
 		status.value = res.data.status_name;
 		orderTime.value = res.data.add_at;
 		orderSn.value = res.data.order_sn;
+		orderPrice.value = res.data.pay_price;
 	}
 };
 

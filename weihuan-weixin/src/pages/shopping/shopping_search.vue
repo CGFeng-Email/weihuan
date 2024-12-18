@@ -1,72 +1,85 @@
 <!-- 商品搜索 -->
 <template>
-	<searchVue placeholder="请输入商品关键字" :page="page" @search_input="search_input" @search_confirm="search_confirm" />
-	<view class="hot" v-if="keyword == '' && shopping_list.length == 0">
+	<search placeholder="请输入商品关键字" :page="page" @search_input="search_input" @search_confirm="search_confirm" />
+	<view class="hot" v-if="keyword == '' && list.length == 0">
 		<view class="title">热门搜索</view>
 		<view class="list">
-			<view class="li" v-for="(item,index) in hot_list" :key="item.id" @click="open_shopping">
+			<view class="li" v-for="(item, index) in hotList" :key="item.id" @click="hotItem(item.name)">
 				<text class="iconfont icon-remen" v-if="index < 3"></text>
-				<text class="text">{{ item.title }}</text>
+				<text class="text">{{ item.name }}</text>
 			</view>
 		</view>
 	</view>
-	<searchListVue :list="shopping_list"></searchListVue>
+	<Empty imgSrc="../../static/img/empty.png" tips="抱歉, 没找到商品" :show="keyword != '' && list.length == 0" />
+	<view class="list">
+		<block v-for="item in list" :key="item.id">
+			<Item :item="item"></Item>
+		</block>
+	</view>
+	<uni-load-more :status="isMore" v-if="totalPage > 1"></uni-load-more>
 </template>
 
 <script setup>
-import searchVue from '../component/search.vue';
-import searchListVue from '../component/search_list.vue';
+import { onPageScroll } from '@dcloudio/uni-app';
 import { ref } from 'vue';
+import { shoppingList } from '@/api/index.js';
+import Item from './item.vue';
+import search from '../component/search.vue';
+import Empty from '../component/empty.vue';
 
 const keyword = ref('');
-const page = ref(0);
+const page = ref(1);
+const size = ref(20);
+const totalPage = ref(1);
+const isMore = ref('more');
+const list = ref([]);
+const hotList = ref([]);
 
-const hot_list = ref([
-	{
-		id: 1,
-		title: '猪肉'
-	},
-	{
-		id: 2,
-		title: '鸡蛋'
-	},
-	{
-		id: 3,
-		title: '葱'
-	},
-	{
-		id: 4,
-		title: '虾'
-	},
-	{
-		id: 5,
-		title: '牛奶'
-	},
-	{
-		id: 6,
-		title: '玉米'
-	},
-	{
-		id: 7,
-		title: '辣椒'
-	},
-	{
-		id: 8,
-		title: '饮料'
-	},
-	{
-		id: 9,
-		title: '牛肉'
+const commonData = uni.getStorageSync('commonData');
+hotList.value = commonData.hot_search;
+
+// 搜索列表
+const getShoppingList = async (more = false) => {
+	if (more) {
+		isMore.value = 'loading';
+	} else {
+		uni.showLoading({
+			title: '加载中...',
+			mask: true
+		});
 	}
-]);
 
-// 列表
-const shopping_list = ref([]);
+	const params = {
+		page: page.value,
+		size: size.value,
+		keyword: keyword.value
+	};
+	const res = await shoppingList(params);
+	console.log('搜索列表', res);
+	if (res.code == 1) {
+		if (more) {
+			list.value = [...list.value, ...res.data.lists];
+		} else {
+			list.value = res.data.lists;
+			page.value = 1;
+			totalPage.value = res.data.page_no;
+		}
+	}
+
+	if (more) {
+		if (page.value >= totalPage.value) {
+			return (isMore.value = 'no-more');
+		}
+		isMore.value = 'more';
+	} else {
+		uni.hideLoading();
+	}
+};
 
 // 键盘输入时触发
 function search_input(e) {
 	keyword.value = e.trim();
-	shopping_list.value = keyword.value === '' ? [] : shopping_list.value;
+	list.value = keyword.value === '' ? [] : list.value;
 }
 
 // 键盘回车时触发
@@ -77,90 +90,25 @@ function search_confirm(e) {
 }
 
 // 开始搜索
-function statrSearch() {
+const statrSearch = async () => {
 	if (keyword.value == '') return;
-	uni.showLoading({
-		title: '搜索中',
-		mask: true
-	});
-	// axios
-	setTimeout(() => {
-		shopping_list.value = [
-			{
-				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-				type: 'type2',
-				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-				boom: true,
-				price: 130,
-				primary_price: 210,
-				outmodend_price: 210,
-				tips: '全程冻品冷链运输，保质保鲜',
-				location: '广州'
-			},
-			{
-				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list3.png',
-				type: 'type2',
-				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-				boom: false,
-				price: 120,
-				primary_price: 210,
-				outmodend_price: 210,
-				tips: '全程冻品冷链运输，保质保鲜',
-				location: '广州'
-			},
-			{
-				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list4.png',
-				type: 'type2',
-				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-				boom: false,
-				price: 110,
-				primary_price: 210,
-				outmodend_price: 210,
-				tips: '全程冻品冷链运输，保质保鲜',
-				location: '广州'
-			},
-			{
-				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list5.png',
-				type: 'type2',
-				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-				boom: false,
-				price: 100,
-				primary_price: 210,
-				outmodend_price: 210,
-				tips: '全程冻品冷链运输，保质保鲜',
-				location: '广州'
-			},
-			{
-				src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list6.png',
-				type: 'type2',
-				title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-				boom: false,
-				price: 180,
-				primary_price: 210,
-				outmodend_price: 210,
-				tips: '全程冻品冷链运输，保质保鲜',
-				location: '广州'
-			}
-		];
+	await getShoppingList();
+};
 
-		uni.hideLoading();
-	}, 1000);
-
+// 搜索热门关键词
+function hotItem(text) {
+	keyword.value = text;
+	statrSearch();
 }
 
-// 跳转商品列表
-function open_shopping() {
-	uni.switchTab({
-		url: '/pages/classify/index'
-	})
-}
+// 触底加载
+onPageScroll(() => {
+	if (page.value < totalPage.value) {
+		page.value++;
+		statrSearch();
+	}
+});
 </script>
-
-<style>
-page {
-	background: #fbfbfb;
-}
-</style>
 
 <style lang="scss" scoped>
 .hot {
@@ -182,15 +130,19 @@ page {
 		color: #000;
 		font-weight: 500;
 		margin: 0 20rpx 20rpx 0;
-		
+
 		.iconfont {
 			font-size: 26rpx;
 			color: #ff0000;
 		}
-		
+
 		.text {
 			padding-left: 8rpx;
 		}
 	}
+}
+
+.list {
+	padding: 10rpx 20rpx;
 }
 </style>

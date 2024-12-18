@@ -157,7 +157,6 @@ const getOrderList = async (more = false) => {
 	} else {
 		uni.showLoading({
 			title: '加载中...',
-			
 			mask: true
 		});
 	}
