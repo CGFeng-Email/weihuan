@@ -245,6 +245,13 @@
 				"navigationBarTitleText": "待付款",
 				"navigationBarTextStyle": "black"
 			}
+		},
+		{
+			"path": "pages/order/search",
+			"style": {
+				"navigationBarTitleText": "订单搜索",
+				"backgroundColor": "#fff"
+			}
 		}
 	],
 	"globalStyle": {

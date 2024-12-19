@@ -1,15 +1,6 @@
 <!-- 商品搜索 -->
 <template>
-	<search placeholder="请输入商品关键字" :hotTitle="hotTitle" @searchInput="searchInput" @searchConfirm="searchConfirm" />
-	<view class="hot" v-if="keyword == '' && list.length == 0">
-		<view class="title">热门搜索</view>
-		<view class="list">
-			<view class="li" v-for="(item, index) in hotList" :key="item.id" @click="hotItem(item.name)">
-				<text class="iconfont icon-remen" v-if="index < 3"></text>
-				<text class="text">{{ item.name }}</text>
-			</view>
-		</view>
-	</view>
+	<search placeholder="输入商品名称/订单编号" @searchInput="searchInput" @searchConfirm="searchConfirm" />
 	<Empty imgSrc="../../static/img/empty.png" tips="抱歉, 没找到商品" :show="keyword != '' && list.length == 0" />
 	<view class="list">
 		<block v-for="item in list" :key="item.id">
@@ -22,22 +13,17 @@
 <script setup>
 import { onPageScroll } from '@dcloudio/uni-app';
 import { ref } from 'vue';
-import { shoppingList } from '@/api/index.js';
+import { orderList } from '@/api/index.js';
 import Item from './item.vue';
 import search from '../component/search.vue';
 import Empty from '../component/empty.vue';
 
 const keyword = ref('');
-const hotTitle = ref('');
 const page = ref(1);
-const size = ref(20);
+const size = ref(10);
 const totalPage = ref(1);
-const isMore = ref('more');
 const list = ref([]);
-const hotList = ref([]);
-
-const commonData = uni.getStorageSync('commonData');
-hotList.value = commonData.hot_search;
+const isMore = ref('more');
 
 // 搜索列表
 const getShoppingList = async (more = false) => {
@@ -55,7 +41,7 @@ const getShoppingList = async (more = false) => {
 		size: size.value,
 		keyword: keyword.value
 	};
-	const res = await shoppingList(params);
+	const res = await orderList(params);
 	console.log('搜索列表', res);
 	if (res.code == 1) {
 		if (more) {
@@ -79,7 +65,6 @@ const getShoppingList = async (more = false) => {
 
 // 键盘输入时触发
 function searchInput(e) {
-	hotTitle.value = e.trim();
 	keyword.value = e.trim();
 	list.value = keyword.value === '' ? [] : list.value;
 }
@@ -100,8 +85,6 @@ const statrSearch = async () => {
 // 搜索热门关键词
 function hotItem(text) {
 	keyword.value = text;
-	hotTitle.value = text;
-	console.log('hotTitle', hotTitle.value);
 	statrSearch();
 }
 

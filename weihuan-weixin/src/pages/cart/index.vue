@@ -339,7 +339,6 @@ const switchIcon = async (index, id, quantity, isSelected) => {
 };
 
 // 购买数量 减
-
 const deCrement = async (index, id, isSelected, isPay) => {
 	if (isPay != 1) return;
 	if (list.value[index].goods_num <= 1) return;
@@ -405,6 +404,7 @@ const isPayment = computed(() => {
 		}
 	}
 
+	totalPrice.value = 0;
 	// 默认禁止点击
 	return true;
 });
@@ -461,9 +461,10 @@ onPullDownRefresh(async () => {
 	uni.stopPullDownRefresh();
 });
 
-onShow(async () => {
+onShow(() => {
+	console.log('购物车 show',);
 	// 购物车
-	await getCartListFn();
+	getCartListFn();
 });
 
 onMounted(async () => {

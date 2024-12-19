@@ -117,7 +117,6 @@ onMounted(() => {
 
 .my_address {
 	padding: 30rpx;
-	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 	.head {
 		.iconfont {
 			font-size: 34rpx;

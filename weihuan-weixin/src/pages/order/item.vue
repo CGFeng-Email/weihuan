@@ -2,13 +2,24 @@
 	<uni-transition mode-class="fade" :show="item ? true : false">
 		<view class="item box_shadow box_border_radius" @click="openDetailsClick(item.id)">
 			<view class="status">
-				<view class="status_title">订单状态:</view>
-				<view class="text orligation" v-if="item.status == 10 && item.pay_status == 10">等待付款</view>
-				<view class="text" v-else-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.delivery_status == 10">待发货</view>
+				<view class="status_title">订单状态</view>
+
+				<view class="payment" v-if="item.status == 10 && item.pay_status == 10">
+					<text class="name">等待付款</text>
+					<uv-count-down :time="timestamp(item.pay_end_time)" autoStart format="HH:mm:ss" @change="timeChange">
+						<view class="time">
+							<text class="time__item">{{ timeData.minutes }}分</text>
+						</view>
+					</uv-count-down>
+				</view>
+				<view class="text" v-else>
+					{{ item.status_name }}
+				</view>
+				<!-- <view class="text" v-else-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.delivery_status == 10">待发货</view>
 				<view class="text" v-else-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 20 && item.receipt_status == 10">待收货</view>
 				<view class="text" v-else-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 20">待自提</view>
 				<view class="text" v-else-if="item.status == 30">已完成</view>
-				<view class="text" v-else-if="item.status == 20">已取消</view>
+				<view class="text" v-else-if="item.status == 20">已取消</view> -->
 			</view>
 			<view class="top_cover" v-for="item2 in item.order_goods" :key="item2.id">
 				<view class="cover_box box_border_radius">
@@ -55,7 +66,7 @@
 				<!-- 发货之前 -->
 				<button
 					class="common_btn"
-					@click.stop="statusBtnClick('cancel')"
+					@click.stop="statusBtnClick({ type: 'cancel', data: { order_id: item.id } })"
 					v-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.delivery_status == 10"
 				>
 					取消订单
@@ -63,12 +74,12 @@
 				<!-- 待收货状态 -->
 				<button
 					class="common_btn"
-					@click.stop="statusBtnClick('logistics')"
-					v-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 20 && item.receipt_status == 10"
+					@click.stop="statusBtnClick({ type: 'logistics', data: { order_id: item.id } })"
+					v-if="head_title_index == 0 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.receipt_status == 10"
 				>
 					物流信息
 				</button>
-				<!-- 核销码 -->
+				<!-- 核销码，发货之后就展示核销码 -->
 				<button
 					v-if="head_title_index == 1 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 20"
 					class="common_btn btn_bg"
@@ -82,8 +93,9 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { defineProps, defineEmits } from 'vue';
-import { formatTime } from '@/hooks/useTool.js';
+import { formatTime, timestamp } from '@/hooks/useTool.js';
 
 const emit = defineEmits(['statusBtn', 'orderDetails']);
 
@@ -112,6 +124,9 @@ const props = defineProps({
 	}
 });
 
+// 倒计时时间对象
+const timeData = ref({});
+
 // 底部按钮点击
 const statusBtnClick = (params) => {
 	emit('statusBtn', params);
@@ -120,6 +135,12 @@ const statusBtnClick = (params) => {
 // 跳转详情
 const openDetailsClick = (id) => {
 	emit('orderDetails', id);
+};
+
+// 倒计时
+const timeChange = (e) => {
+	// console.log(e);
+	timeData.value = e;
 };
 </script>
 
@@ -132,21 +153,29 @@ const openDetailsClick = (id) => {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		padding-bottom: 10rpx;
+		padding-bottom: 20rpx;
 
 		.status_title {
-			font-size: 26rpx;
+			font-size: 28rpx;
 			font-weight: 600;
 		}
 
-		.text {
+		.payment {
 			font-size: 26rpx;
 			font-weight: 500;
 			color: fe968d;
+			display: flex;
+			align-items: center;
+			color: #fff;
+			border-radius: 24rpx 0 24rpx 0;
+			font-size: 24rpx;
+			padding: 10rpx 20rpx;
+			background: #ff0000;
 		}
 
-		.orligation {
-			color: #ff0000;
+		.text {
+			font-size: 24rpx;
+			color: #000;
 		}
 	}
 	.top_cover {
@@ -293,7 +322,6 @@ const openDetailsClick = (id) => {
 	}
 
 	.state_btn {
-		margin-top: 10rpx;
 		text-align: right;
 		button {
 			display: inline-block;

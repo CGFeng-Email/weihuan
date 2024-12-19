@@ -1,5 +1,6 @@
 // 格式化时间插件
 import dayjs from "dayjs";
+import moment from "moment";
 
 // 价格后面补12.00操作
 function PriceZero(price) {
@@ -73,10 +74,19 @@ function formatTime(times, type) {
 	return date;
 }
 
+// 将时间转化成时间戳
+function timestamp(date) {
+	// moment()方法将日期或时间字符串转换为Moment对象
+	// 再通过valueOf()方法获取对应的时间戳
+	const timestamp = moment(date).valueOf();
+	return timestamp
+}
+
 export {
 	PriceZero,
 	MobileEncryption,
 	imageBase64,
 	substrText,
-	formatTime
+	formatTime,
+	timestamp
 }

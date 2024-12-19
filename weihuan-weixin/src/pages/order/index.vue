@@ -18,7 +18,7 @@
 	</view>
 	<!-- 搜索 -->
 	<view class="search_box" :style="{ top: useMenuButton().topView }">
-		<view class="search">
+		<view class="search" @click="openSearch">
 			<i class="iconfont icon-sousuo"></i>
 			<text class="text">请输入关键字</text>
 		</view>
@@ -83,7 +83,7 @@ import navigate from '/src/pages/component/navigate.vue';
 import OrderItem from './item.vue';
 import { ref, nextTick } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
-import { orderList } from '@/api/index.js';
+import { orderList, cancelOrder } from '@/api/index.js';
 import _ from 'underscore';
 import Empty from '@/pages/component/empty.vue';
 
@@ -159,6 +159,7 @@ const getOrderList = async (more = false) => {
 			title: '加载中...',
 			mask: true
 		});
+		page.value = 1;
 	}
 	const params = {
 		page: page.value,
@@ -173,7 +174,6 @@ const getOrderList = async (more = false) => {
 			list.value = [...list.value, ...res.data.lists];
 		} else {
 			list.value = res.data.lists;
-			page.value = 1;
 			totalPage.value = res.data.page_no;
 		}
 	}
@@ -192,6 +192,7 @@ const getOrderList = async (more = false) => {
 function itemClick(e) {
 	if (tabsCurrent.value == e.index) return;
 	tabsCurrent.value = e.index;
+
 	getOrderList();
 }
 
@@ -203,7 +204,6 @@ function swiperChange(e) {
 
 // 触底
 const moreScroll = () => {
-	console.log('++');
 	if (page.value < totalPage.value) {
 		page.value++;
 		getOrderList(true);
@@ -214,21 +214,51 @@ const scrolltolower = _.debounce(moreScroll, 800);
 // 核销码弹窗
 const checkCodeRef = ref(null);
 
+// 取消订单
+const cancelOrderFn = async (order_id) => {
+	const params = {
+		order_id
+	};
+	const res = await cancelOrder(params);
+	console.log('取消订单', res);
+	uni.showToast({
+		title: res.msg,
+		icon: 'none',
+		mask: true,
+		duration: 2000
+	});
+};
+
 // 打开核销码弹窗
 function statusBtn(e) {
 	console.log(e);
 	switch (e.type) {
 		case 'payment':
+			// 跳转待支付页面
 			uni.navigateTo({
 				url: `/pages/order/no_payment?orderId=${e.data.order_id}`
+			});
+			break;
+		case 'cancel':
+			// 取消订单
+			uni.showModal({
+				title: '取消订单',
+				content: '确定取消订单?',
+				success: async (res) => {
+					if (res.confirm) {
+						await cancelOrderFn(e.data.order_id);
+						await getOrderList();
+					}
+				}
 			});
 			break;
 		case '核销码':
 			checkCodeRef.value.open();
 			break;
-		case '物流信息':
+		case 'logistics':
+			// 查询物流
 			uni.navigateTo({
-				url: '/pages/order/distribution'
+				url: `/pages/order/distribution?orderId=${e.data.order_id}`
 			});
 			break;
 		case '申请售后':
@@ -251,6 +281,13 @@ function orderDetails(orderId) {
 		url: `/pages/order/details?orderId=${orderId}`
 	});
 }
+
+// 订单搜索
+const openSearch = () => {
+	uni.navigateTo({
+		url: '/pages/order/search'
+	});
+};
 
 // 返回
 function return_page() {

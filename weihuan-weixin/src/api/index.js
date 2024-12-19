@@ -309,3 +309,21 @@ export const orderDetails = async (params) => {
 		data: params
 	})
 }
+
+// 取消订单
+export const cancelOrder = async (params) => {
+	return request({
+		url: '/mini/order/cancel',
+		method: 'post',
+		data: params
+	})
+}
+
+// 查询物流
+export const inquireLogistics = async (params) => {
+	return request({
+		url: '/mini/order/express',
+		method: 'post',
+		data: params
+	})
+}

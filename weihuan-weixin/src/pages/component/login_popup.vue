@@ -162,7 +162,7 @@ function open_privacy() {
 			display: flex;
 			align-items: center;
 			.icon {
-				transform: translateY(2px);
+				transform: translateY(1px);
 			}
 		}
 		.jump {
