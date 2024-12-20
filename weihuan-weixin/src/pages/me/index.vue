@@ -219,7 +219,7 @@ const order_list = ref([
 	{
 		title: '自提订单',
 		head_title_index: 1,
-		index: 4,
+		index: 2,
 		url: '/pages/order/index'
 	},
 	{
@@ -352,7 +352,13 @@ const open_function = (item) => {
 	const title = item.title;
 	switch (title) {
 		case '会员中心':
-			open_function_link(item.url);
+			uni.showToast({
+				title: '功能待完善',
+				mask: true,
+				icon: 'none',
+				duration: 2000
+			});
+			// open_function_link(item.url);
 			break;
 		case '订单核销':
 			open_function_link(item.url);
@@ -361,7 +367,13 @@ const open_function = (item) => {
 			open_function_link(item.url);
 			break;
 		case '开票申请':
-			open_function_link(item.url);
+			uni.showToast({
+				title: '功能待完善',
+				mask: true,
+				icon: 'none',
+				duration: 2000
+			});
+			// open_function_link(item.url);
 			break;
 		case '系统公告':
 			open_function_link(item.url);

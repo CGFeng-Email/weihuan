@@ -13,38 +13,35 @@
 		</view>
 
 		<!-- 自提点 -->
-		<view class="store_box card_box box_border_radius box_shadow" v-if="deliveryType == 20">
+		<view class="store_box card_box box_border_radius box_shadow" v-else>
 			<view class="title">自提点</view>
 			<view class="store_info">
-				<image class="cover" :src="store.image" mode="aspectFill"></image>
+				<image class="cover box_border_radius" :src="store.image" mode="aspectFill"></image>
 				<view class="content">
 					<view class="store_top">
 						<view class="title over2">
-							{{ store.callout.content }}
-						</view>
-						<view class="distance">
-							{{ store.distance }}
+							{{ store.title }}
 						</view>
 					</view>
 					<view class="store_bottom">
-						<view class="li">
+						<view class="lis">
 							<text class="name">联系人：</text>
-							<text class="text">{{ store.store }}</text>
+							<text class="text">{{ store.contact }}</text>
 						</view>
-						<view class="li">
+						<view class="lis">
 							<text class="name">联系电话：</text>
-							<text class="text">{{ store.mobile }}</text>
+							<text class="text">{{ store.phone }}</text>
 						</view>
-						<view class="li">
+						<view class="lis">
 							<text class="name">营业时间：</text>
-							<text class="text">{{ store.date }}</text>
+							<text class="text">{{ store.open_hours }}</text>
 						</view>
 					</view>
 				</view>
 			</view>
 			<view class="address">
 				<view class="location over2">
-					{{ store.title }}
+					{{ store.address }}
 				</view>
 				<view class="location_btn btn_bg" @click.stop="openLocation">
 					<text class="iconfont icon-dizhi"></text>
@@ -100,16 +97,24 @@
 					<view class="val">{{ status }}</view>
 				</view>
 				<view class="li">
-					<view class="name">配送费</view>
-					<view class="val">{{ orderFreight }}</view>
+					<view class="name">支付方式</view>
+					<view class="val">{{ paymentType }}</view>
+				</view>
+				<view class="li">
+					<view class="name">用户名称</view>
+					<view class="val">{{ userName }}</view>
 				</view>
 				<view class="li">
 					<view class="name">订单备注</view>
 					<view class="val">{{ textarta }}</view>
 				</view>
 				<view class="li">
+					<view class="name">配送费</view>
+					<view class="val price_text">￥{{ orderFreight }}</view>
+				</view>
+				<view class="li">
 					<view class="name">订单金额</view>
-					<view class="val">￥{{ orderPrice }}</view>
+					<view class="val price_text">￥{{ orderPrice }}</view>
 				</view>
 			</view>
 		</view>
@@ -152,6 +157,10 @@ const status = ref('');
 const orderTime = ref('');
 // 订单金额
 const orderPrice = ref('');
+// 收货人
+const userName = ref('');
+// 支付方式
+const paymentType = ref('');
 
 onLoad((load) => {
 	console.log(load);
@@ -179,16 +188,18 @@ const getOrderDetails = async () => {
 		orderTime.value = res.data.add_at;
 		orderSn.value = res.data.order_sn;
 		orderPrice.value = res.data.pay_price;
+		userName.value = res.data.real_name;
+		paymentType.value = res.data.pay_type_name;
 	}
 };
 
 // 使用应用内置地图查看位置
 const openLocation = (latitude, longitude) => {
 	uni.openLocation({
-		latitude: store.value.latitude,
-		longitude: store.value.longitude,
-		address: store.value.title,
-		name: store.value.callout.content
+		latitude: Number(store.value.latitude),
+		longitude: Number(store.value.longitude),
+		address: store.value.address,
+		name: store.value.title
 	});
 };
 </script>
@@ -201,6 +212,22 @@ page {
 <style lang="scss" scoped>
 .main {
 	padding: 30rpx;
+}
+
+.card_box {
+	.li {
+		.name {
+			flex: none;
+		}
+		.val {
+			padding-left: 80rpx;
+			text-align: right;
+		}
+		.price_text {
+			color: #ff0000;
+			font-weight: bold;
+		}
+	}
 }
 
 .user_location {
@@ -251,27 +278,24 @@ page {
 		.content {
 			flex: 1;
 			padding-left: 20rpx;
-			display: flex;
-			flex-direction: column;
-			justify-content: space-between;
 			.store_top {
-				display: flex;
-				justify-content: space-between;
 				.title {
 					font-size: 28rpx;
+					line-height: 38rpx;
 					font-weight: bold;
-					flex: 1;
+					padding-bottom: 0;
 				}
 
 				.distance {
 					font-size: 24rpx;
-					color: #c2c2c2;
-					flex: none;
+					line-height: 34rpx;
+					padding: 10rpx 0;
 				}
 			}
 
 			.store_bottom {
-				.li {
+				padding-top: 20rpx;
+				.lis {
 					font-size: 24rpx;
 					color: #999999;
 					line-height: 34rpx;
@@ -289,9 +313,11 @@ page {
 		justify-content: space-between;
 		.location {
 			font-size: 24rpx;
+			line-height: 34rpx;
 			color: #999999;
 			flex: 1;
 			margin-top: 6rpx;
+			padding-right: 20rpx;
 		}
 
 		.location_btn {

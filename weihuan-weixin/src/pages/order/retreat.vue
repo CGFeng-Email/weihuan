@@ -1,7 +1,8 @@
 <!-- 退换商品 -->
 <template>
 	<view class="main">
-		<OrderItem :item="item" :state_btn="false"></OrderItem>
+		<!-- 商品 -->
+		<GoodsItem :goods="goods"></GoodsItem>
 
 		<view class="retreat_box card_box box_border_radius box_shadow">
 			<view class="title">退货信息</view>
@@ -46,10 +47,10 @@
 					</view>
 					<view class="content">
 						<text class="money">￥</text>
-						<text class="price">332.00</text>
+						<text class="price">{{ goods.price }}</text>
 					</view>
 				</view>
-				<view class="tips">不可修改，最多¥332.00，含发货邮费¥0.00</view>
+				<view class="tips">不可修改，最多¥{{ goods.price }} ，含发货邮费¥{{ orderFreight }}</view>
 			</view>
 		</view>
 
@@ -58,67 +59,44 @@
 			<view class="input_box">
 				<textarea v-model="textarta" maxlength="300" placeholder="请填写反馈内容" class="textarea box_shadow" />
 			</view>
-			<uni-file-picker v-model="upList" fileMediatype="image" mode="grid" :limit="5" :auto-upload="false" @select="select" @success="success" @fail="fail" @delete="updelete">
+			<uni-file-picker ref="file" v-model="upList" fileMediatype="image" mode="grid" return-type="array" limit="1" :auto-upload="false" @select="select" @delete="updelete">
 				<view class="up_button">
 					<image src="/static/img/up.png" mode="aspectFit"></image>
-					<view class="text">
-						上传图片
-						<br />
-						最多5张
-					</view>
+					<view class="text">上传图片</view>
 				</view>
 			</uni-file-picker>
 		</view>
 	</view>
-	
+
 	<bottomButton @bottom_click="bottom_click" title="提交申请"></bottomButton>
 </template>
 
 <script setup>
-import OrderItem from './item.vue';
-import bottomButton from '../component/bottom.vue';
 import { ref } from 'vue';
+import { onLoad } from '@dcloudio/uni-app';
+import GoodsItem from './goodsItem.vue';
+import bottomButton from '../component/bottom.vue';
+import { imageBase64 } from '@/hooks/useTool.js';
+import { uploadImg, applyFor } from '@/api/index.js';
+
+// 商品id
+const goodsId = ref('');
+// 售后类型
+const afterSaleType = ref('');
+// 商品
+const goods = ref({});
+// 运费
+const orderFreight = ref(0);
+// 说明备注
 const textarta = ref('');
+// 静态上传列表
 const upList = ref([]);
-
-const item = ref({
-	id: 1,
-	src: 'https://weihuan-1317202885.cos.ap-guangzhou.myqcloud.com/list2.png',
-	type: 'type2',
-	title: '新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉',
-	specification: [
-		{
-			name: '原味',
-			num: 3
-		},
-		{
-			name: '雪域牛乳',
-			num: 2
-		}
-	],
-	boom: true,
-	price: 130,
-	outmodend_price: 210,
-	total_price: 332,
-	tips: '全程冻品冷链运输，保质保鲜',
-	location: '广州',
-	num: 1,
-	code: 2021053100011,
-	status: '待付款',
-	date: 1729580946317,
-	name: '谷志华',
-	phone: 13654345217,
-	address: '广东省广州市天河区中山大道中38号',
-	logistics: '圆通速递',
-	logistics_code: 123654231258,
-	order_code: 2021053100111,
-	order_deta: 1729588815329,
-	order_status: '已发货',
-	order_style: '包邮',
-	order_price_status: '已支付',
-	order_textarea: '暂无备注信息'
-});
-
+// 上传到服务器列表
+const list = ref([]);
+// 上传组件
+const file = ref(null);
+const statusIndex = ref(-1);
+const retreatIndex = ref(-1);
 const status_list = ref([
 	{
 		title: '未拆封完好无损'
@@ -130,7 +108,6 @@ const status_list = ref([
 		title: '已拆封，细微磨损不影响二次销售'
 	}
 ]);
-
 const retreat_list = ref([
 	{
 		title: '商家无货联系我取消订单'
@@ -152,9 +129,6 @@ const retreat_list = ref([
 	}
 ]);
 
-const statusIndex = ref(-1);
-const retreatIndex = ref(-1);
-
 function status_change(e) {
 	statusIndex.value = e.detail.value;
 }
@@ -163,30 +137,89 @@ function retreat_change(e) {
 	retreatIndex.value = e.detail.value;
 }
 
+// 上传
+const upload = async (url) => {
+	// 转化成base64
+	const base64 = await imageBase64(url, 'png');
+	// 上传到服务器
+	const getUploadImg = await uploadImg({ file: base64 });
+	console.log('上传到服务器', getUploadImg);
+	if (getUploadImg.code == 1) {
+		list.value.push(getUploadImg.data.url);
+	}
+	console.log('list', list.value);
+};
+
 // 选择文件后触发
-function select(e) {
+const select = async (e) => {
 	console.log('选择文件后触发', e);
-}
-
-// 上传成功
-function success(e) {
-	console.log('上传成功', e, upList.value);
-}
-
-// 上传失败
-function fail(e) {
-	console.log('上传失败：', e);
-}
+	const tempFilePaths = e.tempFilePaths;
+	if (tempFilePaths.length > 0) {
+		await upload(tempFilePaths[0]);
+	}
+};
 
 // 文件从列表移除时触发
 function updelete(e) {
 	console.log('文件从列表移除时触发', e);
+	list.value.splice(e.index, 1);
 }
 
-function bottom_click() {
-	console.log('点击');
-	uni.navigateBack()
-}
+// 提交申请售后
+const bottom_click = async () => {
+	if (statusIndex.value == -1) {
+		uni.showToast({
+			title: '请选择货物状态',
+			mask: true,
+			icon: 'none',
+			duration: 2000
+		});
+		return;
+	}
+	if (retreatIndex.value == -1) {
+		uni.showToast({
+			title: '请选择退换原因',
+			mask: true,
+			icon: 'none',
+			duration: 2000
+		});
+		return;
+	}
+	const params = {
+		order_goods_id: goodsId.value,
+		type: afterSaleType.value,
+		apply_desc: textarta.value,
+		images: list.value,
+		goods_status: status_list.value[statusIndex.value].title,
+		reason: retreat_list.value[retreatIndex.value].title
+	};
+	const res = await applyFor(params);
+	console.log('提交申请售后', res);
+	if (res.code == 1) {
+		uni.showToast({
+			title: res.msg,
+			mask: true,
+			icon: 'none',
+			duration: 2000,
+			success: () => {
+				setTimeout(() => {
+					uni.navigateBack({
+						delta: 2
+					});
+				}, 2000);
+			}
+		});
+	}
+};
+
+onLoad((load) => {
+	console.log('load', load);
+	goodsId.value = load.goodsId;
+	afterSaleType.value = load.type;
+	orderFreight.value = load.orderFreight;
+	goods.value = JSON.parse(load.goods);
+	console.log('goods', goods.value);
+});
 </script>
 
 <style>
@@ -299,5 +332,4 @@ page {
 		padding-top: 10rpx;
 	}
 }
-
 </style>

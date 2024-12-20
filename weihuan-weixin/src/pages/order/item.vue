@@ -48,8 +48,32 @@
 						</view>
 						<view class="outmoded">原价:￥{{ item2.market_price }}</view>
 					</view>
+					<view class="apply_for">
+						<!-- 申请售后之后的状态 -->
+						<text class="text" v-if="item2.is_refund == 1 && item2.refund_status == 0">售后进度：待审核</text>
+						<text class="text" v-if="item2.is_refund == 1 && item2.refund_status == 10">售后进度：拒绝申请</text>
+						<text class="text" v-if="item2.is_refund == 1 && item2.refund_status == 20">售后进度：已完成</text>
+						<text class="text" v-if="item2.is_refund == 1 && item2.refund_status == 30">售后进度：已取消</text>
+					</view>
 					<view class="after_sale">
-						<button class="btn" v-if="item.status == 30 && item2.is_refund == 0 && item2.is_expire_refund == 0">退款/售后</button>
+						<button
+							class="btn"
+							v-if="head_title_index == 0 && item.status == 30 && item2.is_refund == 0 && item2.is_expire_refund == 0"
+							@click.stop="
+								statusBtnClick({ type: 'appayFor', data: { goodsId: item2.id, order_id: item.id, payPrice: item.pay_price, item: JSON.stringify(item2) } })
+							"
+						>
+							申请售后
+						</button>
+						<button
+							class="btn"
+							v-if="head_title_index == 0 && item.status == 30 && item2.is_refund == 1 && item2.refund_status == 0"
+							@click.stop="
+								statusBtnClick({ type: 'calcelApplyFor', data: { id: item2.id, order_id: item.id } })
+							"
+						>
+							取消申请
+						</button>
 					</view>
 				</view>
 				<view class="shopping_num">
@@ -71,19 +95,31 @@
 				>
 					取消订单
 				</button>
-				<!-- 待收货状态 -->
+				<!-- 物流信息：要在已发货后出现 -->
 				<button
 					class="common_btn"
 					@click.stop="statusBtnClick({ type: 'logistics', data: { order_id: item.id } })"
-					v-if="head_title_index == 0 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.receipt_status == 10"
+					v-if="
+						head_title_index == 0 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.receipt_status == 10 && item.delivery_status == 20
+					"
 				>
 					物流信息
+				</button>
+				<!-- 确认收货 -->
+				<button
+					class="common_btn btn_bg"
+					@click.stop="statusBtnClick({ type: 'confirmReceive', data: { order_id: item.id } })"
+					v-if="
+						head_title_index == 0 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.receipt_status == 10 && item.delivery_status == 20
+					"
+				>
+					确认收货
 				</button>
 				<!-- 核销码，发货之后就展示核销码 -->
 				<button
 					v-if="head_title_index == 1 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 20"
 					class="common_btn btn_bg"
-					@click.stop="statusBtnClick('核销码')"
+					@click.stop="statusBtnClick({ type: 'code', data: { order_id: item.id } })"
 				>
 					核销码
 				</button>
@@ -254,6 +290,16 @@ const timeChange = (e) => {
 		position: absolute;
 		top: 12rpx;
 		right: 0;
+	}
+
+	.apply_for {
+		text-align: right;
+		padding: 20rpx 0;
+		.text {
+			font-size: 24rpx;
+			font-weight: 500;
+			color: #ff0000;
+		}
 	}
 
 	.after_sale {

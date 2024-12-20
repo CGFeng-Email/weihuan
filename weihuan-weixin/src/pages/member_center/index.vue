@@ -50,7 +50,6 @@
 						<text class="text">v2</text>
 					</view>
 				</view>
-				<view class="lead">你的会员将在2030-05-29到期</view>
 			</view>
 		</view>
 		<!-- 标题 -->
@@ -140,18 +139,28 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-// 胶囊信息
-import useMenuButton from '../../hooks/useMenu.js';
-//onPageScroll:滚动事件
+import { ref, onMounted } from 'vue';
 import { onPageScroll } from '@dcloudio/uni-app';
-// 底部按钮
+import useMenuButton from '../../hooks/useMenu.js';
 import bottomButton from '../component/bottom.vue';
+import { memberCenter } from '@/api/index.js';
+
+// 获取会员中心数据
+const getMemberCenter = async () => {
+	const res = await memberCenter({});
+	console.log('res', res);
+};
 
 // 返回
 const return_page = () => {
 	uni.navigateBack();
 };
+
+function bottom_click() {}
+
+onMounted(() => {
+	getMemberCenter();
+});
 
 // 顶部区域滚动
 const scrollTop = ref('white_default');
@@ -167,8 +176,6 @@ onPageScroll((e) => {
 		scrollTop.value = 'white_100';
 	}
 });
-
-function bottom_click() {}
 </script>
 
 <style>

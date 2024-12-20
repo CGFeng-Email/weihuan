@@ -327,3 +327,57 @@ export const inquireLogistics = async (params) => {
 		data: params
 	})
 }
+
+// 确认收货
+export const confirmRecelve = async (params) => {
+	return request({
+		url: '/mini/order/confirm',
+		method: 'post',
+		data: params
+	})
+}
+
+// 申请售后
+export const applyFor = async (params) => {
+	return request({
+		url: '/mini/refund/apply',
+		method: 'post',
+		data: params
+	})
+}
+
+// 订单核销码
+export const orderCode = async (params) => {
+	return request({
+		url: '/mini/order/qrcode',
+		method: 'post',
+		data: params
+	})
+}
+
+// 立即核销
+export const scanCode = async (params) => {
+	return request({
+		url: '/mini/order/getScanOrder',
+		method: 'post',
+		data: params
+	})
+}
+
+// 取消售后
+export const cancelApplyFor = async (params) => {
+	return request({
+		url: '/mini/refund/cancel',
+		method: 'post',
+		data: params
+	})
+}
+
+// 会员中心
+export const memberCenter = async (params) => {
+	return request({
+		url: '/mini/user/userCenter',
+		method: 'post',
+		data: params
+	})
+}

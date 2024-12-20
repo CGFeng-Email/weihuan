@@ -29,7 +29,7 @@
 	<uni-popup ref="checkCodeRef" @change="checkCodeChange">
 		<view class="check_code_wrap box_border_radius box_shadow">
 			<view class="title">订单核销码</view>
-			<image class="cover" src="/src/static/img/code.png" mode="aspectFit"></image>
+			<!-- <image class="cover" src="/src/static/img/code.png" mode="aspectFit"></image> -->
 		</view>
 	</uni-popup>
 

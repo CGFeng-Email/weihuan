@@ -61,7 +61,6 @@ li {
 
 html,
 body {
-    background: pink;
     overflow-x: hidden;
     color: #333;
     line-height: 1.6;
@@ -651,5 +650,69 @@ body::-webkit-scrollbar-thumb:hover {
         left: 0;
         width: 100%;
         z-index: 10;
+    }
+}
+
+.footer {
+
+    .main {
+        padding: 80px 0 40px;
+
+        .list {
+            .title {
+                font-size: 16px;
+                letter-spacing: 1px;
+                color: #fff;
+                font-weight: 600;
+            }
+
+            .ul {
+                margin-top: 10px;
+
+                .li {
+                    .link {
+                        font-size: 14px;
+                        line-height: 24px;
+                        color: #fff;
+                        font-weight: 500;
+                        padding: 6px 0;
+                        transition: .3s ease-out;
+
+                        .iconfont {
+                            padding-right: 4px;
+                        }
+
+                        &:hover {
+                            transform: skew(6deg) translateX(10px);
+                            color: @fontColor;
+                        }
+                    }
+                }
+            }
+        }
+
+        .right {
+            .lead {
+                padding: 10px 0;
+                color: #fff;
+                text-align: center;
+            }
+        }
+    }
+
+    .copyright {
+        border-top: 1px solid rgba(255, 255, 255, .1);
+        padding: 24px 0;
+        text-align: center;
+
+        span,
+        .link {
+            width: auto;
+            font-size: 14px;
+            line-height: 24px;
+            color: #fff;
+            font-weight: 500;
+            padding: 0 20px;
+        }
     }
 }

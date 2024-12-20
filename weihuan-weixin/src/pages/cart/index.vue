@@ -76,7 +76,7 @@
 		</view>
 	</view>
 
-	<Empty imgSrc="../../static/img/empty_cart.png" tips="购物车还是空的哦~" :show="list.length > 0 ? false : true"></Empty>
+	<Empty imgSrc="https://test.cnmaris.cn/uploads/images/20241220/17347004196747.png" tips="购物车还是空的哦~" :show="list.length > 0 ? false : true"></Empty>
 
 	<!-- 推荐 -->
 	<view class="hot_recommend">
@@ -200,7 +200,8 @@ const getCartListFn = async () => {
 	const params = {
 		page: page.value,
 		size: size.value,
-		is_self_take: head_title_index.value
+		is_self_take: head_title_index.value,
+		delivery_type: head_title_index.value == 1 ? 20 : 10
 	};
 	const res = await getCartList(params);
 	console.log('获取购物车列表', res);
@@ -462,7 +463,7 @@ onPullDownRefresh(async () => {
 });
 
 onShow(() => {
-	console.log('购物车 show',);
+	console.log('购物车 show');
 	// 购物车
 	getCartListFn();
 });

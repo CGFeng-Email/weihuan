@@ -40,6 +40,8 @@
 						</uv-steps-item>
 					</uv-steps>
 				</view>
+
+				<Empty tips="没有相关物流信息!" :show="logisticsList.length == 0"></Empty>
 			</uv-read-more>
 
 			<view class="order_code">
@@ -53,33 +55,9 @@
 
 		<!-- 商品列表 -->
 		<view class="shopping_list">
-			<view class="shopping box_shadow box_border_radius" v-for="(item, index) in shoppingList" :key="item.id">
-				<image class="cover box_border_radius" :src="item.image" mode="aspectFill"></image>
-				<view class="content">
-					<view class="shopping_top">
-						<view class="title over2">{{ item.goods_name }}</view>
-						<view class="spec">
-							<text>{{ item.key_name }}</text>
-						</view>
-					</view>
-					<view class="shopping_bottom">
-						<view class="price_box">
-							<text class="symbol">￥</text>
-							<text class="price">{{ item.price }}</text>
-							<text class="primary_price">￥{{ item.market_price }}</text>
-						</view>
-						<view class="quantity_box">
-							<view class="icon">
-								<i class="iconfont icon-jianhao"></i>
-							</view>
-							<view class="quantity_number">{{ item.goods_num }}</view>
-							<view class="icon">
-								<i class="iconfont icon-jia"></i>
-							</view>
-						</view>
-					</view>
-				</view>
-			</view>
+			<block v-for="(item, index) in shoppingList" :key="item.id">
+				<GoodsItem :goods="item"></GoodsItem>
+			</block>
 		</view>
 	</view>
 </template>
@@ -88,6 +66,8 @@
 import { ref, nextTick } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
 import { orderDetails, inquireLogistics } from '@/api/index.js';
+import GoodsItem from './goodsItem.vue';
+import Empty from '../component/empty.vue';
 
 // 订单id
 const orderId = ref('');
@@ -247,91 +227,6 @@ page {
 		font-size: 28rpx;
 		color: #787878;
 		padding-left: 6rpx;
-	}
-}
-
-.shopping {
-	padding: 24rpx;
-	background: #fff;
-	margin-bottom: 24rpx;
-	display: flex;
-	justify-content: space-between;
-	.cover {
-		width: 190rpx;
-		height: 190rpx;
-		flex: none;
-	}
-
-	.content {
-		flex: 1;
-		padding-left: 24rpx;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-
-		.shopping_top {
-			.title {
-				font-size: 30rpx;
-				line-height: 40rpx;
-				font-weight: 600;
-			}
-
-			.spec {
-				font-size: 24rpx;
-				color: #acacac;
-				padding-top: 10rpx;
-			}
-
-			.store_count {
-				padding-left: 20rpx;
-			}
-		}
-
-		.shopping_bottom {
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-
-			.price_box {
-				color: #ff0000;
-				font-weight: 600;
-				font-size: 24rpx;
-				padding-right: 10rpx;
-				.price {
-					font-size: 34rpx;
-					padding-right: 10rpx;
-				}
-
-				.primary_price {
-					font-weight: 500;
-					color: #cbcbcb;
-					text-decoration: line-through;
-				}
-			}
-
-			.quantity_box {
-				display: flex;
-				align-items: center;
-				.icon {
-					width: 40rpx;
-					height: 40rpx;
-					line-height: 40rpx;
-					text-align: center;
-					line-height: 40rpx;
-					background: #d8d8d8;
-					border-radius: 8rpx;
-					.iconfont {
-						font-size: 24rpx;
-						color: #000;
-						font-weight: 600;
-					}
-				}
-
-				.quantity_number {
-					padding: 0 20rpx;
-				}
-			}
-		}
 	}
 }
 </style>

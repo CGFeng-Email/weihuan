@@ -23,8 +23,9 @@
 			<text class="text">请输入关键字</text>
 		</view>
 	</view>
-	<!-- 导航栏 -->
-	<view class="tabs_box" :style="{ top: useMenuButton().navigateTop }">
+
+	<!-- 物流配送导航栏 -->
+	<view class="tabs_box" :style="{ top: useMenuButton().navigateTop }" v-if="head_title_index == 0">
 		<uv-tabs
 			class="tabs"
 			lineWidth="44"
@@ -40,7 +41,28 @@
 				color: '#606266',
 				fontSize: '24rpx'
 			}"
-			itemStyle="padding-left: 12px; padding-right: 12px; height: 82rpx;"
+			itemStyle="padding-left: 16px; padding-right: 16px; height: 82rpx;"
+		></uv-tabs>
+	</view>
+
+	<!-- 自提点导航栏 -->
+	<view class="tabs_box" :style="{ top: useMenuButton().navigateTop }" v-if="head_title_index == 1">
+		<uv-tabs
+			class="tabs"
+			lineWidth="44"
+			lineColor="#fe968d"
+			:list="storeNavList"
+			@click="itemClick"
+			:current="tabsCurrent"
+			:activeStyle="{
+				color: '#000',
+				fontWeight: 'bold'
+			}"
+			:inactiveStyle="{
+				color: '#606266',
+				fontSize: '24rpx'
+			}"
+			itemStyle="padding-left: 16px; padding-right: 16px; height: 82rpx;"
 		></uv-tabs>
 	</view>
 
@@ -70,7 +92,7 @@
 	<uni-popup ref="checkCodeRef" @change="checkCodeChange">
 		<view class="check_code_wrap box_border_radius box_shadow">
 			<view class="title">订单核销码</view>
-			<image class="cover" src="/src/static/img/code.png" mode="aspectFit"></image>
+			<image class="cover" :src="storeCode" mode="aspectFit"></image>
 		</view>
 	</uni-popup>
 </template>
@@ -83,7 +105,7 @@ import navigate from '/src/pages/component/navigate.vue';
 import OrderItem from './item.vue';
 import { ref, nextTick } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
-import { orderList, cancelOrder } from '@/api/index.js';
+import { orderList, cancelOrder, confirmRecelve, orderCode, cancelApplyFor } from '@/api/index.js';
 import _ from 'underscore';
 import Empty from '@/pages/component/empty.vue';
 
@@ -103,6 +125,9 @@ const head_title_index = ref(0);
 const list = ref([]);
 // 列表加载
 const isMore = ref('more');
+// 自提订单二维码
+const storeCode = ref('');
+
 // 导航栏列表
 const navList = ref([
 	{
@@ -120,6 +145,26 @@ const navList = ref([
 	{
 		name: '待收货',
 		type: 'received'
+	},
+	{
+		name: '已完成',
+		type: 'complete'
+	},
+	{
+		name: '已取消',
+		type: 'cancel'
+	}
+]);
+
+// 自提导航栏列表
+const storeNavList = ref([
+	{
+		name: '全部',
+		type: 'all'
+	},
+	{
+		name: '待付款',
+		type: 'payment'
 	},
 	{
 		name: '待自提',
@@ -164,7 +209,7 @@ const getOrderList = async (more = false) => {
 	const params = {
 		page: page.value,
 		size: size.value,
-		type: navList.value[tabsCurrent.value].type,
+		type: head_title_index.value == 0 ? navList.value[tabsCurrent.value].type : storeNavList.value[tabsCurrent.value].type,
 		delivery_type: head_title_index.value == 1 ? 20 : 10
 	};
 	const res = await orderList(params);
@@ -229,6 +274,49 @@ const cancelOrderFn = async (order_id) => {
 	});
 };
 
+// 确认收货
+const isConfirmRecelve = async (order_id) => {
+	const params = {
+		order_id
+	};
+	const res = await confirmRecelve(params);
+	console.log('确认收货', res);
+	uni.showToast({
+		title: res.msg,
+		icon: 'none',
+		mask: true,
+		duration: 2000
+	});
+};
+
+// 获取订单核销码
+const getOrderCode = async (order_id) => {
+	const params = {
+		order_id
+	};
+	const res = await orderCode(params);
+	console.log('获取订单核销码', res);
+	if (res.code == 1) {
+		storeCode.value = res.data.qrcode_url;
+		checkCodeRef.value.open();
+	}
+};
+
+// 取消申请售后
+const isCancelApplyFor = async (id) => {
+	const params = {
+		refund_id: id
+	};
+	const res = await cancelApplyFor();
+	console.log('取消申请售后', res);
+	uni.showToast({
+		title: res.msg,
+		mask: true,
+		icon: 'none',
+		duration: 2000
+	});
+};
+
 // 打开核销码弹窗
 function statusBtn(e) {
 	console.log(e);
@@ -252,19 +340,45 @@ function statusBtn(e) {
 				}
 			});
 			break;
-		case '核销码':
-			checkCodeRef.value.open();
-			break;
 		case 'logistics':
 			// 查询物流
 			uni.navigateTo({
 				url: `/pages/order/distribution?orderId=${e.data.order_id}`
 			});
 			break;
-		case '申请售后':
-			uni.navigateTo({
-				url: '/pages/order/after_sale'
+		case 'confirmReceive':
+			// 取消订单
+			uni.showModal({
+				content: '为了保障您的权益，请收到商品确认无误后再确认收货',
+				success: async (res) => {
+					if (res.confirm) {
+						await isConfirmRecelve(e.data.order_id);
+						await getOrderList();
+					}
+				}
 			});
+			break;
+		case 'appayFor':
+			// 申请售后
+			uni.navigateTo({
+				url: `/pages/order/after_sale?orderId=${e.data.order_id}&goodsId=${e.data.goodsId}&payPrice=${e.data.payPrice}&item=${e.data.item}`
+			});
+			break;
+		case 'calcelApplyFor':
+			// 取消申请售后
+			uni.showModal({
+				content: '确定取消申请售后吗？',
+				success: async (res) => {
+					if (res.confirm) {
+						isCancelApplyFor(e.data.order_id);
+					}
+				}
+			});
+
+			break;
+		case 'code':
+			// 核销码
+			getOrderCode(e.data.order_id);
 			break;
 	}
 }
@@ -343,6 +457,7 @@ function return_page() {
 	position: fixed;
 	left: 0;
 	z-index: 3;
+	width: 100%;
 	height: 82rpx;
 	background: #fff;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.1);

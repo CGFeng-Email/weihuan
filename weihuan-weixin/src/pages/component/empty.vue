@@ -16,7 +16,7 @@ const props = defineProps({
 	},
 	imgSrc: {
 		type: String,
-		default: '../../static/img/empty_content.png'
+		default: 'https://test.cnmaris.cn/uploads/images/20241220/17347004872159.png'
 	},
 	show: {
 		type: Boolean,

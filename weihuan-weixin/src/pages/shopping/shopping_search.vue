@@ -10,7 +10,7 @@
 			</view>
 		</view>
 	</view>
-	<Empty imgSrc="../../static/img/empty.png" tips="抱歉, 没找到商品" :show="keyword != '' && list.length == 0" />
+	<Empty imgSrc="https://test.cnmaris.cn/uploads/images/20241220/17347003598480.png" tips="抱歉, 没找到商品" :show="keyword != '' && list.length == 0" />
 	<view class="list">
 		<block v-for="item in list" :key="item.id">
 			<Item :item="item" @itemClick="itemClick"></Item>

@@ -50,7 +50,6 @@ li {
 }
 html,
 body {
-  background: pink;
   overflow-x: hidden;
   color: #333;
   line-height: 1.6;
@@ -519,4 +518,50 @@ body::-webkit-scrollbar-thumb:hover {
   left: 0;
   width: 100%;
   z-index: 10;
+}
+.footer .main {
+  padding: 80px 0 40px;
+}
+.footer .main .list .title {
+  font-size: 16px;
+  letter-spacing: 1px;
+  color: #fff;
+  font-weight: 600;
+}
+.footer .main .list .ul {
+  margin-top: 10px;
+}
+.footer .main .list .ul .li .link {
+  font-size: 14px;
+  line-height: 24px;
+  color: #fff;
+  font-weight: 500;
+  padding: 6px 0;
+  transition: 0.3s ease-out;
+}
+.footer .main .list .ul .li .link .iconfont {
+  padding-right: 4px;
+}
+.footer .main .list .ul .li .link:hover {
+  transform: skew(6deg) translateX(10px);
+  color: #202C5C;
+}
+.footer .main .right .lead {
+  padding: 10px 0;
+  color: #fff;
+  text-align: center;
+}
+.footer .copyright {
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 24px 0;
+  text-align: center;
+}
+.footer .copyright span,
+.footer .copyright .link {
+  width: auto;
+  font-size: 14px;
+  line-height: 24px;
+  color: #fff;
+  font-weight: 500;
+  padding: 0 20px;
 }

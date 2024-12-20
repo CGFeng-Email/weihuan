@@ -15,6 +15,7 @@
 <script setup>
 import { ref } from 'vue';
 import sweepNavigate from '../component/sweep_navigate.vue';
+import { scanCode } from '@/api/index.js';
 
 const sweep_index = ref(0);
 
@@ -23,12 +24,39 @@ function sweep_click() {
 	uni.scanCode({
 		autoDecodeCharset: true,
 		barCodeInput: true,
-		success: function (res) {
+		success: async (res) => {
 			console.log('res', res);
-			if(res.errMsg == 'scanCode:ok') {
-				uni.navigateTo({
-					url: '/pages/order/details'
-				})
+			if (res.errMsg == 'scanCode:ok') {
+				// uni.navigateTo({
+				// 	url: '/pages/order/details'
+				// });
+				const params = {
+					order_sn: res.result
+				};
+				const getCode = await scanCode(params);
+				console.log('立即扫码核销', getCode);
+				if (getCode.code == 1) {
+					uni.showToast({
+						title: '核销成功',
+						icon: 'none',
+						mask: true,
+						duration: 1500,
+						success: () => {
+							setTimeout(() => {
+								uni.navigateTo({
+									url: `/pages/order/details?orderId=${getCode.data.id}`
+								});
+							}, 1000);
+						}
+					});
+				}
+			} else {
+				uni.showToast({
+					title: '订单无效',
+					icon: 'none',
+					mask: true,
+					duration: 1500
+				});
 			}
 		}
 	});
