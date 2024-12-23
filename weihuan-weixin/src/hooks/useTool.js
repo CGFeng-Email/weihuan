@@ -76,10 +76,18 @@ function formatTime(times, type) {
 
 // 将时间转化成时间戳
 function timestamp(date) {
+	// 当前秒级时间戳 moment().unix()
+	// const currentTimestamp = moment().unix();
+	// console.log('当前秒级时间戳', currentTimestamp);
+
 	// moment()方法将日期或时间字符串转换为Moment对象
-	// 再通过valueOf()方法获取对应的时间戳
+	// unix()秒时间戳
+	// valueOf()毫秒时间戳
 	const timestamp = moment(date).valueOf();
-	return timestamp
+	// console.log('转化后有效支付秒', timestamp);
+
+	const time = moment(timestamp).format('HH时mm分');
+	return time
 }
 
 export {

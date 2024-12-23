@@ -381,3 +381,21 @@ export const memberCenter = async (params) => {
 		data: params
 	})
 }
+
+// 申请svip
+export const applyVip = async (params) => {
+	return request({
+		url: '/mini/user/applySvip',
+		method: 'post',
+		data: params
+	})
+}
+
+// 核销列表
+export const codeList = async (params) => {
+	return request({
+		url: '/mini/extract/getList',
+		method: 'post',
+		data: params
+	})
+}

@@ -21,33 +21,36 @@
 		<!-- 卡片 -->
 		<view class="card">
 			<view class="bg">
-				<image src="/src/static/img/card_bg.jpg" mode="scaleToFill"></image>
+				<image src="/src/static/img/card_bg.jpg" mode="widthFix"></image>
 			</view>
 			<view class="content">
 				<view class="head_portrait">
 					<!-- 头像 -->
 					<view class="box">
-						<image class="portrait" src="/static/img/head_portrait.png" mode="aspectFit"></image>
+						<image class="portrait" :src="headPortrait" mode="aspectFit"></image>
 					</view>
 					<view class="right_content">
 						<view class="name">
-							<text class="text">思源本兮</text>
+							<text class="text">{{ nickName }}</text>
+							<image class="vip" src="/static/img/me_index.png" mode="widthFix" lazy-load v-if="is_svip != 0"></image>
 						</view>
 						<view class="phone">
 							<image class="icon" src="/src/static/img/phone.png" mode="widthFix"></image>
-							<text class="text">13662245269</text>
+							<text class="text">{{ mobile }}</text>
 						</view>
 					</view>
 				</view>
-				<view class="lead">还需要消费¥500.00元升级</view>
-				<view class="progress_box">
-					<view class="schedule" :style="{ left: 50 + '%' }">
-						<text class="price">￥860.00</text>
-					</view>
-					<progress :percent="60" :border-radius="30" stroke-width="10" activeColor="#FFF867" active />
-					<view class="tips">
-						<text class="text">v1</text>
-						<text class="text">v2</text>
+				<view v-if="is_svip == 0">
+					<view class="lead">还需要消费¥{{ need_fee }}元升级{{ nextVips }}</view>
+					<view class="progress_box">
+						<view class="schedule" :style="{ left: fee_rate + '%' }">
+							<text class="price">￥{{ spent }}</text>
+						</view>
+						<progress :percent="fee_rate" :border-radius="30" stroke-width="10" activeColor="#FFF867" active />
+						<view class="tips">
+							<text class="text">{{ gradeVips }}</text>
+							<text class="text">{{ nextVips }}</text>
+						</view>
 					</view>
 				</view>
 			</view>
@@ -57,7 +60,8 @@
 			<text class="title">会员权益</text>
 			<text class="line"></text>
 		</view>
-		<view class="sub_head">可申请成为SVIP，享受更优质的会员服务</view>
+		<view class="sub_head" v-if="is_svip == 0">可申请成为SVIP，享受更优质的会员服务</view>
+		<view class="sub_head" v-else>尊敬的SVIP，你正在享受优质的会员服务</view>
 		<!-- 服务 -->
 		<view class="service">
 			<view class="item">
@@ -101,41 +105,17 @@
 		<view class="sub_head">满足以下会员等级条件中任意一个条件即可</view>
 		<!-- 消费阶梯 -->
 		<view class="ladder">
-			<view class="item">
+			<view class="item" v-for="item in rankList" :key="item.id">
 				<view class="box">
-					<view class="title">v1</view>
+					<view class="title">{{ item.title }}</view>
 					<view class="height">
-						<text class="text">累计消费 满100元</text>
-					</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="box">
-					<view class="title">v2</view>
-					<view class="height">
-						<text class="text">累计消费 满2500元</text>
-					</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="box">
-					<view class="title">v3</view>
-					<view class="height">
-						<text class="text">累计消费 满4500元</text>
-					</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="box">
-					<view class="title">v4</view>
-					<view class="height">
-						<text class="text">累计消费 满8000元</text>
+						<text class="text">累计消费 满{{ item.fee }}元</text>
 					</view>
 				</view>
 			</view>
 		</view>
 	</view>
-	<bottomButton @bottom_click="bottom_click" title="申请成为SVIP"></bottomButton>
+	<bottomButton @bottom_click="confirmApplySvip" title="申请成为SVIP" v-if="is_svip == 0"></bottomButton>
 </template>
 
 <script setup>
@@ -143,12 +123,67 @@ import { ref, onMounted } from 'vue';
 import { onPageScroll } from '@dcloudio/uni-app';
 import useMenuButton from '../../hooks/useMenu.js';
 import bottomButton from '../component/bottom.vue';
-import { memberCenter } from '@/api/index.js';
+import { memberCenter, applyVip } from '@/api/index.js';
+
+// 头像
+const headPortrait = ref('/static/img/head_portrait.png');
+// 昵称
+const nickName = ref('微信用户');
+// 手机号
+const mobile = ref('');
+// 是否SVIP
+const is_svip = ref('');
+// 已消费金额
+const spent = ref(0);
+// 下一等级还需消费金额
+const need_fee = ref(null);
+// 等级比例
+const fee_rate = ref(0);
+// 当前等级名称
+const gradeVips = ref('');
+// 下一等级名称
+const nextVips = ref('');
+// 等级列表
+const rankList = ref([]);
 
 // 获取会员中心数据
 const getMemberCenter = async () => {
-	const res = await memberCenter({});
-	console.log('res', res);
+	const res = await memberCenter();
+	console.log('会员中心', res);
+	if (res.code == 1) {
+		nickName.value = res.data.nickname;
+		mobile.value = res.data.mobile;
+		is_svip.value = res.data.is_svip;
+		spent.value = res.data.total_fee;
+		need_fee.value = res.data.need_fee;
+		fee_rate.value = res.data.fee_rate;
+		gradeVips.value = res.data.grade_info.title;
+		nextVips.value = res.data.next_grade_info.title;
+		const avatar = res.data.avatar;
+		if (avatar) {
+			headPortrait.value = avatar;
+		}
+	}
+};
+
+// 申请成为svip
+const confirmApplySvip = () => {
+	uni.showModal({
+		content: '确定申请成为SVIP吗？',
+		success: async (res) => {
+			if (res.confirm) {
+				const res = await applyVip();
+				console.log('申请成为svip', res);
+
+				uni.showToast({
+					title: res.msg,
+					duration: 2000,
+					mask: true,
+					icon: 'none'
+				});
+			}
+		}
+	});
 };
 
 // 返回
@@ -156,10 +191,10 @@ const return_page = () => {
 	uni.navigateBack();
 };
 
-function bottom_click() {}
-
 onMounted(() => {
 	getMemberCenter();
+	const commonData = uni.getStorageSync('commonData');
+	rankList.value = commonData.grade_list;
 });
 
 // 顶部区域滚动
@@ -212,7 +247,7 @@ page {
 	padding: 20rpx 30rpx 50rpx;
 
 	.card {
-		height: 384rpx;
+		// height: 384rpx;
 		position: relative;
 		border-radius: 30rpx;
 		overflow: hidden;
@@ -246,6 +281,7 @@ page {
 					.portrait {
 						width: 100%;
 						height: 100%;
+						border-radius: 50%;
 					}
 					.vip {
 						position: absolute;
@@ -268,6 +304,11 @@ page {
 							font-weight: bold;
 							padding-right: 6rpx;
 						}
+
+						.vip {
+							width: 64rpx;
+						}
+
 						.icon {
 							width: 54rpx;
 						}
@@ -293,9 +334,10 @@ page {
 				font-size: 26rpx;
 				line-height: 34rpx;
 				color: #fff;
-				padding: 8rpx 0;
+				padding: 6rpx 0;
 			}
 			.progress_box {
+				margin-top: 60rpx;
 				padding: 10rpx 0;
 				position: relative;
 

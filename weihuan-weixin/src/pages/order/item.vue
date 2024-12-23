@@ -6,11 +6,7 @@
 
 				<view class="payment" v-if="item.status == 10 && item.pay_status == 10">
 					<text class="name">等待付款</text>
-					<uv-count-down :time="timestamp(item.pay_end_time)" autoStart format="HH:mm:ss" @change="timeChange">
-						<view class="time">
-							<text class="time__item">{{ timeData.minutes }}分</text>
-						</view>
-					</uv-count-down>
+					<text class="time">{{ timestamp(item.pay_end_time) }}</text>
 				</view>
 				<view class="text" v-else>
 					{{ item.status_name }}
@@ -68,9 +64,7 @@
 						<button
 							class="btn"
 							v-if="head_title_index == 0 && item.status == 30 && item2.is_refund == 1 && item2.refund_status == 0"
-							@click.stop="
-								statusBtnClick({ type: 'calcelApplyFor', data: { id: item2.id, order_id: item.id } })
-							"
+							@click.stop="statusBtnClick({ type: 'calcelApplyFor', data: { id: item2.id, order_id: item.id } })"
 						>
 							取消申请
 						</button>
@@ -132,6 +126,7 @@
 import { ref } from 'vue';
 import { defineProps, defineEmits } from 'vue';
 import { formatTime, timestamp } from '@/hooks/useTool.js';
+import moment from 'moment';
 
 const emit = defineEmits(['statusBtn', 'orderDetails']);
 
@@ -160,9 +155,6 @@ const props = defineProps({
 	}
 });
 
-// 倒计时时间对象
-const timeData = ref({});
-
 // 底部按钮点击
 const statusBtnClick = (params) => {
 	emit('statusBtn', params);
@@ -171,12 +163,6 @@ const statusBtnClick = (params) => {
 // 跳转详情
 const openDetailsClick = (id) => {
 	emit('orderDetails', id);
-};
-
-// 倒计时
-const timeChange = (e) => {
-	// console.log(e);
-	timeData.value = e;
 };
 </script>
 

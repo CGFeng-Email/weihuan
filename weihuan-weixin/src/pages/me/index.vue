@@ -352,13 +352,7 @@ const open_function = (item) => {
 	const title = item.title;
 	switch (title) {
 		case '会员中心':
-			uni.showToast({
-				title: '功能待完善',
-				mask: true,
-				icon: 'none',
-				duration: 2000
-			});
-			// open_function_link(item.url);
+			open_function_link(item.url);
 			break;
 		case '订单核销':
 			open_function_link(item.url);

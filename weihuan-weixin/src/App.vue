@@ -26,6 +26,7 @@ export default {
 
 <style lang="scss">
 @import url('/src/static/font/iconfont.css');
+@import '@/uni_modules/uv-ui-tools/index.scss';
 
 view,
 scroll-view {

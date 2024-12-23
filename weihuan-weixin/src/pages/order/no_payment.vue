@@ -252,7 +252,7 @@ const open_location = () => {
 // 立即支付
 const submitOrder = async () => {
 	const params = {
-		is_settle: 1,
+		is_settle: 0,
 		pay_type: 20,
 		order_id: orderId.value,
 		openid: openid.value
@@ -262,7 +262,7 @@ const submitOrder = async () => {
 
 	if (res.code == 1) {
 		// 微信支付
-		if (res.data.wechat_payinfo.length > 0) {
+		if (Object.keys(res.data.wechat_payinfo).length > 0) {
 			await wxPayment(res.data.wechat_payinfo);
 		} else {
 			uni.showToast({
