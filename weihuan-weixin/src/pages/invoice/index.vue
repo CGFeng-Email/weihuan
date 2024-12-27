@@ -6,7 +6,7 @@
 			<view class="lis">
 				<view class="title">发票抬头</view>
 				<view class="input_box">
-					<input type="text" v-model="name" placeholder-class="input_placeholder" focus placeholder="请填写发票抬头信息" />
+					<input type="text" v-model="invoice_header" placeholder-class="input_placeholder" focus placeholder="请填写发票抬头信息" />
 				</view>
 			</view>
 			<view class="lis">
@@ -30,7 +30,7 @@
 					</picker>
 				</view>
 			</view>
-			<view class="lis" v-if="price_index == 0">
+			<view class="lis" v-if="price_index == 1">
 				<view class="title">其他未开票成交金额</view>
 				<view class="input_box">
 					<input type="number" v-model="price" placeholder-class="input_placeholder" placeholder="请填写金额" />
@@ -48,49 +48,131 @@
 		</view>
 	</view>
 
-	<Bottom title="提交申请" @bottom_click="bottom_click"></Bottom>
+	<Bottom title="提交申请" @bottom_click="apply"></Bottom>
 </template>
 
 <script setup>
-import Bottom from '../component/bottom.vue';
 import { ref } from 'vue';
+import Bottom from '../component/bottom.vue';
+import { applyInvoice, invoiceOrderList } from '@/api/index.js';
+
+// 发票抬头
+const invoice_header = ref('');
+// 开票类型下标
+const type_index = ref(-1);
+// 开票类型文案
+const type_value = ref(null);
+// 开票类型数组
 const type = ref([
 	{
-		id: 0,
+		id: 10,
 		value: '普通发票'
+	},
+	{
+		id: 20,
+		value: '专用发票'
 	}
 ]);
-const type_index = ref(-1);
-const type_value = ref(null);
+
+// 开票金额
+const price = ref(null);
+const price_index = ref(-1);
+const price_value = ref(null);
+const pricetype = ref([
+	{
+		id: 10,
+		value: '所有未开票成交金额'
+	},
+	{
+		id: 20,
+		value: '其他未开票成交金额'
+	}
+]);
+// 未开票订单列表
+const orderList = ref([]);
+
+// 开票类型回调
 function typeChange(e) {
 	const index = Number(e.detail.value);
 	type_index.value = index;
 	type_value.value = type.value[index].value;
 }
 
-const price_index = ref(-1);
-const price_value = ref(null);
-const pricetype = ref([
-	{
-		id: 1,
-		value: '其他未开票成交金额'
-	},
-	{
-		id: 2,
-		value: '所有未开票成交金额'
-	}
-]);
-function priceChange(e) {
+// 金额回调
+const priceChange = async (e) => {
 	const index = Number(e.detail.value);
+	console.log('index', index);
 	price_index.value = index;
 	price_value.value = pricetype.value[index].value;
-}
 
-const price = ref(null);
+	if (index == 0) {
+		if (orderList.value.length > 0) return;
+		getInvoiceList();
+	} else {
+		price.value = null;
+	}
+};
 
-function bottom_click() {
-	uni.navigateBack();
-}
+// 获取未开发票订单
+const getInvoiceList = async () => {
+	const res = await invoiceOrderList();
+	console.log('获取未开发票订单', res);
+	if (res.code == 1) {
+		orderList.value = res.data.order_ids;
+	}
+};
+
+// 申请开票
+const apply = async () => {
+	if (invoice_header.value == '') {
+		uni.showToast({
+			title: '请填写发票抬头信息',
+			duration: 2000,
+			icon: 'none',
+			mask: true
+		});
+		return;
+	}
+
+	if (type_index.value == -1) {
+		uni.showToast({
+			title: '请选择开票类型',
+			duration: 2000,
+			icon: 'none',
+			mask: true
+		});
+		return;
+	}
+
+	if (price_index.value == -1) {
+		uni.showToast({
+			title: '请选择开票金额',
+			duration: 2000,
+			icon: 'none',
+			mask: true
+		});
+		return;
+	}
+
+	const params = {
+		invoice_header: invoice_header.value,
+		invoice_type: type.value[type_index.value].id,
+		fee_type: pricetype.value[price_index.value].id,
+		fee: price.value,
+		order_ids: orderList.value
+	};
+
+	console.log('params', params);
+	const res = await applyInvoice(params);
+	console.log('开票申请', res);
+
+	uni.showToast({
+		title: res.msg,
+		duration: 2000,
+		icon: 'none',
+		mask: true
+	});
+};
 </script>
 
 <style>

@@ -1,6 +1,6 @@
 <template>
 	<!-- 打开弹窗时，禁止滑动页面，必须要在第一个节点 -->
-	<page-meta :page-style="'overflow:' + (isScroll ? 'hidden' : 'visible')"></page-meta>
+	<page-meta :page-style="'overflow:' + (show ? 'hidden' : 'visible')"></page-meta>
 
 	<!-- 搜索 -->
 	<view class="search">
@@ -15,13 +15,13 @@
 	<navigate class="top_navigate" :list="navList" :itemIndex="itemIndex" top="40px" @itemClick="itemClick" />
 
 	<!-- 占位 -->
-	<view style="height: 82px"></view>
+	<view style="height: 30px"></view>
 
 	<view class="main">
 		<!-- 列表 -->
 		<view class="list">
 			<block v-for="(item, index) in list" :key="item.id">
-				<Item :item="item"></Item>
+				<Item :item="item" :head_title_index="1" @statusBtn="statusBtn" @orderDetails="orderDetails"></Item>
 			</block>
 		</view>
 		<uni-load-more :status="isMore" v-if="totalPage > 1"></uni-load-more>
@@ -29,10 +29,10 @@
 	</view>
 
 	<!-- 核销码弹窗 -->
-	<uni-popup ref="codePopupRef" @change="codePopupChange">
+	<uni-popup ref="checkCodeRef" @change="checkCodeChange">
 		<view class="check_code_wrap box_border_radius box_shadow">
 			<view class="title">订单核销码</view>
-			<!-- <image class="cover" src="/src/static/img/code.png" mode="aspectFit"></image> -->
+			<image class="cover" :src="storeCode" mode="aspectFit"></image>
 		</view>
 	</uni-popup>
 
@@ -47,7 +47,7 @@ import sweepNavigate from '../component/sweep_navigate.vue';
 import navigate from '/src/pages/component/navigate.vue';
 import Item from './item.vue';
 import Empty from '../component/empty.vue';
-import { codeList } from '@/api/index.js';
+import { codeList, orderCode } from '@/api/index.js';
 
 // 底部栏下标
 const sweep_index = ref(1);
@@ -76,18 +76,20 @@ const page = ref(1);
 const totalPage = ref(1);
 // 页码条数
 const size = ref(10);
-// 页面滚动
+// 核销码弹窗
 const isScroll = ref(false);
 // 核销码弹窗
-const codePopupRef = ref(null);
+const checkCodeRef = ref(null);
 // 列表
 const list = ref([]);
 // 列表加载
 const isMore = ref('more');
+// 自提订单二维码
+const storeCode = ref('');
 
-// 核销码弹窗
-function codePopupChange(e) {
-	isScroll.value = true;
+// 核销码弹窗change - 放置页面穿透滚动
+function checkCodeChange(e) {
+	isScroll.value = e.show;
 }
 
 // 导航栏切换
@@ -148,6 +150,92 @@ const searchConfirm = (e) => {
 	console.log('搜索回车', e);
 	getList();
 };
+
+// 打开核销码弹窗
+function statusBtn(e) {
+	console.log(e);
+	switch (e.type) {
+		case 'payment':
+			// 跳转待支付页面
+			uni.navigateTo({
+				url: `/pages/order/no_payment?orderId=${e.data.order_id}`
+			});
+			break;
+		case 'cancel':
+			// 取消订单
+			uni.showModal({
+				title: '取消订单',
+				content: '确定取消订单?',
+				success: async (res) => {
+					if (res.confirm) {
+						await cancelOrderFn(e.data.order_id);
+						await getOrderList();
+					}
+				}
+			});
+			break;
+		case 'logistics':
+			// 查询物流
+			uni.navigateTo({
+				url: `/pages/order/distribution?orderId=${e.data.order_id}`
+			});
+			break;
+		case 'confirmReceive':
+			// 取消订单
+			uni.showModal({
+				content: '为了保障您的权益，请收到商品确认无误后再确认收货',
+				success: async (res) => {
+					if (res.confirm) {
+						await isConfirmRecelve(e.data.order_id);
+						await getOrderList();
+					}
+				}
+			});
+			break;
+		case 'appayFor':
+			// 申请售后
+			uni.navigateTo({
+				url: `/pages/order/after_sale?orderId=${e.data.order_id}&goodsId=${e.data.goodsId}&payPrice=${e.data.payPrice}&item=${e.data.item}`
+			});
+			break;
+		case 'calcelApplyFor':
+			// 取消申请售后
+			uni.showModal({
+				content: '确定取消申请售后吗？',
+				success: async (res) => {
+					if (res.confirm) {
+						isCancelApplyFor(e.data.order_id);
+					}
+				}
+			});
+
+			break;
+		case 'code':
+			// 核销码
+			getOrderCode(e.data.order_id);
+			break;
+	}
+}
+
+// 获取订单核销码
+const getOrderCode = async (order_id) => {
+	const params = {
+		order_id
+	};
+	const res = await orderCode(params);
+	console.log('获取订单核销码', res);
+	if (res.code == 1) {
+		storeCode.value = res.data.qrcode_url;
+		checkCodeRef.value.open();
+	}
+};
+
+// 订单详情
+function orderDetails(orderId) {
+	uni.navigateTo({
+		url: `/pages/order/details?orderId=${orderId}`
+	});
+}
 
 // 触底
 onReachBottom(() => {

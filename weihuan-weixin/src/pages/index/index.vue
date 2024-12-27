@@ -160,6 +160,7 @@ import useMenuButton from '../../hooks/useMenu.js';
 import { getBanner, getUserData, getPhoneLocation, noticeList, couponCenter, getCoupon, classifyList, commonData } from '@/api/index.js';
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
+import share from '../../utils/share.js';
 
 // 默认头像
 const headPortrait = ref('/static/img/head_portrait.png');

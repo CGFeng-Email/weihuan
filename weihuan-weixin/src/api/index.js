@@ -399,3 +399,21 @@ export const codeList = async (params) => {
 		data: params
 	})
 }
+
+// 申请开票
+export const applyInvoice = async (params) => {
+	return request({
+		url: '/mini/invoice/apply',
+		method: 'post',
+		data: params
+	})
+}
+
+// 未开发票订单
+export const invoiceOrderList = async (params) => {
+	return request({
+		url: '/mini/invoice/getNotInvoiceOrder',
+		method: 'post',
+		data: params
+	})
+}

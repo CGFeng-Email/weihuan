@@ -19,7 +19,7 @@
 					<text class="tips">点击可更换昵称</text>
 				</view>
 				<view class="right">
-					<input class="input" type="nickname" v-model="nickName" maxlength="6" @blur="nickNameBlur" />
+					<input class="input" type="nickname" v-model="nickName" maxlength="12" @blur="nickNameBlur" />
 				</view>
 			</view>
 			<view class="item">

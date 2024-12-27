@@ -580,7 +580,6 @@ const hotRecommentItem = (id) => {
 
 // 分享聊天，朋友
 onShareAppMessage((res) => {
-	console.log('分享', res);
 	return {
 		title: details.value.title,
 		path: `/pages/shopping/place_an_order?id=${id.value}`

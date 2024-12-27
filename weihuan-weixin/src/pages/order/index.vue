@@ -23,7 +23,7 @@
 			<text class="text">请输入关键字</text>
 		</view>
 	</view>
-
+	
 	<!-- 物流配送导航栏 -->
 	<view class="tabs_box" :style="{ top: useMenuButton().navigateTop }" v-if="head_title_index == 0">
 		<uv-tabs
@@ -75,7 +75,15 @@
 				<!-- 列表 -->
 				<view class="list">
 					<Empty :show="list.length == 0 ? true : false" tips="您还没有相关订单"></Empty>
-					<scroll-view class="scroll_view" scroll-y scroll-with-animation enable-back-to-top :scroll-anchoring="true" @scrolltolower="scrolltolower">
+					<scroll-view
+						class="scroll_view"
+						scroll-y
+						scroll-with-animation
+						enable-back-to-top
+						:scroll-anchoring="true"
+						:scroll-top="scrollTop"
+						@scrolltolower="scrolltolower"
+					>
 						<view class="scroll_item">
 							<block v-for="(item, index) in list" :key="item.id">
 								<OrderItem :item="item" :head_title_index="head_title_index" @statusBtn="statusBtn" @orderDetails="orderDetails"></OrderItem>
@@ -127,7 +135,8 @@ const list = ref([]);
 const isMore = ref('more');
 // 自提订单二维码
 const storeCode = ref('');
-
+// scroll组件y轴滚动距离
+const scrollTop = ref(0);
 // 导航栏列表
 const navList = ref([
 	{
@@ -205,6 +214,7 @@ const getOrderList = async (more = false) => {
 			mask: true
 		});
 		page.value = 1;
+		scrollTop.value = 1;
 	}
 	const params = {
 		page: page.value,
@@ -229,6 +239,8 @@ const getOrderList = async (more = false) => {
 		}
 		isMore.value = 'more';
 	} else {
+		scrollTop.value = 0;
+		console.log('scrollTop', scrollTop.value);
 		uni.hideLoading();
 	}
 };
@@ -237,7 +249,6 @@ const getOrderList = async (more = false) => {
 function itemClick(e) {
 	if (tabsCurrent.value == e.index) return;
 	tabsCurrent.value = e.index;
-
 	getOrderList();
 }
 
@@ -407,6 +418,7 @@ const openSearch = () => {
 function return_page() {
 	uni.navigateBack();
 }
+
 </script>
 
 <style lang="scss" scoped>

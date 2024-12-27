@@ -71,6 +71,9 @@
 							<image class="cover" :src="item.image" mode="widthFix"></image>
 						</view>
 						<view class="name">{{ item.title }}</view>
+						<view class="collect" v-if="item.count">
+							<text class="text">{{ item.count }}</text>
+						</view>
 					</view>
 				</block>
 			</view>
@@ -143,6 +146,53 @@ const collect_count = ref('-');
 // 推荐banner
 const recommendBannerList = ref([]);
 
+// 订单列表
+const order_list = ref([
+	{
+		title: '全部订单',
+		head_title_index: 0,
+		index: 0,
+		url: '/pages/order/index'
+	},
+	{
+		title: '自提订单',
+		head_title_index: 1,
+		index: 2,
+		url: '/pages/order/index'
+	},
+	{
+		title: '待付款',
+		head_title_index: 0,
+		image: '/static/img/order1.png',
+		index: 1,
+		url: '/pages/order/index',
+		count: 0
+	},
+	{
+		title: '待发货',
+		head_title_index: 0,
+		image: '/static/img/order2.png',
+		index: 2,
+		url: '/pages/order/index',
+		count: 0
+	},
+	{
+		title: '待收货',
+		head_title_index: 0,
+		image: '/static/img/order3.png',
+		index: 3,
+		url: '/pages/order/index',
+		count: 0
+	},
+	{
+		title: '已完成',
+		head_title_index: 0,
+		image: '/static/img/order4.png',
+		index: 5,
+		url: '/pages/order/index'
+	}
+]);
+
 // 打开登录弹窗
 function show_login() {
 	login_show.value = true;
@@ -191,6 +241,9 @@ const getUserDataFn = async () => {
 		coupon_count.value = res.data.coupon_count;
 		collect_count.value = res.data.collect_count;
 		mobile.value = res.data.mobile;
+		order_list.value[2].count = res.data.wait_pay_order_count;
+		order_list.value[3].count = res.data.wait_delivery_order_count;
+		order_list.value[4].count = res.data.wait_received_order_count;
 		const avatar = res.data.avatar;
 		if (avatar) {
 			headPortrait.value = avatar;
@@ -204,53 +257,8 @@ const getUserDataFn = async () => {
 		coupon_count.value = '-';
 		collect_count.value = '-';
 	}
-
 	uni.hideLoading();
 };
-
-// 订单列表
-const order_list = ref([
-	{
-		title: '全部订单',
-		head_title_index: 0,
-		index: 0,
-		url: '/pages/order/index'
-	},
-	{
-		title: '自提订单',
-		head_title_index: 1,
-		index: 2,
-		url: '/pages/order/index'
-	},
-	{
-		title: '待付款',
-		head_title_index: 0,
-		image: '/static/img/order1.png',
-		index: 1,
-		url: '/pages/order/index'
-	},
-	{
-		title: '待发货',
-		head_title_index: 0,
-		image: '/static/img/order2.png',
-		index: 2,
-		url: '/pages/order/index'
-	},
-	{
-		title: '待收货',
-		head_title_index: 0,
-		image: '/static/img/order3.png',
-		index: 3,
-		url: '/pages/order/index'
-	},
-	{
-		title: '已完成',
-		head_title_index: 0,
-		image: '/static/img/order4.png',
-		index: 5,
-		url: '/pages/order/index'
-	}
-]);
 
 // 订单列表 click
 const open_order = async (item) => {
@@ -361,13 +369,7 @@ const open_function = (item) => {
 			open_function_link(item.url);
 			break;
 		case '开票申请':
-			uni.showToast({
-				title: '功能待完善',
-				mask: true,
-				icon: 'none',
-				duration: 2000
-			});
-			// open_function_link(item.url);
+			open_function_link(item.url);
 			break;
 		case '系统公告':
 			open_function_link(item.url);
@@ -559,6 +561,7 @@ page {
 		.item {
 			width: 25%;
 			text-align: center;
+			position: relative;
 
 			.cover_box {
 				height: 40rpx;
@@ -572,6 +575,24 @@ page {
 				color: #000;
 				font-weight: 500;
 				padding-top: 16rpx;
+			}
+
+			.collect {
+				position: absolute;
+				top: -8rpx;
+				right: 16rpx;
+				.text {
+					display: inline-block;
+					width: 44rpx;
+					height: 44rpx;
+					text-align: center;
+					line-height: 44rpx;
+					background: #ff0000;
+					border-radius: 50%;
+					font-size: 12px;
+					color: #fff;
+					transform: scale(0.7);
+				}
 			}
 		}
 	}
