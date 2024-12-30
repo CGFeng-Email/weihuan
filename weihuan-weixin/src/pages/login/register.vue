@@ -24,7 +24,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { phoneLogin } from '@/api/index.js';
+import { phoneLogin, sendMobileCode } from '@/api/index.js';
 
 const selectIndex = ref(0);
 const phone = ref(null);
@@ -81,7 +81,7 @@ function get_code() {
 }
 
 // 开始倒计时
-function start_times() {
+async function start_times() {
 	// 手机号正则
 	const regExp = new RegExp(/^1[3|4|5|7|8|9][0-9]\d{8}$/);
 	const reg = regExp.test(phone.value);
@@ -94,13 +94,28 @@ function start_times() {
 			duration: 1200
 		});
 	} else {
-		const timesId = setInterval(() => {
-			times.value--;
-			if (times.value == 1) {
-				times.value = 60;
-				clearInterval(timesId);
+		const res = await sendMobileCode({
+			mobile: phone.value
+		});
+		console.log('发送验证码', res);
+
+		uni.showToast({
+			title: res.msg,
+			icon: 'none',
+			mask: true,
+			duration: 2000,
+			complete: () => {
+				if (res.code == 1) {
+					const timesId = setInterval(() => {
+						times.value--;
+						if (times.value == 1) {
+							times.value = 60;
+							clearInterval(timesId);
+						}
+					}, 1000);
+				}
 			}
-		}, 1000);
+		});
 	}
 }
 
@@ -186,18 +201,19 @@ async function wx_login() {
 				padding: 0 20rpx;
 				font-size: 30rpx;
 				font-weight: 500;
+				font-size: 32rpx;
 			}
 
 			.get_code {
 				flex: none;
-				width: 180rpx;
-				height: 60rpx;
+				width: 200rpx;
+				height: 64rpx;
 				border-radius: 45rpx;
 				text-align: center;
-				line-height: 60rpx;
+				line-height: 64rpx;
 				color: #fff;
 				font-weight: 500;
-				font-size: 24rpx;
+				font-size: 26rpx;
 				&::after {
 					display: none;
 				}

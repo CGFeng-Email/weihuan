@@ -1,4 +1,7 @@
 <script>
+// 路由返回键拦截器
+import interceptor from '@/utils/interceptor.js';
+
 export default {
 	onLaunch: function () {
 		// 获取胶囊坐标
@@ -18,9 +21,12 @@ export default {
 				}
 			});
 		}
+
+		// 路由拦截
+		interceptor.addRouteInterceptor();
 	},
 	onShow: function () {},
-	onHide: function () {}
+	onHide: function () {},
 };
 </script>
 

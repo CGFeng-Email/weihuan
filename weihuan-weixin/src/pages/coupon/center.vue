@@ -14,14 +14,18 @@
 </template>
 
 <script setup>
+import { onReachBottom } from '@dcloudio/uni-app';
 import { ref, onMounted } from 'vue';
 import { couponCenter, getCoupon } from '@/api/index.js';
 
-// 领劵中心
+const page = ref(1);
+const size = ref(8);
+const totalPage = ref(1);
 const list = ref([]);
 
 // 优惠卷
-const getCouponList = async () => {
+const getCouponList = async (more = false) => {
+	
 	const res = await couponCenter();
 	console.log('优惠卷', res);
 	if (res.code == 1) {
@@ -73,6 +77,13 @@ const getCouponItem = async (is_get, id) => {
 onMounted(() => {
 	getCouponList();
 });
+
+onReachBottom(() => {
+	// if (page.value < totalPage.value) {
+	// 	page.value++;
+	// 	getMyCoupon(true);
+	// }
+});
 </script>
 
 <style lang="scss" scoped>
@@ -106,7 +117,7 @@ onMounted(() => {
 				font-weight: 600;
 				color: #fff;
 			}
-			
+
 			.discount {
 				height: 80rpx;
 				line-height: 80rpx;

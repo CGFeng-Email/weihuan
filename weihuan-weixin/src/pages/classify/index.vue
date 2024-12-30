@@ -25,7 +25,7 @@
 					</scroll-view>
 
 					<!-- 右侧商品 -->
-					<scroll-view class="right_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive>
+					<scroll-view class="right_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive @scrolltolower="listToLower">
 						<!-- 分类导航 -->
 						<view class="classify_navigation">
 							<view class="item company" v-if="organList.length > 0">
@@ -65,7 +65,7 @@
 
 							<Empty tips="小伟正在紧急补充货源哟" :show="isEmpty"></Empty>
 
-							<view style="height: 20px"></view>
+							<uni-load-more :status="isMore" v-if="totalPage > 1" :iconSize="14" :contentText="contentText"></uni-load-more>
 						</view>
 					</scroll-view>
 				</view>
@@ -90,7 +90,7 @@ const MenuChildRef = ref(null);
 // 分页
 const page = ref(1);
 // 条数
-const size = ref(20);
+const size = ref(10);
 // 总页数
 const totalPage = ref(null);
 // 关键词
@@ -119,6 +119,9 @@ const organList = ref([]);
 const organListIndex = ref(0);
 // 商品列表
 const allShoppingList = ref([]);
+// 列表加载
+const isMore = ref('more');
+const contentText = ref({ contentdown: '上拉显示更多', contentrefresh: '正在加载...', contentnomore: '我也是有底线的' });
 
 onLoad(async () => {
 	uni.showLoading({
@@ -234,8 +237,14 @@ const getClassify = async () => {
 };
 
 // 商品列表
-const getShoppingList = async () => {
+const getShoppingList = async (more = false) => {
 	if (classify_list.value.length > 0 && childCategory.value.length > 0) {
+		if (more) {
+			isMore.value = 'loading';
+		} else {
+			page.value = 1;
+		}
+
 		const params = {
 			cate_id: classify_list.value[menu_index.value].id,
 			cate_id_2: childCategory.value[childCategoryIndex.value].id,
@@ -251,10 +260,29 @@ const getShoppingList = async () => {
 		console.log('params', params);
 		const res = await shoppingList(params);
 		console.log('商品列表', res);
+
 		if (res.code == 1) {
-			allShoppingList.value = res.data.lists;
-			totalPage.value = res.page_no;
+			if (more) {
+				allShoppingList.value = [...allShoppingList.value, ...res.data.lists];
+			} else {
+				allShoppingList.value = res.data.lists;
+				totalPage.value = res.data.page_no;
+			}
 		}
+
+		if (more) {
+			if (page.value >= totalPage.value) {
+				return (isMore.value = 'no-more');
+			}
+			isMore.value = 'more';
+		}
+	}
+};
+
+const listToLower = () => {
+	if (page.value < totalPage.value) {
+		page.value++;
+		getShoppingList(true);
 	}
 };
 
@@ -367,9 +395,10 @@ onPullDownRefresh(async () => {
 
 	.right_menus {
 		flex: 1;
+		position: relative;
 
 		.list {
-			padding: 0 10rpx;
+			padding: 72rpx 10rpx 0;
 		}
 	}
 }
@@ -380,11 +409,14 @@ onPullDownRefresh(async () => {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	position: sticky;
+	position: fixed;
 	top: 0;
-	left: 0;
+	right: 0;
+	width: 590rpx;
+	height: 72rpx;
 	background: #fff;
 	z-index: 10;
+
 	.item {
 		flex: 1;
 		display: flex;

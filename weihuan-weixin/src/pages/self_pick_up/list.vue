@@ -13,7 +13,7 @@
 	</view>
 
 	<!-- 地址，搜索 -->
-	<view class="location_search" :style="{ top: useMenuButton().topView }">
+	<!-- <view class="location_search" :style="{ top: useMenuButton().topView }">
 		<view class="address" @click="jump_selectAddress">
 			<text class="iconfont icon-dizhi"></text>
 			<text class="text">{{ address }}</text>
@@ -22,11 +22,13 @@
 			<text class="iconfont icon-sousuo"></text>
 			<text class="text">请输入关键字</text>
 		</view>
-	</view>
+	</view -->
+	>
 
 	<view :style="{ height: useMenuButton().top }"></view>
-	<view :style="{ height: useMenuButton().height }"></view>
-	<view style="height: 36px"></view>
+	<!-- <view :style="{ height: useMenuButton().height }"></view> -->
+	<!-- <view style="height: 36px"></view> -->
+	<view style="height: 20rpx"></view>
 
 	<!-- 列表 -->
 	<view class="list">
@@ -169,12 +171,6 @@ function open_shopping_search() {
 	});
 }
 </script>
-
-<style>
-page {
-	background: #fbfbfb;
-}
-</style>
 
 <style lang="scss" scoped>
 .top {

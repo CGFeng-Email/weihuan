@@ -29,14 +29,11 @@ const getNoticeList = async () => {
 		title: '加载中...',
 		mask: true
 	});
-
 	const res = await noticeList();
 	console.log('公告列表', res);
-
 	if (res.code == 1) {
 		NoticeList.value = res.data;
 	}
-
 	uni.hideLoading();
 };
 

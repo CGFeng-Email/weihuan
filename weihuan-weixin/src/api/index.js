@@ -213,7 +213,7 @@ export const shoppingSpecification = (id, mod_id) => {
 }
 
 // 选中的规格获取价格
-export const selectSpecification = async (params) => {
+export const selectSpecification = (params) => {
 	return request({
 		url: '/mini/goods/getSpecPrice',
 		method: 'post',
@@ -222,7 +222,7 @@ export const selectSpecification = async (params) => {
 }
 
 // 立即购买
-export const immedPayment = async (params) => {
+export const immedPayment = (params) => {
 	return request({
 		url: '/mini/order/buy',
 		method: 'post',
@@ -231,7 +231,7 @@ export const immedPayment = async (params) => {
 }
 
 // 加入购物车
-export const addCart = async (params) => {
+export const addCart = (params) => {
 	return request({
 		url: '/mini/cart/add',
 		method: 'post',
@@ -240,7 +240,7 @@ export const addCart = async (params) => {
 }
 
 // 最近自提点
-export const nearStore = async (params) => {
+export const nearStore = (params) => {
 	return request({
 		url: '/mini/store/getRecentStore',
 		method: 'post',
@@ -249,7 +249,7 @@ export const nearStore = async (params) => {
 }
 
 // 订单支付
-export const OrderPayment = async (params) => {
+export const OrderPayment = (params) => {
 	return request({
 		url: '/mini/order/pay',
 		method: 'post',
@@ -258,7 +258,7 @@ export const OrderPayment = async (params) => {
 }
 
 // 添加收藏，取消收藏
-export const isCollect = async (params) => {
+export const isCollect = (params) => {
 	return request({
 		url: '/mini/goods/setCollect',
 		method: 'post',
@@ -267,7 +267,7 @@ export const isCollect = async (params) => {
 }
 
 // 购物车
-export const getCartList = async (params) => {
+export const getCartList = (params) => {
 	return request({
 		url: '/mini/cart/getList',
 		method: 'post',
@@ -275,7 +275,7 @@ export const getCartList = async (params) => {
 	})
 }
 // 购物车删除商品
-export const delCartShopping = async (params) => {
+export const delCartShopping = (params) => {
 	return request({
 		url: '/mini/cart/clear',
 		method: 'post',
@@ -284,7 +284,7 @@ export const delCartShopping = async (params) => {
 }
 
 // 修改购物车商品数量
-export const editCartShopping = async (params) => {
+export const editCartShopping = (params) => {
 	return request({
 		url: '/mini/cart/change',
 		method: 'post',
@@ -293,7 +293,7 @@ export const editCartShopping = async (params) => {
 }
 
 // 订单列表
-export const orderList = async (params) => {
+export const orderList = (params) => {
 	return request({
 		url: '/mini/order/getList',
 		method: 'post',
@@ -302,7 +302,7 @@ export const orderList = async (params) => {
 }
 
 // 订单详情
-export const orderDetails = async (params) => {
+export const orderDetails = (params) => {
 	return request({
 		url: '/mini/order/detail',
 		method: 'post',
@@ -311,7 +311,7 @@ export const orderDetails = async (params) => {
 }
 
 // 取消订单
-export const cancelOrder = async (params) => {
+export const cancelOrder = (params) => {
 	return request({
 		url: '/mini/order/cancel',
 		method: 'post',
@@ -320,7 +320,7 @@ export const cancelOrder = async (params) => {
 }
 
 // 查询物流
-export const inquireLogistics = async (params) => {
+export const inquireLogistics = (params) => {
 	return request({
 		url: '/mini/order/express',
 		method: 'post',
@@ -329,7 +329,7 @@ export const inquireLogistics = async (params) => {
 }
 
 // 确认收货
-export const confirmRecelve = async (params) => {
+export const confirmRecelve = (params) => {
 	return request({
 		url: '/mini/order/confirm',
 		method: 'post',
@@ -338,7 +338,7 @@ export const confirmRecelve = async (params) => {
 }
 
 // 申请售后
-export const applyFor = async (params) => {
+export const applyFor = (params) => {
 	return request({
 		url: '/mini/refund/apply',
 		method: 'post',
@@ -347,7 +347,7 @@ export const applyFor = async (params) => {
 }
 
 // 订单核销码
-export const orderCode = async (params) => {
+export const orderCode = (params) => {
 	return request({
 		url: '/mini/order/qrcode',
 		method: 'post',
@@ -356,7 +356,7 @@ export const orderCode = async (params) => {
 }
 
 // 立即核销
-export const scanCode = async (params) => {
+export const scanCode = (params) => {
 	return request({
 		url: '/mini/order/getScanOrder',
 		method: 'post',
@@ -365,7 +365,7 @@ export const scanCode = async (params) => {
 }
 
 // 取消售后
-export const cancelApplyFor = async (params) => {
+export const cancelApplyFor = (params) => {
 	return request({
 		url: '/mini/refund/cancel',
 		method: 'post',
@@ -374,7 +374,7 @@ export const cancelApplyFor = async (params) => {
 }
 
 // 会员中心
-export const memberCenter = async (params) => {
+export const memberCenter = (params) => {
 	return request({
 		url: '/mini/user/userCenter',
 		method: 'post',
@@ -383,7 +383,7 @@ export const memberCenter = async (params) => {
 }
 
 // 申请svip
-export const applyVip = async (params) => {
+export const applyVip = (params) => {
 	return request({
 		url: '/mini/user/applySvip',
 		method: 'post',
@@ -392,7 +392,7 @@ export const applyVip = async (params) => {
 }
 
 // 核销列表
-export const codeList = async (params) => {
+export const codeList = (params) => {
 	return request({
 		url: '/mini/extract/getList',
 		method: 'post',
@@ -401,7 +401,7 @@ export const codeList = async (params) => {
 }
 
 // 申请开票
-export const applyInvoice = async (params) => {
+export const applyInvoice = (params) => {
 	return request({
 		url: '/mini/invoice/apply',
 		method: 'post',
@@ -410,9 +410,18 @@ export const applyInvoice = async (params) => {
 }
 
 // 未开发票订单
-export const invoiceOrderList = async (params) => {
+export const invoiceOrderList = (params) => {
 	return request({
 		url: '/mini/invoice/getNotInvoiceOrder',
+		method: 'post',
+		data: params
+	})
+}
+
+// 发送验证码
+export const sendMobileCode = (params) => {
+	return request({
+		url: '/mini/user/sendCode',
 		method: 'post',
 		data: params
 	})

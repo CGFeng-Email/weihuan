@@ -256,6 +256,9 @@ const getUserDataFn = async () => {
 		wait_take_order_count.value = '-';
 		coupon_count.value = '-';
 		collect_count.value = '-';
+		order_list.value[2].count = 0;
+		order_list.value[3].count = 0;
+		order_list.value[4].count = 0;
 	}
 	uni.hideLoading();
 };

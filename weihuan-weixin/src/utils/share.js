@@ -6,11 +6,15 @@ import {
 export default {
 	// 发送给朋友
 	onShareAppMessage(res) {
-		return {}
+		return {
+			path: '/pages/index/index'
+		}
 	},
 
 	//分享到朋友圈
 	onShareTimeline(res) {
-		return {}
+		return {
+			path: '/pages/index/index'
+		}
 	}
 }
