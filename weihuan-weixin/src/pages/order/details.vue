@@ -119,7 +119,7 @@
 			</view>
 		</view>
 
-		<Bottom title="确认核销" v-if="head_title_index == 1 && item.status == 10 && item.pay_status == 20 && item.delivery_type == 20" />
+		<Bottom title="确认核销" v-if="isVerification" @bottom_click="confirmVerification" />
 	</view>
 </template>
 
@@ -127,7 +127,7 @@
 import Bottom from '@/pages/component/bottom.vue';
 import { ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
-import { orderDetails } from '@/api/index.js';
+import { orderDetails, orderVerification } from '@/api/index.js';
 
 // 订单id
 const orderId = ref('');
@@ -161,10 +161,13 @@ const orderPrice = ref('');
 const userName = ref('');
 // 支付方式
 const paymentType = ref('');
+// 核销按钮
+const isVerification = ref(false);
 
 onLoad((load) => {
 	console.log(load);
 	orderId.value = load.orderId;
+	isVerification.value = load.verification;
 	getOrderDetails();
 });
 
@@ -200,6 +203,32 @@ const openLocation = (latitude, longitude) => {
 		longitude: Number(store.value.longitude),
 		address: store.value.address,
 		name: store.value.title
+	});
+};
+
+// 确认核销
+const confirmVerification = () => {
+	uni.showModal({
+		content: '确定核销该订单吗？',
+		success: async (res) => {
+			if (res.confirm) {
+				const params = {
+					order_id: orderId.value
+				};
+				const getCode = await orderVerification(params);
+				console.log('确认核销', getCode);
+				
+				uni.showToast({
+					title: getCode.msg,
+					icon: 'none',
+					mask: true,
+					duration: 2000,
+					complete: () => {
+						// if (getCode.code == 1) {}
+					}
+				});
+			}
+		}
 	});
 };
 </script>

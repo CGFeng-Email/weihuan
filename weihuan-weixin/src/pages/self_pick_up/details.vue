@@ -25,6 +25,7 @@
 			<view class="info">
 				<view class="li">联系人：{{ details.contact || '-' }}</view>
 				<view class="li">联系电话：{{ details.phone }}</view>
+				<view class="li">门店电话：{{ details.store_phone }}</view>
 				<view class="li">营业时间：{{ details.open_hours }}</view>
 				<view class="li">地址：{{ details.address }}</view>
 			</view>

@@ -1,6 +1,8 @@
 <script>
 // 路由返回键拦截器
-import interceptor from '@/utils/interceptor.js';
+import addRouteInterceptor from '@/utils/interceptor.js';
+// 版本更新
+import autoUpdate from '@/utils/update.js';
 
 export default {
 	onLaunch: function () {
@@ -23,10 +25,12 @@ export default {
 		}
 
 		// 路由拦截
-		interceptor.addRouteInterceptor();
+		addRouteInterceptor();
+		// 更新
+		autoUpdate();
 	},
 	onShow: function () {},
-	onHide: function () {},
+	onHide: function () {}
 };
 </script>
 

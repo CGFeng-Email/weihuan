@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { onShow, onPullDownRefresh } from '@dcloudio/uni-app';
+import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
 import { ref, computed, watch, onMounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
 import Empty from '@/pages/component/empty.vue';
@@ -446,10 +446,9 @@ const jump_place_order = () => {
 };
 
 // 热门推荐点击
-const hotRecommentItem = (id, spec_key, quantity, isPay) => {
-	if (isPay != 1) return;
+const hotRecommentItem = (id) => {
 	uni.navigateTo({
-		url: `/pages/shopping/place_an_order?id=${id}&spec_key=${spec_key}&quantity=${quantity}`
+		url: `/pages/shopping/place_an_order?id=${id}`
 	});
 };
 
@@ -463,7 +462,7 @@ onPullDownRefresh(async () => {
 });
 
 onShow(() => {
-	console.log('购物车 show');
+	console.log('购物车show');
 	// 购物车
 	getCartListFn();
 });

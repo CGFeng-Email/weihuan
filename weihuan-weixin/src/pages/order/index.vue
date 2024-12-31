@@ -341,7 +341,6 @@ function statusBtn(e) {
 		case 'cancel':
 			// 取消订单
 			uni.showModal({
-				title: '取消订单',
 				content: '确定取消订单?',
 				success: async (res) => {
 					if (res.confirm) {

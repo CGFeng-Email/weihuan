@@ -10,6 +10,18 @@
 				</view>
 			</view>
 			<view class="lis">
+				<view class="title">单位税号</view>
+				<view class="input_box">
+					<input type="text" v-model="tax" placeholder-class="input_placeholder" placeholder="请填写单位税号" />
+				</view>
+			</view>
+			<view class="lis">
+				<view class="title">收件邮箱</view>
+				<view class="input_box">
+					<input type="text" v-model="email" placeholder-class="input_placeholder" placeholder="请填写收件邮箱" />
+				</view>
+			</view>
+			<view class="lis">
 				<view class="title">
 					开票类型
 					<text class="text">（专用发票请联系客服）</text>
@@ -58,6 +70,10 @@ import { applyInvoice, invoiceOrderList } from '@/api/index.js';
 
 // 发票抬头
 const invoice_header = ref('');
+// 单位税号
+const tax = ref('');
+// 收件邮箱
+const email = ref('');
 // 开票类型下标
 const type_index = ref(-1);
 // 开票类型文案
@@ -67,11 +83,11 @@ const type = ref([
 	{
 		id: 10,
 		value: '普通发票'
-	},
-	{
-		id: 20,
-		value: '专用发票'
 	}
+	// {
+	// 	id: 20,
+	// 	value: '专用发票'
+	// }
 ]);
 
 // 开票金额
@@ -159,7 +175,9 @@ const apply = async () => {
 		invoice_type: type.value[type_index.value].id,
 		fee_type: pricetype.value[price_index.value].id,
 		fee: price.value,
-		order_ids: orderList.value
+		order_ids: orderList.value,
+		tax: tax.value,
+		email: email.value
 	};
 
 	console.log('params', params);

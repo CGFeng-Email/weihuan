@@ -53,6 +53,9 @@
 							<view class="li">
 								<text class="name">联系电话：</text>
 								<text class="text">{{ item.phone }}</text>
+							</view><view class="li">
+								<text class="name">门店电话：</text>
+								<text class="text">{{ item.store_phone }}</text>
 							</view>
 							<view class="li">
 								<text class="name">营业时间：</text>

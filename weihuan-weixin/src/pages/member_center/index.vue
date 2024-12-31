@@ -64,36 +64,12 @@
 		<view class="sub_head" v-else>尊敬的SVIP，你正在享受优质的会员服务</view>
 		<!-- 服务 -->
 		<view class="service">
-			<view class="item">
+			<view class="item" v-for="(item, index) in serveList" :key="item.name">
 				<view class="box">
-					<image src="/src/static/img/service1.png" mode="widthFix"></image>
-					<view class="title">价格优惠</view>
+					<image :src="item.icon" mode="widthFix"></image>
+					<view class="title">{{ item.name }}</view>
 					<view class="line"></view>
-					<view class="lead over2">购买商品时使用优惠券的同时还能享受会员折扣。</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="box">
-					<image src="/src/static/img/service2.png" mode="widthFix"></image>
-					<view class="title">优先发货</view>
-					<view class="line"></view>
-					<view class="lead over2">购买商品后，仓库优先安排商品发货。</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="box">
-					<image src="/src/static/img/service3.png" mode="widthFix"></image>
-					<view class="title">售后优先</view>
-					<view class="line"></view>
-					<view class="lead over2">商品有任何问题，咨询客服享受快速回应服务。</view>
-				</view>
-			</view>
-			<view class="item">
-				<view class="box">
-					<image src="/src/static/img/service4.png" mode="widthFix"></image>
-					<view class="title">客户回馈</view>
-					<view class="line"></view>
-					<view class="lead over2">平台客服不定时给优质客户提供温馨回馈服务。</view>
+					<view class="lead over2">{{ item.remark }}</view>
 				</view>
 			</view>
 		</view>
@@ -145,6 +121,8 @@ const gradeVips = ref('');
 const nextVips = ref('');
 // 等级列表
 const rankList = ref([]);
+// 会员描述列表
+const serveList = ref([]);
 
 // 获取会员中心数据
 const getMemberCenter = async () => {
@@ -195,6 +173,7 @@ onMounted(() => {
 	getMemberCenter();
 	const commonData = uni.getStorageSync('commonData');
 	rankList.value = commonData.grade_list;
+	serveList.value = commonData.vip_desc;
 });
 
 // 顶部区域滚动
@@ -405,7 +384,7 @@ page {
 	.service {
 		display: flex;
 		flex-wrap: wrap;
-		padding: 30rpx 0 60rpx;
+		padding: 30rpx 0;
 		.item {
 			width: 50%;
 			padding: 10rpx;
@@ -443,7 +422,7 @@ page {
 	}
 
 	.ladder {
-		padding-top: 40rpx;
+		padding-top: 20rpx;
 		display: flex;
 		align-items: flex-end;
 		.item {
@@ -456,6 +435,7 @@ page {
 					text-align: center;
 					padding: 10rpx 0;
 					font-weight: bold;
+					font-size: 30rpx;
 				}
 				.height {
 					display: flex;

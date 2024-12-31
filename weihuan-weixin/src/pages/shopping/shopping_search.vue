@@ -81,7 +81,11 @@ const getShoppingList = async (more = false) => {
 function searchInput(e) {
 	hotTitle.value = e.trim();
 	keyword.value = e.trim();
-	list.value = keyword.value === '' ? [] : list.value;
+	if (keyword.value == '') {
+		list.value = [];
+	} else {
+		getShoppingList();
+	}
 }
 
 // 键盘回车时触发

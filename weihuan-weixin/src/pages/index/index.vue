@@ -163,7 +163,7 @@ import { MobileEncryption } from '@/hooks/useTool.js';
 import share from '../../utils/share.js';
 
 // 默认头像
-const headPortrait = ref('/static/img/head_portrait.png');
+const headPortrait = ref('/src/static/img/head_portrait.png');
 const nickName = ref('炜洹游客用户');
 const mobile = ref(null);
 const isVip = ref('普通会员');
@@ -274,7 +274,9 @@ const getCouponItem = async (is_get, id) => {
 		mask: true,
 		success: () => {
 			setTimeout(() => {
-				getCouponList();
+				if (res.code == 1) {
+					getCouponList();
+				}
 			}, 1500);
 		}
 	});
@@ -620,6 +622,7 @@ onShow(async () => {
 			}
 			.vip {
 				width: 64rpx;
+				margin-left: 8rpx;
 			}
 			.lead {
 				font-size: 24rpx;

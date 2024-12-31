@@ -19,7 +19,7 @@
 					<text class="tips">点击可更换昵称</text>
 				</view>
 				<view class="right">
-					<input class="input" type="nickname" v-model="nickName" maxlength="12" @blur="nickNameBlur" />
+					<input class="input" type="nickname" v-model="nickName" maxlength="12" @blur="nickNameBlur" @confirm="nickNameBlur" />
 				</view>
 			</view>
 			<view class="item">
@@ -28,7 +28,7 @@
 				</view>
 				<view class="right">
 					<view class="value">
-						<input class="uni-input input" v-model="userName" placeholder="请输入您的姓名" maxlength="12" confirm-type="done" @confirm="userNameConfirm" />
+						<input class="uni-input input" v-model="userName" placeholder="请输入您的姓名" maxlength="12" confirm-type="done" @blur="userNameConfirm" @confirm="userNameConfirm" />
 					</view>
 				</view>
 			</view>
@@ -46,7 +46,6 @@
 							maxlength="11"
 							v-model="userMobile"
 							confirm-type="done"
-							@confirm="userMobileConfiem"
 						/>
 					</view>
 				</view>
@@ -57,7 +56,7 @@
 				</view>
 				<view class="right">
 					<view class="value">
-						<input type="text" class="uni-input input" placeholder="请输入您的邮箱" v-model="userEmail" confirm-type="done" @confirm="userEmailConfirm" />
+						<input type="text" class="uni-input input" placeholder="请输入您的邮箱" v-model="userEmail" confirm-type="done" @blur="userEmailConfirm" @confirm="userEmailConfirm" />
 					</view>
 				</view>
 			</view>
@@ -114,13 +113,6 @@ const nickNameBlur = (e) => {
 
 // 姓名修改
 const userNameConfirm = () => {
-	nextTick(() => {
-		editUserDataFn();
-	});
-};
-
-// 手机号修改
-const userMobileConfiem = () => {
 	nextTick(() => {
 		editUserDataFn();
 	});

@@ -1,8 +1,17 @@
 <template>
-	<uni-transition :show="Object.keys(item).length > 0" mode-class="fade" :duration="600">
+	<uni-transition :show="Object.keys(item).length > 0" mode-class="fade" :duration="100">
 		<view class="item" @click="itemClick(item.id)">
 			<view class="cover_box">
-				<image class="cover box_border_radius" :src="item.images[0]" mode="widthFix"></image>
+				<uv-image
+					class="cover"
+					:src="item.images[0]"
+					width="180rpx"
+					height="180rpx"
+					radius="6"
+					:lazy-load="true"
+					:observeLazyLoad="true"
+					:fade="true"
+				></uv-image>
 			</view>
 			<view class="content">
 				<view class="title">
@@ -26,11 +35,11 @@
 						<text class="price">￥{{ item.market_price }}</text>
 					</view>
 				</view>
-				<view class="bottom_cart">
+				<!-- <view class="bottom_cart">
 					<view class="cart">
 						<i class="iconfont icon-gouwuche-tianchong"></i>
 					</view>
-				</view>
+				</view> -->
 			</view>
 		</view>
 	</uni-transition>
@@ -58,11 +67,11 @@ function itemClick(id) {
 	background: #fff;
 	border-radius: 10rpx;
 	overflow: hidden;
-	height: 250rpx;
+	height: 180rpx;
 	padding-left: 20rpx;
 
 	.cover_box {
-		width: 190rpx;
+		width: 180rpx;
 		height: 100%;
 		flex: none;
 		overflow: hidden;
@@ -136,9 +145,9 @@ function itemClick(id) {
 			.primary_price {
 				color: #cfcfcf;
 				font-weight: 500;
-				font-size: 24rpx;
+				font-size: 22rpx;
 				text-decoration: line-through;
-				padding-left: 8rpx;
+				padding-left: 12rpx;
 			}
 		}
 

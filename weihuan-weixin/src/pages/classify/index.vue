@@ -9,68 +9,65 @@
 	</view>
 	<!-- 顶部区域占位 -->
 	<view style="height: 170rpx"></view>
+
 	<!-- 主体 -->
 	<swiper class="swiper" :current="swiperIndex" :duration="0" @change="swiperChange">
-		<uni-transition :show="childCategory.length > 0" mode-class="fade" :duration="300">
-			<swiper-item v-for="(item, index) in classify_list" :key="item.id">
-				<view class="swiper-item">
-					<!-- 分类 -->
-					<scroll-view class="left_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive>
-						<block v-for="(item, index) in childCategory" :key="item.id">
-							<view class="item" :class="{ active: childCategoryIndex == index }" @click="childCategoryItem(index)">
-								<text class="text over1">{{ item.title }}</text>
-								<image class="cover" src="/src/static/img/category_active.png" mode="scaleToFill"></image>
+		<swiper-item v-for="(item, index) in classify_list" :key="item.id">
+			<view class="swiper-item" v-if="childCategory.length > 0">
+				<!-- 分类 -->
+				<scroll-view class="left_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive>
+					<block v-for="(item, index) in childCategory" :key="item.id">
+						<view class="item" :class="{ active: childCategoryIndex == index }" @click="childCategoryItem(index)">
+							<view class="text over2">{{ item.title }}</view>
+							<image class="cover" src="/static/img/category_active.png" mode="scaleToFill" v-if="childCategoryIndex == index"></image>
+						</view>
+					</block>
+				</scroll-view>
+
+				<!-- 右侧商品 -->
+				<scroll-view class="right_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive @scrolltolower="listToLower">
+					<!-- 分类导航 -->
+					<view class="classify_navigation">
+						<view class="item company" v-if="organList.length > 0">
+							<picker class="picker" mode="selector" :range="organList" :value="organListIndex" range-key="title" @change="organListChange">
+								<input
+									type="text"
+									class="input"
+									v-model="organList[organListIndex].title"
+									disabled
+									placeholder-class="input_placeholder"
+									focus
+									placeholder="请选择机构分类"
+								/>
+							</picker>
+						</view>
+						<view class="item spec" @click="switchSales">
+							<view class="text">销量</view>
+							<view class="icon">
+								<i class="iconfont icon-shang" :class="{ active: salesIndex == 1 }"></i>
+								<i class="iconfont icon-xiala" :class="{ active: salesIndex == 0 }"></i>
 							</view>
+						</view>
+						<view class="item spec" @click="switchPrice">
+							<view class="text">价格</view>
+							<view class="icon">
+								<i class="iconfont icon-shang" :class="{ active: priceIndex == 1 }"></i>
+								<i class="iconfont icon-xiala" :class="{ active: priceIndex == 0 }"></i>
+							</view>
+						</view>
+					</view>
+
+					<!-- 列表 -->
+					<view class="list">
+						<block v-for="item2 in allShoppingList" :key="item2.id">
+							<Item :item="item2" @itemClick="itemClick"></Item>
 						</block>
-					</scroll-view>
-
-					<!-- 右侧商品 -->
-					<scroll-view class="right_menus scroll_box" :scroll-y="true" enable-back-to-top scroll-anchoring enhanced enable-passive @scrolltolower="listToLower">
-						<!-- 分类导航 -->
-						<view class="classify_navigation">
-							<view class="item company" v-if="organList.length > 0">
-								<picker class="picker" mode="selector" :range="organList" :value="organListIndex" range-key="title" @change="organListChange">
-									<input
-										type="text"
-										class="input"
-										v-model="organList[organListIndex].title"
-										disabled
-										placeholder-class="input_placeholder"
-										focus
-										placeholder="请选择机构分类"
-									/>
-								</picker>
-							</view>
-							<view class="item spec" @click="switchSales">
-								<view class="text">销量</view>
-								<view class="icon">
-									<i class="iconfont icon-shang" :class="{ active: salesIndex == 1 }"></i>
-									<i class="iconfont icon-xiala" :class="{ active: salesIndex == 0 }"></i>
-								</view>
-							</view>
-							<view class="item spec" @click="switchPrice">
-								<view class="text">价格</view>
-								<view class="icon">
-									<i class="iconfont icon-shang" :class="{ active: priceIndex == 1 }"></i>
-									<i class="iconfont icon-xiala" :class="{ active: priceIndex == 0 }"></i>
-								</view>
-							</view>
-						</view>
-
-						<!-- 列表 -->
-						<view class="list">
-							<block v-for="item2 in allShoppingList" :key="item2.id">
-								<Item :item="item2" @itemClick="itemClick"></Item>
-							</block>
-
-							<Empty tips="小伟正在紧急补充货源哟" :show="isEmpty"></Empty>
-
-							<uni-load-more :status="isMore" v-if="totalPage > 1" :iconSize="14" :contentText="contentText"></uni-load-more>
-						</view>
-					</scroll-view>
-				</view>
-			</swiper-item>
-		</uni-transition>
+						<uni-load-more :status="isMore" v-if="totalPage > 1" :iconSize="14" :contentText="contentText"></uni-load-more>
+					</view>
+					<Empty tips="抱歉, 暂时还没有该商品哦" :show="allShoppingList.length == 0"></Empty>
+				</scroll-view>
+			</view>
+		</swiper-item>
 	</swiper>
 </template>
 
@@ -121,7 +118,8 @@ const organListIndex = ref(0);
 const allShoppingList = ref([]);
 // 列表加载
 const isMore = ref('more');
-const contentText = ref({ contentdown: '上拉显示更多', contentrefresh: '正在加载...', contentnomore: '我也是有底线的' });
+const contentText = ref({ contentdown: '上拉显示更多', contentrefresh: '正在加载...', contentnomore: '到底了' });
+const menuActive = '/static/img/category_active.png';
 
 onLoad(async () => {
 	uni.showLoading({
@@ -360,15 +358,19 @@ onPullDownRefresh(async () => {
 		flex: none;
 		width: 160rpx;
 		.item {
-			padding: 30rpx 0;
+			min-height: 92rpx;
 			position: relative;
-			z-index: 2;
-			text-align: center;
 			.text {
 				font-size: 26rpx;
 				color: #000;
-				position: relative;
-				z-index: 3;
+				position: absolute;
+				top: 50%;
+				transform: translateY(-50%);
+				left: 0;
+				width: 100%;
+				text-align: center;
+				z-index: 2;
+				padding: 0 12rpx;
 			}
 
 			.cover {
@@ -376,9 +378,8 @@ onPullDownRefresh(async () => {
 				top: 0;
 				left: 0;
 				width: 100%;
-				height: 102rpx;
+				height: 100%;
 				z-index: 1;
-				opacity: 0;
 			}
 		}
 
@@ -386,9 +387,6 @@ onPullDownRefresh(async () => {
 			.text {
 				color: #000;
 				font-weight: bold;
-			}
-			.cover {
-				opacity: 1;
 			}
 		}
 	}
@@ -398,7 +396,7 @@ onPullDownRefresh(async () => {
 		position: relative;
 
 		.list {
-			padding: 72rpx 10rpx 0;
+			padding: 72rpx 10rpx 20rpx;
 		}
 	}
 }

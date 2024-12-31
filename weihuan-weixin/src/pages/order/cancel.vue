@@ -37,16 +37,18 @@ function sweep_click() {
 				console.log('立即扫码核销', getCode);
 				if (getCode.code == 1) {
 					uni.showToast({
-						title: '核销成功',
+						title: '获取订单信息成功',
 						icon: 'none',
 						mask: true,
-						duration: 1500,
+						duration: 2000,
 						success: () => {
+							console.log(123);
 							setTimeout(() => {
+								console.log(456);
 								uni.navigateTo({
-									url: `/pages/order/details?orderId=${getCode.data.id}`
+									url: `/pages/order/details?orderId=${getCode.data.id}&verification=${true}`
 								});
-							}, 1000);
+							}, 1500);
 						}
 					});
 				}

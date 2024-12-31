@@ -124,6 +124,15 @@ export const couponCenter = (params) => {
 	})
 }
 
+// 领劵中心 分页
+export const couponCenterList = (params) => {
+	return request({
+		url: '/mini/coupon/getList',
+		method: 'post',
+		data: params
+	})
+}
+
 // 领取优惠券
 export const getCoupon = (params) => {
 	return request({
@@ -422,6 +431,15 @@ export const invoiceOrderList = (params) => {
 export const sendMobileCode = (params) => {
 	return request({
 		url: '/mini/user/sendCode',
+		method: 'post',
+		data: params
+	})
+}
+
+// 确认核销
+export const orderVerification = (params) => {
+	return request({
+		url: '/mini/order/extract',
 		method: 'post',
 		data: params
 	})

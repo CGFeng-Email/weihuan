@@ -81,11 +81,19 @@
 				<button class="common_btn btn_bg" @click.stop="statusBtnClick({ type: 'payment', data: { order_id: item.id } })" v-if="item.status == 10 && item.pay_status == 10">
 					立即支付
 				</button>
-				<!-- 发货之前 -->
+				<!-- 取消订单：物流配送 -->
 				<button
 					class="common_btn"
 					@click.stop="statusBtnClick({ type: 'cancel', data: { order_id: item.id } })"
 					v-if="item.status == 10 && item.pay_status == 20 && item.delivery_type == 10 && item.delivery_status == 10"
+				>
+					取消订单
+				</button>
+				<!-- 取消订单：自提订单 -->
+				<button
+					class="common_btn"
+					@click.stop="statusBtnClick({ type: 'cancel', data: { order_id: item.id } })"
+					v-if="head_title_index == 1 && item.status == 10 && item.pay_status == 20"
 				>
 					取消订单
 				</button>

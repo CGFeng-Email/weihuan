@@ -15,6 +15,4 @@ function addRouteInterceptor() {
 		}
 	});
 }
-export default {
-	addRouteInterceptor
-};
+export default addRouteInterceptor

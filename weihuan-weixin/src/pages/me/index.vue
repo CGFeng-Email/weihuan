@@ -19,10 +19,10 @@
 	<!-- 用户信息 -->
 	<view class="user">
 		<view class="wrap" @click="isLogin">
-			<view class="head_portrait">
+			<view class="head_portrait" @click.stop="jump_personal_data">
 				<image class="cover" :src="headPortrait" mode="widthFix"></image>
 			</view>
-			<view class="content">
+			<view class="content" @click.stop="jump_personal_data">
 				<view class="name">
 					<text class="text">{{ nickName }}</text>
 					<image class="vip" src="/static/img/me_index.png" mode="widthFix" lazy-load v-if="isVip == 'SVIP'"></image>
@@ -325,9 +325,8 @@ const functionList = ref([
 		url: '/pages/coupon/center'
 	},
 	{
-		id: 4,
-		title: '开票申请',
-		url: '/pages/invoice/index'
+		id: 8,
+		title: '联系客服'
 	},
 	{
 		id: 5,
@@ -344,8 +343,9 @@ const functionList = ref([
 		url: '/pages/address/index'
 	},
 	{
-		id: 8,
-		title: '联系客服'
+		id: 4,
+		title: '开票申请',
+		url: '/pages/invoice/index'
 	}
 ]);
 
@@ -488,6 +488,11 @@ page {
 				margin-top: 10rpx;
 				display: flex;
 				align-items: center;
+				
+				.iconfont,.text {
+					font-size: 24rpx;
+					line-height: 34rpx;
+				}
 			}
 			.phone {
 				width: 14rpx;
@@ -500,6 +505,7 @@ page {
 			}
 			.text {
 				padding-right: 10rpx;
+				transform: translateY(-1px);
 			}
 		}
 

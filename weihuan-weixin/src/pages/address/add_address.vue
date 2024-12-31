@@ -139,10 +139,9 @@ page {
 				.textarea_box {
 					padding: 24rpx;
 					width: 100%;
-					min-height: 200rpx;
+					height: 220rpx;
 					box-sizing: border-box;
 					font-size: 26rpx;
-					height: auto;
 					line-height: 36rpx;
 				}
 			}

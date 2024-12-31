@@ -1,35 +1,68 @@
 <!-- 领劵中心 -->
 <template>
-	<view class="list">
-		<view class="item" v-for="item in list" :key="item.id">
-			<view class="box" @click="open_details(item)">
-				<view class="ide">{{ item.title }}</view>
-				<view class="price" v-if="item.coupon_type == 1">{{ item.money }}</view>
-				<view class="discount" v-else>{{ item.coupon_type_name }}</view>
-				<view class="lead">{{ item.remark }}</view>
-				<button class="btn" @click.stop="getCouponItem(item.is_get, item.id)">{{ item.is_get == 1 ? '立即使用' : '立即领取' }}</button>
+	<view class="main">
+		<view class="list">
+			<view class="item" v-for="item in list" :key="item.id">
+				<view class="box" @click="open_details(item)">
+					<view class="ide">{{ item.title }}</view>
+					<view class="price" v-if="item.coupon_type == 1">{{ item.money }}</view>
+					<view class="discount" v-else>{{ item.coupon_type_name }}</view>
+					<view class="lead">{{ item.remark }}</view>
+					<button class="btn" @click.stop="getCouponItem(item.is_get, item.id)">{{ item.is_get == 1 ? '立即使用' : '立即领取' }}</button>
+				</view>
 			</view>
 		</view>
+		<uni-load-more :status="isMore" v-if="totalPage > 1" :iconSize="14" :contentText="contentText"></uni-load-more>
+		<Empty :show="list.length == 0" tips="您还没有相关收藏商品" />
 	</view>
 </template>
 
 <script setup>
 import { onReachBottom } from '@dcloudio/uni-app';
 import { ref, onMounted } from 'vue';
-import { couponCenter, getCoupon } from '@/api/index.js';
+import { couponCenterList, getCoupon } from '@/api/index.js';
+import Empty from '../component/empty.vue';
 
 const page = ref(1);
 const size = ref(8);
 const totalPage = ref(1);
 const list = ref([]);
+const isMore = ref('more');
+const contentText = ref({ contentdown: '上拉显示更多', contentrefresh: '正在加载...', contentnomore: '到底了' });
 
 // 优惠卷
 const getCouponList = async (more = false) => {
-	
-	const res = await couponCenter();
+	if (more) {
+		isMore.value = 'loading';
+	} else {
+		uni.showLoading({
+			title: '加载中...'
+		});
+		page.value = 1;
+	}
+	const params = {
+		page: page.value,
+		size: size.value
+	};
+
+	const res = await couponCenterList(params);
 	console.log('优惠卷', res);
 	if (res.code == 1) {
-		list.value = res.data;
+		if (more) {
+			list.value = [...list.value, ...res.data.lists];
+		} else {
+			list.value = res.data.lists;
+			totalPage.value = res.data.page_no;
+		}
+
+		if (more) {
+			if (page.value >= totalPage.value) {
+				return (isMore.value = 'no-more');
+			}
+			isMore.value = 'more';
+		} else {
+			uni.hideLoading();
+		}
 	}
 };
 
@@ -68,7 +101,9 @@ const getCouponItem = async (is_get, id) => {
 		mask: true,
 		success: () => {
 			setTimeout(() => {
-				getCouponList();
+				if (res.code == 1) {
+					getCouponList();
+				}
 			}, 1500);
 		}
 	});
@@ -79,16 +114,19 @@ onMounted(() => {
 });
 
 onReachBottom(() => {
-	// if (page.value < totalPage.value) {
-	// 	page.value++;
-	// 	getMyCoupon(true);
-	// }
+	if (page.value < totalPage.value) {
+		page.value++;
+		getCouponList(true);
+	}
 });
 </script>
 
 <style lang="scss" scoped>
+.main {
+	padding-bottom: 40rpx;
+}
 .list {
-	padding: 20rpx;
+	padding: 20rpx 20rpx 0;
 	display: flex;
 	flex-wrap: wrap;
 	.item {
