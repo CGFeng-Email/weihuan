@@ -35,7 +35,7 @@
 </template>
 
 <script setup>
-import { onLoad, onPageScroll } from '@dcloudio/uni-app';
+import { onLoad, onPageScroll, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import { ref, computed } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
@@ -91,6 +91,20 @@ onLoad((load) => {
 		id.value = load.id;
 		getNoticeDetails();
 	}
+});
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
 });
 </script>
 

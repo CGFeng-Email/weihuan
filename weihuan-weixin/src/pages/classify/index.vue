@@ -73,7 +73,7 @@
 
 <script setup>
 import { ref, onUnmounted, nextTick, computed } from 'vue';
-import { onLoad, onPullDownRefresh } from '@dcloudio/uni-app';
+import { onLoad, onPullDownRefresh, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import Search from '../component/search.vue';
 import MenuChild from './menu.vue';
 import Item from './item.vue';
@@ -306,6 +306,20 @@ function open_search() {
 		url: '/pages/shopping/shopping_search'
 	});
 }
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
 
 // 卸载之后
 onUnmounted(() => {

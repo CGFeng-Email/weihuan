@@ -45,7 +45,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { onLoad, onPageScroll } from '@dcloudio/uni-app';
+import { onLoad, onPageScroll, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import useMenuButton from '../../hooks/useMenu.js';
 import { storeDetails } from '@/api/index.js';
 import Bottom from '../component/bottom.vue';
@@ -120,6 +120,20 @@ const openLocation = () => {
 function returnPage() {
 	uni.navigateBack();
 }
+
+onShareAppMessage(() => {
+	return {
+		title: details.value.title,
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: details.value.title,
+		path: '/pages/index/index'
+	};
+});
 </script>
 
 <style lang="scss" scoped>

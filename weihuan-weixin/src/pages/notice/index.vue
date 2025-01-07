@@ -16,6 +16,7 @@
 </template>
 
 <script setup>
+import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import { noticeList } from '@/api/index.js';
 import { ref, onMounted } from 'vue';
 import Empty from '../component/empty.vue';
@@ -43,6 +44,20 @@ const open_details = (id) => {
 		url: `/pages/notice/details?id=${id}`
 	});
 };
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	}
+})
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	}
+})
 
 onMounted(() => {
 	getNoticeList();

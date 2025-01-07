@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { onReachBottom } from '@dcloudio/uni-app';
+import { onReachBottom, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import { ref, onMounted } from 'vue';
 import Navigate from '../component/navigate.vue';
 import { myCoupon } from '@/api/index.js';
@@ -112,6 +112,20 @@ const getMyCoupon = async (more = false) => {
 		}
 	}
 };
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
 
 onMounted(() => {
 	getMyCoupon();

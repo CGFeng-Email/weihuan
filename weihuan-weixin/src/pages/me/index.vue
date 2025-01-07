@@ -121,7 +121,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 //onPageScroll:滚动事件
-import { onPageScroll, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+import { onPageScroll, onPullDownRefresh, onShow, onShareAppMessage, onShareTimeline  } from '@dcloudio/uni-app';
 // api
 import { getUserData, getBanner } from '@/api/index.js';
 // 工具函数
@@ -402,6 +402,20 @@ onShow(() => {
 	console.log('我的onShow');
 	getUserDataFn();
 	getSwiperBanner();
+});
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
 });
 
 // 开启下拉刷新

@@ -62,7 +62,7 @@ import { ref } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 //onPageScroll:滚动事件
-import { onLoad, onPageScroll } from '@dcloudio/uni-app';
+import { onLoad, onPageScroll, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 
 // 优惠卷
 const coupon_data = ref();
@@ -100,6 +100,20 @@ onLoad((load) => {
 	if (item) {
 		coupon_data.value = item;
 	}
+});
+
+onShareAppMessage(() => {
+	return {
+		title: coupon_data.value.title,
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: coupon_data.value.title,
+		path: '/pages/index/index'
+	};
 });
 </script>
 

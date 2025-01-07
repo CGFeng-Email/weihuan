@@ -1,5 +1,5 @@
 // 全局请求封装
-const base_url = 'https://test.cnmaris.cn';
+const base_url = 'https://wakan.com.cn';
 
 // 需要修改token，和根据实际修改请求头
 function request(params) {

@@ -184,7 +184,7 @@
 </template>
 
 <script setup>
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import { ref, onUnmounted } from 'vue';
 import Bottom from '../component/bottom.vue';
 import { getUserData, getShoppingAddress, nearStore, immedPayment, OrderPayment } from '@/api/index.js';
@@ -465,6 +465,20 @@ const wxPayment = (params) => {
 onUnmounted(() => {
 	uni.$off('selectAddress');
 	uni.$off('selectStore');
+});
+
+onShareAppMessage(() => {
+	return {
+		title: shoppingList.value[0].title,
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: shoppingList.value[0].title,
+		path: '/pages/index/index'
+	};
 });
 </script>
 

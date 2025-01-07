@@ -88,7 +88,7 @@ import useMenuButton from '../../hooks/useMenu.js';
 // 系统信息
 import getSystem from '../../hooks/getSystem.js';
 import { storeList } from '@/api/index.js';
-import { onPullDownRefresh } from '@dcloudio/uni-app';
+import { onPullDownRefresh, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 
 const mapContent = ref(null);
 const latitude = ref(null);
@@ -254,6 +254,20 @@ function open_details(id) {
 		url: `/pages/self_pick_up/details?params=${JSON.stringify(params)}`
 	});
 }
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
 
 onMounted(() => {
 	get_location();

@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import { ref, computed } from 'vue';
 import { phoneLogin, sendMobileCode } from '@/api/index.js';
 
@@ -160,6 +161,20 @@ async function wx_login() {
 		uni.navigateBack();
 	}
 }
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	}
+})
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	}
+})
 </script>
 
 <style lang="scss" scoped>

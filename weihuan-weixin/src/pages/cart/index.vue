@@ -149,7 +149,7 @@
 </template>
 
 <script setup>
-import { onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+import { onPullDownRefresh, onShow, onShareAppMessage, onShareTimeline  } from '@dcloudio/uni-app';
 import { ref, computed, watch, onMounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
 import Empty from '@/pages/component/empty.vue';
@@ -459,6 +459,20 @@ onPullDownRefresh(async () => {
 	await getCartListFn();
 	// 关闭下拉刷新
 	uni.stopPullDownRefresh();
+});
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
 });
 
 onShow(() => {

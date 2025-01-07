@@ -152,7 +152,7 @@
 
 <script setup>
 //onPageScroll:滚动事件
-import { onPageScroll, onPullDownRefresh, onShow } from '@dcloudio/uni-app';
+import { onPageScroll, onPullDownRefresh, onShow, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import { ref, computed, onMounted, watch, nextTick } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
@@ -441,6 +441,20 @@ onPageScroll((e) => {
 		scrollTop.value = 'white_100';
 	}
 });
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	}
+})
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	}
+})
 
 onMounted(async () => {
 	// 获取swiper轮播图

@@ -37,6 +37,7 @@
 </template>
 
 <script setup>
+import { onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import { ref, onMounted } from 'vue';
 import { getPhoneLocation, getUserData, getShoppingAddress } from '@/api/index.js';
 import Empty from '../component/empty.vue';
@@ -71,6 +72,20 @@ const getShoppingAddressList = async () => {
 		shoppingList.value = res.data.lists;
 	}
 };
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	}
+})
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	}
+})
 
 onMounted(() => {
 	getLocation();

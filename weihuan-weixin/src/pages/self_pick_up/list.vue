@@ -53,7 +53,8 @@
 							<view class="li">
 								<text class="name">联系电话：</text>
 								<text class="text">{{ item.phone }}</text>
-							</view><view class="li">
+							</view>
+							<view class="li">
 								<text class="name">门店电话：</text>
 								<text class="text">{{ item.store_phone }}</text>
 							</view>
@@ -79,7 +80,7 @@
 </template>
 
 <script setup>
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 import { ref } from 'vue';
@@ -173,6 +174,20 @@ function open_shopping_search() {
 		url: '/pages/shopping/shopping_search'
 	});
 }
+
+onShareAppMessage(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
+
+onShareTimeline(() => {
+	return {
+		title: '网上商城 | WakanMALL',
+		path: '/pages/index/index'
+	};
+});
 </script>
 
 <style lang="scss" scoped>
