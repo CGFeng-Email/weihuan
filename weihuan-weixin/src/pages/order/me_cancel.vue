@@ -4,18 +4,14 @@
 
 	<!-- 搜索 -->
 	<view class="search">
-		<!-- <view class="search">
-			<i class="iconfont icon-sousuo"></i>
-			<text class="text">请输入关键字</text>
-		</view> -->
-		<Search @searchInput="searchInput" @searchConfirm="searchConfirm"></Search>
+		<Search @searchInput="searchInput" @searchConfirm="searchConfirm" :focus="false"></Search>
 	</view>
 
 	<!-- 导航栏 -->
-	<navigate class="top_navigate" :list="navList" :itemIndex="itemIndex" top="40px" @itemClick="itemClick" />
+	<navigate class="top_navigate" :list="navList" :itemIndex="itemIndex" top="50px" @itemClick="itemClick" />
 
 	<!-- 占位 -->
-	<view style="height: 30px"></view>
+	<view style="height: 40px"></view>
 
 	<view class="main">
 		<!-- 列表 -->

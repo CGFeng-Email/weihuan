@@ -68,13 +68,7 @@
 							<text class="primary_price">￥{{ item.market_price }}</text>
 						</view>
 						<view class="quantity_box">
-							<view class="icon">
-								<i class="iconfont icon-jianhao"></i>
-							</view>
-							<view class="quantity_number">{{ item.goods_num }}</view>
-							<view class="icon">
-								<i class="iconfont icon-jia"></i>
-							</view>
+							<view class="quantity_number">x{{ item.goods_num }}</view>
 						</view>
 					</view>
 				</view>
@@ -444,7 +438,6 @@ page {
 				}
 
 				.quantity_number {
-					padding: 0 20rpx;
 				}
 			}
 		}

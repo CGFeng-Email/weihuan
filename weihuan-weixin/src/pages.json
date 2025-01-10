@@ -251,6 +251,9 @@
 				"navigationBarTitleText": "订单搜索",
 				"backgroundColor": "#fff"
 			}
+		},
+		{
+			"path": "pages/me/subscription"
 		}
 	],
 	"globalStyle": {

@@ -138,7 +138,6 @@ onLoad(async () => {
 		if (e.id) {
 			classify_list.value.forEach((item, index) => {
 				if (item.id == e.id) {
-					console.log('==');
 					// 调用子组件方法
 					MenuChildRef.value.menuItemClick(index);
 				}
@@ -309,14 +308,14 @@ function open_search() {
 
 onShareAppMessage(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: `${organList.value[organListIndex.value].title} | WakanMALL`,
 		path: '/pages/index/index'
 	};
 });
 
 onShareTimeline(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: `${organList.value[organListIndex.value].title} | WakanMALL`,
 		path: '/pages/index/index'
 	};
 });

@@ -444,14 +444,14 @@ onPageScroll((e) => {
 
 onShareAppMessage(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: '首页 | WakanMALL',
 		path: '/pages/index/index'
 	}
 })
 
 onShareTimeline(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: '首页 | WakanMALL',
 		path: '/pages/index/index'
 	}
 })

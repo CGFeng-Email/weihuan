@@ -23,7 +23,7 @@
 			<text class="text">请输入关键字</text>
 		</view>
 	</view>
-	
+
 	<!-- 物流配送导航栏 -->
 	<view class="tabs_box" :style="{ top: useMenuButton().navigateTop }" v-if="head_title_index == 0">
 		<uv-tabs
@@ -74,7 +74,6 @@
 			<swiper-item>
 				<!-- 列表 -->
 				<view class="list">
-					<Empty :show="list.length == 0 ? true : false" tips="您还没有相关订单"></Empty>
 					<scroll-view
 						class="scroll_view"
 						scroll-y
@@ -90,6 +89,7 @@
 							</block>
 						</view>
 						<uni-load-more :status="isMore" v-if="totalPage > 1"></uni-load-more>
+						<Empty :show="isEmpty" tips="您还没有相关订单"></Empty>
 					</scroll-view>
 				</view>
 			</swiper-item>
@@ -123,6 +123,7 @@ const page = ref(1);
 const size = ref(8);
 // 总页码
 const totalPage = ref(1);
+const isEmpty = ref(false);
 // 订单类型
 const type = ref('all');
 // tabs下标
@@ -230,6 +231,7 @@ const getOrderList = async (more = false) => {
 		} else {
 			list.value = res.data.lists;
 			totalPage.value = res.data.page_no;
+			isEmpty.value = list.value.length == 0 ? true : false;
 		}
 	}
 
@@ -239,8 +241,8 @@ const getOrderList = async (more = false) => {
 		}
 		isMore.value = 'more';
 	} else {
+		// 滚动条
 		scrollTop.value = 0;
-		console.log('scrollTop', scrollTop.value);
 		uni.hideLoading();
 	}
 };
@@ -417,7 +419,6 @@ const openSearch = () => {
 function return_page() {
 	uni.navigateBack();
 }
-
 </script>
 
 <style lang="scss" scoped>

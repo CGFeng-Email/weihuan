@@ -16,12 +16,6 @@
 				</view>
 			</view>
 			<view class="lis">
-				<view class="title">收件邮箱</view>
-				<view class="input_box">
-					<input type="text" v-model="email" placeholder-class="input_placeholder" placeholder="请填写收件邮箱" />
-				</view>
-			</view>
-			<view class="lis">
 				<view class="title">
 					开票类型
 					<text class="text">（专用发票请联系客服）</text>
@@ -46,6 +40,12 @@
 				<view class="title">其他未开票成交金额</view>
 				<view class="input_box">
 					<input type="number" v-model="price" placeholder-class="input_placeholder" placeholder="请填写金额" />
+				</view>
+			</view>
+			<view class="lis">
+				<view class="title">收件邮箱</view>
+				<view class="input_box">
+					<input type="text" v-model="email" placeholder-class="input_placeholder" placeholder="请填写收件邮箱" />
 				</view>
 			</view>
 			<view class="lis">

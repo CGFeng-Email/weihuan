@@ -98,6 +98,8 @@
 		</view>
 
 		<List :list="hotRecommentList" @itemClick="hotRecommentItem"></List>
+
+		<uni-load-more :status="isMore" v-if="totalPage > 1" :iconSize="14" :contentText="contentText"></uni-load-more>
 	</view>
 
 	<!-- 底部栏-购物车 -->
@@ -207,15 +209,16 @@
 			</view>
 		</view>
 	</uni-popup>
+
+	<uv-back-top :scroll-top="scrollPageTop" :iconStyle="iconStyle"></uv-back-top>
 </template>
 
 <script setup>
-import { onLoad, onPageScroll, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
+import { onLoad, onPageScroll, onReachBottom, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import List from '@/pages/shopping/list.vue';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
 import { goodsDetails, shoppingSpecification, selectSpecification, getUserData, addCart, isCollect, shoppingList } from '@/api/index.js';
-// 防抖、节流
 import _ from 'underscore';
 
 // 商品id
@@ -265,10 +268,20 @@ const page = ref(1);
 const size = ref(10);
 // 总页数
 const totalPage = ref(0);
+// 列表加载
+const isMore = ref('more');
+const contentText = ref({ contentdown: '上拉显示更多', contentrefresh: '正在加载...', contentnomore: '到底了' });
 // 热门推荐列表
 const hotRecommentList = ref([]);
 // 市场价
 const marketPrice = ref(0);
+// 页面滚动距离
+const scrollPageTop = ref(0);
+// 返回顶部样式
+const iconStyle = ref({
+	fontSize: '28rpx',
+	color: '#fff'
+})
 
 onLoad(async (load) => {
 	uni.showLoading({
@@ -456,6 +469,7 @@ const submitOrderDebounce = _.debounce(submitOrder, 200);
 // 顶部区域滚动
 const scrollTop = ref('white_default');
 onPageScroll((e) => {
+	scrollPageTop.value = e.scrollTop;
 	if (e.scrollTop < 30) {
 		scrollTop.value = 'white_default';
 	}
@@ -557,17 +571,30 @@ const switchCollect = async () => {
 };
 
 // 热门推荐
-const getHotRecommend = async () => {
+const getHotRecommend = async (more = false) => {
+	if (more) {
+		isMore.value = 'loading';
+	} else {
+		page.value = 1;
+	}
 	const params = {
 		page: page.value,
 		size: size.value,
-		is_recommend: 1
+		is_recommend: 1,
 	};
 	const res = await shoppingList(params);
 	console.log('推荐商品', res);
 	if (res.code == 1) {
-		totalPage.value = res.data.page_no;
-		hotRecommentList.value = res.data.lists;
+		if (more) {
+			hotRecommentList.value = [...hotRecommentList.value, ...res.data.lists];
+			if (page.value >= totalPage.value) {
+				return (isMore.value = 'no-more');
+			}
+			isMore.value = 'more';
+		} else {
+			totalPage.value = res.data.page_no;
+			hotRecommentList.value = res.data.lists;
+		}
 	}
 };
 
@@ -577,6 +604,14 @@ const hotRecommentItem = (id) => {
 		url: `/pages/shopping/place_an_order?id=${id}`
 	});
 };
+
+// 触底
+onReachBottom(() => {
+	if (page.value < totalPage.value) {
+		page.value++;
+		getHotRecommend(true);
+	}
+});
 
 // 分享聊天，朋友
 onShareAppMessage((res) => {

@@ -456,7 +456,20 @@ const wxPayment = (params) => {
 			}
 		},
 		fail: function (payErr) {
-			console.log('支付失败:', payErr);
+			console.log('未支付成功:', payErr);
+			uni.showToast({
+				title: '未支付成功',
+				duration: 1500,
+				icon: 'none',
+				mask: true,
+				success: () => {
+					setTimeout(() => {
+						uni.redirectTo({
+							url: `/pages/order/index?index=1&head_title_index=${deliveryType.value == 10 ? 0 : 1}`
+						});
+					}, 1500);
+				}
+			});
 		}
 	});
 };

@@ -72,7 +72,8 @@
 						</view>
 						<view class="name">{{ item.title }}</view>
 						<view class="collect" v-if="item.count">
-							<text class="text">{{ item.count }}</text>
+							<uni-badge :text="item.count"></uni-badge>
+							<!-- <text class="text">{{  }}</text> -->
 						</view>
 					</view>
 				</block>
@@ -121,7 +122,7 @@ import { ref, onMounted, watch, computed } from 'vue';
 // 胶囊信息
 import useMenuButton from '../../hooks/useMenu.js';
 //onPageScroll:滚动事件
-import { onPageScroll, onPullDownRefresh, onShow, onShareAppMessage, onShareTimeline  } from '@dcloudio/uni-app';
+import { onPageScroll, onPullDownRefresh, onShow, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 // api
 import { getUserData, getBanner } from '@/api/index.js';
 // 工具函数
@@ -188,7 +189,7 @@ const order_list = ref([
 		title: '已完成',
 		head_title_index: 0,
 		image: '/static/img/order4.png',
-		index: 5,
+		index: 4,
 		url: '/pages/order/index'
 	}
 ]);
@@ -227,10 +228,6 @@ const getSwiperBanner = async () => {
 
 // 用户信息
 const getUserDataFn = async () => {
-	uni.showLoading({
-		title: '加载中...',
-		mask: true
-	});
 	const res = await getUserData();
 	console.log('用户信息', res);
 
@@ -260,7 +257,6 @@ const getUserDataFn = async () => {
 		order_list.value[3].count = 0;
 		order_list.value[4].count = 0;
 	}
-	uni.hideLoading();
 };
 
 // 订单列表 click
@@ -330,7 +326,8 @@ const functionList = ref([
 	},
 	{
 		id: 5,
-		title: '品牌动态'
+		title: '品牌动态',
+		url: '/pages/me/subscription'
 	},
 	{
 		id: 6,
@@ -380,6 +377,9 @@ const open_function = (item) => {
 		case '地址管理':
 			open_function_link(item.url);
 			break;
+		case '品牌动态':
+			open_function_link(item.url);
+			break;
 	}
 };
 
@@ -406,14 +406,14 @@ onShow(() => {
 
 onShareAppMessage(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: '我的 | WakanMALL',
 		path: '/pages/index/index'
 	};
 });
 
 onShareTimeline(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: '我的 | WakanMALL',
 		path: '/pages/index/index'
 	};
 });
@@ -502,8 +502,9 @@ page {
 				margin-top: 10rpx;
 				display: flex;
 				align-items: center;
-				
-				.iconfont,.text {
+
+				.iconfont,
+				.text {
 					font-size: 24rpx;
 					line-height: 34rpx;
 				}
@@ -603,16 +604,17 @@ page {
 			.collect {
 				position: absolute;
 				top: -8rpx;
-				right: 16rpx;
+				right: 8rpx;
+				text-align: center;
+				border-radius: 50%;
+
 				.text {
 					display: inline-block;
-					width: 44rpx;
-					height: 44rpx;
-					text-align: center;
-					line-height: 44rpx;
-					background: #ff0000;
+					min-width: 40rpx;
 					border-radius: 50%;
-					font-size: 12px;
+					background: #ff0000;
+					font-size: 14px;
+					padding: 6rpx 4rpx;
 					color: #fff;
 					transform: scale(0.7);
 				}

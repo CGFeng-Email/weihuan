@@ -8,7 +8,7 @@
 				v-model="keyword"
 				:disabled="disabled"
 				placeholder="请输入商品名称"
-				focus
+				:focus="focus"
 				confirm-type="search"
 				@input="search_input"
 				@confirm="search_confirm"
@@ -35,6 +35,10 @@ const props = defineProps({
 	hotTitle: {
 		type: String,
 		default: ''
+	},
+	focus: {
+		type: Boolean,
+		default: true
 	}
 });
 

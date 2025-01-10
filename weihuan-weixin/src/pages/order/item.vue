@@ -28,7 +28,6 @@
 						:lazy-load="true"
 						:observeLazyLoad="true"
 						:fade="true"
-						duration="200"
 					></uv-image>
 					<!-- <image class="cover" :src="item2.image" mode="widthFix"></image> -->
 				</view>
@@ -199,8 +198,8 @@ const openDetailsClick = (id) => {
 			color: #fff;
 			border-radius: 24rpx 0 24rpx 0;
 			font-size: 24rpx;
-			padding: 10rpx 20rpx;
-			background: #ff0000;
+			padding: 14rpx 20rpx;
+			background: #ff8992;
 		}
 
 		.text {

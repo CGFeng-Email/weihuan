@@ -42,6 +42,9 @@
 									<view class="content">
 										<view class="shopping_top">
 											<view class="title over2" :class="{ out_title: item.is_buyable != 1 }">{{ item.goods_name }}</view>
+											<view class="category">
+												{{ item.organ_name }}
+											</view>
 											<view class="spec lead over2">
 												<text class="text">{{ item.key_name }}</text>
 												<text class="text">库存:{{ item.store_count }}</text>
@@ -86,9 +89,10 @@
 			<text class="line"></text>
 		</view>
 		<List :list="hotRecommentList" @itemClick="hotRecommentItem"></List>
+		<uni-load-more :status="isMore" v-if="totalPage > 1" :iconSize="14" :contentText="contentText"></uni-load-more>
 	</view>
 
-	<view style="height: 40px"></view>
+	<view style="height: 10px"></view>
 
 	<view class="bottom_cart" v-if="list.length > 0">
 		<view class="check_all" @click="switch_check_all">
@@ -146,10 +150,12 @@
 			</view>
 		</view>
 	</uni-popup>
+
+	<uv-back-top :scroll-top="scrollPageTop" :iconStyle="iconStyle"></uv-back-top>
 </template>
 
 <script setup>
-import { onPullDownRefresh, onShow, onShareAppMessage, onShareTimeline  } from '@dcloudio/uni-app';
+import { onPullDownRefresh, onPageScroll, onShow, onReachBottom, onShareAppMessage, onShareTimeline } from '@dcloudio/uni-app';
 import { ref, computed, watch, onMounted } from 'vue';
 import useMenuButton from '../../hooks/useMenu.js';
 import Empty from '@/pages/component/empty.vue';
@@ -167,7 +173,7 @@ const head_title_index = ref(0);
 // 页码
 const page = ref(1);
 // 条数
-const size = ref(20);
+const size = ref(10);
 // 总页数
 const totalPage = ref(1);
 // 购物车列表
@@ -190,13 +196,19 @@ const reduceMoney = ref(0);
 const orderFreight = ref(0);
 // 合计,实际支付金额
 const totalPrice = ref(0);
+// 页面滚动距离
+const scrollPageTop = ref(0);
+// 返回顶部样式
+const iconStyle = ref({
+	fontSize: '28rpx',
+	color: '#fff'
+});
+// 列表加载
+const isMore = ref('more');
+const contentText = ref({ contentdown: '上拉显示更多', contentrefresh: '正在加载...', contentnomore: '到底了' });
 
 // 获取购物车列表
 const getCartListFn = async () => {
-	uni.showLoading({
-		title: '加载中...'
-	});
-
 	const params = {
 		page: page.value,
 		size: size.value,
@@ -208,28 +220,50 @@ const getCartListFn = async () => {
 	if (res.code == 1) {
 		list.value = res.data.lists;
 		totalPage.value = res.data.page_no;
+		uni.pageScrollTo({
+			scrollTop: 0,
+			duration: 300
+		});
 		// 获取立即购买数据
 		await getImmetPayment();
 	}
-
-	uni.hideLoading();
 };
 
 // 热门推荐
-const getHotRecommend = async () => {
+const getHotRecommend = async (more = false) => {
+	if (more) {
+		isMore.value = 'loading';
+	} else {
+		page.value = 1;
+	}
 	const params = {
-		page: recommendPage.value,
+		page: page.value,
 		size: size.value,
-		is_recommend: 1,
-		is_hot: 1
+		is_recommend: 1
 	};
 	const res = await shoppingList(params);
 	console.log('推荐商品', res);
 	if (res.code == 1) {
-		recommendTotalPage.value = res.data.page_no;
-		hotRecommentList.value = res.data.lists;
+		if (more) {
+			hotRecommentList.value = [...hotRecommentList.value, ...res.data.lists];
+			if (page.value >= totalPage.value) {
+				return (isMore.value = 'no-more');
+			}
+			isMore.value = 'more';
+		} else {
+			totalPage.value = res.data.page_no;
+			hotRecommentList.value = res.data.lists;
+		}
 	}
 };
+
+// 触底
+onReachBottom(() => {
+	if (page.value < totalPage.value) {
+		page.value++;
+		getHotRecommend(true);
+	}
+});
 
 // 获取立即购买数据
 // isSettle:1 任何修改, isSettle:0 去支付
@@ -463,16 +497,20 @@ onPullDownRefresh(async () => {
 
 onShareAppMessage(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: '购物车 | WakanMALL',
 		path: '/pages/index/index'
 	};
 });
 
 onShareTimeline(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: '购物车 | WakanMALL',
 		path: '/pages/index/index'
 	};
+});
+
+onPageScroll((e) => {
+	scrollPageTop.value = e.scrollTop;
 });
 
 onShow(() => {
@@ -573,11 +611,16 @@ onMounted(async () => {
 							.spec {
 								font-size: 24rpx;
 								color: #acacac;
-								padding-top: 10rpx;
+								padding: 4rpx 0;
 							}
 
 							.text {
 								padding-right: 20rpx;
+							}
+
+							.category {
+								font-size: 24rpx;
+								padding: 4rpx 0;
 							}
 						}
 
@@ -616,6 +659,7 @@ onMounted(async () => {
 							display: flex;
 							justify-content: space-between;
 							align-items: center;
+							padding-top: 10rpx;
 
 							.price_box {
 								color: #ff0000;

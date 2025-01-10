@@ -17,7 +17,7 @@
 				v-for="(item, index) in list"
 				:key="item.id"
 				:id="'item' + item.id"
-				@click="menuItemClick(index, item.id)"
+				@click="debounce(index, item.id)"
 			>
 				<view class="cover_box">
 					<image class="cover" :src="item.image" mode="aspectFit"></image>
@@ -34,6 +34,8 @@
 import { defineProps, defineEmits, getCurrentInstance, ref, defineExpose, watch, nextTick } from 'vue';
 const emit = defineEmits(['menuClick']);
 const that = getCurrentInstance();
+import _ from 'underscore';
+
 const props = defineProps({
 	list: {
 		type: Array,
@@ -67,6 +69,8 @@ function menuItemClick(index, id) {
 defineExpose({
 	menuItemClick
 });
+
+const debounce = _.debounce(menuItemClick, 200);
 
 // 获取每个item的View信息
 const getItemView = () => {

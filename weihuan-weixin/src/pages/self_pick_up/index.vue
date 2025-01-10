@@ -257,14 +257,14 @@ function open_details(id) {
 
 onShareAppMessage(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: '自提点 | WakanMALL',
 		path: '/pages/index/index'
 	};
 });
 
 onShareTimeline(() => {
 	return {
-		title: '网上商城 | WakanMALL',
+		title: '自提点 | WakanMALL',
 		path: '/pages/index/index'
 	};
 });

@@ -60,13 +60,7 @@
 							<text class="primary_price">￥{{ item.market_price }}</text>
 						</view>
 						<view class="quantity_box">
-							<view class="icon">
-								<i class="iconfont icon-jianhao"></i>
-							</view>
-							<view class="quantity_number">{{ item.goods_num }}</view>
-							<view class="icon">
-								<i class="iconfont icon-jia"></i>
-							</view>
+							<view class="quantity_number">x{{ item.goods_num }}</view>
 						</view>
 					</view>
 				</view>
@@ -217,7 +211,7 @@ const getOrderDetails = async () => {
 		textarta.value = res.data.buyer_remark;
 		orderFreight.value = res.data.express_price;
 		couponPrice.value = res.data.coupon_money;
-		totalPrice.value = res.data.total_price;
+		totalPrice.value = res.data.pay_price;
 		status.value = res.data.status_name;
 		orderTime.value = res.data.add_at;
 	}
@@ -304,8 +298,8 @@ const wxPayment = (params) => {
 		fail: function (payErr) {
 			console.log('支付失败:', payErr);
 			uni.showToast({
-				title: payErr.errMsg,
-				duration: 2000,
+				title: '未支付成功',
+				duration: 1500,
 				icon: 'none',
 				mask: true
 			});
@@ -526,7 +520,6 @@ page {
 				}
 
 				.quantity_number {
-					padding: 0 20rpx;
 				}
 			}
 		}
