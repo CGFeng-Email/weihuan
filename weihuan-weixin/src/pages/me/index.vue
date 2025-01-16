@@ -81,7 +81,7 @@
 		</view>
 
 		<!-- 推荐 -->
-		<view class="recommend">
+		<view class="recommend" v-if="recommendBannerList.length > 0">
 			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
 				<block v-for="item in recommendBannerList" :key="item.src">
 					<swiper-item class="item" @click="open_shopping_details(item.id)">
@@ -625,6 +625,7 @@ page {
 	.my_order {
 		padding: 30rpx;
 		background: #fff;
+		margin-bottom: 30rpx;
 	}
 
 	.function {
@@ -657,7 +658,7 @@ page {
 }
 
 .recommend {
-	margin: 20rpx 0;
+	margin: 0 0 30rpx;
 	background: #f1f1f1;
 	width: 100vw;
 	padding: 0 20rpx;

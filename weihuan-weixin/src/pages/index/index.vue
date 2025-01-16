@@ -138,7 +138,7 @@
 		</view>
 
 		<!-- 推荐 -->
-		<view class="recommend">
+		<view class="recommend" v-if="recommendBannerList.length > 0">
 			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
 				<block v-for="item in recommendBannerList" :key="item.src">
 					<swiper-item class="item" @click="open_shopping_details(item.id)">
@@ -446,15 +446,15 @@ onShareAppMessage(() => {
 	return {
 		title: '首页 | WakanMALL',
 		path: '/pages/index/index'
-	}
-})
+	};
+});
 
 onShareTimeline(() => {
 	return {
 		title: '首页 | WakanMALL',
 		path: '/pages/index/index'
-	}
-})
+	};
+});
 
 onMounted(async () => {
 	// 获取swiper轮播图
