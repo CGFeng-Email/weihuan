@@ -1,7 +1,7 @@
-
+$(function () {
   AOS.init();
   NProgress.done();
-
+})
 
 // h5导航菜单栏
 $('.header .menu').click(function () {
@@ -13,5 +13,20 @@ $('.header .menu').click(function () {
 $('.h5_nav .child_li .head_title').click(function () {
   $(this).children('.iconfont').toggleClass('rotateIcon');
   $(this).parent().next().stop().toggleClass('childActive');
+})
+
+window.addEventListener('scroll', function () {
+  const scrollY = window.scrollY || window.pageYOffset;
+  if (scrollY >= 200) {
+    $('.header').css({
+      'padding': '0 10px',
+      'background': 'rgba(0,0,0,.7)'
+    })
+  } else {
+    $('.header').css({
+      'padding': '0',
+      'background': 'transparent'
+    })
+  }
 })
 

@@ -28,6 +28,10 @@
     font-size: 14px;
     line-height: 24px;
   }
+  .about .main .data {
+    position: relative;
+    width: 100%;
+  }
 }
 @media screen and (max-width: 1200px) {
   .header .content .right .nav .li .head_title {
@@ -36,16 +40,27 @@
   }
 }
 @media screen and (max-width: 992px) {
+  .header {
+    background: transparent !important;
+  }
   .header .content {
     padding: 10px 0;
   }
+  .header .content .logo .link {
+    background: linear-gradient(276.14deg, #6cbc41 0%, #33499c 100%);
+    border-radius: 50px;
+    height: 50px;
+    padding: 2px 24px 0;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+  }
   .header .content .logo .cover {
-    width: 100px;
+    width: 80px;
   }
   .header .content .right {
     padding: 7px 16px;
     background: #fff;
     border-radius: 45px;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
   }
   .header .content .right .nav {
     display: none;
@@ -65,7 +80,7 @@
     display: block;
   }
   .container_padding {
-    padding: 60px 0;
+    padding: 40px 0;
   }
   .col-xs-12 {
     padding: 0 10px;
@@ -81,14 +96,88 @@
     font-size: 14px;
     line-height: 24px;
   }
+  .left_head_bg {
+    top: 10%;
+    font-size: 140px;
+  }
+  ._center {
+    left: -15%;
+    bottom: -15%;
+  }
+  .modal .modal-dialog {
+    margin-top: 100px;
+  }
+  .modal .modal-dialog .modal-body .pad_bottom {
+    padding-bottom: 10px;
+  }
+  .center_head {
+    padding: 20px 0;
+  }
+  .center_head .deep {
+    font-size: 80px;
+  }
+  .center_head .h3 {
+    padding: 20px 50px;
+    font-size: 18px;
+    transform: translateY(-40px);
+  }
+  .index_banner .bottom_cover {
+    height: 80px;
+  }
+  .development_trend .main .trend .primary_trend_swiper {
+    height: 500px;
+  }
+  .about .main .content {
+    min-height: auto;
+    padding: 20px 0;
+  }
+  .about .main .data {
+    padding: 12px 0;
+  }
+  .product .main .content {
+    min-height: auto;
+    padding: 20px 0;
+  }
+  .recommend {
+    padding: 100px 0;
+  }
 }
 @media screen and (max-width: 767px) {
+  .container {
+    padding: 0 8px;
+  }
   .container_padding {
     padding: 30px 0;
   }
   .title {
     font-size: 18px;
     line-height: 28px;
+  }
+  .modal .modal-dialog .modal-body {
+    padding: 6px;
+  }
+  .head_bg {
+    top: 33%;
+    font-size: 62px;
+  }
+  .center_head {
+    padding: 20px 0;
+  }
+  .center_head .deep {
+    font-size: 64px;
+  }
+  .center_head .h3 {
+    padding: 16px 50px;
+    font-size: 18px;
+    transform: translateY(-30px);
+  }
+  ._right {
+    position: absolute;
+    top: 40%;
+    transform: translateY(-50%);
+    right: -240px;
+    width: 400px;
+    z-index: -1;
   }
   .index_banner .slide .content .banner_title {
     width: 90%;
@@ -106,6 +195,9 @@
     font-size: 14px;
     line-height: 24px;
   }
+  .index_banner .autoplay-progress {
+    bottom: 10%;
+  }
   .footer .main {
     padding: 10px 0;
   }
@@ -121,5 +213,52 @@
   }
   .footer .main .list .ul .li .link {
     padding: 0;
+  }
+  .development_trend .main .trend .primary_trend_swiper {
+    height: 450px;
+  }
+  .about {
+    padding: 0 0 20px;
+  }
+  .about .main .cover_box .shade {
+    opacity: 1;
+  }
+  .about .main .cover_box .shade .cover {
+    width: 40px;
+    height: 40px;
+  }
+  .about .main .content {
+    padding: 20px 0 0;
+  }
+  .about .main .content .h3 {
+    font-size: 18px;
+  }
+  .about .main .data .box .text {
+    font-size: 14px;
+  }
+  .about .main .data .box .date .num {
+    font-size: 22px;
+  }
+  .product {
+    padding: 0 0 20px;
+  }
+  .product .main .content {
+    padding: 20px 0;
+  }
+  .product .main .content .h3 {
+    font-size: 18px;
+  }
+  .product .main .product_list .item {
+    margin-bottom: 10px;
+  }
+  .product .main .product_list .col_md:first-child {
+    padding-top: 0;
+  }
+  .organization .main .content {
+    padding-top: 0;
+  }
+  .organization .main .content .title {
+    font-size: 20px;
+    line-height: 28px;
   }
 }
