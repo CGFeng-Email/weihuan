@@ -1495,6 +1495,12 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .company_about {
+    position: relative;
+
+    .head_bg {
+        font-size: 140px;
+    }
+
     .left_box {
         overflow: hidden;
 
@@ -1514,5 +1520,39 @@ body::-webkit-scrollbar-thumb:hover {
                 }
             }
         }
+    }
+
+    .content {
+        padding: 40px 0 40px 40px;
+
+        .date {
+            font-size: 24px;
+            line-height: 34px;
+            color: #918C8C;
+            padding: 10px 0;
+        }
+
+        .name {
+            display: inline-block;
+            width: 350px;
+            height: 80px;
+            font-size: 34px;
+            line-height: 80px;
+            padding-left: 30px;
+            border-radius: 10.1px 50.5px 50.5px 10.1px;
+            background: @gradient;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .lead {
+            font-size: 14px;
+            line-height: 26px;
+            color: #878686;
+        }
+    }
+
+    ._right {
+        top: 70%;
     }
 }
