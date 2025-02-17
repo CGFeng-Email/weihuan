@@ -35,7 +35,7 @@
 			<text>/0{{ details.images.length }}</text>
 		</view>
 		<!-- 底部圆角 -->
-		<view class="swiper_radius"></view>
+		<!-- <view class="swiper_radius"></view> -->
 	</view>
 
 	<view class="main">
@@ -708,7 +708,7 @@ onUnmounted(() => {
 }
 
 .main {
-	padding: 0 30rpx;
+	padding: 30rpx 30rpx 0;
 	.head_price {
 		display: flex;
 		justify-content: space-between;

@@ -147,6 +147,7 @@
 				</block>
 			</swiper>
 		</view>
+		
 	</view>
 </template>
 

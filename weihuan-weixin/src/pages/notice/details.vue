@@ -25,7 +25,7 @@
 				<text class="name">来源：炜洹集团</text>
 			</view>
 
-			<rich-text class="rich_box" type="text" :preview="true" :nodes="content"></rich-text>
+			<uv-parse :content="details.content" :tagStyle="contentStyle" :lazyLoad="true"></uv-parse>
 
 			<view class="return_btn">
 				<view class="btn btn_bg" @click="return_page">返回列表</view>
@@ -50,6 +50,13 @@ const return_page = () => {
 	uni.navigateBack();
 };
 
+// 富文本样式
+const contentStyle = ref({
+	p: 'font-size:32rpx;line-height: 44rpx;',
+	span: 'font-size: 30rpx,line-height: 40rpx;',
+	img: 'margin-bottom: 10rpx'
+});
+
 // 顶部区域滚动
 // const scrollTop = ref('white_default');
 // onPageScroll((e) => {
@@ -73,17 +80,6 @@ const getNoticeDetails = async () => {
 		details.value = res.data;
 	}
 };
-
-const content = computed(() => {
-	return details.value.content
-		.replace(/<p([\s\w"=\/\.:;]+)((?:(style="[^"]+")))/gi, '<p')
-		.replace(/<p>/gi, '<p style="font-size: 15Px; line-height: 25Px;">')
-		.replace(/<img([\s\w"-=\/\.:;]+)((?:(height="[^"]+")))/gi, '<img$1')
-		.replace(/<img([\s\w"-=\/\.:;]+)((?:(width="[^"]+")))/gi, '<img$1')
-		.replace(/<img([\s\w"-=\/\.:;]+)((?:(style="[^"]+")))/gi, '<img$1')
-		.replace(/<img([\s\w"-=\/\.:;]+)((?:(alt="[^"]+")))/gi, '<img$1')
-		.replace(/<img([\s\w"-=\/\.:;]+)/gi, '<img$1 style="width: 100%; border-radius: 8Px;"');
-});
 
 onLoad((load) => {
 	console.log('load', load);

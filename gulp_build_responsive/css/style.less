@@ -718,6 +718,43 @@ body::-webkit-scrollbar-thumb:hover {
     opacity: 0.04;
 }
 
+.banner {
+    position: relative;
+
+    .cover_box {
+        .cover {
+            height: 100vh;
+        }
+    }
+
+    .content {
+        position: absolute;
+        width: 1500px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+
+        .h3 {
+            display: inline-block;
+            width: auto;
+            min-width: 400px;
+            height: 84px;
+            line-height: 84px;
+            background: linear-gradient(60deg, #fff 0, #ffffff00 100%);
+            padding: 0 30px;
+            color: #fff;
+            font-size: 36px;
+            opacity: .9;
+        }
+
+        .sub {
+            font-size: 28px;
+            color: #fff;
+            padding: 20px 0;
+        }
+    }
+}
+
 .index_banner {
     .slide {
         position: relative;
@@ -796,9 +833,13 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .footer {
+    margin-top: 200px;
+    padding: 220px 0 0;
+    position: relative;
+    background-position: top center;
 
-    .main {
-        padding: 80px 0 40px;
+    .content {
+        padding: 80px 0;
 
         .list {
             .title {
@@ -830,6 +871,20 @@ body::-webkit-scrollbar-thumb:hover {
                         }
                     }
                 }
+            }
+        }
+
+        .blogroll_list {
+            padding-top: 14px;
+            display: flex;
+
+            .b_li {
+                margin-right: 10px;
+            }
+
+            .cover_box {
+                width: 30px;
+                height: 30px;
             }
         }
 
@@ -1381,10 +1436,83 @@ body::-webkit-scrollbar-thumb:hover {
 }
 
 .join_us {
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+
     .main {
         width: 1000px;
         border-radius: 10px;
         background: #fff;
         box-shadow: 0 0 50px #0000001c;
+        margin: auto;
+        padding: 80px 100px;
+        text-align: center;
+
+        .h3 {
+            color: @primaryColor;
+            font-size: 28px;
+        }
+
+        .sub {
+            color: #848484;
+            padding: 10px 0 20px;
+        }
+
+        .form {
+            margin-bottom: 20px;
+
+            .wrap {
+                border-radius: 45px;
+                position: relative;
+
+                .input {
+                    border-radius: 50px;
+                    height: 50px;
+                    padding: 0 20px;
+                }
+
+                .btn {
+                    border-radius: 50px;
+                    background: @gradient;
+                    width: 250px;
+                    height: 50px;
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    border: none;
+                    font-size: 18px;
+                }
+            }
+        }
+
+        .lead {
+            color: #848484;
+            font-weight: 400;
+        }
+    }
+}
+
+.company_about {
+    .left_box {
+        overflow: hidden;
+
+        .company_swiper {
+            .swiper-pagination {
+                bottom: 20px;
+
+                .swiper-pagination-bullet {
+                    background: #fff;
+                    opacity: .7;
+                }
+
+                .swiper-pagination-bullet-active {
+                    width: 20px;
+                    opacity: 1;
+                    border-radius: 4px;
+                }
+            }
+        }
     }
 }

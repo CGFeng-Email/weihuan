@@ -9,8 +9,62 @@
 
 <body>
     @@include('header.html')
-
+    <div class="banner">
+        <div class="cover_box">
+            <img class="cover" src="../../img/company_banner.jpg" alt="">
+        </div>
+        <div class="content">
+            <div class="h3" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="50">炜洹集团</div>
+            <div class="sub uppercase" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="80">Company
+                Introduction</div>
+        </div>
+    </div>
+    <div class="company_about container_padding">
+        <div class="container">
+            <div class="row">
+                <div class="col_md col-md-6 col-sm-8 col-xs-12">
+                    <div class="left_box">
+                        <div class="swiper-container company_swiper">
+                            <div class="swiper-wrapper">
+                                <div class="swiper-slide slide">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/company_about_1.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="swiper-slide slide">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/company_about_1.png" alt="">
+                                    </div>
+                                </div>
+                                <div class="swiper-slide slide">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/company_about_1.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="swiper-pagination"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div style="height: 2000px;"></div>
     @@include('footer.html')
 </body>
+<script>
+    let company_swiper = new Swiper('.company_swiper', {
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+        speed: 1000,
+        spaceBetween: 20,
+        pagination: {
+            el: '.swiper-pagination',
+        },
+    })
+</script>
 
 </html>

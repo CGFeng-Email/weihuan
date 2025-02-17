@@ -36,7 +36,11 @@
 				</view>
 			</view>
 			<view class="line"></view>
-			<rich-text class="rich_box" type="text" :preview="true" :nodes="content"></rich-text>
+
+			<!-- 详情图片 -->
+			<view class="uv-content">
+				<uv-parse :content="details.content" :tagStyle="contentStyle" :lazyLoad="true"></uv-parse>
+			</view>
 		</view>
 	</view>
 
@@ -51,19 +55,9 @@ import { storeDetails } from '@/api/index.js';
 import Bottom from '../component/bottom.vue';
 
 const params = ref({});
+
 // 自提点信息
 const details = ref({});
-
-const content = computed(() => {
-	return details.value.content
-		.replace(/<p([\s\w"=\/\.:;]+)((?:(style="[^"]+")))/gi, '<p')
-		.replace(/<p>/gi, '<p style="font-size: 14Px; line-height: 24Px; color: #111;">')
-		.replace(/<img([\s\w"-=\/\.:;]+)((?:(height="[^"]+")))/gi, '<img$1')
-		.replace(/<img([\s\w"-=\/\.:;]+)((?:(width="[^"]+")))/gi, '<img$1')
-		.replace(/<img([\s\w"-=\/\.:;]+)((?:(style="[^"]+")))/gi, '<img$1')
-		.replace(/<img([\s\w"-=\/\.:;]+)((?:(alt="[^"]+")))/gi, '<img$1')
-		.replace(/<img([\s\w"-=\/\.:;]+)/gi, '<img$1 style="width: 100%; border-radius: 8Px;"');
-});
 
 onLoad((load) => {
 	params.value = JSON.parse(load.params);
@@ -79,6 +73,14 @@ const getStoreDetails = async () => {
 		details.value = res.data;
 	}
 };
+
+// 富文本样式
+const contentStyle = ref({
+	p: 'font-size:32rpx;line-height: 44rpx;',
+	span: 'font-size: 30rpx,line-height: 40rpx;',
+	text: 'font-size: 30rpx,line-height: 40rpx;',
+	img: 'margin-bottom: 10rpx'
+});
 
 // 顶部区域滚动
 const scrollTop = ref('white_default');
@@ -166,6 +168,12 @@ onShareTimeline(() => {
 }
 .white_100 {
 	background: rgba(255, 255, 255, 1);
+}
+
+.uv-content {
+	font-size: 24rpx;
+	line-height: 32rpx;
+	margin-bottom: 10rpx;
 }
 
 .main {
