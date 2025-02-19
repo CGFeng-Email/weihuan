@@ -37,6 +37,13 @@
     position: relative;
     width: 100%;
   }
+  .partner .list .li {
+    width: 16%;
+  }
+  .partner .list .li .cover_box {
+    width: 94%;
+    height: 94%;
+  }
 }
 @media screen and (max-width: 1200px) {
   .header .content .right .nav .li .head_title {
@@ -161,6 +168,9 @@
   .footer .content .right {
     margin-top: 40px;
   }
+  .company_about {
+    padding-bottom: 120px !important;
+  }
   .company_about .content {
     padding: 30px 0;
   }
@@ -169,6 +179,27 @@
     line-height: 60px;
     font-size: 24px;
     padding-left: 20px;
+  }
+  .company_about .course .wrap {
+    width: 120px;
+    height: 120px;
+  }
+  .company_about .course .wrap .w_name {
+    font-size: 18px;
+  }
+  .serve_project {
+    padding: 40px 0;
+    margin-bottom: 0;
+  }
+  .serve_project .project {
+    position: initial;
+    height: auto;
+    transform: translate(0);
+    margin: auto;
+    width: 94%;
+  }
+  .serve_project .project .project_content_swiper .slide .content {
+    margin-bottom: 20px;
   }
 }
 @media screen and (max-width: 767px) {
@@ -327,5 +358,39 @@
     width: 120px;
     height: 40px;
     font-size: 14px;
+  }
+  .serve_project .project {
+    width: 96%;
+    padding: 10px;
+  }
+  .serve_project .project .history_line {
+    top: 122px;
+  }
+  .serve_project .project .project_content_swiper .slide .content {
+    padding: 0;
+  }
+  .honor {
+    padding-bottom: 0;
+  }
+  .honor .main {
+    padding: 0;
+  }
+  .honor .main .honor_swiper .slide .cover_box .cover {
+    height: 380px;
+  }
+  .honor .main .honor_swiper .honor_prev,
+  .honor .main .honor_swiper .honor_next {
+    width: 50px;
+    height: 50px;
+  }
+  .honor .main .honor_swiper .honor_prev .iconfont,
+  .honor .main .honor_swiper .honor_next .iconfont {
+    font-size: 28px;
+  }
+  .partner {
+    padding-bottom: 0;
+  }
+  .partner .list .li {
+    width: 32%;
   }
 }
