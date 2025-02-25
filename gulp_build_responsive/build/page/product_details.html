@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>产品详情</title>
+    @@include('head.html')
+</head>
+
+<body>
+    @@include('header.html')
+    <div class="banner auto_banner">
+        <div class="cover_box">
+            <img class="cover" src="../../img/product_center_banner.jpg" alt="">
+        </div>
+    </div>
+    <div class="goods_specification container_padding">
+        <div class="main">
+            <div class="container">
+                <div class="row">
+                    <div class="col_md col-md-9 col-sm-12 col-xs-12">
+                        <div class="goods">
+                            <div class="row">
+                                <div class="col_md col-md-5 col-sm-6 col-xs-12">
+                                    <div class="goods_image">
+                                        <div class="swiper-container goods_swiper">
+                                            <div class="swiper-wrapper">
+                                                <div class="swiper-slide goods_item">
+                                                    <div class="cover_box">
+                                                        <img class="cover" src="../../img/product_li4.png" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide goods_item">
+                                                    <div class="cover_box">
+                                                        <img class="cover" src="../../img/product_li2.png" alt="">
+                                                    </div>
+                                                </div>
+                                                <div class="swiper-slide goods_item">
+                                                    <div class="cover_box">
+                                                        <img class="cover" src="../../img/product_li3.png" alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="swiper-pagination"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col_md col-md-7 col-sm-6 col-xs-12">
+                                    <div class="goods_content">
+                                        <div class="goods_label">
+                                            <img class="cover" src="../../img/label_type1.png" alt="">
+                                        </div>
+                                        <h3 class="title">新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉食材500g猪肉猪五花</h3>
+                                        <p class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</p>
+                                        <div class="price">
+                                            <div class="current">
+                                                <span class="ide">￥</span>
+                                                <span class="num">130.00</span>
+                                            </div>
+                                            <div class="formerly">
+                                                <span class="ide">原价:</span>
+                                                <span class="num">￥210.00</span>
+                                            </div>
+                                        </div>
+                                        <p class="lead">
+                                            商品已售：1000+
+                                        </p>
+                                        <p class="lead">服务保障：摔坏包赔 / 7天无理由退货 / 商品冷链运输</p>
+                                        <div class="specification_select">
+                                            <span class="name">商品规格：</span>
+                                            <div class="layui-form">
+                                                <select lay-filter="goods_specification_select">
+                                                    <option value="">请选择</option>
+                                                    <option value="AAA">黑猪带皮五花肉【1斤】</option>
+                                                    <option value="BBB">黑猪带皮五花肉【2斤】</option>
+                                                    <option value="CCC">黑猪带皮五花肉【3斤】</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col_md col-md-3 col-sm-12 col-xs-12">
+                        <div class="add_cart">
+                            <div class="price">
+                                <div class="current">
+                                    <span class="ide">￥</span>
+                                    <span class="num">130.00</span>
+                                </div>
+                            </div>
+                            <div class="lead">现在下单，省内3-5日送达；可选择自提点自提，配送服务享受免邮费，全程冷链运输，保质保鲜。</div>
+                            <div class="address">
+                                <i class="iconfont icon-dizhi"></i>
+                                <span>配送至广州·天河</span>
+                            </div>
+                            <div class="store">现在现货</div>
+                            <div class="store_quantity">
+                                <span class="name">数量：</span>
+                                <input type="number" lay-affix="number" value="1" min="1" class="layui-input input">
+                            </div>
+                            <div class="add_btn">加入购物车</div>
+                            <div class="buy">立即购买</div>
+                            <div class="collect">
+                                <i class="iconfont icon-shoucang"></i>
+                                <!-- <i class="iconfont icon-shoucang1"></i> -->
+                                <span>收藏商品</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 图片列表 -->
+                <div class="goods_list">
+                    <div class="center_head">
+                        <div class="deep uppercase">Product Details</div>
+                        <h3 class="h3">产品详情</h3>
+                    </div>
+                    <div class="list">
+                        <div class="cover_box">
+                            <img class="cover" src="../../img/product_list_li1.jpg" alt="">
+                        </div>
+                        <div class="cover_box">
+                            <img class="cover" src="../../img/product_list_li2.jpg" alt="">
+                        </div>
+                        <div class="cover_box">
+                            <img class="cover" src="../../img/product_list_li3.jpg" alt="">
+                        </div>
+                        <div class="cover_box">
+                            <img class="cover" src="../../img/product_list_li4.jpg" alt="">
+                        </div>
+                        <div class="cover_box">
+                            <img class="cover" src="../../img/product_list_li5.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="you_like container_padding">
+                <div class="head_like">
+                    <h3 class="title">猜你喜欢</h3>
+                </div>
+                <div class="like_box">
+                    <div class="swiper-container like_swiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide item">
+                                <a href="./product_details.html" class="link">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/product_li1.png" alt="">
+                                        <!-- 标签 -->
+                                        <img class="shopping_label" src="../../img/label_type2.png" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">
+                                            <span class="label_title">
+                                                <img class="label_cover" src="../../img/label_type1.png" alt="">
+                                            </span>
+                                            <span class="text">新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉食材</span>
+                                        </div>
+                                        <div class="price">
+                                            <div class="current">
+                                                <span class="ide">￥</span>
+                                                <span class="num">130.00</span>
+                                            </div>
+                                            <div class="formerly">
+                                                <span class="ide">原价:</span>
+                                                <span class="num">￥210.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="lead">
+                                            全程冻品冷链运输，保质保鲜
+                                        </div>
+                                        <div class="lead">配送至广州</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swiper-slide item">
+                                <a href="./product_details.html" class="link">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/product_li2.png" alt="">
+                                        <!-- 标签 -->
+                                        <img class="shopping_label" src="../../img/label_type1.png" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">
+                                            <span class="label_title">
+                                                <img class="label_cover" src="../../img/label_type1.png" alt="">
+                                            </span>
+                                            <span class="text">新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉食材</span>
+                                        </div>
+                                        <div class="price">
+                                            <div class="current">
+                                                <span class="ide">￥</span>
+                                                <span class="num">130.00</span>
+                                            </div>
+                                            <div class="formerly">
+                                                <span class="ide">原价:</span>
+                                                <span class="num">￥210.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="lead">
+                                            全程冻品冷链运输，保质保鲜
+                                        </div>
+                                        <div class="lead">配送至广州</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swiper-slide item">
+                                <a href="./product_details.html" class="link">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/product_li3.png" alt="">
+                                        <!-- 标签 -->
+                                        <img class="shopping_label" src="../../img/label_type3.png" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">
+                                            <span class="label_title">
+                                                <img class="label_cover" src="../../img/label_type1.png" alt="">
+                                            </span>
+                                            <span class="text">新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉食材</span>
+                                        </div>
+                                        <div class="price">
+                                            <div class="current">
+                                                <span class="ide">￥</span>
+                                                <span class="num">130.00</span>
+                                            </div>
+                                            <div class="formerly">
+                                                <span class="ide">原价:</span>
+                                                <span class="num">￥210.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="lead">
+                                            全程冻品冷链运输，保质保鲜
+                                        </div>
+                                        <div class="lead">配送至广州</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swiper-slide item">
+                                <a href="./product_details.html" class="link">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/product_li4.png" alt="">
+                                        <!-- 标签 -->
+                                        <img class="shopping_label" src="../../img/label_type1.png" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">
+                                            <span class="label_title">
+                                                <img class="label_cover" src="../../img/label_type1.png" alt="">
+                                            </span>
+                                            <span class="text">新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉食材</span>
+                                        </div>
+                                        <div class="price">
+                                            <div class="current">
+                                                <span class="ide">￥</span>
+                                                <span class="num">130.00</span>
+                                            </div>
+                                            <div class="formerly">
+                                                <span class="ide">原价:</span>
+                                                <span class="num">￥210.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="lead">
+                                            全程冻品冷链运输，保质保鲜
+                                        </div>
+                                        <div class="lead">配送至广州</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swiper-slide item">
+                                <a href="./product_details.html" class="link">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/product_li5.png" alt="">
+                                        <!-- 标签 -->
+                                        <img class="shopping_label" src="../../img/label_type2.png" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">
+                                            <span class="label_title">
+                                                <img class="label_cover" src="../../img/label_type1.png" alt="">
+                                            </span>
+                                            <span class="text">新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉食材</span>
+                                        </div>
+                                        <div class="price">
+                                            <div class="current">
+                                                <span class="ide">￥</span>
+                                                <span class="num">130.00</span>
+                                            </div>
+                                            <div class="formerly">
+                                                <span class="ide">原价:</span>
+                                                <span class="num">￥210.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="lead">
+                                            全程冻品冷链运输，保质保鲜
+                                        </div>
+                                        <div class="lead">配送至广州</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swiper-slide item">
+                                <a href="./product_details.html" class="link">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/product_li6.png" alt="">
+                                        <!-- 标签 -->
+                                        <img class="shopping_label" src="../../img/label_type3.png" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">
+                                            <span class="label_title">
+                                                <img class="label_cover" src="../../img/label_type1.png" alt="">
+                                            </span>
+                                            <span class="text">新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉食材</span>
+                                        </div>
+                                        <div class="price">
+                                            <div class="current">
+                                                <span class="ide">￥</span>
+                                                <span class="num">130.00</span>
+                                            </div>
+                                            <div class="formerly">
+                                                <span class="ide">原价:</span>
+                                                <span class="num">￥210.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="lead">
+                                            全程冻品冷链运输，保质保鲜
+                                        </div>
+                                        <div class="lead">配送至广州</div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="swiper-slide item">
+                                <a href="./product_details.html" class="link">
+                                    <div class="cover_box">
+                                        <img class="cover" src="../../img/product_li7.png" alt="">
+                                        <!-- 标签 -->
+                                        <img class="shopping_label" src="../../img/label_type2.png" alt="">
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">
+                                            <span class="label_title">
+                                                <img class="label_cover" src="../../img/label_type1.png" alt="">
+                                            </span>
+                                            <span class="text">新鲜黑猪带皮五花肉农家散养土猪冷冻烤肉食材</span>
+                                        </div>
+                                        <div class="price">
+                                            <div class="current">
+                                                <span class="ide">￥</span>
+                                                <span class="num">130.00</span>
+                                            </div>
+                                            <div class="formerly">
+                                                <span class="ide">原价:</span>
+                                                <span class="num">￥210.00</span>
+                                            </div>
+                                        </div>
+                                        <div class="lead">
+                                            全程冻品冷链运输，保质保鲜
+                                        </div>
+                                        <div class="lead">配送至广州</div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @@include('footer.html')
+</body>
+<script>
+    const goods_swiper = new Swiper('.goods_swiper', {
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+        speed: 1000,
+        spaceBetween: 10,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+    })
+
+    const like_swiper = new Swiper('.like_swiper', {
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+        speed: 1000,
+        spaceBetween: 20,
+        breakpoints: {
+            1400: {
+                slidesPerView: 5,
+            },
+            // 大于992
+            1200: {
+                slidesPerView: 4,
+            },
+            992: {
+                slidesPerView: 3,
+            },
+            768: {
+                slidesPerView: 2,
+            },
+            // 大于332
+            332: {
+                slidesPerView: 1,
+            }
+        }
+    })
+
+    layui.use(function () {
+        var form = layui.form;
+        var layer = layui.layer;
+
+        form.on('select(goods_specification_select)', function (data) {
+            var value = data.value; // 获得被选中的值
+            console.log('商品规格:', value);
+        });
+    });
+</script>
+
+</html>

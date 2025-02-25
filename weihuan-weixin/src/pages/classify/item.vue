@@ -11,6 +11,7 @@
 					:lazy-load="true"
 					:observeLazyLoad="true"
 					:fade="true"
+					:showLoading="false"
 				></uv-image>
 			</view>
 			<view class="content">

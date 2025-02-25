@@ -44,6 +44,17 @@
     width: 94%;
     height: 94%;
   }
+  .service_provider_list .list .item .content .box {
+    padding: 20px;
+  }
+  .service_provider_list .list .item .content .box .name {
+    font-size: 18px;
+    line-height: 28px;
+  }
+  .service_provider_list .list .item .content .box .lead {
+    font-size: 14px;
+    line-height: 24px;
+  }
 }
 @media screen and (max-width: 1200px) {
   .header .content .right .nav .li .head_title {
@@ -55,6 +66,18 @@
   }
   .join_us .main {
     width: 80%;
+  }
+  .product_center .main .list .item .link .cover_box .cover {
+    height: 200px;
+  }
+  .product_center .main .list .item .link .name {
+    font-size: 16px;
+  }
+  .product_center .main .list .item .link .lead {
+    font-size: 14px;
+  }
+  .product_center .main .list .item .link .price {
+    margin-bottom: 10px;
   }
 }
 @media screen and (max-width: 992px) {
@@ -201,6 +224,51 @@
   .serve_project .project .project_content_swiper .slide .content {
     margin-bottom: 20px;
   }
+  .service_provider_list .list .item {
+    margin: 15px 10px;
+  }
+  .product_center {
+    padding: 20px 0;
+  }
+  .product_center .main .menu .box .category_list {
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .product_center .main .menu .box .category_list .item {
+    margin-right: 30px;
+    margin-bottom: 10px;
+  }
+  .product_center .main .menu .box .category_list .item .type .iconfont {
+    color: #ff5353;
+  }
+  .product_center .main .menu .box .category_list .item .type .text {
+    font-weight: 600;
+  }
+  .product_center .main .menu .box .category_list .item .child_list {
+    padding-left: 4px;
+    display: block !important;
+  }
+  .product_center .main .screen .product_nav {
+    margin-bottom: 20px;
+  }
+  .goods_specification {
+    padding-bottom: 0;
+  }
+  .goods_specification .main {
+    padding-bottom: 0;
+  }
+  .goods_specification .main .goods {
+    margin-bottom: 20px;
+  }
+  .you_like {
+    padding-bottom: 0;
+  }
+  .you_like .head_like::before {
+    width: 34%;
+  }
+  .you_like .head_like::after {
+    width: 34%;
+  }
 }
 @media screen and (max-width: 767px) {
   .container {
@@ -269,7 +337,7 @@
     bottom: 10%;
   }
   .footer {
-    margin-top: 150px;
+    margin-top: 80px;
     padding-top: 170px;
   }
   .footer .content {
@@ -392,5 +460,84 @@
   }
   .partner .list .li {
     width: 32%;
+  }
+  .product_center {
+    padding-bottom: 0;
+  }
+  .product_center .main {
+    width: 100%;
+  }
+  .product_center .main .screen .product_nav .condition .link {
+    padding: 0 18px;
+  }
+  .product_center .main .right_main {
+    padding: 0;
+  }
+  .product_center .main .list .col_md {
+    padding: 0 4px;
+  }
+  .product_center .main .list .item {
+    margin-bottom: 8px;
+  }
+  .product_center .main .list .item .link .cover_box .shopping_label {
+    max-width: 56px;
+  }
+  .product_center .main .list .item .link .content {
+    padding: 10px 6px;
+  }
+  .product_center .main .list .item .link .content .name {
+    font-size: 14px;
+    height: 48px;
+  }
+  .product_center .main .list .item .link .content .name .label_title .label_cover {
+    height: 18px;
+  }
+  .product_center .main .list .item .link .content .price .current .num {
+    font-size: 18px;
+  }
+  .product_center .main .list .item .link .content .price .formerly {
+    font-size: 12px;
+  }
+  .product_center .main .list .item .link .content .lead {
+    font-size: 14px;
+  }
+  .goods_specification {
+    padding-bottom: 0;
+  }
+  .goods_specification .main {
+    padding-bottom: 0;
+  }
+  .goods_specification .main .col_md {
+    padding: 0;
+  }
+  .goods_specification .main .goods .goods_content {
+    margin-top: 14px;
+  }
+  .goods_specification .main .goods_list .center_head {
+    padding-bottom: 0;
+  }
+  .goods_specification .main .goods_list .center_head .deep {
+    font-size: 34px;
+  }
+  .goods_specification .main .goods_list .center_head .h3 {
+    padding: 15px 50px;
+    font-size: 16px;
+  }
+  .goods_specification .main .goods_list .center_head .h3::before {
+    bottom: 7px;
+  }
+  .you_like {
+    padding-bottom: 0;
+  }
+  .you_like .head_like::before {
+    width: 30%;
+    left: 14px;
+  }
+  .you_like .head_like::after {
+    width: 30%;
+    right: 14px;
+  }
+  .you_like .like_box {
+    margin-top: 30px;
   }
 }

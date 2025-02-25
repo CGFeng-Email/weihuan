@@ -112,7 +112,7 @@ import getSystem from '../../hooks/getSystem.js';
 import navigate from '/src/pages/component/navigate.vue';
 import OrderItem from './item.vue';
 import { ref, nextTick } from 'vue';
-import { onLoad } from '@dcloudio/uni-app';
+import { onLoad, onShow } from '@dcloudio/uni-app';
 import { orderList, cancelOrder, confirmRecelve, orderCode, cancelApplyFor } from '@/api/index.js';
 import _ from 'underscore';
 import Empty from '@/pages/component/empty.vue';
@@ -196,6 +196,15 @@ onLoad((params) => {
 		head_title_index.value = params.head_title_index;
 		tabsCurrent.value = params.index;
 		getOrderList();
+	}
+});
+
+onShow((onshow) => {
+	const isOrderUpdate = uni.getStorageSync('isOrderUpdate');
+	console.log('onshow', isOrderUpdate);
+	if (isOrderUpdate.update) {
+		getOrderList();
+		uni.removeStorageSync('isOrderUpdate');
 	}
 });
 

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>发展动态</title>
+    @@include('head.html')
+</head>
+
+<body>
+    @@include('header.html')
+    <div class="banner auto_banner">
+        <div class="cover_box">
+            <img class="cover" src="../../img/development_trend_banner.jpg" alt="">
+        </div>
+        <div class="content">
+            <div class="h3" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="50"
+                style="background: linear-gradient(90.00deg, #6bbb41 0%, #51935600 100%);">发展动态</div>
+            <div class="sub uppercase" data-aos="fade-right" data-aos-duration="1000" data-aos-delay="80">Development
+                Trends
+            </div>
+        </div>
+    </div>
+    <div class="development_trend container_padding">
+        <div class="container">
+            <div class="main">
+                <div class="row">
+                    <div class="col_md col-md-6 col-sm-12 col-xs-12">
+                        <div class="content">
+                            <div class="date">
+                                <span class="day">25</span>
+                                <span class="year">/06 2024</span>
+                            </div>
+                            <div class="title over2">汇聚了众多技术大师的心血，在众多的竞争产品中脱颖而出。</div>
+                            <p class="lead over4">
+                                炜洹诚信为本非常 重视商业信誉，从不销售品质低劣的产品，在行内一直享有较高的声 誉 。从2007年至今 ，连续十四年获得广州市工商局颁发 “ 守合 同、重信用企业”称号。
+                            </p>
+                            <div class="more">
+                                <a href="" class="link">查看详情</a>
+                            </div>
+                            <div class="menu">
+                                <div class="swiper-container development_trend_menu">
+                                    <div class="swiper-wrapper">
+                                        <div class="swiper-slide slide active">
+                                            <div class="cover_box">
+                                                <img class="cover" src="../../img/trend_1.jpg" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide slide">
+                                            <div class="cover_box">
+                                                <img class="cover" src="../../img/trend_2.jpg" alt="">
+                                            </div>
+                                        </div>
+                                        <div class="swiper-slide slide">
+                                            <div class="cover_box">
+                                                <img class="cover" src="../../img/trend_3.jpg" alt="">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col_md col-md-6 col-sm-12 col-xs-12">
+                        <div class="trend">
+                            <div class="swiper-container primary_trend_swiper">
+                                <div class="swiper-wrapper">
+                                    <div class="swiper-slide slide">
+                                        <div class="cover_box">
+                                            <img class="cover" src="../../img/trend_1.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide slide">
+                                        <div class="cover_box">
+                                            <img class="cover" src="../../img/trend_2.jpg" alt="">
+                                        </div>
+                                    </div>
+                                    <div class="swiper-slide slide">
+                                        <div class="cover_box">
+                                            <img class="cover" src="../../img/trend_3.jpg" alt="">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="_right">
+            <div class="cover_box">
+                <img class="cover" src="../../img/right_.png" alt="">
+            </div>
+        </div>
+    </div>
+    <div class="trend_list container_padding">
+        <div class="container">
+            <div class="list">
+                <div class="item">
+                    <a href="" class="link">
+                        <div class="row">
+                            <div class="col_md col-md-3 col-sm-12 col-xs-12">
+                                <div class="cover_box">
+                                    <img class="cover" src="../../img/trend_1.jpg" alt="">
+                                </div>
+                            </div>
+                            <div class="col_md col-md-9 col-sm-12 col-xs-12">
+                                <div class="content">
+                                    <h3 class="title over2">汇聚了众多技术大师的心血，在众多的竞争产品中脱颖而出。</h3>
+                                    <div class="lead">炜洹诚信为本非常 重视商业信誉，从不销售品质低劣的产品，在行内一直享有较高的声 誉 。从2007年至今
+                                        ，连续十四年获得广州市工商局颁发“ 守合 同、重信用企业”称号。</div>
+                                    <span class="date">
+                                        <span class="day">36</span>
+                                        <span class="year">/06-2024</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    @@include('footer.html')
+</body>
+<script>
+    const development_trend_menu = new Swiper('.development_trend_menu', {
+        loop: true,
+        speed: 1000,
+        spaceBetween: 20,
+        breakpointsBase: 'window',
+        breakpoints: {
+            // 大于992
+            992: {
+                slidesPerView: 3,
+            },
+            // 大于332
+            332: {
+                slidesPerView: 2,
+            }
+        }
+    })
+
+    const primary_trend_swiper = new Swiper('.primary_trend_swiper', {
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        loop: true,
+        speed: 1000,
+        spaceBetween: 20,
+        effect: 'cards',
+        grabCursor: true,
+        centeredSlides: true,
+        cardsEffect: {
+            slideShadows: true
+        },
+        on: {
+            slideChangeTransitionStart: function () {
+                $('.development_trend_menu .slide').eq(this.realIndex).addClass('active').siblings().removeClass('active');
+            }
+        }
+    })
+
+    $('.development_trend_menu .slide').click(function () {
+        const index = $(this).index();
+        $(this).addClass('active').siblings().removeClass('active');
+        primary_trend_swiper.slideToLoop(index, 1000, false);
+    })
+</script>
+
+</html>

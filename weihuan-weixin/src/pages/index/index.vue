@@ -751,6 +751,10 @@ onShow(async () => {
 				.lead {
 					font-size: 24rpx;
 				}
+				
+				.lead {
+					height: 32rpx;
+				}
 
 				.price {
 					height: 80rpx;

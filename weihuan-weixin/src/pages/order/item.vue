@@ -19,16 +19,7 @@
 			</view>
 			<view class="top_cover" v-for="item2 in item.order_goods" :key="item2.id">
 				<view class="cover_box box_border_radius">
-					<uv-image
-						class="cover"
-						:src="item2.image"
-						width="190rpx"
-						height="190rpx"
-						radius="6"
-						:lazy-load="true"
-						:observeLazyLoad="true"
-						:fade="true"
-					></uv-image>
+					<uv-image class="cover" :src="item2.image" width="190rpx" height="190rpx" radius="6" :lazy-load="true" :observeLazyLoad="true" :fade="true"></uv-image>
 					<!-- <image class="cover" :src="item2.image" mode="widthFix"></image> -->
 				</view>
 				<view class="cover_content">

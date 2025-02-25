@@ -116,7 +116,8 @@
 				<view class="name">订单备注</view>
 				<view class="right">
 					<view class="textarea_box">
-						<textarea v-model="textarta" placeholder-class="textarea" placeholder="请填写您的备注内容" />
+						<!-- <textarea v-model="textarta" placeholder-class="textarea" placeholder="请填写您的备注内容" /> -->
+						<uv-textarea v-model="textarta" placeholder="请填写您的备注内容" count confirmType="完成" :textStyle="textareaStyle"></uv-textarea>
 					</view>
 				</view>
 			</view>
@@ -222,6 +223,12 @@ const size = ref(20);
 const totalPrice = ref(null);
 // 是否购物车下单 1=是
 const defaultIsCart = ref(0);
+// 留言框样式
+const textareaStyle = ref({
+	color: '#000',
+	fontSize: '26rpx',
+	lineHeight: 1.6
+});
 
 onLoad(async (load) => {
 	uni.showLoading({
@@ -431,7 +438,10 @@ const getImmetPayment = async (isSettle = 1) => {
 
 // 微信支付
 const wxPayment = (params) => {
-	// 仅作为示例，非真实参数信息。
+	uni.showLoading({
+		title: '加载中'
+	});
+	
 	uni.requestPayment({
 		provider: 'wxpay',
 		timeStamp: params.timeStamp,
@@ -442,24 +452,26 @@ const wxPayment = (params) => {
 		success: function (pay) {
 			console.log('支付成功:', pay);
 			if (pay.errMsg == 'requestPayment:ok') {
+				uni.hideLoading();
 				uni.showToast({
 					title: '支付成功',
-					duration: 1500,
+					duration: 1000,
 					icon: 'none',
 					mask: true,
 					success: () => {
 						setTimeout(() => {
 							uni.navigateBack();
-						}, 1500);
+						}, 1000);
 					}
 				});
 			}
 		},
 		fail: function (payErr) {
-			console.log('未支付成功:', payErr);
+			console.log('未支付：', payErr);
+			uni.hideLoading();
 			uni.showToast({
-				title: '未支付成功',
-				duration: 1500,
+				title: '订单未支付',
+				duration: 1000,
 				icon: 'none',
 				mask: true,
 				success: () => {
@@ -467,7 +479,7 @@ const wxPayment = (params) => {
 						uni.redirectTo({
 							url: `/pages/order/index?index=1&head_title_index=${deliveryType.value == 10 ? 0 : 1}`
 						});
-					}, 1500);
+					}, 1000);
 				}
 			});
 		}

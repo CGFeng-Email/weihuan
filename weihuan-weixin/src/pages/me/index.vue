@@ -245,6 +245,11 @@ const getUserDataFn = async () => {
 		if (avatar) {
 			headPortrait.value = avatar;
 		}
+
+		// 是否店员（店员才拥有核销权限）
+		if (res.data.is_clerk == 0) {
+			functionList.value.splice(1, 1);
+		}
 	} else {
 		mobile.value = null;
 		nickName.value = '炜洹游客用户';

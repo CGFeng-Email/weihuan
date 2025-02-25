@@ -91,7 +91,7 @@
 				<view class="name">订单备注</view>
 				<view class="right">
 					<view class="textarea_box">
-						<uni-easyinput
+						<!-- <uni-easyinput
 							type="textarea"
 							v-model="textarta"
 							trim
@@ -99,7 +99,8 @@
 							primaryColor="#A2A2A2"
 							placeholder="请填写您的备注内容"
 							placeholderStyle="#A2A2A2"
-						></uni-easyinput>
+						></uni-easyinput> -->
+						<uv-textarea v-model="textarta" placeholder="请填写您的备注内容" count confirmType="完成" :textStyle="textareaStyle"></uv-textarea>
 					</view>
 				</view>
 			</view>
@@ -163,6 +164,11 @@ const orderSn = ref('');
 const status = ref('');
 // 下单时间
 const orderTime = ref('');
+const textareaStyle = ref({
+	color: '#000',
+	fontSize: '26rpx',
+	lineHeight: 1.6
+});
 
 onLoad(async (load) => {
 	console.log('load', load);
@@ -271,6 +277,10 @@ const submitOrder = async () => {
 
 // 微信支付
 const wxPayment = (params) => {
+	uni.showLoading({
+		title: '加载中'
+	});
+
 	// 仅作为示例，非真实参数信息。
 	uni.requestPayment({
 		provider: 'wxpay',
@@ -282,24 +292,30 @@ const wxPayment = (params) => {
 		success: function (pay) {
 			console.log('支付成功:', pay);
 			if (pay.errMsg == 'requestPayment:ok') {
+				uni.hideLoading();
 				uni.showToast({
 					title: '支付成功',
-					duration: 1500,
+					duration: 1000,
 					icon: 'none',
 					mask: true,
 					success: () => {
+						// 订单是否支付成功标识
+						uni.setStorageSync('isOrderUpdate', {
+							update: true
+						});
 						setTimeout(() => {
 							uni.navigateBack();
-						}, 1500);
+						}, 1000);
 					}
 				});
 			}
 		},
 		fail: function (payErr) {
 			console.log('支付失败:', payErr);
+			uni.hideLoading();
 			uni.showToast({
-				title: '未支付成功',
-				duration: 1500,
+				title: '订单未支付',
+				duration: 1000,
 				icon: 'none',
 				mask: true
 			});
