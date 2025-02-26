@@ -2163,21 +2163,28 @@ body::-webkit-scrollbar-thumb:hover {
   box-shadow: 0 0 3px 1px rgba(107, 187, 65, 0.7);
   transform: scale(1.03);
 }
+.trend_list {
+  position: relative;
+  padding-bottom: 100px;
+}
 .trend_list .list .item {
   margin-bottom: 30px;
 }
 .trend_list .list .item .link {
   border-radius: 8px;
-  box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.1);
   padding: 20px;
-}
-.trend_list .list .item .link .col_md {
-  padding: 0;
+  background: #fff;
+  display: flex;
+  justify-content: space-between;
 }
 .trend_list .list .item .link .cover_box {
   border-radius: 4px;
+  width: 370px;
+  flex: none;
 }
 .trend_list .list .item .link .content {
+  flex: 1;
   padding: 10px 0 0 30px;
 }
 .trend_list .list .item .link .lead {
@@ -2186,9 +2193,12 @@ body::-webkit-scrollbar-thumb:hover {
 }
 .trend_list .list .item .link .date {
   margin-top: 20px;
+  font-weight: 600;
+  font-size: 20px;
 }
 .trend_list .list .item .link .date .day {
-  font-size: 26px;
+  font-size: 42px;
   font-weight: 600;
   color: #FF9100;
+  padding-right: 2px;
 }
