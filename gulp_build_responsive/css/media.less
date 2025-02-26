@@ -166,6 +166,22 @@
             }
         }
     }
+
+    .trend_list {
+        .list {
+            .item {
+                .link {
+                    .content {
+                        .title {
+                            font-size: 22px;
+                            line-height: 1.6;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 @media screen and (max-width: 992px) {
@@ -461,6 +477,52 @@
             }
         }
     }
+
+    .trend_list {
+        .list {
+            .item {
+                .link {
+                    .cover_box {
+                        width: 280px;
+                    }
+
+                    .content {
+                        .title {
+                            font-size: 18px;
+                        }
+
+                        .lead {
+                            font-size: 14px;
+                        }
+
+                        .date {
+                            margin-top: 10px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .social_responsibility {
+        .screen {
+            .s_box {
+                margin-bottom: 20px;
+            }
+        }
+
+        .list {
+            padding: 20px 0;
+        }
+    }
+
+    .asked_questions {
+        ._center {
+            left: -82%;
+            bottom: -10%;
+        }
+    }
+
 }
 
 @media screen and (max-width: 767px) {
@@ -489,6 +551,29 @@
     .head_bg {
         top: 33%;
         font-size: 62px;
+    }
+
+    .article {
+        flex-wrap: wrap;
+        padding: 20px;
+        margin: 0;
+
+        .up {
+            width: 100%;
+            flex: none;
+        }
+
+        .return {
+            margin-top: 10px;
+            width: 100%;
+            text-align: right;
+
+            .link {
+                height: 44px;
+                line-height: 44px;
+                font-size: 14px;
+            }
+        }
     }
 
     .banner {
@@ -894,6 +979,88 @@
 
         .like_box {
             margin-top: 30px;
+        }
+    }
+
+    .trend_list {
+        .list {
+            padding-bottom: 10px;
+
+            .item {
+                margin-bottom: 14px;
+
+                .link {
+                    flex-wrap: wrap;
+                    padding: 10px;
+
+                    .cover_box {
+                        width: 100%;
+                    }
+
+                    .content {
+                        padding-left: 0;
+
+                        .title {
+                            font-size: 18px;
+                        }
+
+                        .lead {
+                            font-size: 14px;
+                        }
+
+                        .date {
+                            margin-top: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .social_responsibility {
+        .screen {
+            .s_box {
+                .layui-input {
+                    height: 44px;
+                }
+
+                .layui-form-select dl {
+                    top: 44px;
+                }
+
+                .search_item {
+                    height: 44px;
+                }
+            }
+        }
+
+        .list {
+            .item {
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+    .asked_questions {
+        .list {
+            .item {
+                padding: 20px;
+                overflow: hidden;
+                margin-bottom: 20px;
+
+                .artcle_head {
+                    align-items: center;
+
+                    .title {
+                        font-size: 16px;
+                        line-height: 24px;
+                    }
+                }
+
+                .down_content {
+                    padding-top: 10px;
+                }
+            }
         }
     }
 }

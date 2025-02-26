@@ -79,6 +79,10 @@
   .product_center .main .list .item .link .price {
     margin-bottom: 10px;
   }
+  .trend_list .list .item .link .content .title {
+    font-size: 22px;
+    line-height: 1.6;
+  }
 }
 @media screen and (max-width: 992px) {
   .header {
@@ -269,6 +273,28 @@
   .you_like .head_like::after {
     width: 34%;
   }
+  .trend_list .list .item .link .cover_box {
+    width: 280px;
+  }
+  .trend_list .list .item .link .content .title {
+    font-size: 18px;
+  }
+  .trend_list .list .item .link .content .lead {
+    font-size: 14px;
+  }
+  .trend_list .list .item .link .content .date {
+    margin-top: 10px;
+  }
+  .social_responsibility .screen .s_box {
+    margin-bottom: 20px;
+  }
+  .social_responsibility .list {
+    padding: 20px 0;
+  }
+  .asked_questions ._center {
+    left: -82%;
+    bottom: -10%;
+  }
 }
 @media screen and (max-width: 767px) {
   .container {
@@ -287,6 +313,25 @@
   .head_bg {
     top: 33%;
     font-size: 62px;
+  }
+  .article {
+    flex-wrap: wrap;
+    padding: 20px;
+    margin: 0;
+  }
+  .article .up {
+    width: 100%;
+    flex: none;
+  }
+  .article .return {
+    margin-top: 10px;
+    width: 100%;
+    text-align: right;
+  }
+  .article .return .link {
+    height: 44px;
+    line-height: 44px;
+    font-size: 14px;
   }
   .banner .content .h3 {
     min-width: 50%;
@@ -539,5 +584,57 @@
   }
   .you_like .like_box {
     margin-top: 30px;
+  }
+  .trend_list .list {
+    padding-bottom: 10px;
+  }
+  .trend_list .list .item {
+    margin-bottom: 14px;
+  }
+  .trend_list .list .item .link {
+    flex-wrap: wrap;
+    padding: 10px;
+  }
+  .trend_list .list .item .link .cover_box {
+    width: 100%;
+  }
+  .trend_list .list .item .link .content {
+    padding-left: 0;
+  }
+  .trend_list .list .item .link .content .title {
+    font-size: 18px;
+  }
+  .trend_list .list .item .link .content .lead {
+    font-size: 14px;
+  }
+  .trend_list .list .item .link .content .date {
+    margin-top: 0;
+  }
+  .social_responsibility .screen .s_box .layui-input {
+    height: 44px;
+  }
+  .social_responsibility .screen .s_box .layui-form-select dl {
+    top: 44px;
+  }
+  .social_responsibility .screen .s_box .search_item {
+    height: 44px;
+  }
+  .social_responsibility .list .item {
+    margin-bottom: 20px;
+  }
+  .asked_questions .list .item {
+    padding: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  .asked_questions .list .item .artcle_head {
+    align-items: center;
+  }
+  .asked_questions .list .item .artcle_head .title {
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .asked_questions .list .item .down_content {
+    padding-top: 10px;
   }
 }

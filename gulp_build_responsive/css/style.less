@@ -1,5 +1,6 @@
 @primaryColor: #33499C;
 @gradient: linear-gradient(276.14deg, #6cbc41 0%, #33499c 100%);
+@gradient2: linear-gradient(44.37deg, #ffab53 0%, #ff514a 100%);
 
 * {
     padding: 0;
@@ -794,6 +795,61 @@ body::-webkit-scrollbar-thumb:hover {
             height: auto;
             min-height: 500px;
         }
+    }
+}
+
+
+.article {
+    margin-top: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 30px;
+    background: #F9F9F9;
+
+    .up {
+        flex: 1;
+        padding-right: 20px;
+
+        .lead {
+            text-align: left;
+
+            .link {
+                padding: 4px 0;
+                width: auto;
+                color: #000;
+                text-indent: 0;
+            }
+        }
+    }
+
+    .return {
+        flex: none;
+        width: 160px;
+
+        .link {
+            height: 54px;
+            line-height: 54px;
+            background: @gradient2;
+            border-radius: 45px;
+            color: #fff;
+            font-size: 16px;
+            text-align: center;
+        }
+    }
+}
+
+.author {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, .1);
+    text-align: center;
+
+    .text {
+        font-size: 16px;
+        color: #B5B5B5;
+        padding: 0 14px;
     }
 }
 
@@ -2735,6 +2791,8 @@ body::-webkit-scrollbar-thumb:hover {
     padding-bottom: 100px;
 
     .list {
+        padding-bottom: 30px;
+
         .item {
             margin-bottom: 30px;
 
@@ -2745,12 +2803,16 @@ body::-webkit-scrollbar-thumb:hover {
                 background: #fff;
                 display: flex;
                 justify-content: space-between;
-                
+
 
                 .cover_box {
                     border-radius: 4px;
                     width: 370px;
                     flex: none;
+
+                    .cover {
+                        max-height: 300px;
+                    }
                 }
 
                 .content {
@@ -2775,6 +2837,203 @@ body::-webkit-scrollbar-thumb:hover {
                         padding-right: 2px;
                     }
                 }
+            }
+        }
+    }
+}
+
+.case_details {
+    .child_padding {
+        padding-top: 30px;
+    }
+
+    .content {
+        overflow-x: hidden;
+    }
+
+    .cover_box {
+        padding: 10px 0;
+    }
+
+    .lead {
+        text-indent: 2em;
+        padding: 8px 0;
+        font-weight: 400;
+        line-height: 1.8;
+    }
+}
+
+.social_responsibility {
+    padding-bottom: 100px;
+    position: relative;
+
+    .screen {
+        .s_box {
+            .layui-input {
+                height: 60px;
+                background: #F0F2F2;
+                color: #000;
+                font-size: 16px;
+                border-radius: 4px;
+            }
+
+            .layui-form-select dl {
+                top: 60px;
+            }
+
+            .search_item {
+                display: flex;
+                align-items: center;
+                border-radius: 50px;
+                background: #F0F2F2;
+                box-shadow: 0 0 6px 2px rgba(0, 0, 0, .1);
+                overflow: hidden;
+                height: 60px;
+
+                .input {
+                    border: none;
+                    outline: none;
+                    background: none;
+                    padding: 0 12px;
+                }
+
+                .icon {
+                    button {
+                        background: none;
+                        border: none;
+                        padding: 4px 0 4px 20px;
+
+                        .iconfont {
+                            font-size: 20px;
+                            color: #FF0000;
+                            font-weight: 500;
+                        }
+
+                        &::before,
+                        &::after {
+                            display: none;
+                        }
+                    }
+                }
+
+                .input:focus {
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+
+    .list {
+        padding: 60px 0;
+
+        .item {
+            margin-bottom: 40px;
+
+            .link {
+                border-radius: 4px;
+                box-shadow: 0 0 6px 1px rgba(0, 0, 0, .1);
+                background: #fff;
+                padding: 20px;
+
+                .cover_box {
+                    .cover {
+                        max-height: 310px;
+                    }
+                }
+
+                .content {
+                    padding: 20px 0 10px;
+                    line-height: 1.7;
+
+                    .date {
+                        color: #BEBEBE;
+                        font-size: 16px;
+                    }
+
+                    .social_label {
+                        padding: 10px 0;
+
+                        .text {
+                            padding: 6px 12px;
+                            background: rgba(255, 0, 0, .3);
+                            color: #FF0000;
+                            border-radius: 3px;
+                        }
+                    }
+
+                    .lead {
+                        color: #BEBEBE;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.asked_questions {
+    position: relative;
+
+    .list {
+        .item {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px 2px rgba(0, 0, 0, .2);
+            cursor: pointer;
+            line-height: 1.6;
+            margin-bottom: 40px;
+
+            .artcle_head {
+                display: flex;
+                justify-content: space-between;
+
+                .cover {
+                    width: 30px;
+                    object-fit: contain;
+                }
+
+                .title {
+                    flex: 1;
+                    padding: 0 10px;
+                    font-size: 20px;
+                    line-height: 1.8;
+                }
+
+                .icon {
+                    .iconfont {
+                        font-size: 24px;
+                        display: inline-block;
+                        transition: .3s ease;
+                    }
+                }
+            }
+
+            .down_content {
+                padding-top: 20px;
+                display: none;
+
+                .lead {
+                    font-size: 14px;
+                    line-height: 30px;
+                }
+            }
+        }
+
+        .active {
+            .artcle_head {
+                .title {
+                    color: #334899;
+                }
+
+                .icon {
+                    .iconfont {
+                        transform: rotate(-180deg);
+                    }
+                }
+            }
+
+            .down_content {
+                display: block;
             }
         }
     }
