@@ -4,7 +4,7 @@
 		<search placeholder="输入商品名称/订单编号" @searchInput="searchInput" @searchConfirm="searchConfirm" />
 	</view>
 	<view class="" v-if="keyword != ''">
-		<Empty imgSrc="https://test.cnmaris.cn/uploads/images/20241220/17347003598480.png" tips="没有相关订单信息" :show="list.length == 0 ? true : false" />
+		<Empty imgSrc="/static/img/empty_content.png" tips="没有相关订单信息" :show="list.length == 0 ? true : false" />
 	</view>
 	<view class="list">
 		<block v-for="item in list" :key="item.id">

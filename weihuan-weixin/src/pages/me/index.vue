@@ -146,6 +146,8 @@ const coupon_count = ref('-');
 const collect_count = ref('-');
 // 推荐banner
 const recommendBannerList = ref([]);
+// 是否店员（店员才拥有核销权限） 0:没权限，1:有权限
+const isClerk = ref(0);
 
 // 订单列表
 const order_list = ref([
@@ -241,14 +243,10 @@ const getUserDataFn = async () => {
 		order_list.value[2].count = res.data.wait_pay_order_count;
 		order_list.value[3].count = res.data.wait_delivery_order_count;
 		order_list.value[4].count = res.data.wait_received_order_count;
+		isClerk.value = res.data.is_clerk;
 		const avatar = res.data.avatar;
 		if (avatar) {
 			headPortrait.value = avatar;
-		}
-
-		// 是否店员（店员才拥有核销权限）
-		if (res.data.is_clerk == 0) {
-			functionList.value.splice(1, 1);
 		}
 	} else {
 		mobile.value = null;
@@ -368,8 +366,19 @@ const open_function = (item) => {
 			open_function_link(item.url);
 			break;
 		case '订单核销':
-			open_function_link(item.url);
-			break;
+			if (isClerk.value == 0) {
+				uni.showToast({
+					title: '权限不足，只对内部员工开放',
+					icon: 'none',
+					mask: true,
+					duration: 1200
+				});
+				break;
+			} else {
+				open_function_link(item.url);
+				break;
+			}
+			
 		case '领券中心':
 			open_function_link(item.url);
 			break;

@@ -2,7 +2,7 @@
 	<view class="main">
 		<view class="wrap" v-if="!noRights">
 			<!-- 收货地址 -->
-			<view class="user_location box_shadow box_border_radius" v-if="deliveryType == 10">
+			<view class="user_location box_shadow box_border_radius" v-if="deliveryType == 10 && address.id">
 				<view class="content" @click="open_address">
 					<view class="head">
 						<text class="title">{{ address.real_name || address.consignee }}</text>
@@ -14,7 +14,7 @@
 			</view>
 
 			<!-- 自提点 -->
-			<view class="store_box card_box box_border_radius box_shadow" v-else>
+			<view class="store_box card_box box_border_radius box_shadow" v-else-if="deliveryType == 20 && store.id">
 				<view class="title">自提点</view>
 				<view class="store_info">
 					<image class="cover box_border_radius" :src="store.image" mode="aspectFill"></image>
@@ -114,12 +114,12 @@
 				</view>
 			</view>
 
-			<Bottom title="确认核销" v-if="isVerification" @bottom_click="confirmVerification" />
+			<Bottom title="确认核销" v-if="codeSn && isCancel == 0" @bottom_click="confirmVerification" />
 		</view>
 		<!-- 没权限 -->
 		<view class="no_rights" v-else>
 			<view class="cover_box">
-				<image class="cover" src="/src/static/img/no_rights.png" mode="widthFix"></image>
+				<image class="cover" src="/static/img/empty_rights.png" mode="widthFix"></image>
 			</view>
 			<view class="lead">没有找到相关订单，请核查收货自提点后到对应自提点进行核销</view>
 		</view>
@@ -130,7 +130,7 @@
 import Bottom from '@/pages/component/bottom.vue';
 import { ref } from 'vue';
 import { onLoad } from '@dcloudio/uni-app';
-import { orderDetails, orderVerification } from '@/api/index.js';
+import { orderDetails, orderVerification, scanCode } from '@/api/index.js';
 
 // 订单id
 const orderId = ref('');
@@ -164,42 +164,52 @@ const orderPrice = ref('');
 const userName = ref('');
 // 支付方式
 const paymentType = ref('');
-// 核销按钮
-const isVerification = ref(false);
 // 没权限
 const noRights = ref(false);
+// 核销码订单号
+const codeSn = ref('');
+// 核销状态 0:未核销, 1:已核销
+const isCancel = ref(0);
 
 onLoad((load) => {
 	console.log(load);
 	orderId.value = load.orderId;
-	isVerification.value = load.verification;
+	codeSn.value = load.codeSn;
 	getOrderDetails();
 });
 
 // 订单详情
 const getOrderDetails = async () => {
-	const params = {
-		order_id: orderId.value
-	};
-	const res = await orderDetails(params);
-	console.log('订单详情', res);
-	if (res.code == 1) {
-		deliveryType.value = res.data.delivery_type;
-		address.value = res.data.address;
-		store.value = res.data.store;
-		shoppingList.value = res.data.order_goods;
-		textarta.value = res.data.buyer_remark;
-		orderFreight.value = res.data.express_price;
-		couponPrice.value = res.data.coupon_money;
-		totalPrice.value = res.data.total_price;
-		status.value = res.data.status_name;
-		orderTime.value = res.data.add_at;
-		orderSn.value = res.data.order_sn;
-		orderPrice.value = res.data.pay_price;
-		userName.value = res.data.real_name;
-		paymentType.value = res.data.pay_type_name;
+	if (codeSn.value) {
+		// 核销订单详情，只有核销扫码获取的订单详情数据才能查看别人的订单
+		var resultData = await scanCode({
+			order_sn: codeSn.value
+		});
 	} else {
-		noRights.value = true
+		// 订单详情
+		var resultData = await orderDetails({
+			order_id: orderId.value
+		});
+	}
+	console.log('订单详情', resultData);
+	if (resultData.code == 1) {
+		deliveryType.value = resultData.data.delivery_type;
+		address.value = resultData.data.address;
+		store.value = resultData.data.store;
+		shoppingList.value = resultData.data.order_goods;
+		textarta.value = resultData.data.buyer_remark;
+		orderFreight.value = resultData.data.express_price;
+		couponPrice.value = resultData.data.coupon_money;
+		totalPrice.value = resultData.data.total_price;
+		status.value = resultData.data.status_name;
+		orderTime.value = resultData.data.add_at;
+		orderSn.value = resultData.data.order_sn;
+		orderPrice.value = resultData.data.pay_price;
+		userName.value = resultData.data.real_name;
+		paymentType.value = resultData.data.pay_type_name;
+		isCancel.value = resultData.data.is_extract;
+	} else {
+		noRights.value = true;
 	}
 };
 
@@ -224,20 +234,28 @@ const confirmVerification = () => {
 				};
 				const getCode = await orderVerification(params);
 				console.log('确认核销', getCode);
-
-				uni.showToast({
-					title: getCode.msg,
-					icon: 'none',
-					mask: true,
-					duration: 1000,
-					complete: () => {
-						setTimeout(() => {
-							uni.redirectTo({
-								url: '/pages/order/me_cancel'
-							})
-						}, 1000)
-					}
-				});
+				if (getCode.code == 1) {
+					uni.showToast({
+						title: getCode.msg,
+						icon: 'none',
+						mask: true,
+						duration: 1000,
+						complete: () => {
+							setTimeout(() => {
+								uni.redirectTo({
+									url: '/pages/order/me_cancel'
+								});
+							}, 1000);
+						}
+					});
+				} else {
+					uni.showToast({
+						title: getCode.msg,
+						icon: 'none',
+						mask: true,
+						duration: 1000
+					});
+				}
 			}
 		}
 	});

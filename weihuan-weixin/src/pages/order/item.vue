@@ -65,8 +65,8 @@
 					<text class="num">{{ item2.goods_num }}</text>
 				</view>
 			</view>
-
-			<view class="state_btn">
+			<view class="order_date">下单时间：{{ item.add_at }}</view>
+			<view class="state_btn" v-if="state_btn">
 				<!-- 待付款 -->
 				<button class="common_btn btn_bg" @click.stop="statusBtnClick({ type: 'payment', data: { order_id: item.id } })" v-if="item.status == 10 && item.pay_status == 10">
 					立即支付
@@ -116,6 +116,7 @@
 					核销码
 				</button>
 			</view>
+			
 		</view>
 	</uni-transition>
 </template>
@@ -150,7 +151,7 @@ const props = defineProps({
 	cancel: {
 		type: Boolean,
 		default: false
-	}
+	},
 });
 
 // 底部按钮点击
@@ -198,6 +199,13 @@ const openDetailsClick = (id) => {
 			color: #000;
 		}
 	}
+	
+	.order_date {
+		padding: 10rpx 0 16rpx;
+		font-size: 24rpx;
+		font-weight: 500;
+	}
+	
 	.top_cover {
 		padding: 10rpx 0;
 		position: relative;
@@ -216,7 +224,7 @@ const openDetailsClick = (id) => {
 
 		.cover_content {
 			flex: 1;
-			padding: 0 0 0 10rpx;
+			padding: 0 0 0 24rpx;
 			.cover_head {
 				.title {
 					font-size: 26rpx;

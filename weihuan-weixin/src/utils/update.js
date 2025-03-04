@@ -38,8 +38,9 @@ function autoUpdate() {
 				// 新的版本下载失败
 				updateManager.onUpdateFailed(function() {
 					uni.showModal({
-						title: '温馨提示',
-						content: '新版本已经上线，请您删除当前小程序，重新搜索打开',
+						title: '更新提示',
+						content: '新版本下载失败，请检查网络或稍后重试。',
+						showCancel: false
 					})
 				})
 			}

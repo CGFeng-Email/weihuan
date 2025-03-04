@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "37288905",
+      "name": "下载",
+      "font_class": "xiazai",
+      "unicode": "e657",
+      "unicode_decimal": 58967
+    },
+    {
       "icon_id": "1788579",
       "name": "热门",
       "font_class": "remen",

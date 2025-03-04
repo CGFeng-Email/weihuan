@@ -79,7 +79,7 @@
 		</view>
 	</view>
 
-	<Empty imgSrc="https://test.cnmaris.cn/uploads/images/20241220/17347004196747.png" tips="购物车还是空的哦~" :show="list.length > 0 ? false : true"></Empty>
+	<Empty imgSrc="/static/img/empty_cart.png" tips="购物车还是空的哦~" :show="list.length > 0 ? false : true"></Empty>
 
 	<!-- 推荐 -->
 	<view class="hot_recommend">

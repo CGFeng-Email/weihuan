@@ -43,7 +43,7 @@ function sweep_click() {
 						success: () => {
 							setTimeout(() => {
 								uni.navigateTo({
-									url: `/pages/order/details?orderId=${getCode.data.id}&verification=${true}`
+									url: `/pages/order/details?orderId=${getCode.data.id}&codeSn=${res.result}`
 								});
 								uni.hideLoading();
 							}, 1500);

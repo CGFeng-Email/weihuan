@@ -347,6 +347,13 @@ const inCrement = (storeCount, index) => {
 	if (shoppingList.value[index].quantity < storeCount) {
 		shoppingList.value[index].quantity += 1;
 		getImmetPayment();
+	} else {
+		uni.showToast({
+			title: '库存数量不足',
+			icon: 'none',
+			mask: true,
+			duration: 1000
+		});
 	}
 };
 
@@ -431,6 +438,12 @@ const getImmetPayment = async (isSettle = 1) => {
 		totalPrice.value = res.data.pay_price;
 		orderFreight.value = res.data.express_price;
 		couponList.value = res.data.coupon_list;
+	} else {
+		uni.showToast({
+			title: res.msg,
+			icon: 'none',
+			mask: true,
+		});
 	}
 
 	if (isSettle == 0) return res;
@@ -441,7 +454,7 @@ const wxPayment = (params) => {
 	uni.showLoading({
 		title: '加载中'
 	});
-	
+
 	uni.requestPayment({
 		provider: 'wxpay',
 		timeStamp: params.timeStamp,

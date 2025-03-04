@@ -100,7 +100,11 @@
 	<uni-popup ref="checkCodeRef" @change="checkCodeChange">
 		<view class="check_code_wrap box_border_radius box_shadow">
 			<view class="title">订单核销码</view>
-			<image class="cover" :src="storeCode" mode="aspectFit"></image>
+			<image class="cover" :src="storeCode" mode="aspectFit" show-menu-by-longpress></image>
+			<view class="b_code">
+				<view class="lead">到对应自提点进行核销</view>
+				<i class="iconfont icon-xiazai" @click="saveImage" v-if="storeCode"></i>
+			</view>
 		</view>
 	</uni-popup>
 </template>
@@ -324,6 +328,78 @@ const getOrderCode = async (order_id) => {
 	}
 };
 
+// 检查图片存储权限
+const saveImage = () => {
+	// 第一步：检查是否有相册权限
+	uni.getSetting({
+		success: (res) => {
+			if (!res.authSetting['scope.writePhotosAlbum']) {
+				// 没有权限，请求权限
+				uni.authorize({
+					scope: 'scope.writePhotosAlbum',
+					success: () => {
+						// 权限申请成功，保存图片
+						downloadAndSaveImage();
+					},
+					fail: () => {
+						// 权限申请失败，提示用户
+						uni.showModal({
+							title: '提示',
+							content: '你拒绝了相册权限，无法保存图片，请在设置中开启相册权限',
+							success: (res) => {
+								if (res.confirm) {
+									// 用户点击确定，打开设置页面
+									uni.openSetting();
+								}
+							}
+						});
+					}
+				});
+			} else {
+				// 已有权限，直接保存图片
+				downloadAndSaveImage();
+			}
+		}
+	});
+};
+
+// 保存图片到本地相册
+const downloadAndSaveImage = () => {
+	// 第二步：下载图片
+	uni.downloadFile({
+		url: storeCode.value,
+		success: (res) => {
+			if (res.statusCode === 200) {
+				// 第三步：保存图片到相册
+				uni.saveImageToPhotosAlbum({
+					filePath: res.tempFilePath,
+					success: () => {
+						// 保存成功提示
+						uni.showToast({
+							title: '图片保存成功',
+							icon: 'success'
+						});
+					},
+					fail: () => {
+						// 保存失败提示
+						uni.showToast({
+							title: '图片保存失败',
+							icon: 'none'
+						});
+					}
+				});
+			}
+		},
+		fail: () => {
+			// 下载失败提示
+			uni.showToast({
+				title: '图片下载失败',
+				icon: 'none'
+			});
+		}
+	});
+};
+
 // 取消申请售后
 const isCancelApplyFor = async (id) => {
 	const params = {
@@ -490,7 +566,7 @@ function return_page() {
 
 .check_code_wrap {
 	background: #fff;
-	padding: 40rpx 30rpx 30rpx;
+	padding: 40rpx 30rpx 10rpx;
 	text-align: center;
 	margin: auto;
 
@@ -498,9 +574,26 @@ function return_page() {
 		font-size: 38rpx;
 		font-weight: bold;
 	}
+
 	.cover {
-		width: 580rpx;
-		height: 580rpx;
+		width: 500rpx;
+		height: 500rpx;
+		margin: 10px 0 0;
+	}
+
+	.lead {
+		font-weight: 500;
+	}
+	
+	.b_code {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		.iconfont {
+			font-size: 38rpx;
+			font-weight: 500;
+			padding: 20rpx 20rpx 20rpx 30rpx;
+		}
 	}
 }
 

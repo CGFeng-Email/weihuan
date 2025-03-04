@@ -1116,11 +1116,10 @@ onUnmounted(() => {
 
 	.submit_btn {
 		button {
-			height: 100rpx;
-			line-height: 100rpx;
+			height: 80rpx;
+			line-height: 80rpx;
 			font-size: 30rpx;
 			color: #fff;
-			font-weight: bold;
 			border-radius: 50rpx;
 		}
 	}

@@ -295,6 +295,16 @@
     left: -82%;
     bottom: -10%;
   }
+  .contact_us .main {
+    padding: 0 10px;
+  }
+  .contact_us .main .message_box .right {
+    margin-bottom: 20px;
+  }
+  .contact_us .main .message_box .form .item .input_box {
+    padding-left: 0;
+    margin-top: 20px;
+  }
 }
 @media screen and (max-width: 767px) {
   .container {
@@ -636,5 +646,89 @@
   }
   .asked_questions .list .item .down_content {
     padding-top: 10px;
+  }
+  .contact_us .main .center_head {
+    padding-bottom: 0;
+  }
+  .contact_us .main .center_head .deep {
+    font-size: 52px;
+  }
+  .contact_us .main .information .title {
+    font-size: 24px;
+  }
+  .contact_us .main .information .subhead {
+    font-size: 16px;
+    line-height: 26px;
+  }
+  .contact_us .main .information .mobile {
+    font-size: 20px;
+  }
+  .contact_us .main .information .list {
+    padding: 0;
+    margin-top: 0;
+  }
+  .contact_us .main .information .list .item {
+    padding: 14px;
+    margin-bottom: 20px;
+    min-height: auto;
+  }
+  .contact_us .main .information .list .item .icon .iconfont {
+    font-size: 32px;
+  }
+  .contact_us .main .information .list .item .content .name {
+    font-size: 16px;
+  }
+  .contact_us .main .information .list .item .content .text {
+    font-size: 14px;
+  }
+  .contact_us .main .information .map {
+    height: 450px;
+  }
+  .contact_us .main .message_box {
+    padding: 10px;
+    margin-bottom: 20px;
+  }
+  .contact_us .main .message_box .left_cover,
+  .contact_us .main .message_box .right_content {
+    padding: 0;
+  }
+  .contact_us .main .message_box .title {
+    font-size: 24px;
+  }
+  .contact_us .main .message_box .lead {
+    font-size: 14px;
+    line-height: 28px;
+  }
+  .contact_us .main .message_box .form {
+    margin-top: 20px;
+  }
+  .contact_us .main .message_box .form .item {
+    margin-bottom: 10px;
+  }
+  .contact_us .main .message_box .form .item .input {
+    height: 46px;
+    font-size: 12px;
+    padding: 0 10px;
+  }
+  .contact_us .main .message_box .form .item .input_box {
+    margin-top: 10px;
+  }
+  .contact_us .main .message_box .form .item .textarea {
+    padding: 10px;
+    font-size: 12px;
+  }
+  .contact_us .main .message_box .form .btn_box {
+    margin-top: 10px;
+  }
+  .contact_us .main .message_box .form .btn_box .btn {
+    min-width: auto;
+    width: 100%;
+    height: 46px;
+    line-height: 46px;
+    font-size: 12px;
+  }
+  .contact_us .main .message_box .right .cover_box {
+    width: 100%;
+    height: auto;
   }
 }
