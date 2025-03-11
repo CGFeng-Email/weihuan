@@ -147,7 +147,7 @@
 							<text class="name">已售:</text>
 							<text class="price">{{ details.sales_sum }}+</text>
 						</view>
-						<view class="market_box">
+						<view class="market_box" v-if="shoppingStoreCount">
 							<text class="name">库存:</text>
 							<text class="price">{{ shoppingStoreCount }}</text>
 						</view>

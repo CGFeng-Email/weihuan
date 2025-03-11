@@ -27,7 +27,7 @@
 			<!-- 轮播图 -->
 			<swiper class="swiper_banner" autoplay :interval="5000" :duration="1000" circular>
 				<block v-for="item in swiper_list" :key="item.src">
-					<swiper-item class="swiper-item">
+					<swiper-item class="swiper-item" @click="open_shopping_details(item.ad_param)">
 						<image class="cover" :src="item.thumb" mode="widthFix"></image>
 					</swiper-item>
 				</block>
@@ -147,7 +147,6 @@
 				</block>
 			</swiper>
 		</view>
-		
 	</view>
 </template>
 
@@ -751,7 +750,7 @@ onShow(async () => {
 				.lead {
 					font-size: 24rpx;
 				}
-				
+
 				.lead {
 					height: 32rpx;
 				}
@@ -817,10 +816,12 @@ onShow(async () => {
 
 .recommend {
 	background: #f1f1f1;
-	padding: 0 15rpx 30rpx;
+	padding: 0 30rpx 30rpx;
 	.recommend_swiper {
 		width: 100%;
 		height: 384rpx;
+		border-radius: 24rpx;
+		overflow: hidden;
 		.item {
 			.cover {
 				width: 100%;

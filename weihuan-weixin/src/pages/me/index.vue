@@ -675,11 +675,13 @@ page {
 	margin: 0 0 30rpx;
 	background: #f1f1f1;
 	width: 100vw;
-	padding: 0 20rpx;
+	padding: 0 30rpx;
 	transform: translateX(-30rpx);
 	.recommend_swiper {
 		width: 100%;
 		height: 384rpx;
+		border-radius: 24rpx;
+		overflow: hidden;
 		.item {
 			.cover {
 				width: 100%;
