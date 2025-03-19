@@ -19,7 +19,7 @@
 			</view>
 			<view class="search" @click="open_shopping_search">
 				<text class="iconfont icon-sousuo"></text>
-				<text class="text">进口美国3A牛肉</text>
+				<text class="text">俄罗斯帝王蟹</text>
 			</view>
 		</view>
 
@@ -142,7 +142,7 @@
 			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
 				<block v-for="item in recommendBannerList" :key="item.src">
 					<swiper-item class="item" @click="open_shopping_details(item.id)">
-						<image class="cover" :src="item.thumb" mode="aspectFit"></image>
+						<image class="cover" :src="item.thumb"></image>
 					</swiper-item>
 				</block>
 			</swiper>
@@ -163,7 +163,7 @@ import { MobileEncryption } from '@/hooks/useTool.js';
 import share from '../../utils/share.js';
 
 // 默认头像
-const headPortrait = ref('/src/static/img/head_portrait.png');
+const headPortrait = ref('/static/img/head_portrait.png');
 const nickName = ref('炜洹游客用户');
 const mobile = ref(null);
 const isVip = ref('普通会员');
@@ -816,16 +816,21 @@ onShow(async () => {
 
 .recommend {
 	background: #f1f1f1;
-	padding: 0 30rpx 30rpx;
+	padding: 10rpx 0 30rpx;
+
 	.recommend_swiper {
-		width: 100%;
+		width: 690rpx;
 		height: 384rpx;
-		border-radius: 24rpx;
-		overflow: hidden;
+		margin: auto;
+		
 		.item {
+			overflow: hidden;
+			border-radius: 20rpx;
+
 			.cover {
 				width: 100%;
-				height: 384rpx;
+				height: 100%;
+				vertical-align: middle;
 			}
 		}
 	}

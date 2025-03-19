@@ -57,14 +57,21 @@
 						</view>
 					</view>
 
-					<!-- 列表 -->
-					<view class="list">
-						<block v-for="item2 in allShoppingList" :key="item2.id">
-							<Item :item="item2" @itemClick="itemClick"></Item>
-						</block>
-						<uni-load-more :status="isMore" v-if="totalPage > 1" :iconSize="14" :contentText="contentText"></uni-load-more>
+					<view class="loading">
+						<view class="load_text" v-if="isLoading">
+							<uni-load-more iconType="circle" :iconSize="13" status="loading" />
+						</view>
+						<view v-else-if="isEmpty">
+							<Empty tips="抱歉, 暂时还没有该商品哦" :show="true"></Empty>
+						</view>
+						<!-- 列表 -->
+						<view class="list" v-else>
+							<view v-for="item2 in allShoppingList" :key="item2.id">
+								<Item :item="item2" @itemClick="itemClick"></Item>
+							</view>
+							<uni-load-more :status="isMore" v-if="totalPage > 1 && !isLoading" :iconSize="12" :contentText="contentText"></uni-load-more>
+						</view>
 					</view>
-					<Empty tips="抱歉, 暂时还没有该商品哦" :show="allShoppingList.length == 0"></Empty>
 				</scroll-view>
 			</view>
 		</swiper-item>
@@ -118,21 +125,19 @@ const organListIndex = ref(0);
 const allShoppingList = ref([]);
 // 列表加载
 const isMore = ref('more');
-const contentText = ref({ contentdown: '上拉显示更多', contentrefresh: '正在加载...', contentnomore: '到底了' });
+const contentText = ref({ contentdown: '上拉加载', contentrefresh: '正在加载...', contentnomore: '没有更多推荐了，试试浏览其他商品吧' });
 const menuActive = '/static/img/category_active.png';
+// 加载组件
+const isLoading = ref(false);
+const isEmpty = ref(false);
 
 onLoad(async () => {
-	uni.showLoading({
-		title: '加载中...',
-		mask: true
-	});
 	// 公共数据
 	await getCommonData();
 	// 一级分类
 	await getClassify();
 	// 二级分类
 	await getClassify();
-
 	// 首页跳转的分类
 	uni.$on('classifyMenu', (e) => {
 		if (e.id) {
@@ -143,16 +148,6 @@ onLoad(async () => {
 				}
 			});
 		}
-	});
-
-	uni.hideLoading();
-});
-
-// 空组件是否显示
-const isEmpty = computed(() => {
-	nextTick(() => {
-		if (allShoppingList.value.length > 0) return false;
-		return true;
 	});
 });
 
@@ -240,8 +235,9 @@ const getShoppingList = async (more = false) => {
 			isMore.value = 'loading';
 		} else {
 			page.value = 1;
+			isLoading.value = true;
+			isEmpty.value = false;
 		}
-
 		const params = {
 			cate_id: classify_list.value[menu_index.value].id,
 			cate_id_2: childCategory.value[childCategoryIndex.value].id,
@@ -254,24 +250,24 @@ const getShoppingList = async (more = false) => {
 			page: page.value,
 			size: size.value
 		};
-		console.log('params', params);
 		const res = await shoppingList(params);
 		console.log('商品列表', res);
 
 		if (res.code == 1) {
 			if (more) {
 				allShoppingList.value = [...allShoppingList.value, ...res.data.lists];
+				if (page.value >= totalPage.value) {
+					return (isMore.value = 'no-more');
+				}
+				isMore.value = 'more';
 			} else {
 				allShoppingList.value = res.data.lists;
 				totalPage.value = res.data.page_no;
+				isLoading.value = false;
+				if (res.data.lists.length == 0) {
+					isEmpty.value = true;
+				}
 			}
-		}
-
-		if (more) {
-			if (page.value >= totalPage.value) {
-				return (isMore.value = 'no-more');
-			}
-			isMore.value = 'more';
 		}
 	}
 };

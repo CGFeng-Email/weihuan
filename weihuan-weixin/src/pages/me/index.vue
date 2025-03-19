@@ -80,17 +80,6 @@
 			</view>
 		</view>
 
-		<!-- 推荐 -->
-		<view class="recommend" v-if="recommendBannerList.length > 0">
-			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
-				<block v-for="item in recommendBannerList" :key="item.src">
-					<swiper-item class="item" @click="open_shopping_details(item.id)">
-						<image class="cover" :src="item.thumb" mode="aspectFit"></image>
-					</swiper-item>
-				</block>
-			</swiper>
-		</view>
-
 		<!-- 平台相关 -->
 		<view class="function box_border_radius box_shadow">
 			<view class="head">
@@ -144,8 +133,6 @@ const wait_take_order_count = ref('-');
 const coupon_count = ref('-');
 // 用户收藏订单数量
 const collect_count = ref('-');
-// 推荐banner
-const recommendBannerList = ref([]);
 // 是否店员（店员才拥有核销权限） 0:没权限，1:有权限
 const isClerk = ref(0);
 
@@ -215,18 +202,6 @@ function isLogin() {
 	}
 	return true;
 }
-
-// 首页轮播图
-const getSwiperBanner = async () => {
-	const params = {
-		pos_type: 2
-	};
-	const res = await getBanner(params);
-	console.log('banner', res);
-	if (res.code == 1) {
-		recommendBannerList.value = res.data.lists;
-	}
-};
 
 // 用户信息
 const getUserDataFn = async () => {
@@ -415,7 +390,6 @@ onPageScroll((e) => {
 onShow(() => {
 	console.log('我的onShow');
 	getUserDataFn();
-	getSwiperBanner();
 });
 
 onShareAppMessage(() => {
@@ -667,26 +641,6 @@ page {
 		padding: 30rpx 0;
 		.cover {
 			width: 100%;
-		}
-	}
-}
-
-.recommend {
-	margin: 0 0 30rpx;
-	background: #f1f1f1;
-	width: 100vw;
-	padding: 0 30rpx;
-	transform: translateX(-30rpx);
-	.recommend_swiper {
-		width: 100%;
-		height: 384rpx;
-		border-radius: 24rpx;
-		overflow: hidden;
-		.item {
-			.cover {
-				width: 100%;
-				height: 384rpx;
-			}
 		}
 	}
 }

@@ -68,6 +68,8 @@ a:focus {
 img {
   vertical-align: middle;
   object-fit: cover;
+  user-select: none;
+  pointer-events: none;
 }
 .cover_box {
   overflow: hidden;
@@ -126,13 +128,11 @@ body::-webkit-scrollbar-thumb:hover {
 }
 .title {
   font-size: 28px;
-  line-height: 38px;
   font-weight: 500;
   color: #000;
 }
 .lead {
   font-size: 16px;
-  line-height: 28px;
   font-weight: 500;
   color: #000;
   margin-bottom: 0;
@@ -2545,24 +2545,33 @@ body::-webkit-scrollbar-thumb:hover {
 }
 .login {
   overflow: hidden;
-}
-.login .login_left {
-  position: absolute;
-  top: 0;
-  left: 0;
+  display: flex;
+  justify-content: space-between;
+  user-select: none;
 }
 .login .login_left .cover {
   height: 100vh;
   object-fit: fill;
 }
-.login .content {
-  position: relative;
-  height: 100vh;
-}
-.login .content .login_right {
-  position: absolute;
-  top: 0;
-  right: 0;
+.login .content .login_right .cover {
   height: 100vh;
   object-fit: fill;
+}
+.login .content .login_form {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 300px;
+}
+.login .content .login_form .title {
+  color: #33499C;
+  font-weight: 600;
+  font-size: 32px;
+  padding: 20px 0;
+}
+.login .content .login_form .item {
+  width: 480px;
+  height: 70px;
+  border-radius: 32px;
+  background: #f6f7fb;
 }

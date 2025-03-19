@@ -817,10 +817,16 @@
     layui.use(function () {
         var form = layui.form;
         var layer = layui.layer;
+        var util = layui.util;
+
+        util.fixbar({});
+
         form.on('submit(get_email)', function (data) {
             console.log(data);
             return false; // 阻止默认 form 跳转
         });
+
+
     });
 </script>
 </body>

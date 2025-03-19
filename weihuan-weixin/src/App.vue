@@ -85,6 +85,12 @@ image {
 	text-overflow: ellipsis;
 }
 
+.loading {
+	.load_text {
+		padding: 60rpx 20rpx;
+	}
+}
+
 .navigation_wrap {
 	display: inline-block;
 

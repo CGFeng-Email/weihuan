@@ -13,7 +13,7 @@
 			</view>
 		</view>
 		<uni-load-more :status="isMore" v-if="totalPage > 1" :iconSize="14" :contentText="contentText"></uni-load-more>
-		<Empty :show="list.length == 0" tips="您还没有相关收藏商品" />
+		<Empty :show="list.length == 0" tips="您还没有相关优惠券" />
 	</view>
 </template>
 

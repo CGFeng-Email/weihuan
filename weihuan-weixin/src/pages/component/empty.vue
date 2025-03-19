@@ -37,7 +37,8 @@ const props = defineProps({
 }
 
 .lead {
-	font-size: 28rpx;
+	font-size: 26rpx;
+	letter-spacing: 0.3px;
 	font-weight: 500;
 	padding: 10rpx 0;
 }

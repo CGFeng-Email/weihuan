@@ -77,19 +77,31 @@
 					<scroll-view
 						class="scroll_view"
 						scroll-y
-						scroll-with-animation
 						enable-back-to-top
+						:scroll-with-animation="true"
 						:scroll-anchoring="true"
+						:scroll-into-view="toTopId" 
 						:scroll-top="scrollTop"
 						@scrolltolower="scrolltolower"
 					>
 						<view class="scroll_item">
-							<block v-for="(item, index) in list" :key="item.id">
-								<OrderItem :item="item" :head_title_index="head_title_index" @statusBtn="statusBtn" @orderDetails="orderDetails"></OrderItem>
-							</block>
+							<!-- 切换swiper时，使scroll-view回到顶部 -->
+							<view :id="toTopId"></view>
+							
+							<view class="loading">
+								<view class="load_text" v-if="isLoading">
+									<uni-load-more iconType="circle" :iconSize="13" status="loading" />
+								</view>
+								<view v-else-if="isEmpty">
+									<Empty tips="您还没有相关订单呦,快去下单享受优惠吧" :show="true"></Empty>
+								</view>
+								<!-- 列表 -->
+								<block v-else v-for="(item, index) in list" :key="item.id">
+									<OrderItem :item="item" :head_title_index="head_title_index" @statusBtn="statusBtn" @orderDetails="orderDetails"></OrderItem>
+								</block>
+							</view>
 						</view>
-						<uni-load-more :status="isMore" v-if="totalPage > 1"></uni-load-more>
-						<Empty :show="isEmpty" tips="您还没有相关订单"></Empty>
+						<uni-load-more :status="isMore" v-if="totalPage > 1 && !isLoading && !isEmpty"></uni-load-more>
 					</scroll-view>
 				</view>
 			</swiper-item>
@@ -115,7 +127,7 @@ import useMenuButton from '../../hooks/useMenu.js';
 import getSystem from '../../hooks/getSystem.js';
 import navigate from '/src/pages/component/navigate.vue';
 import OrderItem from './item.vue';
-import { ref, nextTick } from 'vue';
+import { ref, nextTick, watchEffect } from 'vue';
 import { onLoad, onShow } from '@dcloudio/uni-app';
 import { orderList, cancelOrder, confirmRecelve, orderCode, cancelApplyFor } from '@/api/index.js';
 import _ from 'underscore';
@@ -127,7 +139,10 @@ const page = ref(1);
 const size = ref(8);
 // 总页码
 const totalPage = ref(1);
+// 空组件
 const isEmpty = ref(false);
+// 加载组件
+const isLoading = ref(false);
 // 订单类型
 const type = ref('all');
 // tabs下标
@@ -142,6 +157,7 @@ const isMore = ref('more');
 const storeCode = ref('');
 // scroll组件y轴滚动距离
 const scrollTop = ref(0);
+const toTopId = ref(null);
 // 导航栏列表
 const navList = ref([
 	{
@@ -223,12 +239,10 @@ const getOrderList = async (more = false) => {
 	if (more) {
 		isMore.value = 'loading';
 	} else {
-		uni.showLoading({
-			title: '加载中...',
-			mask: true
-		});
 		page.value = 1;
-		scrollTop.value = 1;
+		isLoading.value = true;
+		isEmpty.value = false;
+		toTopId.value = null;
 	}
 	const params = {
 		page: page.value,
@@ -241,22 +255,23 @@ const getOrderList = async (more = false) => {
 	if (res.code == 1) {
 		if (more) {
 			list.value = [...list.value, ...res.data.lists];
+			if (page.value >= totalPage.value) {
+				return (isMore.value = 'no-more');
+			}
+			isMore.value = 'more';
 		} else {
+			toTopId.value = 'toTopId';
 			list.value = res.data.lists;
 			totalPage.value = res.data.page_no;
-			isEmpty.value = list.value.length == 0 ? true : false;
+			isLoading.value = false;
+			if (list.value.length == 0) {
+				isEmpty.value = true;
+			}
+			nextTick(() => {
+				scrollTop.value = 0;
+				console.log('scrollTop.value', scrollTop.value);
+			});
 		}
-	}
-
-	if (more) {
-		if (page.value >= totalPage.value) {
-			return (isMore.value = 'no-more');
-		}
-		isMore.value = 'more';
-	} else {
-		// 滚动条
-		scrollTop.value = 0;
-		uni.hideLoading();
 	}
 };
 
@@ -584,7 +599,7 @@ function return_page() {
 	.lead {
 		font-weight: 500;
 	}
-	
+
 	.b_code {
 		display: flex;
 		justify-content: space-between;

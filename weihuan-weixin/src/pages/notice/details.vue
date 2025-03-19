@@ -1,20 +1,4 @@
 <template>
-	<!-- 顶部到胶囊的高度 -->
-	<!-- <view class="top" :class="scrollTop" :style="{ height: useMenuButton().top }"></view> -->
-	<!-- 标题 -->
-	<!-- <view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
-		<view class="return_icon" @click="return_page">
-			<uni-icons type="left" size="23" :color="scrollTop == 'white_default' ? '#fff' : '#000'"></uni-icons>
-		</view>
-		{{ scrollTop != 'white_default' ? '系统公告' : '' }}
-	</view> -->
-	<!-- 占位 -->
-	<!-- 	<view :style="{ height: useMenuButton().top }"></view>
-	<view :style="{ height: useMenuButton().height }"></view> -->
-	<!-- 顶部背景 -->
-	<view class="fixed_top_bg">
-		<image class="cover" src="/static/img/me_banner.png" mode="widthFix"></image>
-	</view>
 	<!-- 内容 -->
 	<view class="wrap">
 		<image class="cover" :src="details.image" mode="widthFix"></image>
@@ -56,21 +40,6 @@ const contentStyle = ref({
 	span: 'font-size: 30rpx,line-height: 40rpx;',
 	img: 'margin-bottom: 10rpx'
 });
-
-// 顶部区域滚动
-// const scrollTop = ref('white_default');
-// onPageScroll((e) => {
-// 	if (e.scrollTop < 30) {
-// 		scrollTop.value = 'white_default';
-// 	}
-// 	if (e.scrollTop > 30 && e.scrollTop < 60) {
-// 		scrollTop.value = 'white_30';
-// 	} else if (e.scrollTop > 60 && e.scrollTop < 100) {
-// 		scrollTop.value = 'white_60';
-// 	} else if (e.scrollTop > 100) {
-// 		scrollTop.value = 'white_100';
-// 	}
-// });
 
 // 获取公告详情
 const getNoticeDetails = async () => {
@@ -122,16 +91,6 @@ page {
 }
 .white_100 {
 	background: rgba(255, 255, 255, 1);
-}
-.fixed_top_bg {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 750rpx;
-	z-index: -1;
-	.cover {
-		width: 750rpx;
-	}
 }
 
 .wrap {

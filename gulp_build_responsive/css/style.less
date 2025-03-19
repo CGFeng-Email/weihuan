@@ -85,6 +85,8 @@ a:focus {
 img {
     vertical-align: middle;
     object-fit: cover;
+    user-select: none;
+    pointer-events: none;
 }
 
 .cover_box {
@@ -159,14 +161,12 @@ body::-webkit-scrollbar-thumb:hover {
 
 .title {
     font-size: 28px;
-    line-height: 38px;
     font-weight: 500;
     color: #000;
 }
 
 .lead {
     font-size: 16px;
-    line-height: 28px;
     font-weight: 500;
     color: #000;
     margin-bottom: 0;
@@ -3226,11 +3226,11 @@ body::-webkit-scrollbar-thumb:hover {
 
 .login {
     overflow: hidden;
+    display: flex;
+    justify-content: space-between;
+    user-select: none;
 
     .login_left {
-        position: absolute;
-        top: 0;
-        left: 0;
         .cover {
             height: 100vh;
             object-fit: fill;
@@ -3238,16 +3238,32 @@ body::-webkit-scrollbar-thumb:hover {
     }
 
     .content {
-        position: relative;
-        height: 100vh;
-
         .login_right {
+            .cover {
+                height: 100vh;
+                object-fit: fill;
+            }
+        }
+
+        .login_form {
             position: absolute;
-            top: 0;
-            right: 0;
-            height: 100vh;
-            object-fit: fill;
+            top: 50%;
+            transform: translateY(-50%);
+            right: 300px;
+
+            .title {
+                color: @primaryColor;
+                font-weight: 600;
+                font-size: 32px;
+                padding: 20px 0;
+            }
+
+            .item {
+                width: 480px;
+                height: 70px;
+                border-radius: 32px;
+                background: #f6f7fb;
+            }
         }
     }
-
 }

@@ -16,7 +16,6 @@
 				:toggle="isMore"
 				color="#FF8992"
 				textIndent="0"
-				:shadowStyle="shadowStyle"
 				@open="moreOpen"
 				@close="moreClose"
 			>
@@ -88,17 +87,6 @@ const logisticsIndex = ref(0);
 // 列表是否收起
 const isMore = ref(false);
 const readMore = ref(null);
-const shadowStyle = ref({
-	// #ifndef APP-NVUE
-	backgroundImage: 'linear-gradient(-180deg, rgba(255, 255, 255, 0) 0%, #fff 80%)',
-	// #endif
-	// #ifdef APP-NVUE
-	// nvue上不支持设置复杂的backgroundImage属性
-	backgroundImage: 'linear-gradient(to top, #fff, rgba(255, 255, 255, 0.5))',
-	// #endif
-	paddingTop: '100px',
-	marginTop: '-100px'
-});
 
 onLoad(async (load) => {
 	console.log('load', load);

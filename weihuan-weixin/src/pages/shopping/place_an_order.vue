@@ -7,7 +7,7 @@
 	<!-- 标题 -->
 	<view class="page_title" :class="scrollTop" :style="{ top: useMenuButton().top, height: useMenuButton().height, 'line-height': useMenuButton().height }">
 		<view class="left_icon" @click="left_return">
-			<uni-icons type="left" size="24" :color="scrollTop == 'white_default' ? '#fff' : '#000'"></uni-icons>
+			<uni-icons type="left" size="24" color="#000"></uni-icons>
 		</view>
 		{{ scrollTop != 'white_default' ? '产品详情' : '' }}
 	</view>
@@ -89,7 +89,9 @@
 	</view>
 
 	<!-- 详情图片 -->
-	<uv-parse :content="details.goods_content" :tagStyle="contentStyle" :lazyLoad="true"></uv-parse>
+	<view class="rich_box">
+		<uv-parse :content="details.goods_content" :tagStyle="contentStyle" :lazyLoad="true"></uv-parse>
+	</view>
 
 	<!-- 搭配建议 -->
 	<view class="match">
@@ -210,7 +212,7 @@
 		</view>
 	</uni-popup>
 
-	<uv-back-top :scroll-top="scrollPageTop" :iconStyle="iconStyle"></uv-back-top>
+	<uv-back-top :scroll-top="scrollPageTop" :iconStyle="iconStyle" bottom="140" right="10"></uv-back-top>
 </template>
 
 <script setup>
@@ -243,8 +245,10 @@ const price = ref(null);
 const defaultPrice = ref(null);
 // 富文本样式
 const contentStyle = ref({
-	p: 'font-size:32rpx;line-height: 44rpx;',
-	span: 'font-size: 30rpx'
+	p: 'font-size:32rpx; line-height: 44rpx;',
+	span: 'font-size: 30rpx; line-height: 1.6',
+	image: 'vertical-align: bottom; diaplay: block;',
+	img: 'vertical-align: bottom; diaplay: block;'
 });
 // 规格
 const specificationList = ref({});
@@ -281,7 +285,7 @@ const scrollPageTop = ref(0);
 const iconStyle = ref({
 	fontSize: '28rpx',
 	color: '#fff'
-})
+});
 
 onLoad(async (load) => {
 	uni.showLoading({
@@ -580,7 +584,7 @@ const getHotRecommend = async (more = false) => {
 	const params = {
 		page: page.value,
 		size: size.value,
-		is_recommend: 1,
+		is_recommend: 1
 	};
 	const res = await shoppingList(params);
 	console.log('推荐商品', res);
@@ -617,6 +621,7 @@ onReachBottom(() => {
 onShareAppMessage((res) => {
 	return {
 		title: details.value.title,
+		imageUrl: details.value.share_image || '',
 		path: `/pages/shopping/place_an_order?id=${id.value}`
 	};
 });
@@ -625,6 +630,7 @@ onShareAppMessage((res) => {
 onShareTimeline(() => {
 	return {
 		title: details.value.title,
+		imageUrl: details.value.share_image || '',
 		path: `/pages/shopping/place_an_order?id=${id.value}`
 	};
 });
@@ -647,6 +653,17 @@ onUnmounted(() => {
 }
 .white_100 {
 	background: rgba(255, 255, 255, 1);
+}
+
+.page_title {
+	.left_icon {
+		width: 64rpx;
+		height: 64rpx;
+		border-radius: 50%;
+		background: #fff;
+		line-height: 64rpx;
+		padding: 0;
+	}
 }
 
 .swiper_wrap {
@@ -832,7 +849,8 @@ onUnmounted(() => {
 }
 
 .rich_box {
-	margin-top: 60rpx;
+	font-size: 30rpx;
+	line-height: 1.6;
 }
 
 .match {
