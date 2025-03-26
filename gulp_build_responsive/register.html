@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>登录</title>
+    <title>注册</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="renderer" content="webkit">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -52,27 +52,30 @@
             </div>
         </div>
         <div class="login_form">
-            <h1 class="title">Hello，欢迎回家</h1>
+            <h1 class="title">用户注册，尊享专属优惠</h1>
             <form class="layui-form form" action="">
                 <div class="item">
                     <img class="cover" src="img/username.png" alt="">
-                    <input type="text" name="mobile" placeholder="请输入手机号" lay-affix="clear" lay-verify="required|phone" lay-vertype="tips"
-                        lay-reqtext="请输入手机号" autocomplete="off" class="layui-input input">
+                    <input type="text" name="mobile" placeholder="请输入手机号" lay-affix="clear" lay-verify="required|phone"
+                        lay-vertype="tips" lay-reqtext="请输入手机号" autocomplete="off" class="layui-input input">
                 </div>
                 <div class="item">
                     <img class="cover" src="img/password.png" alt="">
-                    <input type="password" name="password" placeholder="请输入密码" lay-affix="eye"
-                        lay-verify="required" lay-vertype="tips" lay-reqtext="请输入密码" autocomplete="off"
-                        class="layui-input input">
+                    <input type="password" name="password" placeholder="请输入密码" lay-affix="eye" lay-verify="required"
+                        lay-vertype="tips" lay-reqtext="请输入密码" autocomplete="off" class="layui-input input">
                 </div>
-                <div class="forget">
-                    <a href="./forget.html" class="link">忘记密码?</a>
+                <div class="item code_item">
+                    <input type="number" name="code" placeholder="请输入验证码" maxlength="6" lay-reqtext="请输入验证码" lay-affix="clear" lay-verify="required"
+                        lay-vertype="tips" autocomplete="off" class="layui-input input">
+                    <div class="get_code">
+                        <span class="text">获取验证码</span>
+                    </div>
                 </div>
                 <div class="submit">
-                    <button class="layui-btn btn" lay-submit lay-filter="login_submit">登录</button>
+                    <button class="layui-btn btn register_btn" lay-submit lay-filter="login_submit">同意并注册</button>
                 </div>
                 <div class="register">
-                    <a href="./register.html" class="link">没有账号，前往注册</a>
+                    <span class="link">已拥有炜焕账号? <a href="./login.html" class="text link">立即登录</a></span>
                 </div>
             </form>
         </div>

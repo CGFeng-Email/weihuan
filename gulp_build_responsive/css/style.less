@@ -3159,69 +3159,70 @@ body::-webkit-scrollbar-thumb:hover {
 
                 .input_box {
                     padding-left: 10px;
-                }
 
-                .input {
-                    height: 60px;
-                    font-size: 16px;
-                    padding: 0 20px;
-                    background: #EFEFEF;
-                    border-radius: 3px;
-                }
-
-                .textarea {
-                    padding: 20px 20px;
-                    font-size: 16px;
-                    background: #EFEFEF;
-                    border-radius: 3px;
-                }
-
-                .btn_box {
-                    margin-top: 20px;
-
-                    .btn {
-                        background: @gradient;
-                        min-width: 180px;
-                        height: 50px;
-                        font-size: 18px;
-                        padding: 0;
-                        border: none;
+                    .input {
+                        height: 60px;
+                        font-size: 16px;
+                        padding: 0 20px;
+                        background: #EFEFEF;
+                        border-radius: 3px;
                     }
-                }
-            }
 
-            .right {
-                padding-top: 30px;
-                display: flex;
-                align-items: center;
-                flex-direction: column;
-                justify-content: flex-end;
+                    .textarea {
+                        padding: 20px 20px;
+                        font-size: 16px;
+                        background: #EFEFEF;
+                        border-radius: 3px;
+                    }
 
-                .cover_box {
-                    width: 480px;
-                    height: 480px;
-                    box-shadow: 0 0 8px 2px rgba(0, 0, 0, .1);
-                    border-radius: 8px;
-                    overflow: hidden;
+                    .btn_box {
+                        margin-top: 20px;
 
-                    .cover {
-                        height: 100%;
+                        .btn {
+                            background: @gradient;
+                            min-width: 180px;
+                            height: 50px;
+                            font-size: 18px;
+                            padding: 0;
+                            border: none;
+                        }
                     }
                 }
 
-                .text {
-                    font-size: 20px;
-                    color: #000;
-                    text-align: center;
-                    margin-top: 20px;
+                .right {
+                    padding-top: 30px;
+                    display: flex;
+                    align-items: center;
+                    flex-direction: column;
+                    justify-content: flex-end;
+
+                    .cover_box {
+                        width: 480px;
+                        height: 480px;
+                        box-shadow: 0 0 8px 2px rgba(0, 0, 0, .1);
+                        border-radius: 8px;
+                        overflow: hidden;
+
+                        .cover {
+                            height: 100%;
+                        }
+                    }
+
+                    .text {
+                        font-size: 20px;
+                        color: #000;
+                        text-align: center;
+                        margin-top: 20px;
+                    }
                 }
             }
         }
+
+        ._right {
+            top: 10%;
+        }
     }
 
-    ._right {
-        top: 10%;
-    }
 }
 
 .login {
@@ -3237,32 +3238,106 @@ body::-webkit-scrollbar-thumb:hover {
         }
     }
 
-    .content {
-        .login_right {
-            .cover {
-                height: 100vh;
-                object-fit: fill;
+    .login_right {
+        .cover {
+            height: 100vh;
+            object-fit: fill;
+        }
+    }
+
+    .login_form {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 300px;
+        padding: 30px;
+
+        .title {
+            color: @primaryColor;
+            font-weight: 600;
+            font-size: 32px;
+            padding: 0 0 30px;
+            text-align: center;
+        }
+
+        .item {
+            width: 480px;
+            height: 60px;
+            border-radius: 32px;
+            background: #f6f7fb;
+            display: flex;
+            align-items: center;
+            padding: 10px 24px;
+            margin-bottom: 20px;
+
+            .layui-input-wrap {
+                width: 100%;
+            }
+
+            .input {
+                width: 100%;
+                border: none;
+                background: none;
+                font-size: 16px;
+                padding-left: 14px;
+            }
+
+            .input:focus {
+                box-shadow: none;
             }
         }
 
-        .login_form {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            right: 300px;
+        .forget {
+            text-align: right;
 
-            .title {
-                color: @primaryColor;
-                font-weight: 600;
-                font-size: 32px;
-                padding: 20px 0;
+            .link {
+                width: auto;
+            }
+        }
+
+        .submit {
+            padding-top: 30px;
+
+            .btn {
+                width: 100%;
+                height: 60px;
+                background: @gradient2;
+                border-radius: 45px;
+                letter-spacing: 1em;
+                font-size: 20px;
             }
 
-            .item {
-                width: 480px;
-                height: 70px;
-                border-radius: 32px;
-                background: #f6f7fb;
+            .register_btn {
+                letter-spacing: normal;
+            }
+        }
+
+        .register {
+            text-align: center;
+            padding: 20px 0 0;
+
+            .link {
+                width: auto;
+
+                .text {
+                    color: @primaryColor;
+                }
+            }
+        }
+
+        .code_item {
+            display: flex;
+            justify-content: space-between;
+
+            .input {
+                flex: 1;
+            }
+
+            .get_code {
+                flex: none;
+                font-size: 18px;
+                color: @primaryColor;
+                cursor: pointer;
             }
         }
     }

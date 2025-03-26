@@ -2493,23 +2493,23 @@ body::-webkit-scrollbar-thumb:hover {
 .contact_us .main .message_box .form .input_box {
   padding-left: 10px;
 }
-.contact_us .main .message_box .form .input {
+.contact_us .main .message_box .form .input_box .input {
   height: 60px;
   font-size: 16px;
   padding: 0 20px;
   background: #EFEFEF;
   border-radius: 3px;
 }
-.contact_us .main .message_box .form .textarea {
+.contact_us .main .message_box .form .input_box .textarea {
   padding: 20px 20px;
   font-size: 16px;
   background: #EFEFEF;
   border-radius: 3px;
 }
-.contact_us .main .message_box .form .btn_box {
+.contact_us .main .message_box .form .input_box .btn_box {
   margin-top: 20px;
 }
-.contact_us .main .message_box .form .btn_box .btn {
+.contact_us .main .message_box .form .input_box .btn_box .btn {
   background: linear-gradient(276.14deg, #6cbc41 0%, #33499c 100%);
   min-width: 180px;
   height: 50px;
@@ -2517,30 +2517,30 @@ body::-webkit-scrollbar-thumb:hover {
   padding: 0;
   border: none;
 }
-.contact_us .main .message_box .right {
+.contact_us .main .message_box .form .right {
   padding-top: 30px;
   display: flex;
   align-items: center;
   flex-direction: column;
   justify-content: flex-end;
 }
-.contact_us .main .message_box .right .cover_box {
+.contact_us .main .message_box .form .right .cover_box {
   width: 480px;
   height: 480px;
   box-shadow: 0 0 8px 2px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
   overflow: hidden;
 }
-.contact_us .main .message_box .right .cover_box .cover {
+.contact_us .main .message_box .form .right .cover_box .cover {
   height: 100%;
 }
-.contact_us .main .message_box .right .text {
+.contact_us .main .message_box .form .right .text {
   font-size: 20px;
   color: #000;
   text-align: center;
   margin-top: 20px;
 }
-.contact_us ._right {
+.contact_us .main ._right {
   top: 10%;
 }
 .login {
@@ -2553,25 +2553,87 @@ body::-webkit-scrollbar-thumb:hover {
   height: 100vh;
   object-fit: fill;
 }
-.login .content .login_right .cover {
+.login .login_right .cover {
   height: 100vh;
   object-fit: fill;
 }
-.login .content .login_form {
+.login .login_form {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   right: 300px;
+  padding: 30px;
 }
-.login .content .login_form .title {
+.login .login_form .title {
   color: #33499C;
   font-weight: 600;
   font-size: 32px;
-  padding: 20px 0;
+  padding: 0 0 30px;
+  text-align: center;
 }
-.login .content .login_form .item {
+.login .login_form .item {
   width: 480px;
-  height: 70px;
+  height: 60px;
   border-radius: 32px;
   background: #f6f7fb;
+  display: flex;
+  align-items: center;
+  padding: 10px 24px;
+  margin-bottom: 20px;
+}
+.login .login_form .item .layui-input-wrap {
+  width: 100%;
+}
+.login .login_form .item .input {
+  width: 100%;
+  border: none;
+  background: none;
+  font-size: 16px;
+  padding-left: 14px;
+}
+.login .login_form .item .input:focus {
+  box-shadow: none;
+}
+.login .login_form .forget {
+  text-align: right;
+}
+.login .login_form .forget .link {
+  width: auto;
+}
+.login .login_form .submit {
+  padding-top: 30px;
+}
+.login .login_form .submit .btn {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(44.37deg, #ffab53 0%, #ff514a 100%);
+  border-radius: 45px;
+  letter-spacing: 1em;
+  font-size: 20px;
+}
+.login .login_form .submit .register_btn {
+  letter-spacing: normal;
+}
+.login .login_form .register {
+  text-align: center;
+  padding: 20px 0 0;
+}
+.login .login_form .register .link {
+  width: auto;
+}
+.login .login_form .register .link .text {
+  color: #33499C;
+}
+.login .login_form .code_item {
+  display: flex;
+  justify-content: space-between;
+}
+.login .login_form .code_item .input {
+  flex: 1;
+}
+.login .login_form .code_item .get_code {
+  flex: none;
+  font-size: 18px;
+  color: #33499C;
+  cursor: pointer;
 }
