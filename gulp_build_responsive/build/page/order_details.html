@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    @@include('head.html')
+</head>
+
+<body style="background: #f7f7f7;">
+    <div class="me_page">
+        <div class="me_head">
+            <div class="container">
+                <div class="wrap justify_apace">
+                    <div class="logo">
+                        <a href="../../index.html" class="link">
+                            <img class="cover" src="../../img/me_logo.png" alt="">
+                        </a>
+                    </div>
+                    <div class="menu justify_end">
+                        <div class="box">
+                            <a href="" class="link">
+                                <i class="iconfont icon-a-bangzhu1x"></i>
+                                <span class="text">帮助</span>
+                            </a>
+                        </div>
+                        <div class="box">
+                            <a href="" class="link">
+                                <i class="iconfont icon-shouji"></i>
+                                <span class="text">小程序</span>
+                            </a>
+                        </div>
+                        <div class="item justify_end">
+                            <div class="text">曼****m</div>
+                            <div class="cover_box">
+                                <img class="cover" src="../../img/user_logo.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 70px;"></div>
+        <div class="me">
+            <div class="main">
+                <div class="container">
+                    <div class="wrap">
+                        <div class="right_main">
+                            <div class="module box_shadow box_radius">
+                                <div class="order_main">
+                                    <div class="me_common_head justify_apace">
+                                        <h3 class="title">订单详情</h3>
+                                    </div>
+                                    <div class="son_head">
+                                        <h4 class="title">产品信息</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    layui.use(function () {
+        var layer = layui.layer;
+        var form = layui.form;
+        form.on('submit(submit_search)', function (data) {
+            var field = data.field;
+            return false;
+        });
+    });
+
+    $('.order_navs .nav_list .li').click(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+    })
+</script>
+
+</html>

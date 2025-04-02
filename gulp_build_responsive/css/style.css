@@ -557,6 +557,22 @@ body::-webkit-scrollbar-thumb:hover {
 .me_common_head .more .link {
   color: #999999;
 }
+.son_head .title {
+  font-size: 16px;
+  position: relative;
+  padding: 6px 0 6px 14px;
+}
+.son_head .title::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 0;
+  width: 7px;
+  height: 22px;
+  border-radius: 3px;
+  background: #33499C;
+}
 .center_head {
   padding: 40px 0;
   text-align: center;
@@ -2840,6 +2856,91 @@ body::-webkit-scrollbar-thumb:hover {
   padding: 10px 14px;
   margin-bottom: 20px;
 }
+.latest_order .order_navs,
+.order_main .order_navs {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+}
+.latest_order .order_navs .search_item,
+.order_main .order_navs .search_item {
+  display: flex;
+  align-items: center;
+  border-radius: 45px;
+  box-shadow: 0 0 1px 1px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  height: 38px;
+  width: 240px;
+}
+.latest_order .order_navs .search_item .input,
+.order_main .order_navs .search_item .input {
+  border: none;
+  outline: none;
+  background: none;
+  padding: 0 12px 0 6px;
+}
+.latest_order .order_navs .search_item .icon button,
+.order_main .order_navs .search_item .icon button {
+  background: none;
+  border: none;
+  padding: 4px 0 4px 14px;
+}
+.latest_order .order_navs .search_item .icon button .iconfont,
+.order_main .order_navs .search_item .icon button .iconfont {
+  font-size: 20px;
+  color: #33499C;
+  font-weight: 500;
+}
+.latest_order .order_navs .search_item .icon button::before,
+.order_main .order_navs .search_item .icon button::before,
+.latest_order .order_navs .search_item .icon button::after,
+.order_main .order_navs .search_item .icon button::after {
+  display: none;
+}
+.latest_order .order_navs .search_item .input:focus,
+.order_main .order_navs .search_item .input:focus {
+  box-shadow: none;
+}
+.latest_order .order_navs .nav_list .li,
+.order_main .order_navs .nav_list .li {
+  height: 34px;
+  line-height: 34px;
+  padding: 0 24px;
+  cursor: pointer;
+}
+.latest_order .order_navs .nav_list .li .name,
+.order_main .order_navs .nav_list .li .name {
+  position: relative;
+  font-size: 16px;
+}
+.latest_order .order_navs .nav_list .li .name::after,
+.order_main .order_navs .nav_list .li .name::after {
+  content: '';
+  position: absolute;
+  bottom: -22px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: #33499C;
+  border-radius: 2px;
+  opacity: 0;
+  transition: 0.3s ease;
+}
+.latest_order .order_navs .nav_list .li .count,
+.order_main .order_navs .nav_list .li .count {
+  color: #FF0000;
+}
+.latest_order .order_navs .nav_list .li:first-child,
+.order_main .order_navs .nav_list .li:first-child {
+  padding-left: 0;
+}
+.latest_order .order_navs .nav_list .active .name,
+.order_main .order_navs .nav_list .active .name {
+  font-weight: 600;
+}
+.latest_order .order_navs .nav_list .active .name::after,
+.order_main .order_navs .nav_list .active .name::after {
+  opacity: 1;
+}
 .latest_order .order_list .item,
 .order_main .order_list .item {
   padding: 10px 0;
@@ -2898,6 +2999,30 @@ body::-webkit-scrollbar-thumb:hover {
 .order_main .order_list .item .display_flex .more .link {
   color: #33499C;
   font-size: 14px;
+}
+.latest_order .order_list .item .display_flex .pay_box,
+.order_main .order_list .item .display_flex .pay_box {
+  margin-left: 20px;
+}
+.latest_order .order_list .item .display_flex .pay,
+.order_main .order_list .item .display_flex .pay {
+  width: 100px;
+  height: 34px;
+  line-height: 34px;
+  background: linear-gradient(276.14deg, #6cbc41 0%, #33499c 100%);
+  text-align: center;
+  margin: auto;
+}
+.latest_order .order_list .item .display_flex .pay .link,
+.order_main .order_list .item .display_flex .pay .link {
+  color: #fff;
+  font-size: 14px;
+}
+.latest_order .order_list .item .display_flex .cancel,
+.order_main .order_list .item .display_flex .cancel {
+  color: #33499C;
+  font-size: 14px;
+  margin-top: 4px;
 }
 .latest_order .order_list .item:last-child,
 .order_main .order_list .item:last-child {
