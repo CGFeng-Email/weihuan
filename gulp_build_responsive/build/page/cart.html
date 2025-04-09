@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    @@include('head.html')
+</head>
+
+<body style="background: #f7f7f7;">
+    <div class="me_page">
+        <div class="me_head">
+            <div class="container">
+                <div class="wrap justify_apace">
+                    <div class="logo">
+                        <a href="../../index.html" class="link">
+                            <img class="cover" src="../../img/me_logo.png" alt="">
+                        </a>
+                    </div>
+                    <div class="menu justify_end">
+                        <div class="box">
+                            <a href="" class="link">
+                                <i class="iconfont icon-a-bangzhu1x"></i>
+                                <span class="text">帮助</span>
+                            </a>
+                        </div>
+                        <div class="box">
+                            <a href="" class="link">
+                                <i class="iconfont icon-shouji"></i>
+                                <span class="text">小程序</span>
+                            </a>
+                        </div>
+                        <div class="item justify_end">
+                            <div class="text">曼****m</div>
+                            <div class="cover_box">
+                                <img class="cover" src="../../img/user_logo.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 70px;"></div>
+        <div class="me">
+            <div class="main">
+                <div class="container">
+                    <div class="wrap justify_apace">
+                        @@include('menus.html')
+                        <div class="right_main">
+                            <div class="module box_shadow box_radius">
+                                <div class="order_main">
+                                    <div class="me_common_head justify_apace">
+                                        <h3 class="title">购物车 <span class="count red">(03)</span></h3>
+                                        <div class="nav_search">
+                                            <div class="layui-form">
+                                                <div class="search_item">
+                                                    <div class="icon">
+                                                        <button lay-submit lay-filter="submit_search">
+                                                            <i class="iconfont icon-sousuo"></i>
+                                                        </button>
+                                                    </div>
+                                                    <input type="text" name="keyword" lay-verify="required"
+                                                        lay-vertype="tips" lay-reqtext="请输入关键字" placeholder="请输入关键字"
+                                                        class="layui-input input">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="order_details cart_list margin_bottom">
+                                        <form action="" id="orderForm">
+                                            <div class="item justify_apace">
+                                                <div class="left_shopping display_flex">
+                                                    <div class="check">
+                                                        <input type="checkbox" name="check1" class="option" />
+                                                    </div>
+                                                    <div class="check_content display_flex">
+                                                        <div class="cover_box box_radius">
+                                                            <img class="cover" src="../../img/product_li1.png" alt="">
+                                                        </div>
+                                                        <div class="shopping_explain">
+                                                            <h3 class="name">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材500g猪肉猪五花</h3>
+                                                            <div class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</div>
+                                                            <div class="lead count">数量：1</div>
+                                                            <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                                            <div class="quantity display_flex">
+                                                                <i
+                                                                    class="iconfont box_radius box_shadow icon-jianhao pointer"></i>
+                                                                <input type="number" class="box_radius box_shadow"
+                                                                    name="quantity1" value="1" min="1" max="9999" />
+                                                                <i
+                                                                    class="iconfont box_radius box_shadow icon-jia1 pointer"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="price">
+                                                    <span class="ide">￥</span>
+                                                    <span class="count">130.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="item justify_apace">
+                                                <div class="left_shopping display_flex">
+                                                    <div class="check">
+                                                        <input type="checkbox" name="check2" class="option">
+                                                    </div>
+                                                    <div class="check_content display_flex">
+                                                        <div class="cover_box box_radius">
+                                                            <img class="cover" src="../../img/product_li1.png" alt="">
+                                                        </div>
+                                                        <div class="shopping_explain">
+                                                            <h3 class="name">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材500g猪肉猪五花</h3>
+                                                            <div class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</div>
+                                                            <div class="lead count">数量：1</div>
+                                                            <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                                            <div class="quantity display_flex">
+                                                                <i
+                                                                    class="iconfont box_radius box_shadow icon-jianhao pointer"></i>
+                                                                <input type="number" class="box_radius box_shadow"
+                                                                    name="quantity2" value="1" min="1" max="9999" />
+                                                                <i
+                                                                    class="iconfont box_radius box_shadow icon-jia1 pointer"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="price">
+                                                    <span class="ide">￥</span>
+                                                    <span class="count">130.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="item justify_apace">
+                                                <div class="left_shopping display_flex">
+                                                    <div class="check">
+                                                        <input type="checkbox" name="check3" class="option">
+                                                    </div>
+                                                    <div class="check_content display_flex">
+                                                        <div class="cover_box box_radius">
+                                                            <img class="cover" src="../../img/product_li1.png" alt="">
+                                                        </div>
+                                                        <div class="shopping_explain">
+                                                            <h3 class="name">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材500g猪肉猪五花</h3>
+                                                            <div class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</div>
+                                                            <div class="lead count">数量：1</div>
+                                                            <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                                            <div class="quantity display_flex">
+                                                                <i
+                                                                    class="iconfont box_radius box_shadow icon-jianhao pointer"></i>
+                                                                <input type="number" class="box_radius box_shadow"
+                                                                    name="quantity3" value="1" min="1" max="9999" />
+                                                                <i
+                                                                    class="iconfont box_radius box_shadow icon-jia1 pointer"></i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="price">
+                                                    <span class="ide">￥</span>
+                                                    <span class="count">130.00</span>
+                                                </div>
+                                            </div>
+                                            <div class="check_box display_flex">
+                                                <div class="select_box">
+                                                    <label class="display_flex">
+                                                        <input type="checkbox" name="itemAllSelect" id="myCheckbox">
+                                                        <span class="text">全选</span>
+                                                    </label>
+                                                </div>
+                                                <div class="select_box">
+                                                    <div class="btn box_radius box_shadow" id="delBtn">删除商品</div>
+                                                </div>
+
+                                                <div class="select_box">
+                                                    <button class="btn box_radius box_shadow" type="submit"
+                                                        id="paymentBtn">立即支付</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</body>
+<script>
+    // 搜索
+    layui.use(function () {
+        var layer = layui.layer;
+        var form = layui.form;
+        form.on('submit(submit_search)', function (data) {
+            var field = data.field;
+            return false;
+        });
+    });
+
+    const orderForm = document.getElementById('orderForm');
+    const delBtn = document.getElementById('delBtn');
+    const paymentBtn = document.getElementById('paymentBtn');
+
+    delBtn.addEventListener('click', function () {
+        console.log('删除商品');
+    })
+
+    paymentBtn.addEventListener('click', function () {
+        event.preventDefault(); // 阻止默认提交
+        // checkbox只有选中时才会有name数据返回
+        let data = $('#orderForm').serializeArray();
+        console.log('立即支付', data);
+    })
+</script>
+
+</html>

@@ -172,8 +172,30 @@ body::-webkit-scrollbar-thumb:hover {
     margin-bottom: 0;
 }
 
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="checkbox"] {
+    accent-color: @primaryColor;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
 .margin_bottom {
     margin-bottom: 20px;
+
 }
 
 .red {
@@ -4195,6 +4217,7 @@ body::-webkit-scrollbar-thumb:hover {
 
     label {
         cursor: pointer;
+        margin-bottom: 0;
 
         input {
             width: 20px;
@@ -4208,12 +4231,64 @@ body::-webkit-scrollbar-thumb:hover {
             user-select: none;
             font-weight: 500;
         }
+    }
 
-        input[type="checkbox"] {
-            accent-color: @primaryColor;
-            width: 18px;
-            height: 18px;
-            cursor: pointer;
+    .btn {
+        height: 36px;
+        line-height: 36px;
+        padding: 0 24px;
+        background: #EBEBEB;
+
+        &:hover {
+            background: @gradient2;
+            color: #fff;
+        }
+    }
+}
+
+.cart_list {
+    .item {
+        border-bottom: 1px solid rgba(0, 0, 0, .1);
+        padding: 20px 40px 20px 0;
+
+        .check {
+            padding: 0 16px;
+        }
+
+        .left_shopping {
+            align-items: center;
+        }
+
+        .check_content {
+            align-items: start;
+        }
+
+        .quantity {
+            margin-top: 20px;
+            height: 36px;
+            line-height: 36px;
+
+            .iconfont {
+                display: inline-block;
+                height: 100%;
+                width: 40px;
+                text-align: center;
+                border: 1px solid #e6e6e6;
+            }
+
+            .icon-jia1 {
+                background: @gradient2;
+                color: #fff;
+            }
+
+            input {
+                text-align: center;
+                width: 100px;
+                height: 36px;
+                border: 1px solid #e6e6e6;
+                box-shadow: 0 0 1px rgba(0, 0, 0, .1);
+                margin: 0 10px;
+            }
         }
     }
 }

@@ -76,7 +76,7 @@
                                                     <!-- itemb标签加：itemDisabled:禁用/下架 -->
                                                     <!-- itemb标签加：itemSelect:选中 -->
 
-                                                    <div class="item itemDisabled">
+                                                    <div class="item collect_item itemDisabled">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="../../img/product_li1.png"
@@ -115,7 +115,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                    <div class="item">
+                                                    <div class="item collect_item">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="../../img/product_li2.png"
@@ -154,7 +154,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                    <div class="item">
+                                                    <div class="item collect_item">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="../../img/product_li3.png"
@@ -193,7 +193,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                    <div class="item">
+                                                    <div class="item collect_item">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="../../img/product_li4.png"
@@ -232,7 +232,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                    <div class="item">
+                                                    <div class="item collect_item">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="../../img/product_li5.png"
@@ -271,7 +271,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                    <div class="item">
+                                                    <div class="item collect_item">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="../../img/product_li9.png"
@@ -310,7 +310,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                    <div class="item">
+                                                    <div class="item collect_item">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="../../img/product_li9.png"
@@ -349,7 +349,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                    <div class="item">
+                                                    <div class="item collect_item">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="../../img/product_li9.png"
@@ -388,7 +388,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="check_box">
+                                            <div class="check_box display_flex">
                                                 <div class="select_box">
                                                     <label class="display_flex">
                                                         <input type="checkbox" name="itemAllSelect" id="myCheckbox">
@@ -401,6 +401,10 @@
                                                         <input type="checkbox" name="itemAllSelect" id="editCheckbox">
                                                         <span class="text">编辑</span>
                                                     </label>
+                                                </div>
+
+                                                <div class="select_box">
+                                                    <div class="btn box_radius box_shadow" id="cancelCollect">取消收藏</div>
                                                 </div>
                                             </div>
                                             <div class="paging">
@@ -437,7 +441,10 @@
     const myCheckbox = document.getElementById('myCheckbox');
     const editCheckbox = document.getElementById('editCheckbox');
     const collect_link = document.getElementsByClassName('collect_link');
-    console.log(collect_link);
+    const cancelCollect = document.getElementById('cancelCollect');
+
+    // 默认不允许选中
+    let isItemEdit = false;
 
     // 禁用a链接默认行为
     const handleClick = (e) => { e.preventDefault(); };
@@ -448,6 +455,8 @@
         Array.from(collect_link).forEach(item => {
             item.addEventListener('click', handleClick)
         });
+
+        isItemEdit = true;
     }
 
     // 恢复a标签跳转
@@ -456,15 +465,22 @@
         Array.from(collect_link).forEach(item => {
             item.removeEventListener("click", handleClick);
         });
+
+        isItemEdit = false;
     }
 
     // 全选-监听
     myCheckbox.addEventListener('change', function (event) {
         if (event.target.checked) {
-            console.log('全选-选中', event.target.checked);
-
+            $('.collect_item').each(function (index, item) {
+                if ($(item).hasClass('itemDisabled')) return;
+                $(item).addClass('itemSelect');
+            })
+            disabledLink();
         } else {
             console.log('全选-取消', event.target.checked);
+            $('.collect_list .item').removeClass('itemSelect');
+            defaultLink();
         }
     })
 
@@ -472,13 +488,30 @@
     editCheckbox.addEventListener('change', function (event) {
         if (event.target.checked) {
             console.log('编辑-选中', event.target.checked);
-            disabledLink()
+            disabledLink();
         } else {
             console.log('编辑-取消', event.target.checked);
-            defaultLink()
+            defaultLink();
         }
     })
 
+    // 当前收藏选中
+    $('.collect_list .item').click(function () {
+        if (isItemEdit) {
+            let isClass = $(this).hasClass('itemSelect');
+            if (isClass) {
+                $(this).removeClass('itemSelect');
+            } else {
+                $(this).addClass('itemSelect');
+            }
+        }
+    })
+
+    cancelCollect.addEventListener('click', function () {
+        console.log('取消收藏');
+    })
+
+    // 搜索
     layui.use(function () {
         var layer = layui.layer;
         var form = layui.form;
@@ -487,6 +520,8 @@
             return false;
         });
     });
+
+
 </script>
 
 </html>
