@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>个人中心</title>
+    <title>我的收藏</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 <meta name="renderer" content="webkit">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -34,6 +34,15 @@
 <script src="swiper/js/swiper.animate1.0.3.min.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="layui/layui.min.js"></script>
+<script>
+    layui.use(function () {
+        var util = layui.util;
+        util.fixbar({
+            bars: [],
+            on: {},
+        })
+    });
+</script>
 </head>
 
 <body style="background: #f7f7f7;">
@@ -92,7 +101,7 @@
         </a>
     </div>
     <div class="box">
-        <a href="" class="link">
+        <a href="member_center.html" class="link">
             <div class="icon">
                 <i class="iconfont icontype icon-huiyuan"></i>
             </div>
@@ -140,7 +149,7 @@
         </a>
     </div>
     <div class="box">
-        <a href="" class="link">
+        <a href="me_data.html" class="link">
             <div class="icon">
                 <i class="iconfont icon-gerenziliao"></i>
             </div>
@@ -148,14 +157,36 @@
         </a>
     </div>
     <div class="box">
-        <a href="" class="link">
+        <div class="link pointer" lay-on="confirm">
             <div class="icon">
                 <i class="iconfont icon-tuichu"></i>
             </div>
             <span class="text">退出登录</span>
-        </a>
+        </div>
     </div>
 </div>
+
+
+<script>
+    layui.use(function () {
+        var layer = layui.layer;
+        var util = layui.util;
+        // 批量事件
+        util.on('lay-on', {
+            confirm: function () {
+                layer.confirm('是否退出登录？', {
+                    title: '退出',
+                    btn: ['确定', '关闭'] //按钮
+                }, function () {
+                    console.log('确定');
+                    layer.closeAll(); 
+                }, function () {
+                    console.log('关闭');
+                });
+            },
+        });
+    });
+</script>
                         <div class="right_main">
                             <div class="module order_main box_shadow box_radius">
                                 <div class="my_collect">
@@ -225,7 +256,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                    <div class="item collect_item">
+                                                    <div class="item collect_item itemSelect">
                                                         <a href="./product_details.html" class="link collect_link">
                                                             <div class="cover_box">
                                                                 <img class="cover" src="img/product_li2.png"

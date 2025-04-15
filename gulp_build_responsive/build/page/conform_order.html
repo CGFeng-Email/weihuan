@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>确认订单</title>
+    @@include('head.html')
+</head>
+
+<body style="background: #f7f7f7;">
+    <div class="me_page">
+        <div class="me_head">
+            <div class="container">
+                <div class="wrap justify_apace">
+                    <div class="logo">
+                        <a href="../../index.html" class="link">
+                            <img class="cover" src="../../img/me_logo.png" alt="">
+                        </a>
+                    </div>
+                    <div class="menu justify_end">
+                        <div class="box">
+                            <a href="" class="link">
+                                <i class="iconfont icon-a-bangzhu1x"></i>
+                                <span class="text">帮助</span>
+                            </a>
+                        </div>
+                        <div class="box">
+                            <a href="" class="link">
+                                <i class="iconfont icon-shouji"></i>
+                                <span class="text">小程序</span>
+                            </a>
+                        </div>
+                        <div class="item justify_end">
+                            <div class="text">曼****m</div>
+                            <div class="cover_box">
+                                <img class="cover" src="../../img/user_logo.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 70px;"></div>
+        <div class="me">
+            <div class="main">
+                <div class="container">
+                    <div class="wrap">
+                        <div class="right_main">
+                            <div class="module box_shadow box_radius">
+                                <div class="order_main confirm_order">
+                                    <div class="son_head">
+                                        <h4 class="title">产品信息</h4>
+                                    </div>
+                                    <div class="order_details margin_bottom">
+                                        <div class="item justify_apace">
+                                            <div class="left_shopping display_flex">
+                                                <div class="cover_box box_radius">
+                                                    <img class="cover" src="../../img/product_li1.png" alt="">
+                                                </div>
+                                                <div class="shopping_explain">
+                                                    <h3 class="name">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材500g猪肉猪五花</h3>
+                                                    <div class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</div>
+                                                    <div class="lead count">数量：x1</div>
+                                                    <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                                    <div class="price">
+                                                        <span class="ide">￥</span>
+                                                        <span class="count">130.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item justify_apace">
+                                            <div class="left_shopping display_flex">
+                                                <div class="cover_box box_radius">
+                                                    <img class="cover" src="../../img/product_li2.png" alt="">
+                                                </div>
+                                                <div class="shopping_explain">
+                                                    <h3 class="name">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材500g猪肉猪五花</h3>
+                                                    <div class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</div>
+                                                    <div class="lead count">数量：x1</div>
+                                                    <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                                    <div class="price">
+                                                        <span class="ide">￥</span>
+                                                        <span class="count">130.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item justify_apace">
+                                            <div class="left_shopping display_flex">
+                                                <div class="cover_box box_radius">
+                                                    <img class="cover" src="../../img/product_li3.png" alt="">
+                                                </div>
+                                                <div class="shopping_explain">
+                                                    <h3 class="name">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材500g猪肉猪五花</h3>
+                                                    <div class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</div>
+                                                    <div class="lead count">数量：x1</div>
+                                                    <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                                    <div class="price">
+                                                        <span class="ide">￥</span>
+                                                        <span class="count">130.00</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="son_head display_flex">
+                                        <h4 class="title">选择配送方式</h4>
+                                        <div class="mode_of_distribution display_flex">
+                                            <div class="type active">快递配送</div>
+                                            <div class="type">自提商品</div>
+                                        </div>
+                                    </div>
+                                    <div class="distribution">
+                                        <!-- 显示：show -->
+
+                                        <!-- 地址列表 -->
+                                        <div class="type_box shippingAddress_list show">
+                                            <div class="row">
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <!-- active：选中默认地址 -->
+                                                    <div class="item itemParent pointer box_radius box_shadow active">
+                                                        <div class="item_head">
+                                                            <span class="name">张阿三</span>
+                                                            <span class="mobile">13695845014</span>
+                                                        </div>
+                                                        <div class="lead over2">
+                                                            广东省广州市荔湾区荷景路74-78号方圆E时光
+                                                        </div>
+                                                        <div class="edit childEdit">
+                                                            修改地址
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="item itemParent pointer box_radius box_shadow">
+                                                        <div class="item_head">
+                                                            <span class="name">张阿三</span>
+                                                            <span class="mobile">13695845014</span>
+                                                        </div>
+                                                        <div class="lead over2">
+                                                            广东省广州市荔湾区荷景路74-78号方圆E时光
+                                                        </div>
+                                                        <div class="edit childEdit">
+                                                            修改地址
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="item itemParent pointer box_radius box_shadow">
+                                                        <div class="item_head">
+                                                            <span class="name">张阿三</span>
+                                                            <span class="mobile">13695845014</span>
+                                                        </div>
+                                                        <div class="lead over2">
+                                                            广东省广州市荔湾区荷景路74-78号方圆E时光
+                                                        </div>
+                                                        <div class="edit childEdit">
+                                                            修改地址
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="item itemParent pointer box_radius box_shadow">
+                                                        <div class="item_head">
+                                                            <span class="name">张阿三</span>
+                                                            <span class="mobile">13695845014</span>
+                                                        </div>
+                                                        <div class="lead over2">
+                                                            广东省广州市荔湾区荷景路74-78号方圆E时光
+                                                        </div>
+                                                        <div class="edit childEdit">
+                                                            修改地址
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="item add box_radius box_shadow" data-toggle="modal"
+                                                        data-target=".address_modal">
+                                                        <div class="icon">
+                                                            <i class="iconfont icon-jia"></i>
+                                                        </div>
+                                                        <div class="lead">添加地址</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- 自提点列表 -->
+                                        <div class="type_box store_list">
+                                            <div class="row">
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <!-- 选中自提点：active -->
+                                                    <div
+                                                        class="item store_item box_shadow box_radius display_flex active">
+                                                        <div class="cover_box box_radius">
+                                                            <a href="../../store_details.html" class="link">
+                                                                <img class="cover" src="../../img/store.png" alt="">
+                                                            </a>
+                                                        </div>
+                                                        <div class="content">
+                                                            <div class="title">天河鲜肉生鲜自提点</div>
+                                                            <div class="name lead">联系人：张先生</div>
+                                                            <div class="mobile lead">联系电话：13636986542</div>
+                                                            <div class="address lead">地址：广东省广州市天河区中山大道中18号</div>
+                                                            <div class="date lead">营业时间：09:00 - 23:00</div>
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="item store_item box_shadow box_radius display_flex">
+                                                        <div class="cover_box box_radius">
+                                                            <a href="../../store_details.html" class="link">
+                                                                <img class="cover" src="../../img/store.png" alt="">
+                                                            </a>
+                                                        </div>
+                                                        <div class="content">
+                                                            <div class="title">天河鲜肉生鲜自提点</div>
+                                                            <div class="name lead">联系人：张先生</div>
+                                                            <div class="mobile lead">联系电话：13636986542</div>
+                                                            <div class="address lead">地址：广东省广州市天河区中山大道中18号</div>
+                                                            <div class="date lead">营业时间：09:00 - 23:00</div>
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="item store_item box_shadow box_radius display_flex">
+                                                        <div class="cover_box box_radius">
+                                                            <a href="../../store_details.html" class="link">
+                                                                <img class="cover" src="../../img/store.png" alt="">
+                                                            </a>
+                                                        </div>
+                                                        <div class="content">
+                                                            <div class="title">天河鲜肉生鲜自提点</div>
+                                                            <div class="name lead">联系人：张先生</div>
+                                                            <div class="mobile lead">联系电话：13636986542</div>
+                                                            <div class="address lead">地址：广东省广州市天河区中山大道中18号</div>
+                                                            <div class="date lead">营业时间：09:00 - 23:00</div>
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="item store_item box_shadow box_radius display_flex">
+                                                        <div class="cover_box box_radius">
+                                                            <a href="../../store_details.html" class="link">
+                                                                <img class="cover" src="../../img/store.png" alt="">
+                                                            </a>
+                                                        </div>
+                                                        <div class="content">
+                                                            <div class="title">天河鲜肉生鲜自提点</div>
+                                                            <div class="name lead">联系人：张先生</div>
+                                                            <div class="mobile lead">联系电话：13636986542</div>
+                                                            <div class="address lead">地址：广东省广州市天河区中山大道中18号</div>
+                                                            <div class="date lead">营业时间：09:00 - 23:00</div>
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                                    <div class="item store_item box_shadow box_radius display_flex">
+                                                        <div class="cover_box box_radius">
+                                                            <a href="../../store_details.html" class="link">
+                                                                <img class="cover" src="../../img/store.png" alt="">
+                                                            </a>
+                                                        </div>
+                                                        <div class="content">
+                                                            <div class="title">天河鲜肉生鲜自提点</div>
+                                                            <div class="name lead">联系人：张先生</div>
+                                                            <div class="mobile lead">联系电话：13636986542</div>
+                                                            <div class="address lead">地址：广东省广州市天河区中山大道中18号</div>
+                                                            <div class="date lead">营业时间：09:00 - 23:00</div>
+                                                        </div>
+                                                        <div class="check">
+                                                            <img class="cover" src="../../img/check2.png" alt="">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="son_head">
+                                        <h4 class="title">选择优惠券</h4>
+                                    </div>
+                                    <div class="coupon_list display_flex">
+                                        <!-- 选中：active -->
+                                        <div class="item itemClickFn animate active" data-id="parent-1">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-1">
+                                                <span class="link">立即使用</span>
+                                            </div>
+                                        </div>
+                                        <div class="item itemClickFn animate" data-id="parent-2">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-2">
+                                                <span class="link">立即使用</span>
+                                            </div>
+                                        </div>
+                                        <div class="item itemClickFn animate" data-id="parent-3">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-3">
+                                                <span class="link">立即使用</span>
+                                            </div>
+                                        </div>
+                                        <div class="item itemClickFn animate" data-id="parent-4">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-4">
+                                                <span class="link">立即使用</span>
+                                            </div>
+                                        </div>
+                                        <div class="item itemClickFn animate" data-id="parent-5">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-5">
+                                                <span class="link">立即使用</span>
+                                            </div>
+                                        </div>
+                                        <div class="item itemClickFn animate" data-id="parent-6">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-6">
+                                                <span class="link">立即使用</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="conform_info">
+                                        <div class="son_head">
+                                            <h4 class="title">确认信息</h4>
+                                        </div>
+                                        <div class="info_wrap justify_apace">
+                                            <div class="content">
+                                                <div class="lis">
+                                                    <span class="name">运送方式：</span>
+                                                    <span class="text">快递运输</span>
+                                                </div>
+                                                <div class="lis">
+                                                    <span class="name">服务保障：</span>
+                                                    <span class="text">包邮、7天无理由退货</span>
+                                                </div>
+                                                <div class="lis">
+                                                    <span class="name">优惠券抵扣：</span>
+                                                    <span class="text count red">-¥50.00</span>
+                                                </div>
+                                                <div class="lis">
+                                                    <span class="name">给卖家留言：</span>
+                                                    <textarea name="textarea" placeholder="请填写备注信息"
+                                                        class="layui-textarea" style="resize: none;"></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="content right_content">
+                                                <div class="lis">
+                                                    <span class="name">实付款：</span>
+                                                    <span class="text red count">￥300.00</span>
+                                                </div>
+                                                <div class="lis">
+                                                    <span class="name">收货地址：</span>
+                                                    <span class="text">广东省广州市荔湾区荷景路74-78号方圆E时光</span>
+                                                </div>
+                                                <div class="lis">
+                                                    <span class="name">收货人：</span>
+                                                    <span class="text">张阿三</span>
+                                                </div>
+                                                <div class="lis">
+                                                    <span class="name">联系电话：</span>
+                                                    <span class="text">13695845014</span>
+                                                </div>
+                                                <div class="payment">
+                                                    <button class="btn" id="immediatePayment">立即支付</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- 地址弹窗 -->
+    <div class="modal fade myModal address_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title uppercase">收货地址</h4>
+                    <p class="sub_head">请填写真实信息，以便收货无误，谢谢配合。</p>
+                </div>
+                <div class="modal-body">
+                    <form class="layui-form" action="">
+                        <div class="item">
+                            <div class="name">姓名：</div>
+                            <input type="text" name="name" autocomplete="off" lay-verify="required" lay-vertype="tips"
+                                placeholder="请填写姓名" lay-reqtext="请填写姓名" class="layui-input input">
+                        </div>
+                        <div class="item">
+                            <div class="name">手机号码：</div>
+                            <input type="text" name="mobile" autocomplete="off" lay-verify="required" lay-vertype="tips"
+                                placeholder="请填写手机号" lay-reqtext="请填写手机号" class="layui-input input">
+                        </div>
+                        <div class="item">
+                            <div class="name">地区：</div>
+                            <input type="text" name="address" autocomplete="off" lay-verify="required"
+                                lay-vertype="tips" lay-reqtext="请填写省/市/区" placeholder="请填写省/市/区"
+                                class="layui-input input">
+                        </div>
+                        <div class="item">
+                            <div class="name">详细地址：</div>
+                            <textarea name="message" placeholder="请填写详细地址" class="layui-textarea"></textarea>
+                        </div>
+                        <div class="btn_item">
+                            <button type="submit" class="layui-btn submit_btn" lay-submit
+                                lay-filter="submit">确认添加</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 优惠券弹窗 -->
+    <div class="modal fade myModal coupon_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title uppercase">优惠券详情</h4>
+                </div>
+                <div class="modal-body img_bg" style="background-image: url(../../img/coupon_bg.png);">
+                    <div class="coupon_data">
+                        <div class="price red">
+                            <span class="count">100.00</span>
+                            <span class="ide">元</span>
+                        </div>
+                        <div class="lead">满100.00元可用</div>
+
+                        <div class="info">
+                            <span class="name">卡券名称：</span>
+                            <span class="text">通用卡券</span>
+                        </div>
+                        <div class="info">
+                            <span class="name">使用条件：</span>
+                            <span class="text">适用所有商品</span>
+                        </div>
+                        <div class="info">
+                            <span class="name">有效日期：</span>
+                            <span class="text">2021/11/26 至 2021/12/30</span>
+                        </div>
+                        <div class="info">
+                            <span class="name">使用说明：</span>
+                            <span class="text"> 超过有效日期会自动失效</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // 切换配送方式
+    $('.mode_of_distribution .type').click(function () {
+        let index = $(this).index();
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.distribution .type_box').eq(index).addClass('show').siblings().removeClass('show');
+    })
+
+    // 地址选中
+    $('.itemParent').click(function () {
+        let has = $(this).hasClass('active');
+        $('.shippingAddress_list .item').removeClass('active');
+        $(this).addClass('active');
+    })
+
+    // 修改地址弹窗
+    document.querySelectorAll('.childEdit').forEach(item => {
+        item.addEventListener('click', function (event) {
+            event.stopPropagation();
+            // 打开地址弹窗
+            $('.address_modal').modal('show');
+        })
+    })
+
+    // 自提点选中
+    document.querySelectorAll('.store_item').forEach((item, index) => {
+        item.addEventListener('click', function (event) {
+            $('.store_list .item').removeClass('active');
+            $('.store_list .col_md').eq(index).children('.item').addClass('active');
+        })
+    })
+
+    // 优惠券父元素-点击
+    document.querySelectorAll('.itemClickFn').forEach(item => {
+        item.addEventListener('click', function (event) {
+            let id = this.getAttribute('data-id');
+            console.log('father', id);
+            // 打开优惠券弹窗
+            $('.coupon_modal').modal('show');
+        })
+    })
+
+    // 优惠券子元素-点击
+    document.querySelectorAll('.click_btn').forEach((item, index) => {
+        item.addEventListener('click', function (event) {
+            event.stopPropagation(); // 阻止冒泡
+            let id = this.getAttribute('data-id');
+            console.log('child', id);
+            // 选中
+            $('.coupon_list .item').siblings().removeClass('active');
+            $('.coupon_list .item').eq(index).addClass('active');
+
+            layer.msg('提示框测试');
+        })
+    })
+
+    // 立即支付
+    document.getElementById('immediatePayment').addEventListener('click', function () {
+        // 开启加载层，防止多次提交
+        var loadIndex = layer.load(2);
+
+        // 模拟关闭
+        setTimeout(function () {
+            layer.close(loadIndex);
+            window.location.href = './submit_order.html'
+        }, 2000);
+    })
+</script>
+
+</html>

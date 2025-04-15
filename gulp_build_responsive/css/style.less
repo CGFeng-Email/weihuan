@@ -1,6 +1,8 @@
 @primaryColor: #33499C;
+@subColor: #FF8992;
 @gradient: linear-gradient(276.14deg, #6cbc41 0%, #33499c 100%);
 @gradient2: linear-gradient(44.37deg, #ffab53 0%, #ff514a 100%);
+@gradient3: linear-gradient(154.39deg, #ff8992 0%, #fdba80 100%);
 
 * {
     padding: 0;
@@ -231,6 +233,16 @@ input[type="checkbox"] {
     justify-content: space-between;
 }
 
+.flex_center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.inline_block {
+    display: inline-blockF;
+}
+
 .paging {
     .nav_box {
         text-align: center;
@@ -265,12 +277,6 @@ input[type="checkbox"] {
 
 .layui-layer-btn a {
     width: auto;
-}
-
-.flex_center {
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 .inline_block {
@@ -4045,50 +4051,79 @@ input[type="checkbox"] {
 
     .item {
         margin-bottom: 30px;
+        align-items: start;
+        background: #fff;
+        padding: 14px;
+        position: relative;
+        cursor: pointer;
 
-        .link {
-            background: #fff;
-            padding: 14px;
-            align-items: start;
+        .cover_box {
+            width: 120px;
+            height: 130px;
+            flex: none;
 
+            .link {
+                height: 100%;
+            }
+
+            .cover {
+                height: 100%;
+                object-fit: contain;
+            }
+        }
+
+        .content {
+            flex: 1;
+            padding-left: 14px;
+
+            .title {
+                font-size: 14px;
+                font-weight: 600;
+            }
+
+            .lead {
+                color: #999999;
+                font-size: 13px;
+                padding: 2px 0;
+            }
+        }
+
+        .check {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            opacity: 0;
+
+            .cover {
+                width: 100%;
+            }
+        }
+
+        &:hover {
             .cover_box {
-                width: 120px;
-                height: 130px;
-                flex: none;
-
                 .cover {
-                    height: 100%;
-                    object-fit: contain;
+                    transform: scale(1.06);
                 }
             }
 
             .content {
-                flex: 1;
-                padding-left: 14px;
-
                 .title {
-                    font-size: 14px;
-                    font-weight: 600;
-                }
-
-                .lead {
-                    color: #999999;
-                    font-size: 13px;
-                    padding: 2px 0;
+                    color: @primaryColor;
                 }
             }
+        }
+    }
 
-            &:hover {
-                .cover {
-                    transform: scale(1.06);
-                }
-
-                .content {
-                    .title {
-                        color: @primaryColor;
-                    }
-                }
+    .active {
+        .content {
+            .title {
+                color: @primaryColor;
             }
+        }
+
+        .check {
+            opacity: 1;
         }
     }
 }
@@ -4132,10 +4167,14 @@ input[type="checkbox"] {
 
         .check {
             position: absolute;
-            bottom: -1px;
+            bottom: 0;
             right: 0;
             width: 40px;
             opacity: 0;
+
+            .cover {
+                width: 100%;
+            }
         }
     }
 
@@ -4181,6 +4220,7 @@ input[type="checkbox"] {
         .submit_btn {
             min-width: 140px;
             background: @gradient2;
+            border: none;
         }
     }
 }
@@ -4291,4 +4331,775 @@ input[type="checkbox"] {
             }
         }
     }
+}
+
+.coupon_list {
+    flex-wrap: wrap;
+    padding: 30px 10px 10px;
+
+    .item {
+        text-align: center;
+        padding: 10px;
+        border-radius: 12px;
+        background: @gradient3;
+        color: #fff;
+        margin: 0 10px 20px 0;
+        line-height: 1.4;
+        width: 110px;
+        height: 132px;
+        cursor: pointer;
+
+        .price {
+            font-size: 28px;
+        }
+
+        .lead {
+            font-size: 13px;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+
+        .link {
+            background: #fff;
+            border-radius: 45px;
+            color: @subColor;
+            font-size: 12px;
+            padding: 6px 8px;
+            opacity: .4;
+
+            &:hover {
+                opacity: 1;
+            }
+        }
+
+        &:hover {
+            transform: translateY(-5px);
+        }
+
+    }
+
+    .active {
+        .link {
+            opacity: 1;
+        }
+    }
+
+    .add {
+        text-align: center;
+        border-radius: 12px;
+        margin: 0 10px 20px 0;
+        line-height: 1.4;
+        background: #F6F6F6;
+        padding: 0;
+
+        .to_ {
+            width: 110px;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            height: 100%;
+            color: #B4B4B4;
+        }
+
+        .iconfont {
+            font-size: 28px;
+        }
+
+        .lead {
+            color: #B4B4B4;
+        }
+
+        &:hover {
+
+            .iconfont,
+            .lead {
+                color: #000;
+            }
+        }
+    }
+}
+
+.coupon {
+    padding-bottom: 30px;
+
+    .paging {
+        .nav_box {
+            .pagination {
+                margin: 0;
+
+                li {
+                    a {
+                        color: @subColor;
+                    }
+                }
+
+                .active {
+                    a {
+                        background: @gradient2;
+                        border-color: @subColor;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+    }
+
+    .bottom_column {
+        padding-top: 20px;
+
+        .check_box {
+            padding-top: 0;
+        }
+    }
+}
+
+.coupon_modal {
+    .modal-dialog {
+        width: 350px;
+    }
+
+    .modal-body {
+        background-size: cover;
+        padding: 20px 20px 30px;
+        background-position: top center;
+
+        .coupon_data {
+            .price {
+                font-size: 42px;
+                font-weight: 600;
+                text-align: center;
+                line-height: 1.6;
+
+                .ide {
+                    font-size: 20px;
+                    font-weight: 500;
+                }
+            }
+
+            .lead {
+                text-align: center;
+                color: #7E7E7E;
+                margin-bottom: 14px;
+            }
+
+            .info {
+                padding: 10px 0;
+
+                .name {
+                    font-size: 16px;
+                    font-weight: 600;
+                }
+
+                .text {
+                    font-size: 14px;
+                    font-weight: 500;
+                }
+            }
+
+            .confirm_btn {
+                padding: 30px 0 0;
+
+                .use {
+                    height: 46px;
+                    line-height: 46px;
+                    text-align: center;
+                    font-size: 14px;
+                    color: #fff;
+                    background: @gradient3;
+                    cursor: pointer;
+                    font-weight: 600;
+                    letter-spacing: 1px;
+                }
+            }
+        }
+
+    }
+}
+
+.mode_of_distribution {
+    padding-left: 40px;
+    margin: 30px 0 20px;
+
+    .type {
+        width: 134px;
+        height: 40px;
+        line-height: 40px;
+        border-radius: 4px;
+        text-align: center;
+        background: #F1F1F1;
+        margin: 0 10px;
+        cursor: pointer;
+    }
+
+    .active {
+        background: @gradient;
+        color: #fff;
+    }
+}
+
+.confirm_order {
+    .son_head {
+        .title {
+            font-weight: 600;
+            font-size: 18px;
+        }
+    }
+
+    .coupon_list {
+        padding: 10px 0;
+    }
+
+    .order_details {
+        .item {
+            margin-bottom: 10px;
+        }
+    }
+
+    .conform_info {
+        padding: 30px 0;
+        border-top: 1px solid rgba(0, 0, 0, .1);
+
+        .info_wrap {
+            align-items: start;
+        }
+
+        .lis {
+            padding: 8px 0;
+        }
+
+        .layui-textarea {
+            width: 380px;
+            margin-top: 10px;
+        }
+
+        .right_content {
+            text-align: right;
+        }
+
+        .count {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .name {
+            font-weight: 600;
+        }
+
+        .payment {
+            padding-top: 14px;
+
+            .btn {
+                width: 200px;
+                height: 46px;
+                line-height: 46px;
+                padding: 0;
+                color: #fff;
+                font-weight: 600;
+                background: @gradient;
+            }
+        }
+    }
+}
+
+.distribution {
+    .type_box {
+        display: none;
+    }
+
+    .show {
+        display: block;
+    }
+}
+
+.order_info {
+    padding: 30px 0;
+
+    .order_head {
+        padding: 10px 0;
+
+        .title {
+            .iconfont {
+                color: #05C697;
+                font-size: 28px;
+            }
+
+        }
+
+        .price {
+            .count {
+                font-size: 30px;
+                font-weight: 600;
+            }
+        }
+    }
+
+    .info_list {
+        padding-bottom: 50px;
+
+        .li {
+            padding: 5px 0;
+            font-size: 16px;
+        }
+    }
+
+    .order_tabs {
+        .tabs_wrap {
+            .item {
+                margin-right: 20px;
+                height: 50px;
+                line-height: 50px;
+                background: #F6F6F6;
+                padding: 0 60px;
+                font-weight: 600;
+                border-top: 3px solid transparent;
+            }
+
+            .active {
+                border-color: @primaryColor;
+                background: #fff;
+            }
+        }
+
+        .tabs_main {
+            padding-top: 40px;
+
+            .row {
+                margin-left: -15px;
+                margin-right: -15px;
+            }
+
+            .item {
+                display: none;
+            }
+
+            .show {
+                display: block;
+            }
+        }
+
+        .bank_card {
+            .box {
+                background: #fff;
+                border: 2px solid transparent;
+                height: 80px;
+                padding: 20px;
+                margin-bottom: 20px;
+                position: relative;
+
+                .bank {
+                    .cover {
+                        width: 40px;
+                    }
+
+                    .name {
+                        font-weight: 600;
+                        padding-left: 10px;
+                    }
+                }
+
+                .text {
+                    color: #ACACAC;
+                }
+
+                .check {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    width: 40px;
+                    opacity: 0;
+
+                    .cover {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .add {
+                justify-content: center;
+                background: #f5f7ff;
+                font-weight: 500;
+                height: 80px;
+                padding: 20px;
+                margin-bottom: 20px;
+                border: 2px solid transparent;
+
+                .iconfont {
+                    font-size: 26px;
+                    color: #32499C;
+                }
+
+                .text {
+                    font-size: 16px;
+                    padding-left: 10px;
+                    color: #32499C;
+                }
+            }
+
+            .active {
+                border-color: @primaryColor;
+
+                .check {
+                    opacity: 1;
+                }
+            }
+
+            .tips {
+                padding: 20px 0;
+
+                .iconfont {
+                    font-size: 20px;
+                    color: #05C697;
+                }
+
+                .text {
+                    font-size: 16px;
+                    padding-left: 6px;
+                }
+            }
+
+            .hint_text {
+                font-size: 16px;
+                font-weight: 600;
+            }
+
+            .password {
+                padding: 10px 0;
+
+                .input {
+                    width: 240px;
+                    height: 50px;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
+
+}
+
+.bank_modal {
+    .bank_list {
+        .row {
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+
+        .item {
+            position: relative;
+            height: 70px;
+            padding: 14px;
+            border: 2px solid #ebebeb;
+            margin-bottom: 20px;
+
+            .cover_box {
+
+                .cover {
+                    width: 100%;
+                    object-fit: contain;
+                    height: 40px;
+                }
+            }
+
+
+            .check {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 40px;
+                opacity: 0;
+
+                .cover {
+                    width: 100%;
+                }
+            }
+        }
+
+        .active {
+            border-color: @primaryColor;
+
+            .check {
+                opacity: 1;
+            }
+        }
+    }
+
+    .band_form {
+        .item {
+            padding: 10px 0;
+
+            .name {
+                width: 120px;
+                flex: none;
+                text-align: right;
+                font-weight: 600;
+            }
+
+            .input {
+                flex: 1;
+                height: 46px;
+            }
+        }
+
+        .submit_bottom {
+            padding-top: 24px;
+        }
+    }
+}
+
+.common_btn {
+    height: 40px;
+    line-height: 40px;
+    padding: 0 60px;
+    color: #fff;
+    background: @gradient;
+    border: none;
+    border-radius: 3px;
+
+    &:hover {
+        color: #fff;
+    }
+}
+
+.return_btn {
+    background: #f0f0f0;
+    color: #000 !important;
+    margin-right: 10px;
+}
+
+.hint_wrap {
+    padding: 60px 20px;
+    align-items: center;
+    justify-content: center;
+
+    .cover_box {
+        width: 200px;
+    }
+
+    .content {
+        line-height: 2;
+        margin-top: 30px;
+        text-align: center;
+
+        .title {
+            font-size: 24px;
+        }
+
+        .price {
+            color: #FF0000;
+            font-weight: 600;
+
+            .ide {
+                font-size: 16px;
+            }
+
+            .count {
+                font-size: 34px;
+            }
+
+        }
+
+        .lead {
+            padding: 10px 0;
+            color: #999999;
+        }
+
+        .see {
+            padding: 10px 0 0 0;
+        }
+    }
+}
+
+.scan_code {
+    text-align: center;
+    padding: 30px 0;
+
+    .cover_box {
+        .cover {
+            width: 300px;
+            object-fit: contain;
+        }
+    }
+
+    .lead {
+        padding: 4px 0;
+        font-size: 18px;
+        font-weight: 500;
+    }
+
+    .iconfont {
+        font-size: 20px;
+    }
+}
+
+.me_data {
+    padding: 40px 30px;
+    text-align: center;
+
+    .head_portrait {
+        width: 100px;
+        height: 100px;
+        margin: auto;
+        overflow: hidden;
+        border-radius: 50%;
+        position: relative;
+
+        .upload {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            background: rgba(0, 0, 0, .3);
+
+            .cover {
+                width: 24px;
+            }
+
+            .lead {
+                color: #fff;
+                padding-top: 10px;
+                font-size: 14px;
+            }
+        }
+
+        .upload_file {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0;
+            border-radius: 50%;
+        }
+    }
+
+    .user_head {
+        font-size: 18px;
+        font-weight: 600;
+        padding: 14px 0;
+    }
+
+    .sex {
+        justify-content: center;
+
+        .name {
+            padding-right: 5px;
+        }
+
+        .icon-nv {
+            color: #FF4E4E;
+        }
+
+        .icon-nan {
+            color: #00ADEF;
+        }
+    }
+
+    .explain {
+        font-size: 16px;
+        color: #BCBCBC;
+        padding: 7px 0;
+    }
+
+    .user_mobile {
+        font-size: 16px;
+    }
+
+    .schedule {
+        text-align: left;
+        width: 500px;
+        margin: auto;
+        padding: 30px 0;
+
+        .lead {
+            font-size: 16px;
+            color: #808080;
+        }
+
+        .slide {
+            padding: 10px 0;
+        }
+    }
+
+    .bt {
+        .text {
+            font-weight: 600;
+        }
+    }
+
+    .bank_modal {
+        padding: 30px 0;
+        width: 800px;
+        margin: auto;
+
+        .item {
+            .name {
+                margin-right: 12px;
+            }
+
+            .layui-form-select {
+                width: 100%;
+            }
+        }
+
+        .submit_bottom {
+            .btn {
+                margin: 0 10px;
+            }
+        }
+    }
+}
+
+.member_service {
+    padding: 20px 0;
+
+    .item {
+        background: #fff;
+        padding: 40px 20px 20px;
+        text-align: center;
+        height: 210px;
+
+        .cover_box {
+            height: 50px;
+
+            .cover {
+                width: 40px;
+            }
+        }
+
+        .name {
+            font-size: 16px;
+            font-weight: 600;
+            padding: 10px 0;
+        }
+
+        .lead {
+            font-size: 14px;
+            line-height: 1.8;
+            color: #333333;
+        }
+    }
+
+    .bt_apply {
+        padding: 30px 0;
+        text-align: center;
+    }
+}
+
+.apply_modal {
+    .band_form {
+        .submit_bottom {
+            text-align: center;
+        }
+    }
+}
+
+.layui-layer-btn .layui-layer-btn0 {
+    background: @primaryColor;
 }

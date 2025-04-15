@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>立即支付</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="renderer" content="webkit">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="icon" type="image/x-icon" href="img/favicon.ico">
+<meta name="keywords"
+    content="广州炜洹贸易有限公司,炜洹,在2016年成立“广州炜洹饮食策划管理有限公司”，发挥资源所长，致力联合上下游资源推广世界各地的优选食材和餐饮文化，研究新餐饮模式和新盈利模式，帮助各类型餐饮企业创新食尚潮流，共同互利共赢。">
+<meta name="description"
+    content="是一家从事国内外冷链食品经营和仓储物流配送服务的全国冷链供应链平台，独具从全球源头安心湖源采购--产品推广营销--高标准冷链仓储--自有物流配送--产品菜式研发---服务培训的一条龙完善服务体系,
+属下首家公司“广州炜洹贸易有限公司”成立于1999年，是华南地 区优秀的专业的冷冻食品进口商和餐饮服务商 。炜洹诚信为本非常 重视商业信誉，从不销售品质低劣的产品，在行内一直享有较高的声 誉 。从2007年至今 ，连续十四年获得广州市工商局颁发	“ 守合 同、重信用企业”称号。">
+<meta name="author" content="">
+<meta name="copyright" content="">
+<link rel="stylesheet" href="nprogress/nprogress.css">
+<link rel="stylesheet" href="font/iconfont.css">
+<link rel="stylesheet" href="css/normalize.css">
+<link rel="stylesheet" href="css/animate.min.css">
+<link rel="stylesheet" href="aos/aos.css">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="swiper/css/swiper-bundle.min.css">
+<link rel="stylesheet" href="swiper/css/swipet-animate.min.css">
+<link rel="stylesheet" href="layui/layui.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/media.css">
+<script src="nprogress/nprogress.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/count.js"></script>
+<script src="aos/aos.js"></script>
+<script src="swiper/js/swiper-bundle.min.js"></script>
+<script src="swiper/js/swiper.animate1.0.3.min.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<script src="layui/layui.min.js"></script>
+<script>
+    layui.use(function () {
+        var util = layui.util;
+        util.fixbar({
+            bars: [],
+            on: {},
+        })
+    });
+</script>
+</head>
+
+<body>
+    <div class="me_page">
+        <div class="me_head">
+            <div class="container">
+                <div class="wrap justify_apace">
+                    <div class="logo">
+                        <a href="index.html" class="link">
+                            <img class="cover" src="img/me_logo.png" alt="">
+                        </a>
+                    </div>
+                    <div class="menu justify_end">
+                        <div class="box">
+                            <a href="" class="link">
+                                <i class="iconfont icon-a-bangzhu1x"></i>
+                                <span class="text">帮助</span>
+                            </a>
+                        </div>
+                        <div class="box">
+                            <a href="" class="link">
+                                <i class="iconfont icon-shouji"></i>
+                                <span class="text">小程序</span>
+                            </a>
+                        </div>
+                        <div class="item justify_end">
+                            <div class="text">曼****m</div>
+                            <div class="cover_box">
+                                <img class="cover" src="img/user_logo.png" alt="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="height: 70px;"></div>
+        <div class="me">
+            <div class="main">
+                <div class="container">
+                    <div class="wrap">
+                        <div class="right_main">
+                            <div class="order_info">
+                                <div class="order_head justify_apace">
+                                    <h3 class="title">
+                                        <i class="iconfont icon-tijiao"></i>
+                                        <span class="text">订单已提交，请您尽快完成支付!</span>
+                                    </h3>
+                                    <div class="price">
+                                        <span class="name">订单金额：</span>
+                                        <span class="count red">￥130.00</span>
+                                    </div>
+                                </div>
+                                <div class="info_list">
+                                    <div class="li">订单号：202406211749001</div>
+                                    <div class="li">订单金额：130.00元</div>
+                                    <div class="li">收款方名称：炜洹集团</div>
+                                    <div class="li">订单时间：2024-06-21 17:51</div>
+                                    <div class="li red">温馨提示：您正在向炜洹集团发起付款交易，为了确保您的资金安全请仔细核实交易信息。</div>
+                                </div>
+
+                                <div class="order_tabs">
+                                    <div class="tabs_wrap inline_block">
+                                        <div class="display_flex">
+                                            <div class="item tabs_head pointer active">微信支付</div>
+                                            <div class="item tabs_head pointer">支付宝支付</div>
+                                            <div class="item tabs_head pointer">银行卡支付</div>
+                                        </div>
+                                    </div>
+                                    <div class="tabs_main">
+                                        <!-- 显示：show -->
+                                        <div class="item show">
+                                            <div class="module box_shadow box_radius">
+                                                <div class="scan_code">
+                                                    <div class="lead">
+                                                        <i class="iconfont icon-saoyisao"></i>
+                                                        <span>使用微信APP扫码付款</span>
+                                                    </div>
+
+                                                    <div class="cover_box">
+                                                        <img class="cover" src="img/wxcode.jpg" alt="">
+                                                    </div>
+                                                    <div class="lead">扫一扫快速付款</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="module box_shadow box_radius">
+                                                <div class="scan_code">
+                                                    <div class="lead">
+                                                        <i class="iconfont icon-saoyisao"></i>
+                                                        <span>使用支付宝APP扫码付款</span>
+                                                    </div>
+
+                                                    <div class="cover_box">
+                                                        <img class="cover" src="img/zfbcode.png" alt="">
+                                                    </div>
+                                                    <div class="lead">扫一扫快速付款</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="item">
+                                            <div class="bank_card">
+                                                <div class="row">
+                                                    <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                                        <!-- 选中:active -->
+                                                        <div
+                                                            class="box box_radius pointer box_shadow justify_apace active">
+                                                            <div class="bank display_flex">
+                                                                <img class="cover" src="img/bank_gs.png" alt="">
+                                                                <div class="name">工商银行</div>
+                                                            </div>
+                                                            <div class="text">储蓄卡（9027）</div>
+                                                            <div class="check">
+                                                                <img class="cover" src="img/check3.png" alt="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                                        <div class="box box_radius pointer box_shadow justify_apace">
+                                                            <div class="bank display_flex">
+                                                                <img class="cover" src="img/bank_zs.png" alt="">
+                                                                <div class="name">招商银行</div>
+                                                            </div>
+                                                            <div class="text">储蓄卡（9027）</div>
+                                                            <div class="check">
+                                                                <img class="cover" src="img/check3.png" alt="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                                        <div class="box box_radius pointer box_shadow justify_apace">
+                                                            <div class="bank display_flex">
+                                                                <img class="cover" src="img/bank_zg.png" alt="">
+                                                                <div class="name">中国银行</div>
+                                                            </div>
+                                                            <div class="text">储蓄卡（9027）</div>
+                                                            <div class="check">
+                                                                <img class="cover" src="img/check3.png" alt="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                                        <div class="box box_radius pointer box_shadow justify_apace">
+                                                            <div class="bank display_flex">
+                                                                <img class="cover" src="img/bank_zg.png" alt="">
+                                                                <div class="name">中国银行</div>
+                                                            </div>
+                                                            <div class="text">储蓄卡（9027）</div>
+                                                            <div class="check">
+                                                                <img class="cover" src="img/check3.png" alt="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                                        <div class="box box_radius pointer box_shadow justify_apace">
+                                                            <div class="bank display_flex">
+                                                                <img class="cover" src="img/bank_zg.png" alt="">
+                                                                <div class="name">中国银行</div>
+                                                            </div>
+                                                            <div class="text">储蓄卡（9027）</div>
+                                                            <div class="check">
+                                                                <img class="cover" src="img/check3.png" alt="">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                                        <div class="box_radius pointer box_shadow display_flex add"
+                                                            data-toggle="modal" data-target=".bank_modal">
+                                                            <i class="iconfont icon-jia"></i>
+                                                            <span class="text">添加新银行卡</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="tips">
+                                                    <i class="iconfont icon-tijiao"></i>
+                                                    <span class="text">安全设置检测成功！</span>
+                                                </div>
+                                                <div class="hint_text">请输入支付密码：</div>
+                                                <div class="password inline_block">
+                                                    <form class="layui-form" action="">
+                                                        <input type="password" name="password" lay-verify="required"
+                                                            maxlength="6" placeholder="请输入6位数支付密码"
+                                                            lay-reqtext="请输入6位数支付密码" lay-vertype="tips"
+                                                            autocomplete="off" class="layui-input input">
+                                                        <button class="common_btn" lay-submit
+                                                            lay-filter="confirm_payment">确认支付</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加银行卡弹窗 -->
+    <div class="modal fade myModal bank_modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content ">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title uppercase">选择开户银行</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="show bank_list">
+                        <div class="row">
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius active">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li1.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li2.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li3.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li4.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li5.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li6.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li7.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li8.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li9.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li10.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col_md col-md-4 col-sm-6 col-xs-6">
+                                <div class="item pointer box_shadow box_radius">
+                                    <div class="cover_box">
+                                        <img class="cover" src="img/bank_li11.png" alt="">
+                                    </div>
+                                    <div class="check">
+                                        <img class="cover" src="img/check3.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="next">
+                            <button class="next_btn common_btn">下一步</button>
+                        </div>
+                    </div>
+                    <div class="hide band_form">
+                        <form class="layui-form" action="">
+                            <div class="item display_flex">
+                                <div class="name">卡号：</div>
+                                <input type="text" name="bandCode" lay-verify="required" placeholder="请输入银行卡卡号"
+                                    lay-reqtext="请输入银行卡卡号" lay-vertype="tips" autocomplete="off"
+                                    class="layui-input input">
+                            </div>
+                            <div class="item display_flex">
+                                <div class="name">持卡人姓名：</div>
+                                <input type="text" name="name" lay-verify="required" placeholder="请输入持卡人姓名"
+                                    lay-reqtext="请输入持卡人姓名" lay-vertype="tips" autocomplete="off"
+                                    class="layui-input input">
+                            </div>
+                            <div class="item display_flex">
+                                <div class="name">身份证号码：</div>
+                                <input type="text" name="identity" lay-verify="required" placeholder="请输入身份证号码"
+                                    lay-reqtext="请输入身份证号码" lay-vertype="tips" autocomplete="off"
+                                    class="layui-input input">
+                            </div>
+                            <div class="item display_flex">
+                                <div class="name">手机号码：</div>
+                                <input type="number" name="mobile" lay-verify="required|phone" placeholder="请输入手机号码"
+                                    lay-reqtext="请输入手机号码" lay-vertype="tips" autocomplete="off"
+                                    class="layui-input input">
+                            </div>
+                            <div class="item display_flex">
+                                <div class="name">验证码：</div>
+                                <input type="number" name="code" lay-verify="required" placeholder="请输入验证码"
+                                    lay-reqtext="请输入验证码" lay-vertype="tips" autocomplete="off"
+                                    class="layui-input input">
+                            </div>
+                            <div class="submit_bottom">
+                                <div class="btn return_btn common_btn">返回列表</div>
+                                <button class="btn common_btn" lay-submit lay-filter="confirm_submmit">确认添加</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    // 支付
+    $('.tabs_head').click(function () {
+        let index = $(this).index();
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.order_tabs .tabs_main .item').eq(index).addClass('show').siblings().removeClass('show');
+    })
+
+    // 选中支付银行卡
+    $('.bank_card .box').click(function () {
+        $('.bank_card .box').removeClass('active');
+        $(this).addClass('active');
+    })
+
+    // 选中绑定银行卡
+    $('.bank_modal .bank_list .item').click(function () {
+        $('.bank_modal .bank_list .item').removeClass('active');
+        $(this).addClass('active');
+    })
+
+    // 下一步
+    $('.next_btn').click(function () {
+        $('.bank_modal .bank_list').removeClass('show').addClass('hide');
+        $('.bank_modal .band_form').removeClass('hide').addClass('show');
+    })
+
+    // 返回
+    $('.return_btn').click(function () {
+        $('.bank_modal .bank_list').removeClass('hide').addClass('show');
+        $('.bank_modal .band_form').removeClass('show').addClass('hide');
+    })
+
+    layui.use(function () {
+        var form = layui.form;
+        var layer = layui.layer;
+
+        // 确认添加银行卡
+        form.on('submit(confirm_submmit)', function (data) {
+            var field = data.field; // 获取表单字段值
+            console.log('field', field);
+
+            $('.bank_modal .bank_list').removeClass('hide').addClass('show');
+            $('.bank_modal .band_form').removeClass('show').addClass('hide');
+            // 关闭弹窗
+            $('.bank_modal').modal('hide');
+
+            return false; // 阻止默认 form 跳转
+        });
+
+        // 确认支付
+        form.on('submit(confirm_payment)', function (data) {
+            var field = data.field; // 获取表单字段值
+            console.log('field', field);
+            window.location.href = './payment_hint.html'
+            return false; // 阻止默认 form 跳转
+        });
+    });
+</script>
+
+</html>

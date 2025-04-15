@@ -16,7 +16,7 @@
         </a>
     </div>
     <div class="box">
-        <a href="" class="link">
+        <a href="../../member_center.html" class="link">
             <div class="icon">
                 <i class="iconfont icontype icon-huiyuan"></i>
             </div>
@@ -64,7 +64,7 @@
         </a>
     </div>
     <div class="box">
-        <a href="" class="link">
+        <a href="../../me_data.html" class="link">
             <div class="icon">
                 <i class="iconfont icon-gerenziliao"></i>
             </div>
@@ -72,11 +72,33 @@
         </a>
     </div>
     <div class="box">
-        <a href="" class="link">
+        <div class="link pointer" lay-on="confirm">
             <div class="icon">
                 <i class="iconfont icon-tuichu"></i>
             </div>
             <span class="text">退出登录</span>
-        </a>
+        </div>
     </div>
 </div>
+
+
+<script>
+    layui.use(function () {
+        var layer = layui.layer;
+        var util = layui.util;
+        // 批量事件
+        util.on('lay-on', {
+            confirm: function () {
+                layer.confirm('是否退出登录？', {
+                    title: '退出',
+                    btn: ['确定', '关闭'] //按钮
+                }, function () {
+                    console.log('确定');
+                    layer.closeAll(); 
+                }, function () {
+                    console.log('关闭');
+                });
+            },
+        });
+    });
+</script>

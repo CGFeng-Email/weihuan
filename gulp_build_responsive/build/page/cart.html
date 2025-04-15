@@ -200,7 +200,9 @@
     const paymentBtn = document.getElementById('paymentBtn');
 
     delBtn.addEventListener('click', function () {
-        console.log('删除商品');
+        let data = $('#orderForm').serializeArray();
+        console.log('删除商品', data);
+
     })
 
     paymentBtn.addEventListener('click', function () {

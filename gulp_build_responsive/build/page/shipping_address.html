@@ -70,7 +70,7 @@
                                         <div class="row">
                                             <div class="col_md col-md-4 col-sm-6 col-xs-12">
                                                 <!-- active：选中默认地址 -->
-                                                <div class="item box_radius box_shadow active">
+                                                <div class="item itemParent pointer box_radius box_shadow active">
                                                     <div class="item_head">
                                                         <span class="name">张阿三</span>
                                                         <span class="mobile">13695845014</span>
@@ -78,7 +78,7 @@
                                                     <div class="lead over2">
                                                         广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
                                                     </div>
-                                                    <div class="edit" data-toggle="modal" data-target=".myModal">
+                                                    <div class="edit childEdit">
                                                         修改地址
                                                     </div>
                                                     <div class="check">
@@ -87,7 +87,7 @@
                                                 </div>
                                             </div>
                                             <div class="col_md col-md-4 col-sm-6 col-xs-12">
-                                                <div class="item box_radius box_shadow">
+                                                <div class="item itemParent pointer box_radius box_shadow">
                                                     <div class="item_head">
                                                         <span class="name">张阿三</span>
                                                         <span class="mobile">13695845014</span>
@@ -95,7 +95,7 @@
                                                     <div class="lead over2">
                                                         广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
                                                     </div>
-                                                    <div class="edit" data-toggle="modal" data-target=".myModal">
+                                                    <div class="edit childEdit">
                                                         修改地址
                                                     </div>
                                                     <div class="check">
@@ -104,7 +104,7 @@
                                                 </div>
                                             </div>
                                             <div class="col_md col-md-4 col-sm-6 col-xs-12">
-                                                <div class="item box_radius box_shadow">
+                                                <div class="item itemParent pointer box_radius box_shadow">
                                                     <div class="item_head">
                                                         <span class="name">张阿三</span>
                                                         <span class="mobile">13695845014</span>
@@ -112,7 +112,7 @@
                                                     <div class="lead over2">
                                                         广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
                                                     </div>
-                                                    <div class="edit" data-toggle="modal" data-target=".myModal">
+                                                    <div class="edit childEdit">
                                                         修改地址
                                                     </div>
                                                     <div class="check">
@@ -121,7 +121,7 @@
                                                 </div>
                                             </div>
                                             <div class="col_md col-md-4 col-sm-6 col-xs-12">
-                                                <div class="item box_radius box_shadow">
+                                                <div class="item itemParent pointer box_radius box_shadow">
                                                     <div class="item_head">
                                                         <span class="name">张阿三</span>
                                                         <span class="mobile">13695845014</span>
@@ -129,7 +129,7 @@
                                                     <div class="lead over2">
                                                         广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
                                                     </div>
-                                                    <div class="edit" data-toggle="modal" data-target=".myModal">
+                                                    <div class="edit childEdit">
                                                         修改地址
                                                     </div>
                                                     <div class="check">
@@ -163,7 +163,7 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h4 class="modal-title uppercase">添加地址</h4>
+                    <h4 class="modal-title uppercase">收货地址</h4>
                     <p class="sub_head">请填写真实信息，以便收货无误，谢谢配合。</p>
                 </div>
                 <div class="modal-body">
@@ -215,6 +215,20 @@
             return false;
         });
     });
+
+    $('.itemParent').click(function() {
+        let has = $(this).hasClass('active');
+        $('.shippingAddress_list .item').removeClass('active');
+        $(this).addClass('active');
+    })
+
+    document.querySelectorAll('.childEdit').forEach(item => {
+        item.addEventListener('click', function(event){
+            event.stopPropagation();
+            // 打开弹窗
+            $('.myModal').modal('show');
+        })
+    })
 </script>
 
 </html>
