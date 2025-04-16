@@ -46,44 +46,50 @@
 </head>
 
 <body style="background: #f7f7f7;">
-    <div class="me_page">
-        <div class="me_head">
-            <div class="container">
-                <div class="wrap justify_apace">
-                    <div class="logo">
-                        <a href="index.html" class="link">
-                            <img class="cover" src="img/me_logo.png" alt="">
-                        </a>
+    <div class="me_head">
+    <div class="container">
+        <div class="wrap justify_apace">
+            <div class="logo">
+                <a href="index.html" class="link">
+                    <img class="cover" src="img/me_logo.png" alt="">
+                </a>
+            </div>
+            <div class="menu justify_end">
+                <!-- <div class="box">
+                    <a href="" class="link">
+                        <i class="iconfont icon-a-bangzhu1x"></i>
+                        <span class="text">帮助</span>
+                    </a>
+                </div> -->
+                <div class="box pointer">
+                    <div class="item display_flex">
+                        <i class="iconfont icon-shouji"></i>
+                        <span class="text">小程序</span>
                     </div>
-                    <div class="menu justify_end">
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-a-bangzhu1x"></i>
-                                <span class="text">帮助</span>
-                            </a>
-                        </div>
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-shouji"></i>
-                                <span class="text">小程序</span>
-                            </a>
-                        </div>
-                        <div class="item justify_end">
-                            <div class="text">曼****m</div>
-                            <div class="cover_box">
-                                <img class="cover" src="img/user_logo.png" alt="">
-                            </div>
+                    <div class="down box_shadow box_radius">
+                        <div class="cover_box">
+                            <img class="cover" src="img/wxcode.jpg" alt="">
                         </div>
                     </div>
                 </div>
+                <div class="box justify_end pointer">
+                    <a href="me.html" class="link item justify_end">
+                        <div class="text">曼****m</div>
+                        <div class="cover_box">
+                            <img class="cover" src="img/user_logo.png" alt="">
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-        <div style="height: 70px;"></div>
-        <div class="me">
-            <div class="main">
-                <div class="container">
-                    <div class="wrap justify_apace">
-                        <div class="me_ments box_shadow box_radius">
+    </div>
+</div>
+<div style="height: 70px;"></div>
+    <div class="me">
+        <div class="main">
+            <div class="container">
+                <div class="wrap justify_apace">
+                    <div class="me_ments box_shadow box_radius">
     <div class="box active">
         <a href="me.html" class="link">
             <div class="icon">
@@ -187,139 +193,138 @@
         });
     });
 </script>
-                        <div class="right_main">
-                            <div class="module box_shadow box_radius">
-                                <div class="order_main">
-                                    <div class="order_navs justify_apace">
-                                        <div class="nav_list display_flex">
-                                            <div class="li active">
-                                                <span class="name">全部</span>
-                                            </div>
-                                            <div class="li">
-                                                <span class="name">未付款</span>
-                                            </div>
-                                            <div class="li">
-                                                <span class="name">待发货</span>
-                                                <span class="count">03</span>
-                                            </div>
-                                            <div class="li">
-                                                <span class="name">待收货</span>
-                                                <span class="count">03</span>
-                                            </div>
-                                            <div class="li">
-                                                <span class="name">已完成</span>
-                                            </div>
-                                            <div class="li">
-                                                <span class="name">已退货</span>
+                    <div class="right_main">
+                        <div class="module box_shadow box_radius">
+                            <div class="order_main">
+                                <div class="order_navs justify_apace">
+                                    <div class="nav_list display_flex">
+                                        <div class="li active">
+                                            <span class="name">全部</span>
+                                        </div>
+                                        <div class="li">
+                                            <span class="name">未付款</span>
+                                        </div>
+                                        <div class="li">
+                                            <span class="name">待发货</span>
+                                            <span class="count">03</span>
+                                        </div>
+                                        <div class="li">
+                                            <span class="name">待收货</span>
+                                            <span class="count">03</span>
+                                        </div>
+                                        <div class="li">
+                                            <span class="name">已完成</span>
+                                        </div>
+                                        <div class="li">
+                                            <span class="name">已退货</span>
+                                        </div>
+                                    </div>
+                                    <div class="nav_search">
+                                        <div class="layui-form">
+                                            <div class="search_item">
+                                                <div class="icon">
+                                                    <button lay-submit lay-filter="submit_search">
+                                                        <i class="iconfont icon-sousuo"></i>
+                                                    </button>
+                                                </div>
+                                                <input type="text" name="keyword" lay-verify="required"
+                                                    lay-vertype="tips" lay-reqtext="请输入关键字" placeholder="请输入关键字"
+                                                    class="layui-input input">
                                             </div>
                                         </div>
-                                        <div class="nav_search">
-                                            <div class="layui-form">
-                                                <div class="search_item">
-                                                    <div class="icon">
-                                                        <button lay-submit lay-filter="submit_search">
-                                                            <i class="iconfont icon-sousuo"></i>
-                                                        </button>
-                                                    </div>
-                                                    <input type="text" name="keyword" lay-verify="required"
-                                                        lay-vertype="tips" lay-reqtext="请输入关键字" placeholder="请输入关键字"
-                                                        class="layui-input input">
+                                    </div>
+                                </div>
+                                <div class="order_list">
+                                    <div class="item justify_apace">
+                                        <div class="shopping display_flex">
+                                            <div class="cover_box">
+                                                <img class="cover" src="img/product_li1.png" alt="">
+                                            </div>
+                                            <div class="content flex_column">
+                                                <div class="c_top">
+                                                    <div class="name over1">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材...</div>
+                                                    <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                                </div>
+                                                <div class="count">共01个商品</div>
+                                            </div>
+                                        </div>
+                                        <div class="params display_flex justify_end">
+                                            <div class="box">
+                                                <div class="date">2024-07-17</div>
+                                            </div>
+                                            <div class="box price">¥130.00</div>
+                                            <div class="box">
+                                                <p class="status">订单已完成</p>
+                                                <div class="more">
+                                                    <a href="./order_details.html" class="link">订单详情</a>
+                                                </div>
+                                            </div>
+                                            <div class="pay_box box">
+                                                <div class="pay box_radius">
+                                                    <a href="./conform_order.html" class="link">立即支付</a>
+                                                </div>
+                                                <a href="" class="link cancel">取消订单</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="item justify_apace">
+                                        <div class="shopping display_flex">
+                                            <div class="cover_box">
+                                                <img class="cover" src="img/product_li1.png" alt="">
+                                            </div>
+                                            <div class="content flex_column">
+                                                <div class="c_top">
+                                                    <div class="name over1">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材...</div>
+                                                    <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                                </div>
+                                                <div class="count">共01个商品</div>
+                                            </div>
+                                        </div>
+                                        <div class="params display_flex justify_end">
+                                            <div class="box">
+                                                <div class="date">2024-07-17</div>
+                                            </div>
+                                            <div class="box price">¥130.00</div>
+                                            <div class="box">
+                                                <p class="status">订单已完成</p>
+                                                <div class="more">
+                                                    <a href="./order_details.html" class="link">订单详情</a>
+                                                </div>
+                                            </div>
+                                            <div class="pay_box box">
+                                                <div class="pay box_radius">
+                                                    <a href="./conform_order.html" class="link">立即支付</a>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="order_list">
-                                        <div class="item justify_apace">
-                                            <div class="shopping display_flex">
-                                                <div class="cover_box">
-                                                    <img class="cover" src="img/product_li1.png" alt="">
-                                                </div>
-                                                <div class="content flex_column">
-                                                    <div class="c_top">
-                                                        <div class="name over1">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材...</div>
-                                                        <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
-                                                    </div>
-                                                    <div class="count">共01个商品</div>
-                                                </div>
+                                    <div class="item justify_apace">
+                                        <div class="shopping display_flex">
+                                            <div class="cover_box">
+                                                <img class="cover" src="img/product_li1.png" alt="">
                                             </div>
-                                            <div class="params display_flex justify_end">
-                                                <div class="box">
-                                                    <div class="date">2024-07-17</div>
+                                            <div class="content flex_column">
+                                                <div class="c_top">
+                                                    <div class="name over1">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材...</div>
+                                                    <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
                                                 </div>
-                                                <div class="box price">¥130.00</div>
-                                                <div class="box">
-                                                    <p class="status">订单已完成</p>
-                                                    <div class="more">
-                                                        <a href="./order_details.html" class="link">订单详情</a>
-                                                    </div>
-                                                </div>
-                                                <div class="pay_box box">
-                                                    <div class="pay box_radius">
-                                                        <a href="./conform_order.html" class="link">立即支付</a>
-                                                    </div>
-                                                    <a href="" class="link cancel">取消订单</a>
-                                                </div>
+                                                <div class="count">共01个商品</div>
                                             </div>
                                         </div>
-                                        <div class="item justify_apace">
-                                            <div class="shopping display_flex">
-                                                <div class="cover_box">
-                                                    <img class="cover" src="img/product_li1.png" alt="">
-                                                </div>
-                                                <div class="content flex_column">
-                                                    <div class="c_top">
-                                                        <div class="name over1">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材...</div>
-                                                        <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
-                                                    </div>
-                                                    <div class="count">共01个商品</div>
+                                        <div class="params display_flex justify_end">
+                                            <div class="box">
+                                                <div class="date">2024-07-17</div>
+                                            </div>
+                                            <div class="box price">¥130.00</div>
+                                            <div class="box">
+                                                <p class="status">订单已完成</p>
+                                                <div class="more">
+                                                    <a href="./order_details.html" class="link">订单详情</a>
                                                 </div>
                                             </div>
-                                            <div class="params display_flex justify_end">
-                                                <div class="box">
-                                                    <div class="date">2024-07-17</div>
-                                                </div>
-                                                <div class="box price">¥130.00</div>
-                                                <div class="box">
-                                                    <p class="status">订单已完成</p>
-                                                    <div class="more">
-                                                        <a href="./order_details.html" class="link">订单详情</a>
-                                                    </div>
-                                                </div>
-                                                <div class="pay_box box">
-                                                    <div class="pay box_radius">
-                                                        <a href="./conform_order.html" class="link">立即支付</a>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="item justify_apace">
-                                            <div class="shopping display_flex">
-                                                <div class="cover_box">
-                                                    <img class="cover" src="img/product_li1.png" alt="">
-                                                </div>
-                                                <div class="content flex_column">
-                                                    <div class="c_top">
-                                                        <div class="name over1">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材...</div>
-                                                        <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
-                                                    </div>
-                                                    <div class="count">共01个商品</div>
-                                                </div>
-                                            </div>
-                                            <div class="params display_flex justify_end">
-                                                <div class="box">
-                                                    <div class="date">2024-07-17</div>
-                                                </div>
-                                                <div class="box price">¥130.00</div>
-                                                <div class="box">
-                                                    <p class="status">订单已完成</p>
-                                                    <div class="more">
-                                                        <a href="./order_details.html" class="link">订单详情</a>
-                                                    </div>
-                                                </div>
-                                                <div class="pay_box box">
-                                                    <div class="pay box_radius">
-                                                        <a href="./conform_order.html" class="link">立即支付</a>
-                                                    </div>
+                                            <div class="pay_box box">
+                                                <div class="pay box_radius">
+                                                    <a href="./conform_order.html" class="link">立即支付</a>
                                                 </div>
                                             </div>
                                         </div>

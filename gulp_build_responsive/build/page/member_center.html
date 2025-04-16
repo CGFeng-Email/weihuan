@@ -8,126 +8,93 @@
 </head>
 
 <body style="background: #f7f7f7;">
-    <div class="me_page">
-        <div class="me_head">
+    @@include('me_header.html')
+    <div class="me">
+        <div class="main">
             <div class="container">
                 <div class="wrap justify_apace">
-                    <div class="logo">
-                        <a href="../../index.html" class="link">
-                            <img class="cover" src="../../img/me_logo.png" alt="">
-                        </a>
-                    </div>
-                    <div class="menu justify_end">
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-a-bangzhu1x"></i>
-                                <span class="text">帮助</span>
-                            </a>
-                        </div>
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-shouji"></i>
-                                <span class="text">小程序</span>
-                            </a>
-                        </div>
-                        <div class="item justify_end">
-                            <div class="text">曼****m</div>
-                            <div class="cover_box">
-                                <img class="cover" src="../../img/user_logo.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="height: 70px;"></div>
-        <div class="me">
-            <div class="main">
-                <div class="container">
-                    <div class="wrap justify_apace">
-                        @@include('menus.html')
-                        <div class="right_main">
-                            <div class="module box_shadow box_radius">
-                                <div class="order_main">
-                                    <div class="me_common_head justify_apace">
-                                        <h3 class="title">会员中心</h3>
-                                    </div>
-                                    <div class="me_data">
-                                        <div class="head_portrait">
-                                            <div class="cover_box">
-                                                <img class="cover" src="../../img/user_logo.png" alt="">
-                                            </div>
-                                        </div>
-                                        <div class="user_head">
-                                            <span class="name">曼****m</span>
-                                            <img class="cover" src="../../img/svip.png" alt="">
-                                        </div>
-                                        <div class="user_mobile">
-                                            <i class="iconfont icon-shouji "></i>
-                                            <span>13636598741</span>
-                                        </div>
-                                        <div class="explain">你的会员将在2030-05-29到期</div>
-                                        <div class="schedule">
-                                            <div class="lead">还需要消费¥500.00元升级</div>
-                                            <div class="slide">
-                                                <div class="layui-progress layui-progress-big" lay-showpercent="true">
-                                                    <div class="layui-progress-bar layui-bg-orange" lay-percent="40%">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="bt justify_apace">
-                                                <div class="start text">V1</div>
-                                                <div class="end text">V2</div>
-                                            </div>
+                    @@include('menus.html')
+                    <div class="right_main">
+                        <div class="module box_shadow box_radius">
+                            <div class="order_main">
+                                <div class="me_common_head justify_apace">
+                                    <h3 class="title">会员中心</h3>
+                                </div>
+                                <div class="me_data">
+                                    <div class="head_portrait">
+                                        <div class="cover_box">
+                                            <img class="cover" src="../../img/user_logo.png" alt="">
                                         </div>
                                     </div>
-                                    <div class="son_head">
-                                        <h4 class="title">会员权益（可申请成为SVIP，享受更优质的会员服务）</h4>
+                                    <div class="user_head">
+                                        <span class="name">曼****m</span>
+                                        <img class="cover" src="../../img/svip.png" alt="">
                                     </div>
-                                    <div class="member_service">
-                                        <div class="row">
-                                            <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                <div class="item box_radius box_shadow">
-                                                    <div class="cover_box">
-                                                        <img class="cover" src="../../img/member1.png" alt="">
-                                                    </div>
-                                                    <div class="name">价格优惠</div>
-                                                    <div class="lead">购买商品时使用优惠券的同时还能享受会员折扣。</div>
-                                                </div>
-                                            </div>
-                                            <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                <div class="item box_radius box_shadow">
-                                                    <div class="cover_box">
-                                                        <img class="cover" src="../../img/member2.png" alt="">
-                                                    </div>
-                                                    <div class="name">优先发货</div>
-                                                    <div class="lead">购买商品后，仓库优先安排商品发货。</div>
-                                                </div>
-                                            </div>
-                                            <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                <div class="item box_radius box_shadow">
-                                                    <div class="cover_box">
-                                                        <img class="cover" src="../../img/member3.png" alt="">
-                                                    </div>
-                                                    <div class="name">售后优先</div>
-                                                    <div class="lead">商品有任何问题，咨询客服享受快速回应服务。</div>
-                                                </div>
-                                            </div>
-                                            <div class="col_md col-md-3 col-sm-4 col-xs-6">
-                                                <div class="item box_radius box_shadow">
-                                                    <div class="cover_box">
-                                                        <img class="cover" src="../../img/member4.png" alt="">
-                                                    </div>
-                                                    <div class="name">客户回馈</div>
-                                                    <div class="lead">平台客服不定时给优质客户提供温馨回馈服务。</div>
+                                    <div class="user_mobile">
+                                        <i class="iconfont icon-shouji "></i>
+                                        <span>13636598741</span>
+                                    </div>
+                                    <div class="explain">你的会员将在2030-05-29到期</div>
+                                    <div class="schedule">
+                                        <div class="lead">还需要消费¥500.00元升级</div>
+                                        <div class="slide">
+                                            <div class="layui-progress layui-progress-big" lay-showpercent="true">
+                                                <div class="layui-progress-bar layui-bg-orange" lay-percent="40%">
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="bt justify_apace">
+                                            <div class="start text">V1</div>
+                                            <div class="end text">V2</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="son_head">
+                                    <h4 class="title">会员权益（可申请成为SVIP，享受更优质的会员服务）</h4>
+                                </div>
+                                <div class="member_service">
+                                    <div class="row">
+                                        <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                            <div class="item box_radius box_shadow">
+                                                <div class="cover_box">
+                                                    <img class="cover" src="../../img/member1.png" alt="">
+                                                </div>
+                                                <div class="name">价格优惠</div>
+                                                <div class="lead">购买商品时使用优惠券的同时还能享受会员折扣。</div>
+                                            </div>
+                                        </div>
+                                        <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                            <div class="item box_radius box_shadow">
+                                                <div class="cover_box">
+                                                    <img class="cover" src="../../img/member2.png" alt="">
+                                                </div>
+                                                <div class="name">优先发货</div>
+                                                <div class="lead">购买商品后，仓库优先安排商品发货。</div>
+                                            </div>
+                                        </div>
+                                        <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                            <div class="item box_radius box_shadow">
+                                                <div class="cover_box">
+                                                    <img class="cover" src="../../img/member3.png" alt="">
+                                                </div>
+                                                <div class="name">售后优先</div>
+                                                <div class="lead">商品有任何问题，咨询客服享受快速回应服务。</div>
+                                            </div>
+                                        </div>
+                                        <div class="col_md col-md-3 col-sm-4 col-xs-6">
+                                            <div class="item box_radius box_shadow">
+                                                <div class="cover_box">
+                                                    <img class="cover" src="../../img/member4.png" alt="">
+                                                </div>
+                                                <div class="name">客户回馈</div>
+                                                <div class="lead">平台客服不定时给优质客户提供温馨回馈服务。</div>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                                        <div class="bt_apply">
-                                            <button class="common_btn" data-toggle="modal"
-                                                data-target=".apply_modal">申请成为SVIP</button>
-                                        </div>
+                                    <div class="bt_apply">
+                                        <button class="common_btn" data-toggle="modal"
+                                            data-target=".apply_modal">申请成为SVIP</button>
                                     </div>
                                 </div>
                             </div>

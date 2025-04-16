@@ -46,44 +46,50 @@
 </head>
 
 <body style="background: #f7f7f7;">
-    <div class="me_page">
-        <div class="me_head">
-            <div class="container">
-                <div class="wrap justify_apace">
-                    <div class="logo">
-                        <a href="index.html" class="link">
-                            <img class="cover" src="img/me_logo.png" alt="">
-                        </a>
+    <div class="me_head">
+    <div class="container">
+        <div class="wrap justify_apace">
+            <div class="logo">
+                <a href="index.html" class="link">
+                    <img class="cover" src="img/me_logo.png" alt="">
+                </a>
+            </div>
+            <div class="menu justify_end">
+                <!-- <div class="box">
+                    <a href="" class="link">
+                        <i class="iconfont icon-a-bangzhu1x"></i>
+                        <span class="text">帮助</span>
+                    </a>
+                </div> -->
+                <div class="box pointer">
+                    <div class="item display_flex">
+                        <i class="iconfont icon-shouji"></i>
+                        <span class="text">小程序</span>
                     </div>
-                    <div class="menu justify_end">
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-a-bangzhu1x"></i>
-                                <span class="text">帮助</span>
-                            </a>
-                        </div>
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-shouji"></i>
-                                <span class="text">小程序</span>
-                            </a>
-                        </div>
-                        <div class="item justify_end">
-                            <div class="text">曼****m</div>
-                            <div class="cover_box">
-                                <img class="cover" src="img/user_logo.png" alt="">
-                            </div>
+                    <div class="down box_shadow box_radius">
+                        <div class="cover_box">
+                            <img class="cover" src="img/wxcode.jpg" alt="">
                         </div>
                     </div>
                 </div>
+                <div class="box justify_end pointer">
+                    <a href="me.html" class="link item justify_end">
+                        <div class="text">曼****m</div>
+                        <div class="cover_box">
+                            <img class="cover" src="img/user_logo.png" alt="">
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-        <div style="height: 70px;"></div>
-        <div class="me">
-            <div class="main">
-                <div class="container">
-                    <div class="wrap justify_apace">
-                        <div class="me_ments box_shadow box_radius">
+    </div>
+</div>
+<div style="height: 70px;"></div>
+    <div class="me">
+        <div class="main">
+            <div class="container">
+                <div class="wrap justify_apace">
+                    <div class="me_ments box_shadow box_radius">
     <div class="box active">
         <a href="me.html" class="link">
             <div class="icon">
@@ -187,87 +193,84 @@
         });
     });
 </script>
-                        <div class="right_main">
-                            <div class="module box_shadow box_radius">
-                                <div class="order_main">
-                                    <div class="me_common_head justify_apace">
-                                        <h3 class="title">会员中心</h3>
-                                    </div>
-                                    <div class="me_data">
-                                        <form class="layui-form" action="">
-                                            <div class="head_portrait">
-                                                <div class="cover_box">
-                                                    <img class="cover" src="img/user_logo.png" alt="">
+                    <div class="right_main">
+                        <div class="module box_shadow box_radius">
+                            <div class="order_main">
+                                <div class="me_common_head justify_apace">
+                                    <h3 class="title">会员中心</h3>
+                                </div>
+                                <div class="me_data">
+                                    <form class="layui-form" action="">
+                                        <div class="head_portrait">
+                                            <div class="cover_box">
+                                                <img class="cover" src="img/user_logo.png" alt="">
+                                            </div>
+                                            <input type="file" class="upload_file pointer" id="fileInput"
+                                                accept=".jpg,.png,.pdf,.jpeg" />
+                                            <div class="upload">
+                                                <img class="cover" src="img/upload_img.png" alt="">
+                                                <div class="lead">更换头像</div>
+                                            </div>
+                                        </div>
+                                        <div class="user_head sex display_flex">
+                                            <span class="name">曼****m</span>
+                                            <i class="iconfont icon-nv show"></i>
+                                            <i class="iconfont icon-nan hide"></i>
+                                        </div>
+                                        <div class="user_mobile">
+                                            <i class="iconfont icon-shouji "></i>
+                                            <span>13636598741</span>
+                                        </div>
+                                        <div class="bank_modal">
+                                            <div class="band_form">
+                                                <div class="item display_flex">
+                                                    <div class="name">昵称：</div>
+                                                    <input type="text" name="bandCode" value="曼不经心m"
+                                                        lay-verify="required" placeholder="请输入昵称" lay-reqtext="请输入昵称"
+                                                        lay-vertype="tips" autocomplete="off" class="layui-input input">
                                                 </div>
-                                                <input type="file" class="upload_file" id="fileInput"
-                                                    accept=".jpg,.png,.pdf,.jpeg" />
-                                                <div class="upload">
-                                                    <img class="cover" src="img/upload_img.png" alt="">
-                                                    <div class="lead">更换头像</div>
+                                                <div class="item display_flex">
+                                                    <div class="name">姓名：</div>
+                                                    <input type="text" name="name" value="张三" lay-verify="required"
+                                                        placeholder="姓名" lay-reqtext="姓名" lay-vertype="tips"
+                                                        autocomplete="off" class="layui-input input">
                                                 </div>
-                                            </div>
-                                            <div class="user_head sex display_flex">
-                                                <span class="name">曼****m</span>
-                                                <i class="iconfont icon-nv show"></i>
-                                                <i class="iconfont icon-nan hide"></i>
-                                            </div>
-                                            <div class="user_mobile">
-                                                <i class="iconfont icon-shouji "></i>
-                                                <span>13636598741</span>
-                                            </div>
-                                            <div class="bank_modal">
-                                                <div class="band_form">
-                                                    <div class="item display_flex">
-                                                        <div class="name">昵称：</div>
-                                                        <input type="text" name="bandCode" value="曼不经心m"
-                                                            lay-verify="required" placeholder="请输入昵称"
-                                                            lay-reqtext="请输入昵称" lay-vertype="tips" autocomplete="off"
-                                                            class="layui-input input">
-                                                    </div>
-                                                    <div class="item display_flex">
-                                                        <div class="name">姓名：</div>
-                                                        <input type="text" name="name" value="张三" lay-verify="required"
-                                                            placeholder="姓名" lay-reqtext="姓名" lay-vertype="tips"
-                                                            autocomplete="off" class="layui-input input">
-                                                    </div>
-                                                    <div class="item display_flex">
-                                                        <div class="name">手机号码：</div>
-                                                        <input type="number" name="mobile" value="13636598741"
-                                                            lay-verify="required|phone" placeholder="请输入手机号码"
-                                                            lay-reqtext="请输入手机号码" lay-vertype="tips" autocomplete="off"
-                                                            class="layui-input input">
-                                                    </div>
-                                                    <div class="item display_flex">
-                                                        <div class="name">性别：</div>
-                                                        <select class="select_input">
-                                                            <option value="">请选择性别</option>
-                                                            <option value="AAA">男</option>
-                                                            <option value="BBB" selected>女</option>
-                                                        </select>
-                                                    </div>
-                                                    <div class="item display_flex">
-                                                        <div class="name">地区：</div>
-                                                        <input type="text" name="region" value="广州天河"
-                                                            lay-verify="required" placeholder="请输入地区"
-                                                            lay-reqtext="请输入地区" lay-vertype="tips" autocomplete="off"
-                                                            class="layui-input input">
-                                                    </div>
-                                                    <div class="item display_flex">
-                                                        <div class="name">详细地址：</div>
-                                                        <input type="text" name="address" value="广东省广州市天河区中山大道中18号"
-                                                            lay-verify="required" placeholder="请输入详细地址"
-                                                            lay-reqtext="请输入详细地址" lay-vertype="tips" autocomplete="off"
-                                                            class="layui-input input">
-                                                    </div>
-                                                    <div class="submit_bottom">
-                                                        <button class="btn common_btn" lay-submit
-                                                            lay-filter="confirm_submmit" id="form_submit">确认修改</button>
-                                                    </div>
+                                                <div class="item display_flex">
+                                                    <div class="name">手机号码：</div>
+                                                    <input type="number" name="mobile" value="13636598741"
+                                                        lay-verify="required|phone" placeholder="请输入手机号码"
+                                                        lay-reqtext="请输入手机号码" lay-vertype="tips" autocomplete="off"
+                                                        class="layui-input input">
+                                                </div>
+                                                <div class="item display_flex">
+                                                    <div class="name">性别：</div>
+                                                    <select class="select_input">
+                                                        <option value="">请选择性别</option>
+                                                        <option value="AAA">男</option>
+                                                        <option value="BBB" selected>女</option>
+                                                    </select>
+                                                </div>
+                                                <div class="item display_flex">
+                                                    <div class="name">地区：</div>
+                                                    <input type="text" name="region" value="广州天河" lay-verify="required"
+                                                        placeholder="请输入地区" lay-reqtext="请输入地区" lay-vertype="tips"
+                                                        autocomplete="off" class="layui-input input">
+                                                </div>
+                                                <div class="item display_flex">
+                                                    <div class="name">详细地址：</div>
+                                                    <input type="text" name="address" value="广东省广州市天河区中山大道中18号"
+                                                        lay-verify="required" placeholder="请输入详细地址"
+                                                        lay-reqtext="请输入详细地址" lay-vertype="tips" autocomplete="off"
+                                                        class="layui-input input">
+                                                </div>
+                                                <div class="submit_bottom">
+                                                    <button class="btn common_btn" lay-submit
+                                                        lay-filter="confirm_submmit" id="form_submit">确认修改</button>
+                                                </div>
 
-                                                </div>
                                             </div>
-                                        </form>
-                                    </div>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

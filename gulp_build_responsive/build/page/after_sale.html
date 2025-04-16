@@ -8,107 +8,74 @@
 </head>
 
 <body style="background: #f7f7f7;">
-    <div class="me_page">
-        <div class="me_head">
+    @@include('me_header.html')
+    <div class="me">
+        <div class="main">
             <div class="container">
                 <div class="wrap justify_apace">
-                    <div class="logo">
-                        <a href="../../index.html" class="link">
-                            <img class="cover" src="../../img/me_logo.png" alt="">
-                        </a>
-                    </div>
-                    <div class="menu justify_end">
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-a-bangzhu1x"></i>
-                                <span class="text">帮助</span>
-                            </a>
-                        </div>
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-shouji"></i>
-                                <span class="text">小程序</span>
-                            </a>
-                        </div>
-                        <div class="item justify_end">
-                            <div class="text">曼****m</div>
-                            <div class="cover_box">
-                                <img class="cover" src="../../img/user_logo.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="height: 70px;"></div>
-        <div class="me">
-            <div class="main">
-                <div class="container">
-                    <div class="wrap justify_apace">
-                        @@include('menus.html')
-                        <div class="right_main">
-                            <div class="module box_shadow box_radius">
-                                <div class="order_main">
-                                    <div class="me_common_head justify_apace">
-                                        <h3 class="title">申请售后</h3>
-                                    </div>
-                                    <div class="son_head">
-                                        <h4 class="title">产品信息</h4>
-                                    </div>
-                                    <div class="order_details margin_bottom">
-                                        <div class="item justify_apace">
-                                            <div class="left_shopping display_flex">
-                                                <div class="cover_box box_radius">
-                                                    <img class="cover" src="../../img/product_li1.png" alt="">
-                                                </div>
-                                                <div class="shopping_explain">
-                                                    <h3 class="name">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材500g猪肉猪五花</h3>
-                                                    <div class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</div>
-                                                    <div class="lead count">数量：1</div>
-                                                    <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
-                                                </div>
-                                            </div>
-                                            <div class="price">
-                                                <span class="ide">￥</span>
-                                                <span class="count">130.00</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="son_head">
-                                        <h4 class="title">选择服务类型</h4>
-                                    </div>
-                                    <div class="afterSale_type">
-                                        <div class="lis">
-                                            <a href="./afterSale_goods.html" class="link display_flex">
-                                                <div class="box">
-                                                    <div class="name">我要退款（无需退货）</div>
-                                                    <div class="lead">没收到货，或与卖家协商同意不用退货只退款</div>
-                                                </div>
-                                                <i class="iconfont icon-right-1-copy"></i>
-                                            </a>
-                                        </div>
-                                        <div class="lis">
-                                            <a href="./afterSale_goods.html" class="link display_flex">
-                                                <div class="box">
-                                                    <div class="name">我要退货退款</div>
-                                                    <div class="lead">已收到货，需要退还收到的货物</div>
-                                                </div>
-                                                <i class="iconfont icon-right-1-copy"></i>
-                                            </a>
-                                        </div>
-                                        <div class="lis">
-                                            <a href="./afterSale_goods.html" class="link display_flex">
-                                                <div class="box">
-                                                    <div class="name">我要换货</div>
-                                                    <div class="lead">已收到货，需要更换收到的货物</div>
-                                                </div>
-                                                <i class="iconfont icon-right-1-copy"></i>
-                                            </a>
-                                        </div>
-                                        <div class="tips">提醒：不影响二次销售，可享受7天无理由退换货</div>
-                                    </div>
-
+                    @@include('menus.html')
+                    <div class="right_main">
+                        <div class="module box_shadow box_radius">
+                            <div class="order_main">
+                                <div class="me_common_head justify_apace">
+                                    <h3 class="title">申请售后</h3>
                                 </div>
+                                <div class="son_head">
+                                    <h4 class="title">产品信息</h4>
+                                </div>
+                                <div class="order_details margin_bottom">
+                                    <div class="item justify_apace">
+                                        <div class="left_shopping display_flex">
+                                            <div class="cover_box box_radius">
+                                                <img class="cover" src="../../img/product_li1.png" alt="">
+                                            </div>
+                                            <div class="shopping_explain">
+                                                <h3 class="name">新鲜黑猪带皮五花肉农家散养土猪原切冷冻烤肉食材500g猪肉猪五花</h3>
+                                                <div class="lead">农家散养士猪，洁净自然生长，长出美味好猪肉全程低温冷冻，食材新鲜如初</div>
+                                                <div class="lead count">数量：1</div>
+                                                <div class="lead">商品规格：黑猪带皮五花肉【4斤】</div>
+                                            </div>
+                                        </div>
+                                        <div class="price">
+                                            <span class="ide">￥</span>
+                                            <span class="count">130.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="son_head">
+                                    <h4 class="title">选择服务类型</h4>
+                                </div>
+                                <div class="afterSale_type">
+                                    <div class="lis">
+                                        <a href="./afterSale_goods.html" class="link display_flex">
+                                            <div class="box">
+                                                <div class="name">我要退款（无需退货）</div>
+                                                <div class="lead">没收到货，或与卖家协商同意不用退货只退款</div>
+                                            </div>
+                                            <i class="iconfont icon-right-1-copy"></i>
+                                        </a>
+                                    </div>
+                                    <div class="lis">
+                                        <a href="./afterSale_goods.html" class="link display_flex">
+                                            <div class="box">
+                                                <div class="name">我要退货退款</div>
+                                                <div class="lead">已收到货，需要退还收到的货物</div>
+                                            </div>
+                                            <i class="iconfont icon-right-1-copy"></i>
+                                        </a>
+                                    </div>
+                                    <div class="lis">
+                                        <a href="./afterSale_goods.html" class="link display_flex">
+                                            <div class="box">
+                                                <div class="name">我要换货</div>
+                                                <div class="lead">已收到货，需要更换收到的货物</div>
+                                            </div>
+                                            <i class="iconfont icon-right-1-copy"></i>
+                                        </a>
+                                    </div>
+                                    <div class="tips">提醒：不影响二次销售，可享受7天无理由退换货</div>
+                                </div>
+
                             </div>
                         </div>
                     </div>

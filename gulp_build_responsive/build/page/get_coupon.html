@@ -8,134 +8,101 @@
 </head>
 
 <body style="background: #f7f7f7;">
-    <div class="me_page">
-        <div class="me_head">
+    @@include('me_header.html')
+    <div class="me">
+        <div class="main">
             <div class="container">
                 <div class="wrap justify_apace">
-                    <div class="logo">
-                        <a href="../../index.html" class="link">
-                            <img class="cover" src="../../img/me_logo.png" alt="">
-                        </a>
-                    </div>
-                    <div class="menu justify_end">
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-a-bangzhu1x"></i>
-                                <span class="text">帮助</span>
-                            </a>
-                        </div>
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-shouji"></i>
-                                <span class="text">小程序</span>
-                            </a>
-                        </div>
-                        <div class="item justify_end">
-                            <div class="text">曼****m</div>
-                            <div class="cover_box">
-                                <img class="cover" src="../../img/user_logo.png" alt="">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div style="height: 70px;"></div>
-        <div class="me">
-            <div class="main">
-                <div class="container">
-                    <div class="wrap justify_apace">
-                        @@include('menus.html')
-                        <div class="right_main">
-                            <div class="module box_shadow box_radius">
-                                <div class="order_main">
-                                    <div class="me_common_head justify_apace">
-                                        <h3 class="title">领券中心</h3>
-                                    </div>
-                                    <div class="coupon">
-                                        <div class="coupon_list display_flex">
-                                            <!-- 选中：active -->
-                                            <div class="item itemClickFn animate active" data-id="parent-1">
-                                                <div class="name text-uppercase">rmb</div>
-                                                <div class="price">150</div>
-                                                <div class="lead">满600可用</div>
-                                                <div class="click_btn" data-id="child-1">
-                                                    <span class="link">立即领取</span>
-                                                </div>
+                    @@include('menus.html')
+                    <div class="right_main">
+                        <div class="module box_shadow box_radius">
+                            <div class="order_main">
+                                <div class="me_common_head justify_apace">
+                                    <h3 class="title">领券中心</h3>
+                                </div>
+                                <div class="coupon">
+                                    <div class="coupon_list display_flex">
+                                        <!-- 选中：active -->
+                                        <div class="item itemClickFn animate active" data-id="parent-1">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-1">
+                                                <span class="link">立即领取</span>
                                             </div>
-                                            <div class="item itemClickFn animate active" data-id="parent-2">
-                                                <div class="name text-uppercase">rmb</div>
-                                                <div class="price">150</div>
-                                                <div class="lead">满600可用</div>
-                                                <div class="click_btn" data-id="child-2">
-                                                    <span class="link">立即领取</span>
-                                                </div>
-                                            </div>
-                                            <div class="item itemClickFn animate active" data-id="parent-3">
-                                                <div class="name text-uppercase">rmb</div>
-                                                <div class="price">150</div>
-                                                <div class="lead">满600可用</div>
-                                                <div class="click_btn" data-id="child-3">
-                                                    <span class="link">立即领取</span>
-                                                </div>
-                                            </div>
-                                            <div class="item itemClickFn animate active" data-id="parent-4">
-                                                <div class="name text-uppercase">rmb</div>
-                                                <div class="price">150</div>
-                                                <div class="lead">满600可用</div>
-                                                <div class="click_btn" data-id="child-4">
-                                                    <span class="link">立即领取</span>
-                                                </div>
-                                            </div>
-                                            <div class="item itemClickFn animate active" data-id="parent-5">
-                                                <div class="name text-uppercase">rmb</div>
-                                                <div class="price">150</div>
-                                                <div class="lead">满600可用</div>
-                                                <div class="click_btn" data-id="child-5">
-                                                    <span class="link">立即领取</span>
-                                                </div>
-                                            </div>
-                                            <div class="item itemClickFn animate active" data-id="parent-6">
-                                                <div class="name text-uppercase">rmb</div>
-                                                <div class="price">150</div>
-                                                <div class="lead">满600可用</div>
-                                                <div class="click_btn" data-id="child-6">
-                                                    <span class="link">立即领取</span>
-                                                </div>
-                                            </div>
-
                                         </div>
-                                        <div class="bottom_column">
-                                            <div class="check_box display_flex">
-                                                <div class="select_box">
-                                                    <label class="display_flex">
-                                                        <input type="checkbox" name="itemAllSelect" id="myCheckbox">
-                                                        <span class="text">全选</span>
-                                                    </label>
-                                                </div>
-                                                <div class="select_box">
-                                                    <div class="btn box_radius box_shadow" id="cancelCollect">立即领取</div>
-                                                </div>
+                                        <div class="item itemClickFn animate active" data-id="parent-2">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-2">
+                                                <span class="link">立即领取</span>
                                             </div>
-                                            <div class="paging">
-                                                <nav class="nav_box" aria-label="Page navigation">
-                                                    <ul class="pagination pagination-lg">
-                                                        <li class="disabled">
-                                                            <a href="#" aria-label="Previous">
-                                                                <span aria-hidden="true">&laquo;</span>
-                                                            </a>
-                                                        </li>
-                                                        <li class="active"><a href="#">1</a></li>
-                                                        <li><a href="#">2</a></li>
-                                                        <li><a href="#">3</a></li>
-                                                        <li class="disabled">
-                                                            <a href="#" aria-label="Next">
-                                                                <span aria-hidden="true">&raquo;</span>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </nav>
+                                        </div>
+                                        <div class="item itemClickFn animate active" data-id="parent-3">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-3">
+                                                <span class="link">立即领取</span>
                                             </div>
+                                        </div>
+                                        <div class="item itemClickFn animate active" data-id="parent-4">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-4">
+                                                <span class="link">立即领取</span>
+                                            </div>
+                                        </div>
+                                        <div class="item itemClickFn animate active" data-id="parent-5">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-5">
+                                                <span class="link">立即领取</span>
+                                            </div>
+                                        </div>
+                                        <div class="item itemClickFn animate active" data-id="parent-6">
+                                            <div class="name text-uppercase">rmb</div>
+                                            <div class="price">150</div>
+                                            <div class="lead">满600可用</div>
+                                            <div class="click_btn" data-id="child-6">
+                                                <span class="link">立即领取</span>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="bottom_column">
+                                        <div class="check_box display_flex">
+                                            <div class="select_box">
+                                                <label class="display_flex">
+                                                    <input type="checkbox" name="itemAllSelect" id="myCheckbox">
+                                                    <span class="text">全选</span>
+                                                </label>
+                                            </div>
+                                            <div class="select_box">
+                                                <div class="btn box_radius box_shadow" id="cancelCollect">立即领取</div>
+                                            </div>
+                                        </div>
+                                        <div class="paging">
+                                            <nav class="nav_box" aria-label="Page navigation">
+                                                <ul class="pagination pagination-lg">
+                                                    <li class="disabled">
+                                                        <a href="#" aria-label="Previous">
+                                                            <span aria-hidden="true">&laquo;</span>
+                                                        </a>
+                                                    </li>
+                                                    <li class="active"><a href="#">1</a></li>
+                                                    <li><a href="#">2</a></li>
+                                                    <li><a href="#">3</a></li>
+                                                    <li class="disabled">
+                                                        <a href="#" aria-label="Next">
+                                                            <span aria-hidden="true">&raquo;</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
                                         </div>
                                     </div>
                                 </div>
@@ -146,7 +113,6 @@
             </div>
         </div>
     </div>
-
     <!-- 优惠券详情弹窗 -->
     <div class="modal fade myModal coupon_modal" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm" role="document">

@@ -301,7 +301,7 @@
                 </div>
             </div>
             <div class="swiper-slide slide">
-                <div class="slide-inner" style="background-image: url(img/index_banner1.png); transition: all;">
+                <div class="slide-inner" style="background-image: url(img/index_banner2.jpg); transition: all;">
                 </div>
                 <div class="content">
                     <div class="container">
@@ -353,7 +353,6 @@
                 <div class="deep uppercase">dynamic</div>
                 <h3 class="h3">发展动态</h3>
             </div>
-
             <div class="main">
                 <div class="row">
                     <div class="col_md col-md-6 col-sm-12 col-xs-12">
@@ -367,7 +366,7 @@
                                 炜洹诚信为本非常 重视商业信誉，从不销售品质低劣的产品，在行内一直享有较高的声 誉 。从2007年至今 ，连续十四年获得广州市工商局颁发 “ 守合 同、重信用企业”称号。
                             </p>
                             <div class="more">
-                                <a href="" class="link">查看详情</a>
+                                <a href="./development_trend.html" class="link">查看详情</a>
                             </div>
                             <div class="menu">
                                 <div class="swiper-container development_trend_menu">
@@ -420,7 +419,7 @@
         </div>
 
         <div class="_right">
-            <div class="cover_box">
+            <div class="cover_box" data-aos="fade-left">
                 <img class="cover" src="img/right_.png" alt="">
             </div>
         </div>
@@ -433,8 +432,8 @@
                     <div class="col_md col-md-6 col-sm-8 col-xs-12">
                         <div class="cover_box">
                             <img class="cover" src="img/about_video.png" alt="">
-                            <div class="shade animate">
-                                <img class="cover" data-toggle="modal" data-target="#video_modal"
+                            <div class="shade animate display_flex">
+                                <img class="cover pointer" data-toggle="modal" data-target="#video_modal"
                                     src="img/play.png" alt="">
                             </div>
                         </div>
@@ -452,13 +451,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="data">
+                <div class="data scroll_count">
                     <div class="row">
                         <div class="col_md col-md-4 col-sm-4 col-xs-4">
                             <div class="box">
                                 <div class="text">公司成立于</div>
                                 <div class="date">
-                                    <span class="num">1999</span>
+                                    <span class="num" data-startVal="0" data-endVal="1999" data-speed="1"
+                                        data-decimals="0" id="mumC1">0</span>
                                     <span class="ide">年</span>
                                 </div>
                             </div>
@@ -467,7 +467,8 @@
                             <div class="box">
                                 <div class="text">公司注册资金</div>
                                 <div class="date">
-                                    <span class="num">5000</span>
+                                    <span class="num" data-startVal="0" data-endVal="5000" data-speed="1"
+                                        data-decimals="0" id="mumC2">0</span>
                                     <span class="ide">年</span>
                                 </div>
                             </div>
@@ -476,7 +477,8 @@
                             <div class="box">
                                 <div class="text">服务客户</div>
                                 <div class="date">
-                                    <span class="num">689</span>
+                                    <span class="num" data-startVal="0" data-endVal="689" data-speed="1"
+                                        data-decimals="0" id="mumC3">0</span>
                                     <span class="ide">年</span>
                                 </div>
                             </div>
@@ -495,13 +497,14 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <video class="video box_radius box_shadow" src="video/2024-12-26 10_16_59.mp4" preload="auto"
-                        autoplay controls>
+                    <video class="video box_radius box_shadow" src="video/compress1.mp4" preload="auto" autoplay
+                        controls>
                     </video>
                 </div>
             </div>
         </div>
     </div>
+
     <div class="product container_padding">
         <div class="left_head_bg uppercase">products</div>
         <div class="container">
@@ -706,7 +709,7 @@
                             <div class="item">
                                 <a href="" class="link">
                                     <div class="cover_box">
-                                        <img class="cover" src="img/recommend_li1.png" alt="">
+                                        <img class="cover" src="img/recommend_li2.png" alt="">
                                     </div>
                                     <div class="name">进口海鲜</div>
                                     <div class="re_line"></div>
@@ -718,7 +721,7 @@
                             <div class="item">
                                 <a href="" class="link">
                                     <div class="cover_box">
-                                        <img class="cover" src="img/recommend_li1.png" alt="">
+                                        <img class="cover" src="img/recommend_li3.png" alt="">
                                     </div>
                                     <div class="name">进口海鲜</div>
                                     <div class="re_line"></div>
@@ -1069,6 +1072,51 @@
     $('.organization .arrow .arrow_next').click(function () {
         organization_swiper.slideNext()
     })
+
+    // 关闭弹窗，初始化播放进度
+    $('#video_modal').on('hidden.bs.modal', function (e) {
+        // 获取 modal 中的 video 元素并暂停
+        $(this).find('video').each(function () {
+            this.pause();
+            // 可选：重置播放位置
+            this.currentTime = 0;
+        });
+    })
+
+
+    $(function () {
+        var countCXArr = [];
+        var countCX = function () {
+            $('.scroll_count').each(function (i, dom) {
+                if (countCXArr[i] && countCXArr[i] === true) {
+                    return;
+                }
+                var sT;
+                var ncTop;
+                sT = $(window).scrollTop();
+                ncTop = $(dom).offset().top;
+                var id, decimals, startVal, endVal, duration;
+                if (sT > ncTop - $(window).height() && sT < ncTop) {
+                    $(dom).find('.num').each(function () {
+                        id = $(this).attr('id');
+                        decimals = $(this).attr('data-decimals'),
+                            startVal = $(this).attr('data-startVal'),
+                            endVal = $(this).attr('data-endVal'),
+                            duration = $(this).attr('data-speed');
+                        new CountUp(id, startVal, endVal, decimals, duration, {
+                            useEasing: true,//效果
+                            separator: ''//数字分隔符
+                        }).start();// target：目标元素id, startVal：你想要开始的值, endVal：你想要到达的值, decimals：小数位数，默认值为0, duration：动画持续时间为秒，默认值为2, options：选项的可选对象
+                        countCXArr[i] = true;
+                    })
+                }
+            })
+        }
+        countCX();
+        $(window).on("scroll", function () {
+            countCX();
+        })
+    });
 </script>
 
 </html>

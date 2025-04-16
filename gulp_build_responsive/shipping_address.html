@@ -46,44 +46,51 @@
 </head>
 
 <body style="background: #f7f7f7;">
-    <div class="me_page">
-        <div class="me_head">
-            <div class="container">
-                <div class="wrap justify_apace">
-                    <div class="logo">
-                        <a href="index.html" class="link">
-                            <img class="cover" src="img/me_logo.png" alt="">
-                        </a>
+    <div class="me_head">
+    <div class="container">
+        <div class="wrap justify_apace">
+            <div class="logo">
+                <a href="index.html" class="link">
+                    <img class="cover" src="img/me_logo.png" alt="">
+                </a>
+            </div>
+            <div class="menu justify_end">
+                <!-- <div class="box">
+                    <a href="" class="link">
+                        <i class="iconfont icon-a-bangzhu1x"></i>
+                        <span class="text">帮助</span>
+                    </a>
+                </div> -->
+                <div class="box pointer">
+                    <div class="item display_flex">
+                        <i class="iconfont icon-shouji"></i>
+                        <span class="text">小程序</span>
                     </div>
-                    <div class="menu justify_end">
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-a-bangzhu1x"></i>
-                                <span class="text">帮助</span>
-                            </a>
-                        </div>
-                        <div class="box">
-                            <a href="" class="link">
-                                <i class="iconfont icon-shouji"></i>
-                                <span class="text">小程序</span>
-                            </a>
-                        </div>
-                        <div class="item justify_end">
-                            <div class="text">曼****m</div>
-                            <div class="cover_box">
-                                <img class="cover" src="img/user_logo.png" alt="">
-                            </div>
+                    <div class="down box_shadow box_radius">
+                        <div class="cover_box">
+                            <img class="cover" src="img/wxcode.jpg" alt="">
                         </div>
                     </div>
                 </div>
+                <div class="box justify_end pointer">
+                    <a href="me.html" class="link item justify_end">
+                        <div class="text">曼****m</div>
+                        <div class="cover_box">
+                            <img class="cover" src="img/user_logo.png" alt="">
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
-        <div style="height: 70px;"></div>
-        <div class="me">
-            <div class="main">
-                <div class="container">
-                    <div class="wrap justify_apace">
-                        <div class="me_ments box_shadow box_radius">
+    </div>
+</div>
+<div style="height: 70px;"></div>
+    
+    <div class="me">
+        <div class="main">
+            <div class="container">
+                <div class="wrap justify_apace">
+                    <div class="me_ments box_shadow box_radius">
     <div class="box active">
         <a href="me.html" class="link">
             <div class="icon">
@@ -187,104 +194,103 @@
         });
     });
 </script>
-                        <div class="right_main">
-                            <div class="module box_shadow box_radius">
-                                <div class="order_main">
-                                    <div class="me_common_head justify_apace">
-                                        <h3 class="title">收货地址</h3>
-                                        <div class="nav_search">
-                                            <div class="layui-form">
-                                                <div class="search_item">
-                                                    <div class="icon">
-                                                        <button lay-submit lay-filter="submit_search">
-                                                            <i class="iconfont icon-sousuo"></i>
-                                                        </button>
-                                                    </div>
-                                                    <input type="text" name="keyword" lay-verify="required"
-                                                        lay-vertype="tips" lay-reqtext="请输入关键字" placeholder="请输入关键字"
-                                                        class="layui-input input">
+                    <div class="right_main">
+                        <div class="module box_shadow box_radius">
+                            <div class="order_main">
+                                <div class="me_common_head justify_apace">
+                                    <h3 class="title">收货地址</h3>
+                                    <div class="nav_search">
+                                        <div class="layui-form">
+                                            <div class="search_item">
+                                                <div class="icon">
+                                                    <button lay-submit lay-filter="submit_search">
+                                                        <i class="iconfont icon-sousuo"></i>
+                                                    </button>
                                                 </div>
+                                                <input type="text" name="keyword" lay-verify="required"
+                                                    lay-vertype="tips" lay-reqtext="请输入关键字" placeholder="请输入关键字"
+                                                    class="layui-input input">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="shippingAddress_list">
-                                        <div class="row">
-                                            <div class="col_md col-md-4 col-sm-6 col-xs-12">
-                                                <!-- active：选中默认地址 -->
-                                                <div class="item itemParent pointer box_radius box_shadow active">
-                                                    <div class="item_head">
-                                                        <span class="name">张阿三</span>
-                                                        <span class="mobile">13695845014</span>
-                                                    </div>
-                                                    <div class="lead over2">
-                                                        广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
-                                                    </div>
-                                                    <div class="edit childEdit">
-                                                        修改地址
-                                                    </div>
-                                                    <div class="check">
-                                                        <img class="cover" src="img/check.png" alt="">
-                                                    </div>
+                                </div>
+                                <div class="shippingAddress_list">
+                                    <div class="row">
+                                        <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                            <!-- active：选中默认地址 -->
+                                            <div class="item itemParent pointer box_radius box_shadow active">
+                                                <div class="item_head">
+                                                    <span class="name">张阿三</span>
+                                                    <span class="mobile">13695845014</span>
+                                                </div>
+                                                <div class="lead over2">
+                                                    广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
+                                                </div>
+                                                <div class="edit childEdit">
+                                                    修改地址
+                                                </div>
+                                                <div class="check">
+                                                    <img class="cover" src="img/check.png" alt="">
                                                 </div>
                                             </div>
-                                            <div class="col_md col-md-4 col-sm-6 col-xs-12">
-                                                <div class="item itemParent pointer box_radius box_shadow">
-                                                    <div class="item_head">
-                                                        <span class="name">张阿三</span>
-                                                        <span class="mobile">13695845014</span>
-                                                    </div>
-                                                    <div class="lead over2">
-                                                        广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
-                                                    </div>
-                                                    <div class="edit childEdit">
-                                                        修改地址
-                                                    </div>
-                                                    <div class="check">
-                                                        <img class="cover" src="img/check.png" alt="">
-                                                    </div>
+                                        </div>
+                                        <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                            <div class="item itemParent pointer box_radius box_shadow">
+                                                <div class="item_head">
+                                                    <span class="name">张阿三</span>
+                                                    <span class="mobile">13695845014</span>
+                                                </div>
+                                                <div class="lead over2">
+                                                    广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
+                                                </div>
+                                                <div class="edit childEdit">
+                                                    修改地址
+                                                </div>
+                                                <div class="check">
+                                                    <img class="cover" src="img/check.png" alt="">
                                                 </div>
                                             </div>
-                                            <div class="col_md col-md-4 col-sm-6 col-xs-12">
-                                                <div class="item itemParent pointer box_radius box_shadow">
-                                                    <div class="item_head">
-                                                        <span class="name">张阿三</span>
-                                                        <span class="mobile">13695845014</span>
-                                                    </div>
-                                                    <div class="lead over2">
-                                                        广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
-                                                    </div>
-                                                    <div class="edit childEdit">
-                                                        修改地址
-                                                    </div>
-                                                    <div class="check">
-                                                        <img class="cover" src="img/check.png" alt="">
-                                                    </div>
+                                        </div>
+                                        <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                            <div class="item itemParent pointer box_radius box_shadow">
+                                                <div class="item_head">
+                                                    <span class="name">张阿三</span>
+                                                    <span class="mobile">13695845014</span>
+                                                </div>
+                                                <div class="lead over2">
+                                                    广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
+                                                </div>
+                                                <div class="edit childEdit">
+                                                    修改地址
+                                                </div>
+                                                <div class="check">
+                                                    <img class="cover" src="img/check.png" alt="">
                                                 </div>
                                             </div>
-                                            <div class="col_md col-md-4 col-sm-6 col-xs-12">
-                                                <div class="item itemParent pointer box_radius box_shadow">
-                                                    <div class="item_head">
-                                                        <span class="name">张阿三</span>
-                                                        <span class="mobile">13695845014</span>
-                                                    </div>
-                                                    <div class="lead over2">
-                                                        广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
-                                                    </div>
-                                                    <div class="edit childEdit">
-                                                        修改地址
-                                                    </div>
-                                                    <div class="check">
-                                                        <img class="cover" src="img/check.png" alt="">
-                                                    </div>
+                                        </div>
+                                        <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                            <div class="item itemParent pointer box_radius box_shadow">
+                                                <div class="item_head">
+                                                    <span class="name">张阿三</span>
+                                                    <span class="mobile">13695845014</span>
+                                                </div>
+                                                <div class="lead over2">
+                                                    广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光广东省广州市荔湾区荷景路74-78号方圆E时光
+                                                </div>
+                                                <div class="edit childEdit">
+                                                    修改地址
+                                                </div>
+                                                <div class="check">
+                                                    <img class="cover" src="img/check.png" alt="">
                                                 </div>
                                             </div>
-                                            <div class="col_md col-md-4 col-sm-6 col-xs-12">
-                                                <div class="item add box_radius box_shadow" data-toggle="modal" data-target=".myModal">
-                                                    <div class="icon">
-                                                        <i class="iconfont icon-jia"></i>
-                                                    </div>
-                                                    <div class="lead">添加地址</div>
+                                        </div>
+                                        <div class="col_md col-md-4 col-sm-6 col-xs-12">
+                                            <div class="item add box_radius box_shadow" data-toggle="modal" data-target=".myModal">
+                                                <div class="icon">
+                                                    <i class="iconfont icon-jia"></i>
                                                 </div>
+                                                <div class="lead">添加地址</div>
                                             </div>
                                         </div>
                                     </div>
@@ -296,7 +302,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade myModal address_modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
