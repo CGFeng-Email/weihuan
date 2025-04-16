@@ -84,7 +84,7 @@
                                                 <div class="pay box_radius">
                                                     <a href="./conform_order.html" class="link">立即支付</a>
                                                 </div>
-                                                <a href="" class="link cancel">取消订单</a>
+                                                <div class="cancel pointer" lay-on="cancel">取消订单</div>
                                             </div>
                                         </div>
                                     </div>
@@ -163,6 +163,23 @@
     layui.use(function () {
         var layer = layui.layer;
         var form = layui.form;
+        var util = layui.util;
+
+        // 取消订单
+        util.on('lay-on', {
+            cancel: function () {
+                layer.confirm('是否取消订单？', {
+                    title: '取消',
+                    btn: ['确定', '关闭'] //按钮
+                }, function () {
+                    console.log('确定');
+                    layer.closeAll();
+                }, function () {
+                    console.log('关闭');
+                });
+            },
+        });
+
         form.on('submit(submit_search)', function (data) {
             var field = data.field;
             return false;

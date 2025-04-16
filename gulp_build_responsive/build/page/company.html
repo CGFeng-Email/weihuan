@@ -19,8 +19,10 @@
                 Introduction</div>
         </div>
     </div>
-    <div class="company_about container_padding">
-        <div class="head_bg uppercase">Company Introduction</div>
+    <div class="company_about container_padding" style="margin-top: 20px;">
+        <div class="head_bg uppercase" style="top: -40px;">
+            <span class="inline_block" data-aos="slide-up">Company Introduction</span>
+        </div>
         <div class="container">
             <div class="row">
                 <div class="col_md col-md-6 col-sm-8 col-xs-12">
@@ -62,12 +64,12 @@
             </div>
         </div>
         <div class="_right">
-            <div class="cover_box">
+            <div class="cover_box" data-aos="fade-left">
                 <img class="cover" src="../../img/right_.png" alt="">
             </div>
         </div>
         <div class="course">
-            <div class="wrap">
+            <div class="wrap pointer" id="to_history">
                 <p class="w_name">发展历程</p>
                 <i class="iconfont icon-shang upAnimation"></i>
             </div>
@@ -82,7 +84,7 @@
                 </div>
                 <div class="content">
                     <p class="lead">成为广东省冷链物流专业委员会委员单位。</p>
-                    <div class="cover_box">
+                    <div class="cover_box box_radius">
                         <img class="cover" src="../../img/company_history_li1.png" alt="">
                     </div>
                 </div>
@@ -94,7 +96,7 @@
                 </div>
                 <div class="content">
                     <p class="lead">成为广东省冷链物流专业委员会委员单位。</p>
-                    <div class="cover_box">
+                    <div class="cover_box box_radius">
                         <img class="cover" src="../../img/company_history_li1.png" alt="">
                     </div>
                 </div>
@@ -106,7 +108,7 @@
                 </div>
                 <div class="content">
                     <p class="lead">成为广东省冷链物流专业委员会委员单位。</p>
-                    <div class="cover_box">
+                    <div class="cover_box box_radius">
                         <img class="cover" src="../../img/company_history_li1.png" alt="">
                     </div>
                 </div>
@@ -118,7 +120,7 @@
                 </div>
                 <div class="content">
                     <p class="lead">成为广东省冷链物流专业委员会委员单位。</p>
-                    <div class="cover_box">
+                    <div class="cover_box box_radius">
                         <img class="cover" src="../../img/company_history_li1.png" alt="">
                     </div>
                 </div>
@@ -130,7 +132,7 @@
                 </div>
                 <div class="content">
                     <p class="lead">成为广东省冷链物流专业委员会委员单位。</p>
-                    <div class="cover_box">
+                    <div class="cover_box box_radius">
                         <img class="cover" src="../../img/company_history_li1.png" alt="">
                     </div>
                 </div>
@@ -142,7 +144,7 @@
                 </div>
                 <div class="content">
                     <p class="lead">成为广东省冷链物流专业委员会委员单位。</p>
-                    <div class="cover_box">
+                    <div class="cover_box box_radius">
                         <img class="cover" src="../../img/company_history_li1.png" alt="">
                     </div>
                 </div>
@@ -152,8 +154,8 @@
     </div>
     <div class="serve_project img_bg" style="background-image: url(../../img/serve_project.png);">
         <div class="center_head">
-            <div class="deep uppercase">dynamic</div>
-            <h3 class="h3">发展动态</h3>
+            <div class="deep uppercase">mechanism</div>
+            <h3 class="h3">服务项目</h3>
         </div>
         <div class="project">
             <div class="history_line"></div>
@@ -319,42 +321,42 @@
             </div>
             <div class="main">
                 <div class="list">
-                    <div class="li">
+                    <div class="li" data-aos="fade-up" data-aos-duration="1100">
                         <div class="cover_box">
                             <img class="cover" src="../../img/partner_li1.png" alt="">
                         </div>
                     </div>
-                    <div class="li">
+                    <div class="li" data-aos="fade-up" data-aos-duration="1200">
                         <div class="cover_box">
                             <img class="cover" src="../../img/partner_li2.png" alt="">
                         </div>
                     </div>
-                    <div class="li">
+                    <div class="li" data-aos="fade-up">
                         <div class="cover_box">
                             <img class="cover" src="../../img/partner_li3.png" alt="">
                         </div>
                     </div>
-                    <div class="li">
+                    <div class="li" data-aos="fade-up">
                         <div class="cover_box">
                             <img class="cover" src="../../img/partner_li4.png" alt="">
                         </div>
                     </div>
-                    <div class="li">
+                    <div class="li" data-aos="fade-up">
                         <div class="cover_box">
                             <img class="cover" src="../../img/partner_li5.png" alt="">
                         </div>
                     </div>
-                    <div class="li">
+                    <div class="li" data-aos="fade-up">
                         <div class="cover_box">
                             <img class="cover" src="../../img/partner_li6.png" alt="">
                         </div>
                     </div>
-                    <div class="li">
+                    <div class="li" data-aos="fade-up">
                         <div class="cover_box">
                             <img class="cover" src="../../img/partner_li7.png" alt="">
                         </div>
                     </div>
-                    <div class="li">
+                    <div class="li" data-aos="fade-up">
                         <div class="cover_box">
                             <img class="cover" src="../../img/partner_li8.png" alt="">
                         </div>
@@ -376,16 +378,18 @@
         spaceBetween: 20,
         pagination: {
             el: '.swiper-pagination',
+            clickable :true,
         },
     })
 
     let history_swiper = new Swiper('.history_swiper', {
         autoplay: {
-            delay: 5000,
+            delay: 5000000,
             disableOnInteraction: false,
         },
         loop: true,
         speed: 1000,
+        slideToClickedSlide: true,
         spaceBetween: 20,
         breakpoints: {
             1600: {
@@ -511,6 +515,17 @@
             }
         })
     });
+
+    const to_history = document.getElementById('to_history');
+    const history_dem = document.querySelector('.history_swiper');
+
+    to_history.addEventListener('click', () => {
+        history_dem.scrollIntoView({
+            behavior: 'smooth',
+            block: 'center',
+            inline: 'nearest'
+        })
+    })
 </script>
 
 </html>

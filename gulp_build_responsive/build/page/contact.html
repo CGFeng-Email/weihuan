@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <title>业务联系</title>
     @@include('head.html')
-    <!-- <script type="text/javascript"
-        src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=LiRa4Im75vBXAvFxYy0IUSQlr5yhkqBW"></script> -->
+    <script src="//api.map.baidu.com/api?type=webgl&v=1.0&ak=7auwyGTEziMsEZFzaMgx3ZgckIM6bEqP"></script>
 </head>
 
 <body>
@@ -82,17 +81,19 @@
                         </div>
                     </div>
 
-                    <div class="map" id="map"></div>
+                    <div class="map_wrap">
+                        <div class="map" id="map"></div>
+                    </div>
                 </div>
             </div>
 
             <div class="message_box img_bg container_padding">
                 <div class="container">
                     <div class="row">
-                        <div class="left_cover col-md-5 col-sm-12 col-xs-12">
+                        <div class="left_cover col-md-5 col-sm-5 col-xs-8">
                             <div class="right">
-                                <div class="cover_box">
-                                    <img class="cover" src="../../img/contact_code.png" alt="code">
+                                <div class="cover_box box_radius box_shadow">
+                                    <img class="cover" src="../../img/code.jpg" alt="code">
                                 </div>
                             </div>
                         </div>
@@ -144,13 +145,13 @@
             </div>
 
             <div class="_right">
-                <div class="cover_box">
+                <div class="cover_box" data-aos="fade-left">
                     <img class="cover" src="../../img/right_.png" alt="">
                 </div>
             </div>
 
             <div class="_center">
-                <div class="cover_box">
+                <div class="cover_box" data-aos="fade-right">
                     <img class="cover" src="../../img/center_.png" alt="">
                 </div>
             </div>
@@ -171,7 +172,7 @@
     });
 
     var map = new BMapGL.Map("map");
-    var point = new BMapGL.Point(113.256342, 23.062094);
+    var point = new BMapGL.Point(113.256342,23.062094);
     map.enableScrollWheelZoom(true);
     var marker = new BMapGL.Marker(point);  // 创建标注
     map.addOverlay(marker);              // 将标注添加到地图中
@@ -189,6 +190,7 @@
     marker.addEventListener("click", function () {
         map.openInfoWindow(infoWindow, point); //开启信息窗口
     });
+
 </script>
 
 </html>

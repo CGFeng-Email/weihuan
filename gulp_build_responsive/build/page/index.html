@@ -47,24 +47,6 @@
                     </div>
                 </div>
             </div>
-            <div class="swiper-slide slide">
-                <div class="slide-inner" style="background-image: url(../../img/index_banner1.png); transition: all;">
-                </div>
-                <div class="content">
-                    <div class="container">
-                        <h2 class="banner_title inline_block ani" swiper-animate-effect="fadeInLeft"
-                            swiper-animate-duration="0.3s">全球一站式</h2>
-                        <h3 class="banner_sub_title ani" swiper-animate-effect="fadeInLeft"
-                            swiper-animate-duration="0.6s">优质食材冷链供应及餐饮服务平台！</h3>
-                        <div class="banner_line ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="0.8s">
-                        </div>
-                        <div class="lead uppercase ani" swiper-animate-effect="fadeInLeft" swiper-animate-duration="1s">
-                            High-quality food cold chain supply and catering service
-                            platform!
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="autoplay-progress">
             <svg viewBox="0 0 48 48">
@@ -154,15 +136,17 @@
         </div>
     </div>
     <div class="about container_padding">
-        <div class="head_bg uppercase">about us</div>
+        <div class="head_bg uppercase" id="about_head" style="top: -40px; right: -54px;">
+            <span class="inline_block" data-aos="slide-left">about us</span>
+        </div>
         <div class="container">
             <div class="main">
                 <div class="row">
                     <div class="col_md col-md-6 col-sm-8 col-xs-12">
                         <div class="cover_box">
                             <img class="cover" src="../../img/about_video.png" alt="">
-                            <div class="shade animate display_flex">
-                                <img class="cover pointer" data-toggle="modal" data-target="#video_modal"
+                            <div class="shade animate display_flex fadeVideo">
+                                <img class="cover pointer " data-toggle="modal" data-target="#video_modal"
                                     src="../../img/play.png" alt="">
                             </div>
                         </div>
@@ -233,9 +217,10 @@
             </div>
         </div>
     </div>
-
     <div class="product container_padding">
-        <div class="left_head_bg uppercase">products</div>
+        <div class="left_head_bg uppercase" style="top: 0;">
+            <span class="inline_block" data-aos="slide-right">products</span>
+        </div>
         <div class="container">
             <div class="main">
                 <div class="row">
@@ -247,7 +232,7 @@
                                 <p class="lead">
                                     在2016年成立“广州炜洹饮食策划管理有限公司”，发挥资源所长，致力联合上下游资源推广世界各地的优选食材和餐饮文化，研究新餐饮模式和新盈利模式，帮助各类型餐饮企业创新食尚潮流，共同互利共赢。
                                 </p>
-                                <a href="" class="link">
+                                <a href="./product_center.html" class="link">
                                     <span>查看更多产品</span>
                                     <i class="iconfont icon-arrowRight"></i>
                                 </a>
@@ -256,7 +241,6 @@
                     </div>
                     <div class="col_md col-md-6 col-sm-12 col-xs-12">
                         <div class="product_list">
-
                             <div class="row">
                                 <div class="col_md col-md-6 col-sm-6 col-xs-12">
                                     <div class="item">

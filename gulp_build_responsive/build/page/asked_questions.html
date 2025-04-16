@@ -24,7 +24,7 @@
     <div class="asked_questions container_padding">
         <div class="container">
             <div class="list">
-                <div class="item active">
+                <div class="item">
                     <div class="artcle_head">
                         <img class="cover" src="../../img/artcle.png" alt="">
                         <h3 class="title">汇聚了众多技术大师的心血，在众多的竞争产品中脱颖而出。</h3>
@@ -153,12 +153,12 @@
             </div>
         </div>
         <div class="_right">
-            <div class="cover_box">
+            <div class="cover_box" data-aos="fade-left">
                 <img class="cover" src="../../img/right_.png" alt="">
             </div>
         </div>
         <div class="_center">
-            <div class="cover_box">
+            <div class="cover_box" data-aos="fade-right">
                 <img class="cover" src="../../img/center_.png" alt="">
             </div>
         </div>
@@ -166,18 +166,13 @@
     @@include('footer.html')
 </body>
 <script>
-    $('.asked_questions .list .item .artcle_head').click(function () {
-        const isActive = $(this).parent('.item').hasClass('active');
 
-        if (isActive) {
-            $(this).siblings('.down_content').stop().slideUp(200, function () {
-                $(this).parent('.item').stop().removeClass('active');
-            })
-        } else {
-            $(this).siblings('.down_content').stop().slideDown(200, function() {
-                $(this).parent('.item').stop().addClass('active');
-            })
-        }
+    $('.asked_questions .list .item').eq(0).children('.down_content').slideDown();
+    $('.asked_questions .list .item').eq(0).addClass('active');
+
+    $('.asked_questions .list .item .artcle_head').click(function () {
+        $(this).parent().stop().toggleClass('active');
+        $(this).siblings().stop().slideToggle();
     })
 </script>
 
