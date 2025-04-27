@@ -376,7 +376,7 @@
                                 <span class="name">数量：</span>
                                 <input type="number" lay-affix="number" value="1" min="1" class="layui-input input">
                             </div>
-                            <div class="add_btn">加入购物车</div>
+                            <div class="add_btn" id="add_cart">加入购物车</div>
                             <div class="buy">
                                 <a href="./conform_order.html" class="link">立即购买</a>
                             </div>
@@ -899,6 +899,11 @@
             console.log('商品规格:', value);
         });
     });
+
+    const add = document.getElementById('add_cart');
+    add.addEventListener('click', function () {
+        layer.msg('加入购物车成功');
+    })
 </script>
 
 </html>
