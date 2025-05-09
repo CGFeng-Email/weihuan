@@ -86,6 +86,8 @@ import MenuChild from './menu.vue';
 import Item from './item.vue';
 import Empty from '../component/empty.vue';
 import { classifyList, shoppingList } from '@/api/index.js';
+import store from '@/store/index.js';
+import { useState } from '@/store/useState.js';
 
 // swiper下标
 const swiperIndex = ref(0);
@@ -112,9 +114,9 @@ const childCategory = ref([]);
 // 二级分类下标
 const childCategoryIndex = ref(0);
 // 销量下标
-const salesIndex = ref(0);
+const salesIndex = ref(null);
 // 价格下标
-const priceIndex = ref(0);
+const priceIndex = ref(null);
 // 配送方式 '':全部, 0:配送, 1:自提
 const is_self_take = ref('');
 // 机构
@@ -130,6 +132,8 @@ const menuActive = '/static/img/category_active.png';
 // 加载组件
 const isLoading = ref(false);
 const isEmpty = ref(false);
+// 分类id
+const { classifyId } = useState(['classifyId']);
 
 onLoad(async () => {
 	// 公共数据
@@ -138,6 +142,7 @@ onLoad(async () => {
 	await getClassify();
 	// 二级分类
 	await getClassify();
+
 	// 首页跳转的分类
 	uni.$on('classifyMenu', (e) => {
 		if (e.id) {
@@ -182,21 +187,37 @@ const organListChange = (e) => {
 
 // 销量
 const switchSales = () => {
-	if (salesIndex.value == 0) {
-		salesIndex.value = 1;
-	} else {
+	if (salesIndex.value == null) {
 		salesIndex.value = 0;
+	} else if (salesIndex.value == 0) {
+		salesIndex.value = 1;
+	} else if (salesIndex.value == 1) {
+		salesIndex.value = null;
 	}
+
+	// if (salesIndex.value == 0) {
+	// 	salesIndex.value = 1;
+	// } else {
+	// 	salesIndex.value = 0;
+	// }
 	getShoppingList();
 };
 
 // 价格
 const switchPrice = () => {
-	if (priceIndex.value == 0) {
-		priceIndex.value = 1;
-	} else {
+	if (priceIndex.value == null) {
 		priceIndex.value = 0;
+	} else if (priceIndex.value == 0) {
+		priceIndex.value = 1;
+	} else if (priceIndex.value == 1) {
+		priceIndex.value = null;
 	}
+
+	// if (priceIndex.value == 0) {
+	// 	priceIndex.value = 1;
+	// } else {
+	// 	priceIndex.value = 0;
+	// }
 	getShoppingList();
 };
 
@@ -244,8 +265,8 @@ const getShoppingList = async (more = false) => {
 			is_self_take: is_self_take.value,
 			organ_id: organList.value[organListIndex.value].id,
 			order_by: {
-				shop_price: priceIndex.value == 1 ? 'asc' : 'desc',
-				total_sales: salesIndex.value == 1 ? 'asc' : 'desc'
+				shop_price: priceIndex.value == null ? '' : priceIndex.value == 1 ? 'asc' : 'desc',
+				total_sales: salesIndex.value == null ? '' : salesIndex.value == 1 ? 'asc' : 'desc'
 			},
 			page: page.value,
 			size: size.value
@@ -266,6 +287,17 @@ const getShoppingList = async (more = false) => {
 				isLoading.value = false;
 				if (res.data.lists.length == 0) {
 					isEmpty.value = true;
+				}
+
+				// 当前页面未注册时，调用一次
+				if (classifyId.value) {
+					classify_list.value.forEach((item, index) => {
+						if (item.id == classifyId.value) {
+							MenuChildRef.value.menuItemClick(index);
+							// 删除分类id
+							store.commit('delClassifyId');
+						}
+					});
 				}
 			}
 		}

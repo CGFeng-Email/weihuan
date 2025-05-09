@@ -223,15 +223,6 @@
 			}
 		},
 		{
-			"path": "pages/classify/index",
-			"style": {
-				"navigationBarBackgroundColor": "#fff0ef",
-				"navigationBarTitleText": "在线商城",
-				"navigationBarTextStyle": "black",
-				"enablePullDownRefresh": true
-			}
-		},
-		{
 			"path": "pages/invoice/index",
 			"style": {
 				"navigationBarTitleText": "开票申请",
@@ -254,6 +245,15 @@
 		},
 		{
 			"path": "pages/me/subscription"
+		},
+		{
+			"path": "pages/classify/index",
+			"style": {
+				"navigationBarBackgroundColor": "#fff0ef",
+				"navigationBarTitleText": "在线商城",
+				"navigationBarTextStyle": "black",
+				"enablePullDownRefresh": true
+			}
 		}
 	],
 	"globalStyle": {

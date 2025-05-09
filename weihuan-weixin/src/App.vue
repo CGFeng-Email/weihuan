@@ -26,6 +26,7 @@ export default {
 
 		// 路由拦截
 		addRouteInterceptor();
+		
 		// 更新
 		autoUpdate();
 	},

@@ -141,7 +141,7 @@
 		<view class="recommend" v-if="recommendBannerList.length > 0">
 			<swiper class="recommend_swiper" autoplay :interval="5000" :duration="1000" circular>
 				<block v-for="item in recommendBannerList" :key="item.src">
-					<swiper-item class="item" @click="open_shopping_details(item.id)">
+					<swiper-item class="item" @click="open_shopping_details(item.ad_param)">
 						<image class="cover" :src="item.thumb"></image>
 					</swiper-item>
 				</block>
@@ -161,6 +161,9 @@ import { getBanner, getUserData, getPhoneLocation, noticeList, couponCenter, get
 // 工具函数
 import { MobileEncryption } from '@/hooks/useTool.js';
 import share from '../../utils/share.js';
+import { Store } from 'vuex';
+import store from '../../store/index.js';
+import { useState } from '@/store/useState.js';
 
 // 默认头像
 const headPortrait = ref('/static/img/head_portrait.png');
@@ -180,6 +183,8 @@ const coupon_list = ref([]);
 const classify_list = ref([]);
 // 推荐列表
 const recommendBannerList = ref([]);
+// 检测分类栏是否已经点击过
+const ClassifyClick = ref(false);
 
 // 打开登录弹窗
 function show_login() {
@@ -388,12 +393,26 @@ function open_classify() {
 	});
 }
 
+const { classifyId } = useState(['classifyId']);
+
 // 跳转商品分类
 function open_classify_item(id) {
+	uni.showLoading({
+		title: '加载中',
+		mask: true
+	});
+
+	if (!ClassifyClick.value) {
+		store.commit('uploadClassifyId', id);
+		ClassifyClick.value = true;
+	} else {
+		uni.$emit('classifyMenu', { id });
+	}
+
 	uni.switchTab({
 		url: '/pages/classify/index',
 		success: () => {
-			uni.$emit('classifyMenu', { id });
+			uni.hideLoading();
 		}
 	});
 }
@@ -822,7 +841,7 @@ onShow(async () => {
 		width: 690rpx;
 		height: 384rpx;
 		margin: auto;
-		
+
 		.item {
 			overflow: hidden;
 			border-radius: 20rpx;

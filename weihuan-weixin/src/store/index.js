@@ -8,7 +8,8 @@ const store = createStore({
 			// 用户信息
 			userData: {},
 			stateNickName: '微信用户',
-			stateHeadPortrait: '/static/img/head_portrait.png'
+			stateHeadPortrait: '/static/img/head_portrait.png',
+			classifyId: null, // 首页和在线商城的分类id
 		}
 	},
 	// 同步，唯一修改state的途径
@@ -24,6 +25,15 @@ const store = createStore({
 			}
 			if (payload.nickname) state.stateNickName = payload.nickname;
 			if (payload.avatar) state.stateHeadPortrait = payload.avatar;
+		},
+		// 更新分类id
+		uploadClassifyId(state, id) {
+			state.classifyId = id;
+		},
+		// 删除分类id
+		delClassifyId(state) {
+			console.log('调用了吗');
+			state.classifyId = null;
 		}
 	},
 	// 异步，axios请求都在这里执行
