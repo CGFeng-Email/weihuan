@@ -396,6 +396,7 @@ input[type="checkbox"] {
                         left: 0;
                         padding: 0 10px;
                         display: none;
+                        width: 100%;
 
                         .lis {
                             border-bottom: 1px solid rgba(255, 255, 255, .4);
@@ -454,6 +455,7 @@ input[type="checkbox"] {
                     .link {
                         height: 100%;
                         border-radius: 50%;
+                        overflow: hidden;
                     }
 
                     .cover {
@@ -1789,7 +1791,8 @@ input[type="checkbox"] {
             margin-bottom: 20px;
         }
 
-        .lead {
+        .lead,
+        p {
             font-size: 14px;
             line-height: 2.2;
             color: #878686;
@@ -2121,7 +2124,7 @@ input[type="checkbox"] {
 
     .list {
         display: flex;
-        justify-content: center;
+        justify-content: start;
         flex-wrap: wrap;
 
         .li {
@@ -2636,6 +2639,7 @@ input[type="checkbox"] {
 
         .title {
             margin: 8px 0;
+            line-height: 1.6;
         }
 
         .price {
@@ -2682,7 +2686,7 @@ input[type="checkbox"] {
             }
 
             .layui-form-select dl dd.layui-this {
-                color: #6BBB41;
+                color: #FF0000;
             }
         }
     }
@@ -2742,6 +2746,10 @@ input[type="checkbox"] {
             align-items: center;
             box-shadow: 0 0 3px 1px rgba(0, 0, 0, .1);
 
+            .layui-form {
+                padding: 5px 0;
+            }
+
             .name {
                 flex: none;
                 padding-left: 10px;
@@ -2756,6 +2764,29 @@ input[type="checkbox"] {
 
             .input:focus {
                 box-shadow: none;
+            }
+
+            .layui-form-radio {
+                color: #999 !important;
+                font-size: 20px;
+                margin: 0 5px 0 0;
+            }
+
+            .layui-form-radio>i {
+                color: #999 !important;
+                margin-right: 4px;
+            }
+
+            .layui-form-radioed {
+                color: #000 !important;
+            }
+
+            .layui-form-radioed>i {
+                color: #000 !important;
+            }
+
+            .layui-form-radio:hover>* {
+                color: #999;
             }
         }
 
@@ -2807,7 +2838,14 @@ input[type="checkbox"] {
         .list {
             max-width: 1200px;
             margin: auto;
+            text-align: center;
+
+            img {
+                width: 100%;
+            }
         }
+
+
     }
 
 }
@@ -3015,6 +3053,14 @@ input[type="checkbox"] {
 
     .content {
         overflow-x: hidden;
+
+        p {
+            text-indent: 2em;
+            padding: 8px 0;
+            font-weight: 400;
+            line-height: 1.9;
+            font-size: 17px;
+        }
     }
 
     .cover_box {
@@ -3180,7 +3226,8 @@ input[type="checkbox"] {
                 display: none;
                 padding: 0 30px 30px;
 
-                .lead {
+                .lead,
+                p {
                     font-size: 14px;
                     line-height: 30px;
                 }
@@ -3524,6 +3571,10 @@ input[type="checkbox"] {
 
         .logo {
             width: 92px;
+
+            .cover {
+                width: 100%;
+            }
         }
 
         .menu {
@@ -3855,6 +3906,7 @@ input[type="checkbox"] {
 
             .shopping {
                 align-items: start;
+                flex-wrap: wrap;
                 width: 500px;
             }
 
@@ -3862,6 +3914,7 @@ input[type="checkbox"] {
                 width: 94px;
                 height: 94px;
                 background: #999999;
+                flex: none;
 
                 .cover {
                     height: 100%;
@@ -3869,6 +3922,7 @@ input[type="checkbox"] {
             }
 
             .content {
+                flex: 1;
                 padding-left: 14px;
                 height: 94px;
 
@@ -4012,6 +4066,14 @@ input[type="checkbox"] {
 
     .explain {
         padding: 20px 0 0;
+
+        p,
+        span {
+            font-size: 15px !important;
+            line-height: 2;
+            font-weight: 500;
+            padding: 5px 0;
+        }
     }
 }
 
@@ -4423,7 +4485,7 @@ input[type="checkbox"] {
         margin: 0 10px 20px 0;
         line-height: 1.4;
         width: 110px;
-        height: 132px;
+        min-height: 132px;
         cursor: pointer;
 
         .price {
@@ -5181,10 +5243,12 @@ input[type="checkbox"] {
     background: @primaryColor;
 }
 
+
 .search {
+
     .main {
         margin: auto;
-        padding: 120px 0 0;
+        padding: 80px 0 0;
     }
 
     .head {
@@ -5194,7 +5258,7 @@ input[type="checkbox"] {
     }
 
     .search_form {
-        margin-top: 60px;
+        margin-top: 0px;
 
         .content {
             width: 60%;
@@ -5209,7 +5273,7 @@ input[type="checkbox"] {
 
             .input {
                 border: none;
-                font-size: 20px;
+                font-size: 18px;
                 height: 60px;
                 line-height: 60px;
             }
@@ -5247,6 +5311,12 @@ input[type="checkbox"] {
                     color: #fff;
                 }
             }
+        }
+    }
+
+    .product_center {
+        .main {
+            padding: 100px 0 0;
         }
     }
 }
@@ -5325,5 +5395,21 @@ input[type="checkbox"] {
 
     .li:nth-child(3) {
         background: linear-gradient(180.00deg, #fcca38 0%, #fc7e0f 100%);
+    }
+}
+
+.product_center .right_main .list .row {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.shopping_item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding: 5px 0;
+
+    .cover_box {
+        flex: none;
     }
 }
